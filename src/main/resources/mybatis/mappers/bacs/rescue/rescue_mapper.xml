@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacs.dao.rescue.IRescueMapper">
+
+    <resultMap id="resultMap" type="com.zhixin.zhfz.bacs.entity.RescueEntity">
+        <id property="id" column="id"/>
+        <result column="serial_id" property="serialId"/>
+        <result column="person_id" property="personId"/>
+        <result column="register_user_id" property="registerUserId"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="case_id" property="caseId"/>
+        <result column="area_id" property="areaId"/>
+        <result column="updated_time" property="updatedTime"/>
+        <result column="rescue_time" property="rescueTime"/>
+        <result column="description" property="description"/>
+        <result column="doctor" property="doctor"/>
+        <result column="real_name" property="registerUserName"/>
+        <result column="police_name" property="policeName"/>
+        <result column="police_id" property="policeId"/>
+        <result column="item" property="item"/>
+        <result column="person_name" property="personName"/>
+        <result column="case_no" property="caseNo"/>
+        <result column="area_name" property="areaName"/>
+        <result column="op_pid" property="opPid" jdbcType="VARCHAR" />
+        <result column="op_user_id" property="opUserId" jdbcType="INTEGER" />
+        <result column="certificate_no" property="policeNo" jdbcType="VARCHAR" />
+
+    </resultMap>
+
+    <select id="list" resultMap="resultMap" parameterType="java.util.Map">
+        SELECT
+            r.id,
+            r.serial_id,
+            r.person_id,
+            r.register_user_id,
+            r.case_id,
+            r.area_id,
+            r.doctor,
+            r.description,
+            r.item,
+            r.rescue_time,
+            r.updated_time,
+            r.created_time,
+            r.police_id,
+            ru.certificate_no,
+            p.`name` AS person_name,
+            c.ajmc AS case_no,
+            a.`name` AS area_name,
+            ru.real_name,
+            pu.real_name AS police_name
+        FROM
+            ba_rescue AS r
+            LEFT JOIN ba_person AS p ON r.person_id = p.id
+            LEFT JOIN ba_case AS c ON r.case_id = c.id
+            LEFT JOIN ba_area AS a ON r.area_id = a.id
+            LEFT JOIN xt_user AS ru ON r.register_user_id = ru.id
+            LEFT JOIN xt_user AS pu ON r.police_id = pu.id
+        <include refid="query_where"/>
+        ORDER BY r.created_time DESC
+		limit ${pageStart},${rows}
+    </select>
+
+
+     <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		 select count(r.id) from ba_rescue r
+		 LEFT JOIN ba_person AS p ON r.person_id = p.id
+         LEFT JOIN ba_case AS c ON r.case_id = c.id
+         LEFT JOIN ba_area AS a ON r.area_id = a.id
+         LEFT JOIN xt_user AS ru ON r.register_user_id = ru.id
+         LEFT JOIN xt_user AS pu ON r.police_id = pu.id
+         <include refid="query_where"/>
+    </select>
+    
+	<insert id="insert" parameterType="com.zhixin.zhfz.bacs.entity.RescueEntity">
+      INSERT INTO ba_rescue
+        (item,doctor,serial_id, person_id, police_id, register_user_id, case_id, area_id, description, created_time, rescue_time ,op_pid ,op_user_id)
+      VALUES
+	    (#{item},#{doctor},#{serialId},#{personId},#{policeId},#{registerUserId},#{caseId},#{areaId},#{description},now(),#{rescueTime},#{opPid},#{opUserId} )
+    </insert>
+    
+    <delete id="delete" parameterType="long">
+        delete from ba_rescue where id=#{id}
+    </delete>
+
+    <update id="update" parameterType="com.zhixin.zhfz.bacs.entity.RescueEntity">
+        update ba_rescue
+        <set>
+            updated_time = now(),
+            <if test="serialId != null and serialId != ''">serial_id = #{serialId},</if>
+            <if test="personId != null and personId != ''">person_id = #{personId},</if>
+            <if test="policeId != null and policeId != ''">`police_id` = #{policeId},</if>
+            <if test="registerUserId != null and registerUserId != ''">register_user_id = #{registerUserId},</if>
+            <if test="caseId != null and caseId != ''">case_id = #{caseId}, </if>
+            <if test="description != null and description != ''">description = #{description}, </if>
+            <if test="doctor != null and doctor != ''">doctor = #{doctor}, </if>
+            <if test="areaId != null and areaId != ''">area_id = #{areaId}, </if>
+            <if test="item != null and item != ''">item = #{item}, </if>
+            <if test="rescueTime != null">rescue_time = #{rescueTime}, </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <sql id="query_where">
+        <where>
+            1=1
+            <if test="personId!=null and personId !=''">
+                and r.person_id = #{personId}
+            </if>
+            <if test="name!=null and name !=''">
+                and p.`name` like '${name}'
+            </if>
+            <if test="areaId!=null and areaId !=''">
+                and r.area_id = ${areaId}
+            </if>
+            <if test="dataAuth!=null and dataAuth!=''">
+                and ${dataAuth}
+            </if>
+
+        </where>
+    </sql>
+</mapper>

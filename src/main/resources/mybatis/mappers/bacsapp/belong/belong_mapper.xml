@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacsapp.dao.belong.IBelongAppMapper">
+    <resultMap id="BaseResultMap"
+               type="com.zhixin.zhfz.bacs.entity.BelongEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="serial_id" property="serialId" jdbcType="BIGINT"/>
+        <result column="register_user_id" property="registerUserId" jdbcType="INTEGER"/>
+        <result column="register_time" property="registerTime" jdbcType="TIMESTAMP"/>
+        <result column="area_id" property="areaId" jdbcType="INTEGER"/>
+        <result column="locker_id" property="lockerId" jdbcType="VARCHAR"/>
+        <result column="is_get" property="isGet" jdbcType="INTEGER"/>
+        <result column="get_way" property="getWay" jdbcType="VARCHAR"/>
+        <result column="get_person" property="getPerson" jdbcType="VARCHAR"/>
+        <result column="get_time" property="getTime" jdbcType="TIMESTAMP"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+        <result column="belongings_id" property="belongingsId" jdbcType="INTEGER"/>
+        <result column="casename" property="casename" jdbcType="VARCHAR"/>
+        <result column="caseNo" property="caseNo" jdbcType="VARCHAR"/>
+        <result column="personname" property="personname" jdbcType="VARCHAR"/>
+        <result column="certificate_no" property="certificateNo" jdbcType="VARCHAR"/>
+        <result column="involved_reason" property="involvedReason" jdbcType="VARCHAR"/>
+        <result column="bename" property="bename" jdbcType="VARCHAR"/>
+        <result column="detail_count" property="detailCount" jdbcType="INTEGER"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="unit" property="unit" jdbcType="VARCHAR"/>
+        <result column="save_method" property="saveMethod" jdbcType="VARCHAR"/>
+        <result column="boxname" property="boxname" jdbcType="VARCHAR"/>
+        <result column="serial_no" property="serialNo" jdbcType="VARCHAR"/>
+        <result column="cabinet_group" property="cabinetGroup" jdbcType="VARCHAR"/>
+        <result column="cabinet_no" property="cabinetNo" jdbcType="VARCHAR"/>
+        <result column="boxip" property="boxip" jdbcType="VARCHAR"/>
+        <result column="boxgroup" property="boxgroup" jdbcType="VARCHAR"/>
+        <result column="boxport" property="boxport" jdbcType="VARCHAR"/>
+        <result column="area_name" property="areaName" jdbcType="VARCHAR"/>
+        <result column="policeName" property="policeName" jdbcType="VARCHAR"/>
+        <result column="in_time" property="inTime" jdbcType="TIMESTAMP"/>
+        <result column="in_photo_name" property="inPhotoName" jdbcType="VARCHAR"/>
+        <result column="uuid" property="uuid" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="BelongingsPhotoResultMap"
+               type="BelongingsPhotoEntity">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="belongings_id" property="belongingsId" jdbcType="BIGINT"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="uuid" property="uuid" jdbcType="VARCHAR"/>
+        <result column="area_id" property="areaId" jdbcType="INTEGER"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap id="comboboxResultMap" type="ComboboxEntity">
+        <id property="id" column="id"/>
+        <result property="value" column="value"/>
+        <result property="groupName" column="group_name"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+		id, serial_id, register_user_id, register_time, case_id,area_id,locker_id, is_get,  created_time, updated_time
+	</sql>
+    <!-- 查询嫌疑人存取物信息 -->
+    <select id="selectBelongByAreaId" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT
+        CONCAT(a.`name`) casename,
+        p.`name` personname,
+        p.certificate_no,
+        (
+        SELECT
+        code_desc
+        FROM
+        xt_crime_define
+        WHERE
+        id = c.ab
+        ) involved_reason,
+        CONCAT(
+        pc.`name`,
+        '柜_',
+        pd.open_key,
+        '号'
+        ) boxname,
+        b.is_get,
+		i.in_time,
+		i.in_photo_name,
+        i.id serial_id,
+        pd.id locker_id,
+        a.id areaId,
+        i.uuid
+        FROM
+        ba_serial i
+        LEFT JOIN ba_area a ON i.area_id = a.id
+        LEFT JOIN xt_organization o ON a.organization_id = o.id
+        LEFT JOIN ba_person p ON i.person_id = p.id
+        LEFT JOIN ba_case c ON c.id = i.case_id
+        LEFT JOIN ba_belongings b ON b.serial_id = i.id
+        LEFT JOIN ba_cabinet_config_detail pd ON pd.id = b.locker_id
+        LEFT JOIN ba_cabinet_config pc ON pd.config_id = pc.id
+        WHERE
+        pc.type = 1
+        and i.status &lt; 11
+        <if test="areaId !=null and areaId !=''">
+            and i.area_id = #{areaId}
+        </if>
+        <if test="personname !=null and personnaeme !=''">
+            and p.name like  "%${personname}%"
+        </if>
+        and b.created_time = (select max(created_time) from ba_belongings bbs where bbs.serial_id = i.id  )
+        limit ${pageStart},${rows}
+    </select>
+    <!-- 查询嫌疑人涉案存取物信息 -->
+    <select id="selectExhibitByAreaId" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT
+        CONCAT(a.`name`) casename,
+        p.`name` personname,
+        p.certificate_no,
+        (
+        SELECT
+        code_desc
+        FROM
+        xt_crime_define
+        WHERE
+        id = c.ab
+        ) involved_reason,
+        CONCAT(
+        pc.`name`,
+        '柜_',
+        pd.open_key,
+        '号'
+        ) boxname,
+        b.is_get,
+        i.in_time,
+        i.in_photo_name,
+        i.id serial_id,
+        pd.id locker_id,
+        a.id areaId,
+        i.uuid
+        FROM
+        ba_serial i
+        LEFT JOIN ba_area a ON i.area_id = a.id
+        LEFT JOIN xt_organization o ON a.organization_id = o.id
+        LEFT JOIN ba_person p ON i.person_id = p.id
+        LEFT JOIN ba_case c ON c.id = i.case_id
+        LEFT JOIN ba_exhibit b ON b.serial_id = i.id
+        LEFT JOIN ba_cabinet_config_detail pd ON pd.id = b.locker_id
+        LEFT JOIN ba_cabinet_config pc ON pd.config_id = pc.id
+        WHERE
+        pc.type = 2
+        and i.status &lt; 11
+        <if test="areaId !=null and areaId !=''">
+            and i.area_id = #{areaId}
+        </if>
+        <if test="personname !=null and personnaeme !=''">
+            and p.name like  "%${personname}%"
+        </if>
+        and b.created_time = (select max(created_time) from ba_exhibit bbs where bbs.serial_id = i.id  )
+        limit ${pageStart},${rows}
+    </select>
+</mapper>

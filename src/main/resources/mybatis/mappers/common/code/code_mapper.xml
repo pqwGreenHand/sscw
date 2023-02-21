@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.common.dao.code.ICodeMapper">
+
+    <resultMap id="codeResultMap" type="CodeEntity">
+       <id property="id" column="id"/>
+		<result column="type" property="type"/>
+       <result column="code_key" property="codeKey"/>
+       <result column="code_value" property="codeValue"/>
+       <result column="key_desc" property="keyDesc"/>
+        <result column="op_pid" property="op_Pid" jdbcType="VARCHAR" />
+        <result column="op_user_id" property="op_User_Id" jdbcType="INTEGER" />
+    </resultMap>
+
+    <select id="list" resultMap="codeResultMap" parameterType="java.util.Map">
+		select * from xt_code c
+		<where>
+            1=1
+			<if test="type!=null and type !=''">
+				and c.type like '%${type}%'
+			</if>
+            <if test="dataAuth!=null and dataAuth!=''">
+                and ${dataAuth}
+            </if>
+		</where>
+		order by c.type,id
+		limit ${pageStart},${rows}
+    </select>
+
+     <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		 select count(1) from xt_code c
+		 <where>
+			 <if test="type!=null and type !=''">
+				 and c.type like '%${type}%'
+			 </if>
+		 </where>
+		 order by c.type,id
+    </select>
+    
+	<insert id="insert" parameterType="CodeEntity">
+        insert into xt_code (type,code_key,code_value,key_desc,op_pid,op_user_id) values(#{type},#{codeKey},#{codeValue},#{keyDesc},#{op_Pid},#{op_User_Id})
+    </insert>
+    
+    <delete id="delete" parameterType="int">  
+        delete from xt_code where id=#{id}
+    </delete>
+    
+    <update id="update" parameterType="CodeEntity">  
+        update xt_code set type = #{type},code_key=#{codeKey},code_value=#{codeValue},key_desc=#{keyDesc} where id=#{id}
+    </update>
+
+    <select id="listByType" resultMap="codeResultMap" parameterType="java.util.Map">
+        	select * from xt_code
+        	where type= #{type} ORDER BY id asc
+    </select>
+
+    <select id="getAllRecognizeType"  resultMap="codeResultMap" parameterType="java.lang.String">
+
+    </select>
+</mapper>

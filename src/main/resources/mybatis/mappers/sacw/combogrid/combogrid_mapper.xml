@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhixin.zhfz.sacw.dao.combogrid.IInvCombogridMapper">
+
+    <resultMap id="combogridResultMap" type="com.zhixin.zhfz.bacs.entity.CombogridEntity">
+        <id property="id" column="id"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="caseNo" column="ajbh" jdbcType="INTEGER"/>
+        <result property="caseName" column="ajmc" jdbcType="VARCHAR"/>
+        <result property="requestPoliceName" column="requestPoliceName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--获取案件信息 -->
+    <select id="getLawCase" parameterType="java.util.Map" resultMap="combogridResultMap">
+        select DISTINCT l.id ,l.ajbh,l.ajmc,u.real_name as name from ba_case l
+        left join xt_user u on l.zbmj_id=u.id
+        left join sa_involved i on i.case_id = l.id
+        LEFT JOIN xt_organization t on l.zbdw_id =t.id
+        <where>
+            <if test="dataAuth!=null and dataAuth!=''">
+                ${dataAuth}
+            </if>
+            <if test="caseNo!=null and caseNo !=''">
+                and l.ajbh like '%${caseNo}%'
+            </if>
+            <if test="caseName !=null and caseName !=''">
+                and l.ajmc like '%${caseName}%'
+            </if>
+            <if test=" beginTime!=null and endTime !=''">
+                and l.created_time between #{beginTime} and #{endTime}
+            </if>
+            <if test=" day!=null and day !=''">
+                and l.created_time > DATE_ADD(now(),INTERVAL -#{day} day)
+            </if>
+            <if test=" caseId!=null and caseId !=''">
+                and l.id =#{caseId}
+            </if>
+        </where>
+        order by l.created_time desc
+    </select>
+
+    <!-- 获取有保管物品的案件信息 -->
+    <select id="getLawCaseForInv" parameterType="java.util.Map" resultMap="combogridResultMap">
+        SELECT b.id, s. NAME as involvedName, b.ajbh, b.ajmc , u.real_name as requestPoliceName
+        FROM sa_involved s
+        INNER JOIN ba_case b ON s.case_id = b.id
+        LEFT JOIN xt_user u on b.zbmj_id = u.id
+        LEFT JOIN xt_organization t on b.zbdw_id = t.id
+        WHERE s.type = 1
+        <if test="status!=null and status!=''">
+            AND s.status = #{status}
+        </if>
+        <if test="dataAuth!=null and dataAuth!=''">
+            AND ${dataAuth}
+        </if>
+        group by b.id
+        order by s.created_time desc
+    </select>
+
+    <!--获取案件信息 -->
+    <select id="getLawCaseId" parameterType="java.util.Map" resultMap="combogridResultMap">
+        select b.*,s.id,s.name as involvedName,u.real_name as requestPoliceName
+        from ba_case b
+        left join sa_involved s on s.case_id = b.id
+        left join xt_user u on b.zbmj_id=u.id
+        <where>
+            <if test="dataAuth!=null and dataAuth!=''">
+                ${dataAuth}
+            </if>
+            <if test="caseNo!=null and caseNo !=''">
+                and b.ajbh like '%${caseNo}%'
+            </if>
+            <if test="caseName !=null and caseName !=''">
+                and b.ajmc like '%${caseName}%'
+            </if>
+            <if test=" beginTime!=null and endTime !=''">
+                and b.created_time between #{beginTime} and #{endTime}
+            </if>
+            <if test=" day!=null and day !=''">
+                and b.created_time > DATE_ADD(now(),INTERVAL -#{day} day)
+            </if>
+            <if test=" caseId!=null and caseId !=''">
+                and b.id =#{caseId}
+            </if>
+        </where>
+        and status =2 order by b.created_time desc
+    </select>
+
+
+</mapper>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhixin.zhfz.jzgl.dao.jzlxRate.IJzlxRateMapper">
+	<resultMap id="jzlxRateMapper" type="com.zhixin.zhfz.jzgl.entity.JzlxRateEntity">
+		<result property="jzlx" column="jzlx" />
+		<result property="jzlxCount" column="jzlxCount" />
+		<result property="count" column="count" />
+		<result property="mc" column="mc" />
+		<result property="organization" column="organization" />
+		<result property="userCount" column="userCount" />
+		<result property="jzgId" column="jzgId" />
+		<result property="zxsj" column="zxsj"/>
+	</resultMap>
+	<resultMap id="zxgjMapper" type="com.zhixin.zhfz.jzgl.entity.ZxgjEntity">
+		<result property="jzbh" column="jzbh" />
+		<result property="zrr" column="zrr" />
+		<result property="xxlx" column="xxlx" />
+		<result property="gjsj" column="gjsj" />
+	</resultMap>
+	
+	<!--查询行政卷宗类型以及各类型的数量 -->
+	<select id="selectCountOfJzlx" resultMap="jzlxRateMapper" parameterType="java.util.Map">
+		SELECT jzlx as jzlx,count(*) as jzlxCount 
+		FROM jz_jzxx jzxx
+		LEFT JOIN jz_jzg_gmxx as gmxx on jzxx.gmxx_id = gmxx.id 
+		LEFT JOIN jz_jzg as jzg on gmxx.jzg_id = jzg.id 
+		where jzlx = 1
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+		<if test="dataAuthGmid != 0">
+			and jzg.id = #{dataAuthGmid}
+		</if>
+	</select>
+	
+	<!--查询刑事卷宗类型以及各类型的数量 -->
+	<select id="selectCountOfJzlxXs" resultMap="jzlxRateMapper"
+		parameterType="java.util.Map">
+		SELECT jzlx as jzlx,count(*) as jzlxCount 
+		FROM jz_jzxx jzxx
+		LEFT JOIN jz_jzg_gmxx as gmxx on jzxx.gmxx_id = gmxx.id 
+		LEFT JOIN jz_jzg as jzg on gmxx.jzg_id = jzg.id 
+		where jzlx <![CDATA[ <> ]]> 1
+		<if test="dataAuthGmid != 0">
+			and jzg.id = #{dataAuthGmid}
+		</if>
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+	</select>
+	
+	<!-- 查询最新告警 -->
+	<select id="selectListZxgj" resultMap="zxgjMapper" parameterType="java.util.Map">
+		select jzxx.jzbh as jzbh,u.real_name as zrr,xx.xxlx as xxlx,xx.fssj as gjsj 
+		from jz_jzxx jzxx 
+		LEFT JOIN jz_alarm xx ON jzxx.id = xx.jzxx_id
+		LEFT JOIN jz_jzg_gmxx as gmxx on jzxx.gmxx_id = gmxx.id
+		LEFT JOIN jz_jzg as jzg on gmxx.jzg_id = jzg.id
+		LEFT JOIN xt_user as u on jzxx.user_id = u.id 
+		WHERE xx.xxlx is not null
+		and DATE_SUB(CURDATE(), INTERVAL 30 DAY) &lt;= xx.fssj
+		<if test="dataAuthGmid != 0 and gd == 2">
+			and jzg.id = #{dataAuthGmid} ORDER BY xx.fssj desc limit 0,8
+		</if>
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+		<if test="dataAuthGmid == 0 and gd ==2">
+			ORDER BY xx.fssj desc limit 0,8
+		</if>
+	</select>
+	
+	<!-- 查询有告警的卷宗数量 -->
+	<select id="selectCountOfAlarmJz" resultType="Integer" parameterType="java.util.Map">
+		select count(t1.id) 
+		from (SELECT jzxx.* FROM jz_alarm xx 
+		      LEFT JOIN jz_jzxx jzxx on xx.jzxx_id = jzxx.id 
+		      LEFT JOIN jz_jzg_gmxx as gmxx on jzxx.gmxx_id = gmxx.id 
+		      LEFT JOIN jz_jzg as jzg on gmxx.jzg_id = jzg.id
+		where xx.jzxx_id is not null
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+		<if test="dataAuthGmid != 0">
+			and jzg.id = #{dataAuthGmid}
+		</if>
+		GROUP BY xx.jzxx_id) t1
+	</select>
+	
+	<!-- 查询总卷宗的数量 -->
+	<select id="selectCountOfJz" resultType="Integer" parameterType="java.util.Map">
+		select count(t1.id) from
+		(select jzxx.id FROM jz_jzxx jzxx 
+		   left join xt_user user on jzxx.user_id = user.id 
+		   LEFT JOIN jz_jzg_gmxx as gmxx on jzxx.gmxx_id = gmxx.id 
+		   LEFT JOIN jz_jzg as jzg on gmxx.jzg_id = jzg.id
+		where 1=1
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+		<if test="dataAuthGmid != 0 ">
+			and jzg.id = #{dataAuthGmid}
+		</if>
+		) t1
+	</select>
+	
+	<!-- 查询总柜门的数量 -->
+	<select id="selectAllGmCount" resultType="Integer" parameterType="java.util.Map">
+		SELECT count(*) FROM jz_jzg_gmxx as gmxx 
+		LEFT JOIN jz_jzg as jzg on jzg.id = gmxx.jzg_id 
+		WHERE 1=1
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+		<if test="dataAuthGmid != 0">
+			and jzg.id = #{dataAuthGmid}
+		</if>
+	</select>
+	
+	<!-- 查询已使用柜门的数量 -->
+	<select id="selectUsedGmCount" resultType="Integer" parameterType="java.util.Map">
+		select count(t1.id) FROM (SELECT gmxx.id FROM jz_jzg_gmxx as gmxx 
+		   LEFT JOIN jz_jzg as jzg on jzg.id = gmxx.jzg_id 
+		   LEFT JOIN jz_jzxx jzxx ON jzxx.gmxx_id = gmxx.id
+		WHERE jzxx.gmxx_id is not null
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+		<if test="dataAuthGmid != 0">
+			and jzg.id = #{dataAuthGmid}
+		</if>
+		GROUP BY jzxx.gmxx_id) t1
+	</select>
+</mapper>

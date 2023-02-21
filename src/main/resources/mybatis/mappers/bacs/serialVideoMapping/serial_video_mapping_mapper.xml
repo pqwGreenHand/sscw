@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.serialVideoMapping.ISerialVideoMappingMapper">
+    <resultMap id="baseResultMap" type="com.zhixin.zhfz.bacs.entity.SerialVideoMappingEntity">
+        <id column="id" property="id"/>
+        <result column="serial_id" property="serialId"/>
+        <result column="config_id" property="configId"/>
+        <result column="service_url" property="serviceId"/>        
+    </resultMap>
+
+    <select id="list" resultMap="baseResultMap" parameterType="java.util.Map">
+    select * from ba_serial_video_mapping where serial_id=#{serialId}
+    </select>
+
+    <insert id="insert" parameterType="com.zhixin.zhfz.bacs.entity.SerialVideoMappingEntity"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ba_serial_video_mapping (config_id, serial_id,service_url)
+        VALUES (#{configId,jdbcType=INTEGER},#{serialId,jdbcType=INTEGER},#{serviceUrl,jdbcType=VARCHAR})
+    </insert>
+
+    <select id="getServerConfig" resultMap="baseResultMap" parameterType="java.util.Map">
+        select * from server_config where 1=1
+        <if test="areaId!=null and areaId!=''">
+            and interrogate_area_id=#{areaId}
+        </if>
+        <if test="type!=null and type!=''">
+            and type=#{type}
+        </if>
+        <if test="id!=null and id!='' and id!=0">
+            and id=#{id}
+        </if>
+    </select>
+
+
+</mapper>

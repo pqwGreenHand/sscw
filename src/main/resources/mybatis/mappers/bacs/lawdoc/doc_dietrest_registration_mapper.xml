@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.lawdoc.IDocDietrestRegistrationMapper" >
+    <resultMap id="BaseResultMap" type="com.zhixin.zhfz.bacs.entity.DocDietrestRegistrationEntity" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="serial_id" property="serialId" jdbcType="BIGINT" />
+        <result column="person_id" property="personId" jdbcType="BIGINT" />
+        <result column="registry" property="registry" jdbcType="VARCHAR" />
+        <result column="date" property="date" jdbcType="VARCHAR" />
+        <result column="begin_time" property="beginTime" jdbcType="VARCHAR" />
+        <result column="end_time" property="endTime" jdbcType="VARCHAR" />
+        <result column="criminal_suspect" property="criminalSuspect" jdbcType="VARCHAR" />
+        <result column="police" property="police" jdbcType="VARCHAR" />
+    </resultMap>
+
+
+    <select id="queryDietRestInfoBySeriaNo" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+       SELECT
+            id,
+            serial_id,
+            person_id,
+            registry,
+            date,
+            begin_time,
+            end_time,
+            criminal_suspect,
+            police
+        FROM
+            ba_doc_dietrest_registration
+        WHERE
+            serial_id = #{serialId}
+    </select>
+</mapper>

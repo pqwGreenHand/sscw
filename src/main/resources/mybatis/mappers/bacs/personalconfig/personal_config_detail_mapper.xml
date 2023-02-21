@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacs.dao.personalconfig.IPersonalConfigDetailMapper">
+
+    <resultMap id="personalConfigDetailResultMap" type="PersonalConfigDetail">
+       <id property="id" column="id"/>
+       <result property="personalConfigId" column="personal_config_id"/>
+       <result property="paramKey" column="param_key"/>
+       <result property="paramValue" column="param_value"/>
+       <result property="desc" column="desc"/>
+    </resultMap>
+
+    <!-- id is same to interface'methmod -->
+    <select id="list" resultMap="personalConfigDetailResultMap" parameterType="java.util.Map">  
+        	select * from ba_personal_config_detail
+        	<where>
+        		 personal_config_id = #{personalConfigId}
+        		<if test="paramKey !=null and paramKey !=''">
+        			 and param_key like "%${paramKey}%"
+        		</if>
+        		<if test="paramValue !=null and paramValue !=''">
+        			 and param_value like "%${paramValue}%"
+        		</if>
+        	</where>
+    </select>
+     <select id="listDetailsByNameAndInterrogateAreaId" resultMap="personalConfigDetailResultMap" parameterType="java.util.Map">  
+        	select * from ba_personal_config_detail
+        	  where personal_config_id = 
+        	    (select id from personal_config 
+        	           where name = '#{name}' and interrogate_area_id=${interrogateAreaId})
+    </select>
+     <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">  
+        select count(1) from ba_personal_config_detail
+        	<where>
+        		 personal_config_id = #{personalConfigId}
+        		<if test="paramKey !=null and paramKey !=''">
+        			 and param_key like '%${paramKey}%'
+        		</if>
+        		<if test="paramValue !=null and paramValue !=''">
+        			 and param_value like '%${paramValue}%'
+        		</if>
+        	</where>
+    </select>
+	<insert id="insert" parameterType="PersonalConfigDetail">  
+            insert into ba_personal_config_detail (personal_config_id,param_key,param_value,`desc`)
+            values(#{personalConfigId},#{paramKey},#{paramValue},#{desc})
+    </insert>
+    
+    <delete id="delete" parameterType="int">  
+            delete from ba_personal_config_detail where id=#{id}
+    </delete>
+     <delete id="deleteByPersonalConfigId" parameterType="int">  
+            delete from ba_personal_config_detail where personal_config_id=#{personalConfigId}
+    </delete>
+    <update id="update" parameterType="PersonalConfigDetail">  
+           update ba_personal_config_detail set
+            param_key=#{paramKey} ,param_value=#{paramValue} ,`desc`=#{desc}
+             where id=#{id} 
+    </update>
+
+     <select id="checkurl" resultMap="personalConfigDetailResultMap" parameterType="java.util.Map">
+	select d.param_value from ba_personal_config_detail d
+	left join ba_personal_config c on c.id =d.personal_config_id
+	where d.param_key= 'boxurl'
+	and c.interrogate_area_id=#{areaid}
+	limit 1
+    </select>
+
+    <!-- 根据储物柜id查询编号 -->
+    
+     <select id="queryBoxNumberById" resultType="java.lang.String" parameterType="java.lang.Long">
+       select pcd.param_key as boxNumber from ba_personal_config_detail pcd where pcd.id = #{lockid}
+    </select>
+    
+    <!-- 查找指定的detail信息 -->
+    <select id="listDetailByCodeAndParam" resultMap="personalConfigDetailResultMap" parameterType="java.util.Map">  
+        SELECT d.* FROM ba_personal_config_detail d
+		LEFT JOIN ba_personal_config c ON c.id=d.personal_config_id
+		WHERE c.type=#{codeKey} AND d.param_key=#{paramKey}
+		AND c.area_id=#{areaId}
+
+    </select>
+    
+    <select id="listInParamDetailByOutParamId" resultMap="personalConfigDetailResultMap" parameterType="Long">  
+        SELECT * FROM ba_personal_config_detail
+		WHERE TYPE=1 AND personal_config_id=(
+			SELECT personal_config_id FROM ba_personal_config_detail WHERE id=#{id}
+		)
+
+    </select>
+    <!-- 查询个性化配置 -->
+    <select id="listConfigDetailByAreaAndName" resultMap="personalConfigDetailResultMap" parameterType="java.util.Map">
+        SELECT
+            *
+        FROM
+            ba_personal_config_detail d
+        WHERE
+            d.personal_config_id = (
+                SELECT
+                    c.id
+                FROM
+                    ba_personal_config c
+                WHERE
+                    c.area_id = #{areaId} and c.desc = #{name} and c.is_enable = 1);
+    </select>
+    
+</mapper>

@@ -1,0 +1,52 @@
+@charset "utf-8";/* CSS Document */
+/*********CSS reset ***********/
+*{margin:0;padding:0;font-family:"微软雅黑","黑体","宋体"; font-size:12px;}
+ul,li,ol{list-style:none; }
+img,a img{border:none;margin:0;padding:0;}
+a{ text-decoration:none;color:black; font-weight:bold;}
+.clear{ clear:both;}
+
+/*--------------------waiting start------------------------*/
+.waiting{ margin-left:20px; width:100%; margin-top:0px;}
+.wait_a{ width:100%; padding-top:8px;}
+.wtop{ height:19px;width:95%;background:url(image/qufen.png) left repeat-x; }
+.wtop span{line-height:18px; color:#000068; margin-left:20px;}
+.first_ww,.two_ww,.three_ww,.four_ww{width:100px;height:60px;float:left; margin-top:10px; margin-right:10px;}
+.first_ww{ background:#1a88ba;}
+
+.ww_ct1{ width:40px;height:30px;float:left;}
+.ww_ct1 img{ width:25px; height:25px; padding:8px;}
+.ww_ct2{width:60px; float:right; height:35px; text-align:center; margin: auto 0;  font-family:Arial, Helvetica, sans-serif; padding-top:2px; padding-bottom:3px;}
+.ww_ct2 span{color:#fff;font-size:16px;font-family:Georgia, "Times New Roman", Times, serif;}
+.ww_ct2 p{color:#fff;padding-top:2px;}
+.ww_ct3{ width:auto; height:20px;background:#000; filter:alpha(opacity=30); -moz-opacity:0.3; -khtml-opacity: 0.3; opacity: 0.3; line-height:20px;}
+.ww_ct3 p{float:left; color:#fff; text-align:center; padding-left:4px;line-height:20px;}
+.ww_ct3 a{float:right; margin-right:4px; padding-top:5px;}
+
+.two_ww{ background:#f2ae43;}
+.three_ww{ background:#28b779;}
+.four_ww{ background:#28a9e3;}
+
+
+
+
+/*******color trans***********/
+.c_1_ww{ background:#1a88ba;}
+.c_1_ww:hover{ background:#1e9ad2;}
+.c_2_ww{ background:#dea346;}
+.c_2_ww:hover{ background:#f2ae43;}
+.c_0_ww{ background:#28b779;}
+.c_0_ww:hover{ background:#39d390;}
+
+.c_grey_ww{ background:#7b7a7a;}
+
+.c_3_ww{background:#ff7f50;}
+.c_4_ww{background:#ff0000;}
+
+
+.c_0_ww,.c_1_ww,.c_2_ww,.c_grey_ww,.c_3_ww,.c_4_ww{width:100px;height:60px;float:left; margin-top:10px; margin-right:10px;}
+
+.div_border{border:1px solid #000;}
+
+.bc_on6{border:none;color:#fff;cursor:pointer;padding-left:180px; background:url(image/kssx_b.png) no-repeat;font-size:36px;}
+/******************/

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacsapp.dao.track.ITrackMapper" >
+  <resultMap id="TrackResultMap" type="com.zhixin.zhfz.bacsapp.entity.TrackInfoEntity" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="serial_id" property="serialId" jdbcType="BIGINT" />
+    <result column="cuff_id" property="cuffId" jdbcType="INTEGER" />
+    <result column="cuff_no" property="cuffNo" jdbcType="VARCHAR" />
+      <result column="area_id" property="areaId" jdbcType="INTEGER"/>
+      <result column="room_group" property="roomGroup" jdbcType="VARCHAR" />
+	  <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+	  <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+	<select id="listTrack" resultMap="TrackResultMap" parameterType="java.util.Map">
+						SELECT a.* FROM  ba_track_info a,ba_serial b WHERE a.serial_id = b.id
+        <if test="serialId!=null and serialId !=''">
+            AND  a.serial_id = #{serialId}
+        </if>
+        <if test="areaId!=null and areaId !=''">
+						AND  b.area_id = #{areaId}
+        </if>
+	</select>
+	
+
+	
+	<insert id="insertTrack" parameterType="com.zhixin.zhfz.bacsapp.entity.TrackInfoEntity" keyProperty="id" useGeneratedKeys="true">
+        insert into ba_track_info (serial_id, cuff_no, room_group,start_time,end_time,created_time)
+		values (#{serialId},#{cuffNo},#{roomGroup},#{startTime},#{endTime},now())
+    </insert>
+
+	<!--<insert id="insertTrackBatch" parameterType="java.util.List">-->
+		<!--insert into track_info (serial_id, cuff_no, room_group,start_time,end_time,created_time)-->
+		<!--values-->
+		<!--<foreach collection="list" item="item" index="index" separator="," >-->
+			<!--(#{item.serialId},#{item.cuffNo},#{item.roomGroup},#{item.startTime},#{item.endTime},now())-->
+		<!--</foreach>-->
+	<!--</insert>-->
+
+    <delete id="deleteTrack" parameterType="java.lang.Integer">
+            delete from ba_track_info where id=#{id}
+    </delete>
+
+
+
+
+</mapper>

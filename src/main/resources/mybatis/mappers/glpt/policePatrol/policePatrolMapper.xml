@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhixin.zhfz.glpt.dao.policePatrol.PolicePatrolMapper">
+    <resultMap id="serialMap" type="com.zhixin.zhfz.bacs.entity.SerialEntity">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="serial_no" property="serialNo" jdbcType="VARCHAR" />
+        <result column="uuid" property="uuid" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="status_change_time" property="statusChangeTime" jdbcType="TIMESTAMP" />
+        <result column="person_id" property="personId" jdbcType="BIGINT" />
+        <result column="send_user_id" property="sendUserId" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="birth" property="birth" jdbcType="TIMESTAMP" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="order_request_id" property="orderId" jdbcType="INTEGER" />
+        <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+        <result column="area_id" property="areaId" jdbcType="INTEGER" />
+        <result column="case_id" property="caseId" jdbcType="INTEGER" />
+        <result column="interrogate_case_name" property="interrogateCaseName" jdbcType="VARCHAR" />
+        <result column="involved_reason" property="involvedReason" jdbcType="VARCHAR" />
+        <result column="case_type" property="caseType" jdbcType="INTEGER" />
+        <result column="case_nature" property="caseNature" jdbcType="VARCHAR" />
+        <result column="cuff_id" property="cuffId" jdbcType="INTEGER" />
+        <result column="police_cuff_id1" property="policeCuffId1" jdbcType="INTEGER" />
+        <result column="police_cuff_id2" property="policeCuffId2" jdbcType="INTEGER" />
+        <result column="cuff_no" property="cuffNo" jdbcType="VARCHAR" />
+        <result column="police_cuff_no1" property="policeCuffNo1" jdbcType="VARCHAR" />
+        <result column="police_cuff_no2" property="policeCuffNo2" jdbcType="VARCHAR" />
+        <result column="in_photo_name" property="inPhotoId" jdbcType="VARCHAR" />
+        <result column="in_user_id1" property="inUserId1" jdbcType="INTEGER" />
+        <result column="in_user_real_name1" property="inUserRealName1" jdbcType="VARCHAR" />
+        <result column="organization" property="organization" jdbcType="VARCHAR" />
+        <result column="in_user_id2" property="inUserId2" jdbcType="INTEGER" />
+        <result column="in_user_real_name1" property="inUserRealName1" jdbcType="VARCHAR" />
+        <result column="in_user_real_name2" property="inUserRealName2" jdbcType="VARCHAR" />
+        <result column="in_register_user_id" property="inRegisterUserId" jdbcType="INTEGER" />
+        <result column="in_register_user_real_name" property="inRegisterUserRealName" jdbcType="VARCHAR" />
+        <result column="in_time" property="inTime" jdbcType="TIMESTAMP" />
+        <result column="out_reason" property="outReason" jdbcType="VARCHAR" />
+        <result column="out_photo_name" property="outPhotoId" jdbcType="VARCHAR" />
+        <result column="out_time" property="outTime" jdbcType="TIMESTAMP" />
+        <result column="out_type" property="outType" jdbcType="INTEGER" />
+        <result column="out_register_user_id" property="outRegisterUserId" jdbcType="INTEGER" />
+        <result column="out_register_user_real_name" property="outRegisterUserRealName" jdbcType="VARCHAR" />
+        <result column="out_user_id1" property="outUserId1" jdbcType="INTEGER" />
+        <result column="out_user_real_name1" property="outUserRealName1" jdbcType="VARCHAR" />
+        <result column="out_user_id2" property="outUserId2" jdbcType="INTEGER" />
+        <result column="out_user_real_name2" property="outUserRealName2" jdbcType="VARCHAR" />
+        <result column="certificate_type_id" property="certificateTypeId" jdbcType="INTEGER" />
+        <result column="certificate_type_name" property="certificateTypeName" jdbcType="VARCHAR" />
+        <result column="sex" property="sex" jdbcType="INTEGER" />
+        <result column="in_user_no1" property="inUserNo1" jdbcType="VARCHAR" />
+        <result column="in_user_no2" property="inUserNo2" jdbcType="VARCHAR" />
+        <result column="confirm_time" property="confirmTime" jdbcType="TIMESTAMP" />
+        <result column="confirm_result" property="confirmResult" jdbcType="VARCHAR" />
+        <result column="person_info" property="personInfo" jdbcType="VARCHAR" />
+        <result column="entrance_procedure" property="entranceProcedure" jdbcType="VARCHAR" />
+        <result column="written_time" property="writtenTime" jdbcType="TIMESTAMP" />
+
+        <!-- 文书需要的东西 -->
+        <result column="certificate_no" property="certificateNo" jdbcType="VARCHAR" />
+        <result column="person_type" property="personType" jdbcType="VARCHAR" />
+        <result column="police_realname" property="policeRealName" jdbcType="VARCHAR" />
+        <result column="flog" property="flog" jdbcType="INTEGER" />
+        <result column="person_name" property="personName" />
+
+        <result column="address" property="address" jdbcType="VARCHAR" />
+        <result column="nation" property="nation" jdbcType="VARCHAR" />
+        <result column="height" property="height" jdbcType="VARCHAR" />
+        <result column="weight" property="weight" jdbcType="VARCHAR" />
+        <result column="bodysize" property="bodysize" jdbcType="VARCHAR" />
+        <result column="faceShape" property="faceShape" jdbcType="VARCHAR" />
+        <result column="footsize" property="footsize" jdbcType="VARCHAR" />
+        <result column="caseName" property="caseName" jdbcType="VARCHAR" />
+
+        <result column="informationContent" property="informationContent" jdbcType="VARCHAR" />
+        <result column="fomate" property="fomate" jdbcType="VARCHAR" />
+        <result column="extractTime" property="extractTime" jdbcType="VARCHAR" />
+        <result column="extractSites" property="extractSites" jdbcType="VARCHAR" />
+        <result column="extractMethod" property="extractMethod" jdbcType="VARCHAR" />
+        <result column="vedioResouce" property="vedioResouce" jdbcType="VARCHAR" />
+        <result column="isOriginal" property="isOriginal" jdbcType="VARCHAR" />
+        <result column="reason" property="reason" jdbcType="VARCHAR" />
+        <result column="witnesses" property="witnesses" jdbcType="VARCHAR" />
+        <result column="saveSpace" property="saveSpace" jdbcType="VARCHAR" />
+        <result column="maker" property="maker" jdbcType="VARCHAR" />
+        <result column="policemen" property="policemen" jdbcType="VARCHAR" />
+        <result column="workspce" property="workspce" jdbcType="VARCHAR" />
+
+        <result column="docInjuryisOriginal" property="docInjuryisOriginal" jdbcType="VARCHAR" />
+        <result column="docInjurymakeSites" property="docInjurymakeSites" jdbcType="VARCHAR" />
+        <result column="docInjurymakeTime" property="docInjurymakeTime" jdbcType="VARCHAR" />
+        <result column="docInjurymaker" property="docInjurymaker" jdbcType="VARCHAR" />
+        <result column="docInjuryrecordPerson" property="docInjuryrecordPerson" jdbcType="VARCHAR" />
+        <result column="docInjurysaveSpace" property="docInjurysaveSpace" jdbcType="VARCHAR" />
+        <result column="docInjurytheLord" property="docInjurytheLord" jdbcType="VARCHAR" />
+        <result column="docInjurywitnesses" property="docInjurywitnesses" jdbcType="VARCHAR" />
+        <result column="docInjuryworkspce" property="docInjuryworkspce" jdbcType="VARCHAR" />
+        <result column="docInjurycontent" property="docInjurycontent"  jdbcType="VARCHAR" />
+
+        <result column="docSpaceisOriginal" property="docSpaceisOriginal" jdbcType="VARCHAR" />
+        <result column="docSpacemakeSites" property="docSpacemakeSites" jdbcType="VARCHAR" />
+        <result column="docSpacemakeTime" property="docSpacemakeTime" jdbcType="VARCHAR" />
+        <result column="docSpacemaker" property="docSpacemaker" jdbcType="VARCHAR" />
+        <result column="docSpacerecordPerson" property="docSpacerecordPerson" jdbcType="VARCHAR" />
+        <result column="docSpacesaveSpace" property="docSpacesaveSpace" jdbcType="VARCHAR" />
+        <result column="docSpacetheLord" property="docSpacetheLord" jdbcType="VARCHAR" />
+        <result column="docSpacewitnesses" property="docSpacewitnesses" jdbcType="VARCHAR" />
+        <result column="docSpaceworkspce" property="docSpaceworkspce"  jdbcType="VARCHAR" />
+        <result column="docSpacecontent" property="docSpacecontent"  jdbcType="VARCHAR" />
+        <result column="nickName" property="nickName" jdbcType="VARCHAR" />
+        <result column="tel" property="tel" jdbcType="VARCHAR" />
+        <result column="qq" property="qq" jdbcType="VARCHAR" />
+        <result column="email" property="email" jdbcType="VARCHAR" />
+        <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+        <result column="censusRegister" property="censusRegister" jdbcType="VARCHAR" />
+        <result column="job" property="job" jdbcType="VARCHAR" />
+
+        <result column="phmakeAddress" property="phmakeAddress" jdbcType="VARCHAR" />
+        <result column="phevidenceExplain" property="phevidenceExplain" jdbcType="VARCHAR" />
+        <result column="phmakeAddress" property="phmakeAddress" jdbcType="VARCHAR" />
+        <result column="phstorageAddress" property="phstorageAddress" jdbcType="VARCHAR" />
+        <result column="phmakeTime" property="phmakeTime" jdbcType="VARCHAR" />
+        <result column="phchecks" property="phchecks" jdbcType="VARCHAR" />
+        <result column="phparty" property="phparty" jdbcType="VARCHAR" />
+        <result column="phproducer" property="phproducer" jdbcType="VARCHAR" />
+        <result column="phshootingPerson" property="phshootingPerson" jdbcType="VARCHAR" />
+        <result column="phunit" property="phunit" jdbcType="VARCHAR" />
+        <result column="phwitnessPerson" property="phwitnessPerson" jdbcType="VARCHAR" />
+
+        <result column="efdataContent" property="efdataContent" jdbcType="VARCHAR" />
+        <result column="efevidtime" property="efevidtime" jdbcType="VARCHAR" />
+        <result column="efextractionAddress" property="efextractionAddress" jdbcType="VARCHAR" />
+        <result column="efextractionMethod" property="efextractionMethod" jdbcType="VARCHAR" />
+        <result column="efformat" property="efformat" jdbcType="VARCHAR" />
+        <result column="eforiginal" property="eforiginal" jdbcType="VARCHAR" />
+        <result column="eforiginalplace" property="eforiginalplace" jdbcType="VARCHAR" />
+        <result column="efpoliceName" property="efpoliceName" jdbcType="VARCHAR" />
+        <result column="efproducer" property="efproducer" jdbcType="VARCHAR" />
+        <result column="efreason" property="efreason" jdbcType="VARCHAR" />
+        <result column="efunit" property="efunit" jdbcType="VARCHAR" />
+        <result column="efvideosource" property="efvideosource" jdbcType="VARCHAR" />
+        <result column="efwitnessPerson" property="efwitnessPerson" jdbcType="VARCHAR" />
+        <result column="interrogate_area_name" property="interrogateAreaName"  jdbcType="VARCHAR" />
+    </resultMap>
+    <resultMap id="exhibitMap" type="ExhibitEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="exhibit_id" property="exhibitId" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="detail_count" property="detailCount" jdbcType="INTEGER"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="serial_id" property="serialId" jdbcType="BIGINT"/>
+        <result column="locker_id" property="lockerId" jdbcType="VARCHAR"/>
+        <result column="is_get" property="isGet" jdbcType="INTEGER"/>
+        <result column="get_way" property="getWay" jdbcType="VARCHAR"/>
+        <result column="get_person" property="getPerson" jdbcType="VARCHAR"/>
+        <result column="get_time" property="getTime" jdbcType="TIMESTAMP"/>
+        <result column="serial_no" property="serialNo" jdbcType="VARCHAR"/>
+        <result column="person_name" property="personName" jdbcType="VARCHAR"/>
+        <result column="cabinet_group" property="cabinetGroup" jdbcType="VARCHAR"/>
+        <result column="cabinet_no" property="cabinetNo" jdbcType="VARCHAR"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="caseNo" property="caseNo" jdbcType="VARCHAR"/>
+        <result column="area_name" property="areaName" jdbcType="VARCHAR"/>
+        <!-- 链表 -->
+        <result column="logId" property="logId" jdbcType="INTEGER"/>
+        <result column="logBelongId" property="logBelongId" jdbcType="INTEGER"/>
+        <result column="logExhibitId" property="logExhibitId" jdbcType="INTEGER"/>
+        <result column="logBelongLockerId" property="logBelongLockerId" jdbcType="VARCHAR"/>
+        <result column="logBelongOpener" property="logBelongOpener" jdbcType="VARCHAR"/>
+        <result column="logBelongReason" property="logBelongReason" jdbcType="VARCHAR"/>
+        <result column="logCreatedTime" property="logCreatedTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap id="JzxxMapper" type="com.zhixin.zhfz.jzgl.entity.JzxxEntity">
+        <id property="id" column="id"/>
+        <result property="ajxxId" column="ajxx_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="gmxxId" column="gmxx_id"/>
+        <result property="jzzt" column="jzzt"/>
+        <result property="jzbh" column="jzbh"/>
+        <result property="zrrname" column="zrrname"/>
+        <result property="cjsj" column="cjsj"/>
+        <result property="ajmc" column="ajmc"/>
+        <result property="xm" column="xm"/>
+        <result property="xsbh" column="xsbh"/>
+        <result property="mc" column="mc"/>
+        <result property="jzgMc" column="jzg_mc"/>
+        <result property="ajbh" column="ajbh"/>
+        <result property="zbmj" column="zbmj"/>
+        <result property="ajlb" column="ajlb"/>
+        <result property="slsj" column="slsj"/>
+        <result property="ztms" column="ztms"/>
+        <result property="ajmcJzbh" column="ajmcJzbh"/>
+        <result property="ajIdJzId" column="ajIdJzId"/>
+        <result property="bmmc" column="bmmc"/>
+        <result property="uuid" column="uuid"/>
+        <result property="yjnr" column="yjnr"/>
+        <result property="yjlx" column="yjlx"/>
+        <result property="incount" column="incount"/>
+        <result property="outcount" column="outcount"/>
+        <result property="jzlx" column="jzlx"/>
+        <result property="jzms" column="jzms"/>
+        <result property="jz_count" column="jz_count"/>
+        <result property="ajlbms" column="ajlbms"/>
+        <result property="z" column="code_value"/>
+        <result property="organization" column="organization"/>
+        <result property="count" column="count"/>
+        <result property="pageNum" column="page_num"/>
+    </resultMap>
+    <resultMap id="EvaluationMapper" type="com.zhixin.zhfz.jxkp.entity.EvaluationEntity">
+        <id column="id" property="id" />
+        <result property="caseNo" column="caseNo"/>
+        <result property="caseName" column="caseName"/>
+        <result property="caseDesc" column="caseDesc"/>
+        <result property="caseType" column="caseType"/>
+        <result property="batchItem" column="batchItem"/>
+        <result property="informant" column="informant"/>
+        <result property="suspect" column="suspect"/>
+        <result property="police" column="police"/>
+        <result property="oraganizationName" column="oraganizationName"/>
+        <result property="leaderId" column="leaderId"/>
+        <result property="createrId" column="createrId"/>
+        <result property="handleTime" column="handleTime"/>
+        <result property="examineTime" column="examineTime"/>
+        <result property="scorevalue" column="scorevalue"/>
+        <result property="pointsvalue" column="pointsvalue"/>
+        <result property="implementation" column="implementation"/>
+        <result property="accordwith" column="accordwith"/>
+        <result property="remarks" column="remarks"/>
+        <result property="batchItemId" column="batchItemId"/>
+        <result property="policeIdZb" column="policeId"/>
+        <result property="lawAccording" column="lawAccording"/>
+        <result property="existEvidence" column="existEvidence"/>
+        <result property="lawerOpinion" column="lawerOpinion"/>
+        <result property="oraganizationId" column="oraganizationId"/>
+    </resultMap>
+    <select id="listPerson" resultMap="serialMap" parameterType="java.util.Map">
+        select
+        count(distinct ints.id)  ,ints.uuid,ints.id,ints.serial_no,ints.`status`,ints.status_change_time,ints.confirm_time,ints.confirm_result,
+        ints.person_id,ints.person_info,p.`name`,p.sex,p.certificate_type_id,p.certificate_no,
+        (select xc.code_value from xt_code xc where xc.type = 'ZJZLID' and xc.code_key = p.certificate_type_id) certificate_type_name ,
+        ints.type,ints.order_request_id,o.order_no,ints.area_id,
+        ia.`name` interrogate_area_name,ints.case_id,ic.ajmc interrogate_case_name,
+        ints.cuff_id,c.cuff_no,ints.in_photo_name,
+        inuser1.id in_user_id1, inuser1.real_name in_user_real_name1,inuser1.certificate_no in_user_no1,
+        (select `name` from xt_organization o where o.id = inuser1.organization_id) as organization,
+        ints.in_register_user_id,inregister.real_name in_register_user_real_name,
+        ints.in_time,ints.out_reason,ints.out_photo_name,ints.out_time,ints.out_type,
+        ic.ajlx case_type, ct.code_desc case_nature,ints.out_register_user_id,outregister.real_name
+        out_register_user_real_name,ints.entrance_procedure,ints.written_time
+        from ba_serial ints
+        left join ba_person p on ints.person_id=p.id
+        left join ba_order_request o on ints.order_request_id=o.id
+        left join ba_area ia on ints.area_id=ia.id
+        left join ba_case ic on ints.case_id=ic.id
+        left join ba_case_police bcp on bcp.case_id = ints.case_id
+        left join xt_crime_define ct on ct.id=ic.ab
+        left join ba_cuff c on ints.cuff_id=c.id
+        left join xt_user inuser1 on ic.zbmj_id=inuser1.id
+        left join xt_user inregister on ints.in_register_user_id=inregister.id
+        left join xt_user outregister on ints.out_register_user_id=outregister.id
+        where ints.type=0
+        and (ic.zbmj_id = ${policeId}  or bcp.xbmj_id = ${policeId})
+        <if test="caseId != null and caseId != ''">
+            and ints.case_id = ${caseId}
+        </if>
+        group by ints.id
+        order by ints.id desc
+        limit ${pageStart},${rows}
+    </select>
+    <select id="listPersonCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(distinct ints.id) from ba_serial ints
+        left join ba_person p on ints.person_id=p.id
+        left join ba_order_request o on ints.order_request_id=o.id
+        left join ba_area ia on ints.area_id=ia.id
+        left join ba_case ic on ints.case_id=ic.id
+        left join ba_case_police bcp on bcp.case_id = ints.case_id
+        left join xt_crime_define ct on ct.id=ic.ab
+        left join ba_cuff c on ints.cuff_id=c.id
+        left join xt_user inuser1 on ic.zbmj_id=inuser1.id
+        left join xt_user inregister on ints.in_register_user_id=inregister.id
+        left join xt_user outregister on ints.out_register_user_id=outregister.id
+        where ints.type=0 and (ic.zbmj_id = ${policeId} or bcp.xbmj_id = ${policeId})
+    </select>
+
+    <select id="listExhibit" resultMap="exhibitMap" parameterType="java.util.Map">
+       SELECT
+	        count(distinct bed.id),bed.*,bp.`name` person_name,be.created_time created_time,ba.`name` areaName,be.serial_id
+        FROM
+            ba_exhibit_detail bed
+        LEFT join ba_exhibit be ON be.id = bed.exhibit_id
+        LEFT join ba_case bc ON be.case_id = bc.id
+        left join ba_case_police bcp on bcp.case_id = be.case_id
+        Left join ba_serial bs on be.serial_id = bs.id
+        LEFT join ba_person bp on bs.person_id = bp.id
+        LEFT join ba_area ba on ba.id= be.area_id
+        where 1=1 and (bc.zbmj_id = ${policeId} or bcp.xbmj_id = ${policeId})
+         group by bed.id
+        order by bed.id desc
+        limit ${pageStart},${rows}
+    </select>
+    <select id="listExhibitCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(distinct bed.id)
+         FROM
+            ba_exhibit_detail bed
+        LEFT join ba_exhibit be ON be.id = bed.exhibit_id
+        LEFT join ba_case bc ON be.case_id = bc.id
+        left join ba_case_police bcp on bcp.case_id = be.case_id
+        Left join ba_serial bs on be.serial_id = bs.id
+        LEFT join ba_person bp on bs.person_id = bp.id
+        LEFT join ba_area ba on ba.id= be.area_id
+        where  1=1 and (bc.zbmj_id = ${policeId} or bcp.xbmj_id = ${policeId})
+        order by bed.id desc
+    </select>
+
+    <select id="getJzxxAndAjxx" parameterType="java.util.Map" resultMap="JzxxMapper">
+        select aj.ajmc,aj.ajbh,
+        (select u.real_name from xt_user u where u.id = jz.zrr) zrr,
+        jz.*, z.code_value,
+        jzg.mc jzg_mc,
+        gm.xsbh xsbh,
+        yh.real_name xm ,
+        (select count(id) from jz_jzxx_detail  jzd where jzd.jzxx_id = jz.id) jz_count
+        from jz_jzxx jz ,
+        jz_jzg jzg ,
+        jz_jzg_gmxx gm ,
+        xt_user yh ,
+        xt_code z,
+        ba_case aj,
+        ba_case_police bcp
+        where
+        jz.gmxx_id = gm.id
+        and jz.user_id = yh.id
+        and gm.jzg_id = jzg.id
+        and z.type = 'jzxx_save'
+        and z.code_key = jz.jzzt
+        and jz.ajxx_id = aj.id
+        and bcp.case_id = jz.ajxx_id
+        and (aj.zbmj_id = ${policeId} or bcp.xbmj_id = ${policeId})
+        <if test="caseId != null and caseId != ''">
+            and jz.ajxx_id = ${caseId}
+        </if>
+        order by jzbh desc
+    </select>
+
+    <select id="countJzxxAndAjxx" resultType="int" parameterType="java.util.Map">
+        select count(1)
+        from jz_jzxx jz ,
+        jz_jzg jzg ,
+        jz_jzg_gmxx gm ,
+        xt_user yh ,
+        xt_code z,
+        ba_case aj,
+        ba_case_police bcp
+        where
+        jz.gmxx_id = gm.id
+        and jz.user_id = yh.id
+        and gm.jzg_id = jzg.id
+        and z.type = 'jzxx_save'
+        and z.code_key = jz.jzzt
+        and jz.ajxx_id = aj.id
+        and bcp.case_id = jz.ajxx_id
+        and (aj.zbmj_id = ${policeId} or bcp.xbmj_id = ${policeId})
+        <if test="caseId != null and caseId != ''">
+            and jz.ajxx_id = ${caseId}
+        </if>
+    </select>
+
+    <!--查询出所有的考评记录 -->
+    <select id="selectAllEvaluation" resultMap="EvaluationMapper" parameterType="java.util.Map">
+        SELECT e.id as id,e.oraganizationId as oraganizationId, e.case_no as caseNo ,e.case_name as caseName ,e.case_desc as caseDesc,e.case_type as caseType,e.batch_item_id as batchItemId ,e.informant as informant,e.suspect as suspect,e.police_id as policeId,area.name as oraganizationName,e.leader_id as leaderId ,e.leader_id as leaderId2  ,e.creater as createrId2, e.handle_time as handleTime, e.examine_time as examineTime, e.scorevalue as scoreValue ,e.pointsvalue as pointsValue,e.implementation as implementation,e.accordwith as accordWith,e.remarks as remarks ,u.real_name as police,bat.content as batchItem ,e.law_according as lawAccording,e.exist_evidence as existEvidence,e.lawerOpinion as lawerOpinion,
+        u2.login_name as policeNo,
+        u3.login_name as policeNo2,
+        u4.real_name as leaderId,
+        u5.real_name as createrId,
+        u6.login_name as policeZbJh
+        FROM evaluation e  LEFT  join xt_organization area on  area.id = e.oraganizationId left JOIN  `xt_user`  u    ON  u.id  =  e.police_id LEFT  join  eva_batch_item bat on e.batch_item_id = bat.id
+        LEFT  join  `xt_user` u2 on u2.id = e.leader_id
+        LEFT  join  `xt_user` u3 on u3.id = e.creater
+        LEFT  join  `xt_user` u4 on u4.id = e.leader_id
+        LEFT  join  `xt_user` u5 on u5.id = e.creater
+        LEFT  join  `xt_user` u6 on u6.id = e.police_id
+        WHERE 1=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="policeId!=null and policeId!=''">
+            and e.police_id = ${policeId}
+        </if>
+        ORDER  BY  e.id desc
+        limit #{pageStart},#{rows}
+    </select>
+    <!--查询出所有的考评记录的数量 -->
+    <select id="selectAllEvaluationCount" resultType="Integer" parameterType="java.util.Map">
+        SELECT count(*)
+        FROM evaluation e  LEFT  join xt_organization area on  area.id = e.oraganizationId left JOIN  `xt_user`  u    ON  u.id  =  e.police_id LEFT  join  eva_batch_item bat on e.batch_item_id = bat.id
+        LEFT  join  `xt_user` u2 on u2.id = e.leader_id
+        LEFT  join  `xt_user` u3 on u3.id = e.creater
+        LEFT  join  `xt_user` u4 on u4.id = e.leader_id
+        LEFT  join  `xt_user` u5 on u5.id = e.creater
+        LEFT  join  `xt_user` u6 on u6.id = e.police_id
+        WHERE 1=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="policeId!=null and policeId!=''">
+            and e.police_id = ${policeId}
+        </if>
+    </select>
+    <!-- 查询警号-->
+    <select id="selectPoliceNoById" parameterType="String" resultType="String">
+		SELECT  login_name from `xt_user` WHERE  ID = #{userId}
+	</select>
+    <!-- 根据民警的id查询出民警的真实姓名-->
+    <select id="selectRealNameById" parameterType="String" resultType="String">
+    SELECT  real_name from `xt_user` WHERE  ID = #{userId}
+	</select>
+</mapper>
+
+

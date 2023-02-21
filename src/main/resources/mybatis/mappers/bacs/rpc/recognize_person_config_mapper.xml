@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacs.dao.rpc.IRecognizePersonConfigMapper">
+	<resultMap id="resultMap" type="com.zhixin.zhfz.bacs.entity.RecognizePersonConfigEntity">
+    	<id property="id" column="id"/>
+    	<result property="name" column="name"/>
+    	<result property="certificateTypeId" column="certificate_type_id"/>
+    	<result property="certificateNo" column="certificate_no"/>
+    	<result property="censusRegister" column="census_register"/>
+		<result property="birth" column="birth"/>
+		<result property="age" column="age"/>
+		<result property="sex" column="sex"/>
+		<result property="skin" column="skin"/>
+		<result property="shape" column="shape"/>
+		<result property="hairLength" column="hair_length"/>
+		<result property="hairColor" column="hair_color"/>
+		<result property="faceStyle" column="face_style"/>
+		<result property="hasPhoto" column="has_photo"/>
+		<result property="photoUuid" column="photo_uuid"/>
+		<result property="photoName" column="photo_name"/>
+		<result property="otherProperty" column="other_property"/>
+		<result property="createdTime" column="created_time"/>
+		<result property="clothing" column="clothing"/>
+		<result property="eyeStyle" column="eye_style"/>
+		<result property="photoType" column="photo_type"/>
+		<result property="bindUp" column="bind_up"/>
+    </resultMap>
+
+
+
+	<select id="list" parameterType="java.util.Map" resultMap="resultMap">
+		SELECT p.*,h.`name` AS photo_name from `ba_recognize_person_config` AS p
+		LEFT JOIN `ba_recognize_photo_config` AS h ON p.photo_uuid = h.uuid
+		<include refid="query_where"/>
+		limit ${pageStart},${rows};
+	</select>
+
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT COUNT(*) from `ba_recognize_person_config` AS p
+		<include refid="query_where"/>
+    </select>
+
+	<select id="get" parameterType="java.util.Map" resultMap="resultMap">
+		SELECT * from `ba_recognize_person_config` AS p where p.certificate_no = #{certificateNo}
+	</select>
+
+	<update id="update" parameterType="com.zhixin.zhfz.bacs.entity.RecognizePersonConfigEntity" >
+		update ba_recognize_person_config set
+		<if test="name!= null and name!=''" >
+			name = #{name}
+		</if>
+		<if test="certificateNo!= null and certificateNo!=''" >
+			,certificate_no = #{certificateNo}
+		</if>
+		<if test="age!= null and age!=''" >
+			,age = #{age}
+		</if>
+		<if test="censusRegister!= null and censusRegister!=''" >
+			,census_register = #{censusRegister}
+		</if>
+		<if test="sex!= null and sex!=''" >
+			,sex = #{sex}
+		</if>
+		<if test="skin!= null and skin!=''" >
+			,skin = #{skin}
+		</if>
+		<if test="shape!= null and shape!=''" >
+			,shape = #{shape}
+		</if>
+		<if test="hairLength!= null and hairLength!=''" >
+			,hair_length = #{hairLength}
+		</if>
+		<if test="hairColor!= null and hairColor!=''" >
+			,hair_color = #{hairColor}
+		</if>
+		<if test="faceStyle!= null and faceStyle!=''" >
+			,face_style = #{faceStyle}
+		</if>
+		<if test="photoType!= null and photoType!=''" >
+			,photo_type = #{photoType}
+		</if>
+		<if test="clothing!= null and clothing!=''" >
+			,clothing = #{clothing}
+		</if>
+        <if test="bindUp!= null and bindUp!=''" >
+			,bind_up = #{bindUp}
+		</if>
+		where id=#{id}
+	</update>
+
+	<insert id="insert" parameterType="com.zhixin.zhfz.bacs.entity.RecognizePersonConfigEntity" >
+		INSERT into ba_recognize_person_config
+			(`name`,certificate_no,age,sex,photo_uuid,created_time,has_photo,photo_type,certificate_type_id)
+		VALUES (#{name},#{certificateNo},#{age},#{sex},#{photoUuid},now(),1,1,111)
+	</insert>
+
+
+	<sql id="query_where">
+		<where>
+			<if test="certificateNo!=null and certificateNo !=''">
+				and p.certificate_no LIKE '%${certificateNo}%'
+			</if>
+			<if test="name!= null and name!=''" >
+				name LIKE '%${name}%'
+			</if>
+		</where>
+	</sql>
+</mapper>
+
+

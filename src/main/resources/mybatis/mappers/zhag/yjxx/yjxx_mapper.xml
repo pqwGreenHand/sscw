@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.zhag.dao.yjxx.IYjxxMapper">
+
+    <resultMap id="yjxxResultMap" type="com.zhixin.zhfz.zhag.entity.YjxxEntity">
+        <id property="id" column="id"/>
+        <result property="yjsj" column="yjsj"/>
+        <result property="yjjb" column="yjjb"/>
+        <result property="yjlx" column="yjlx"/>
+        <result property="yjly" column="yjly"/>
+        <result property="yjnr" column="yjnr"/>
+        <result property="ajbh" column="ajbh"/>
+        <result property="jqbh" column="jqbh"/>
+        <result property="yjzt" column="yjzt"/>
+        <result property="cjsj" column="cjsj"/>
+        <result property="xgsj" column="xgsj"/>
+    </resultMap>
+ 
+<select id="selectYjxx" resultMap="yjxxResultMap"  resultType="com.zhixin.zhfz.zhag.entity.YjxxEntity">
+   SELECT * FROM ag_yjxx  y
+   where 1=1
+  <if test="yjly != '' and yjly != null">
+		 and y.yjly=#{yjly}
+   </if>
+   <if test="yjlx != '' and yjlx != null">
+		 and y.yjlx=#{yjlx}
+   </if>
+   <if test="yjjb != '' and yjjb != null">
+		 and y.yjjb=#{yjjb}
+   </if>
+   <if test="yjzt != '' and yjzt != null">
+		 and y.yjzt=#{yjzt}
+   </if>
+   
+    <if test="start != null and start != ''">
+        and y.yjsj &gt; #{start}
+    </if>
+    <if test="end != null and end != ''">
+        and y.yjsj &lt; #{end}
+    </if>
+      <if test="ajbh != null and ajbh != ''">
+        and y.ajbh=#{ajbh}
+    </if>
+</select>
+<select id="countYjxx"  resultType="int" parameterType="java.util.Map">
+   SELECT count(id) FROM ag_yjxx  y
+     where 1=1
+   <if test="yjly != '' and yjly != null">
+		 and y.yjly=#{yjly}
+   </if>
+   <if test="yjlx != '' and yjlx != null">
+		 and y.yjlx=#{yjlx}
+   </if>
+   <if test="yjjb != '' and yjjb != null">
+		 and y.yjjb=#{yjjb}
+   </if>
+   <if test="yjzt != '' and yjzt != null">
+		 and y.yjzt=#{yjzt}
+   </if>
+   
+    <if test="start != null and start != ''">
+        and y.yjsj &gt; #{start}
+    </if>
+    <if test="end != null and end != ''">
+        and y.yjsj &lt; #{end}
+    </if>
+     <if test="ajbh != null and ajbh != ''">
+        and y.ajbh=#{ajbh}
+    </if>
+</select>
+
+    <select id="jqYjList" resultMap="yjxxResultMap"  resultType="com.zhixin.zhfz.zhag.entity.YjxxEntity">
+        SELECT * FROM ag_yjxx  y
+        where y.yjly = 0
+        <if test="yjly != '' and yjly != null">
+            and y.yjly=#{yjly}
+        </if>
+        <if test="startTime != null and startTime != ''">
+            and y.yjsj &gt; #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and y.yjsj &lt; #{endTime}
+        </if>
+        limit ${pageStart},${rows}
+    </select>
+    <select id="countJqYj"  resultType="int" parameterType="java.util.Map">
+        SELECT count(1) FROM ag_yjxx  y
+        where y.yjly = 0
+        <if test="yjly != '' and yjly != null">
+            and y.yjly=#{yjly}
+        </if>
+        <if test="startTime != null and startTime != ''">
+            and y.yjsj &gt; #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and y.yjsj &lt; #{endTime}
+        </if>
+    </select>
+ 
+</mapper>

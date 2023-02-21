@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhixin.zhfz.jzgl.dao.jzxx.ICzrzMapper">
+	<resultMap id="CzrzMapper" type="com.zhixin.zhfz.jzgl.entity.CzrzEntity">
+		<id property="id" column="id" />
+		<result property="jzxxId" column="jzxx_id" />
+		<result property="userId" column="user_id" />
+		<result property="gmxxId" column="gmxx_id" />
+		<result property="czlx" column="czlx" />
+		<result property="czsj" column="czsj" />
+		<result property="jzJzbh" column="jz_jzbh" />
+		<result property="ajAjmc" column="aj_ajmc" />
+		<result property="gmXsbh" column="gm_xsbh" />
+		<result property="yhXm" column="yh_xm" />
+		<result property="jzgMc" column="jzg_mc" />
+		<result property="z" column="z" />
+		<result property="ajxxId" column="ajxx_id" />
+		<result property="czms" column="czms" />
+		<result property="zplj" column="zplj" />
+		<result property="count" column="count" />
+		<result property="organization" column="organization" />
+		<result property="loginName" column="loginName" />
+		<result property="realName" column="realName" />
+	</resultMap>
+	
+		<!-- listdwJzCq 散点图 -->
+	<select id="listdwJzCr" resultMap="CzrzMapper"
+		parameterType="java.util.Map">
+		SELECT
+		org.id,org.name organization,cz.czlx,cz.czsj
+		FROM
+		jz_czrz cz
+		LEFT JOIN
+		`xt_user` `user` ON cz.user_id = `user`.id
+		LEFT JOIN xt_organization org ON org.id = `user`.organization_id
+		LEFT JOIN ba_case aj ON cz.ajxx_id = aj.id
+		LEFT JOIN jz_jzg_gmxx gm ON cz.gmxx_id = gm.id
+		WHERE cz.user_id = `user`.id 
+		AND org.id = `user`.organization_id
+		AND czlx IN(1,2)
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+
+	</select>
+		<!-- listdwJzCq 散点图 -->
+	<select id="listdwJzQc" resultMap="CzrzMapper"
+		parameterType="java.util.Map">
+		SELECT
+		org.id,org.name organization,cz.czlx,cz.czsj
+		FROM
+		jz_czrz cz
+		LEFT JOIN
+		`xt_user` `user` ON cz.user_id = `user`.id
+		LEFT JOIN xt_organization org ON org.id = `user`.organization_id
+		LEFT JOIN ba_case aj ON cz.ajxx_id = aj.id
+		LEFT JOIN jz_jzg_gmxx gm ON cz.gmxx_id = gm.id
+		WHERE cz.user_id = `user`.id
+		AND org.id = `user`.organization_id
+		AND czlx =2
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+
+	</select>
+	<!-- 卷宗新增top10 -->
+	<select id="listJzXzCount" resultMap="CzrzMapper"
+		parameterType="java.util.Map">
+		SELECT cz.* FROM jz_czrz cz
+		LEFT JOIN `xt_user` `user` ON cz.user_id = `user`.id
+		LEFT JOIN xt_organization org ON org.id = `user`.organization_id
+		LEFT JOIN ba_case aj ON cz.ajxx_id = aj.id
+		LEFT JOIN jz_jzg_gmxx gm ON cz.gmxx_id = gm.id
+		WHERE czlx in (1,2) and  cz.jzxx_id is not  null 
+		<if test="jzgId != null and jzgId != ''">
+			and org.id =(SELECT org_id from jz_jzg where id=#{jzgId})
+		</if>
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+
+	</select>
+	
+	<!-- listAllCzrz -->
+	<select id="listJzCrQcCount" resultMap="CzrzMapper"
+		parameterType="java.util.Map">
+		 SELECT
+		org.name organization,
+		cz.czlx,
+		COUNT(1) COUNT
+		FROM
+		jz_czrz cz
+		LEFT JOIN `xt_user` `user` ON cz.user_id = `user`.id
+		LEFT JOIN xt_organization org ON org.id = `user`.`organization_id`
+		LEFT JOIN ba_case aj ON cz.ajxx_id = aj.id
+		LEFT JOIN jz_jzg_gmxx gm ON cz.gmxx_id = gm.id
+		WHERE cz.user_id = `user`.id 
+		AND czlx IN (1,2)
+		<if test="jzgId != null and jzgId != ''">
+			and org.id =(SELECT org_id from jz_jzg where id=#{jzgId})
+		</if>
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+		GROUP BY
+		org.name,cz.czlx
+
+	</select>
+	<select id="listMjCount" resultMap="CzrzMapper" parameterType="java.util.Map">
+		SELECT
+		`user`.real_name realName,
+		`user`.login_name loginName,
+		cz.czlx,gm.jzg_id,COUNT(*) COUNT
+		FROM
+		jz_czrz cz
+		LEFT JOIN `xt_user` `user` ON cz.user_id = `user`.id 
+		LEFT JOIN xt_organization org ON org.id = `user`.organization_id
+		LEFT JOIN ba_case aj ON cz.ajxx_id = aj.id
+		LEFT JOIN jz_jzg_gmxx gm ON cz.gmxx_id = gm.id
+		WHERE czlx IN (1,2)
+		<if test="jzgId != null and jzgId != ''">
+			and gm.jzg_id = #{jzgId}
+		</if>
+		<if test="organizationId != null and organizationId != ''">
+			and org.id = #{organizationId}
+		</if>
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+		GROUP BY
+		`user`.id,cz.czlx
+		order by cz.czsj desc
+	</select>
+	<!-- listAllCzrz -->
+	<select id="listAllCzrz" resultMap="CzrzMapper">
+		<!-- no ";" at the end -->
+		SELECT * FROM czrz
+	</select>
+
+	<!-- countAllCzrz -->
+	<select id="countAllCzrz" resultType="int">
+		SELECT COUNT(1) FROM czrz
+	</select>
+
+	<!-- listCzrz -->
+	<select id="listCzrz" resultMap="CzrzMapper" parameterType="java.util.Map">
+		<!-- no ";" at the end -->
+		select c.*,
+		j.jzbh jz_jzbh,
+		a.ajmc aj_ajmc,
+		gm.xsbh gm_xsbh,
+		y.real_name
+		yh_xm ,
+		jzg.mc jzg_mc,
+		z.z z
+		from czrz c left join jzxx j on c.jzxx_id =
+		j.id
+		left join user y on c.user_id = y.id
+		left join jzg_gmxx gm on
+		c.gmxx_id = gm.id
+		left join ajxx a on c.ajxx_id = a.id
+		left join jzg jzg
+		on gm.jzg_id = jzg.id
+		left join zd z on z.zj = c.czlx
+		LEFT JOIN
+		organization o ON o.id = a.bm_id
+		where z.zdlx = 'czrz_czlx'
+		<if test="yhXm != null and yhXm != ''">
+			and y.real_name like '%${yhXm}%'
+		</if>
+		<if test="jzgId != null and jzgId != 0 and jzgId != ''">
+			and jzg.id = #{jzgId}
+		</if>
+		<if test="gmxxId != null and gmxxId != 0 and gmxxId !=''">
+			and gm.id = #{gmxxId}
+		</if>
+		<if test="czlx != null and czlx != ''">
+			and c.czlx = #{czlx}
+		</if>
+		<if test="begintime != null and begintime != ''">
+			and c.czsj &gt;= #{begintime}
+		</if>
+		<if test="endtime != null and endtime != ''">
+			and c.czsj &lt;= #{endtime}
+		</if>
+		<if test="ajmc != null and ajmc != ''">
+			and a.ajmc like '%${ajmc}%'
+		</if>
+		<if test="ajxxId != null and ajxxId != ''">
+			and a.id = #{ajxxId}
+		</if>
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+		order by ${sort} ${order}
+		limit ${start},${rows}
+	</select>
+	<!-- list -->
+	<select id="list" resultMap="CzrzMapper" parameterType="java.util.Map">
+		<!-- no ";" at the end -->
+		select c.*,
+		j.jzbh jz_jzbh,
+		a.ajmc aj_ajmc,
+		gm.xsbh gm_xsbh,
+		y.real_name
+		yh_xm ,
+		jzg.mc jzg_mc,
+		z.z z
+		from czrz c left join jzxx j on c.jzxx_id =
+		j.id
+		left join user y on c.user_id = y.id
+		left join jzg_gmxx gm on
+		c.gmxx_id = gm.id
+		left join ajxx a on c.ajxx_id = a.id
+		left join jzg jzg
+		on gm.jzg_id = jzg.id
+		left join zd z on z.zj = c.czlx
+
+		where z.zdlx =
+		'czrz_czlx'
+	</select>
+
+	<!-- countCzrz -->
+	<select id="countCzrz" resultType="int" parameterType="java.util.Map">
+		select count(1)
+		from czrz c left join jzxx j on c.jzxx_id = j.id
+		left
+		join user y on c.user_id = y.id
+		left join jzg_gmxx gm on c.gmxx_id =
+		gm.id
+		left join ajxx a on c.ajxx_id = a.id
+		left join jzg jzg on
+		gm.jzg_id = jzg.id
+		left join zd z on z.zj = c.czlx
+		LEFT JOIN
+		organization o ON o.id = a.bm_id
+		where z.zdlx = 'czrz_czlx'
+		<if test="yhXm != null and yhXm != ''">
+			and y.real_name like '%${yhXm}%'
+		</if>
+		<if test="jzgId != null and jzgId != 0 and jzgId != ''">
+			and jzg.id = #{jzgId}
+		</if>
+		<if test="gmxxId != null and gmxxId != 0 and gmxxId !=''">
+			and gm.id = #{gmxxId}
+		</if>
+		<if test="czlx != null and czlx != ''">
+			and c.czlx = #{czlx}
+		</if>
+		<if test="begintime != null and begintime != ''">
+			and c.czsj &gt;= #{begintime}
+		</if>
+		<if test="endtime != null and endtime != ''">
+			and c.czsj &lt;= #{endtime}
+		</if>
+		<if test="ajmc != null and ajmc != ''">
+			and a.ajmc like '%${ajmc}%'
+		</if>
+		<if test="ajxxId != null and ajxxId != ''">
+			and a.id = #{ajxxId}
+		</if>
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+	</select>
+
+	<!-- getCzrzById -->
+	<select id="getCzrzById" resultMap="CzrzMapper" parameterType="Long">
+		<!-- no ";" at the end -->
+		SELECT * FROM czrz where id=#{id}
+	</select>
+
+	<!-- insertCzrz -->
+	<insert id="insertCzrz" parameterType="com.zhixin.zhfz.jzgl.entity.CzrzEntity" keyProperty="id"
+		useGeneratedKeys="true">
+		<selectKey>
+			select @@IDENTITY
+		</selectKey>
+		INSERT INTO jz_czrz (
+		jzxx_id,
+		user_id,
+		gmxx_id,
+		czlx,
+		czsj,
+		ajxx_id,
+		op_pid
+		)
+		VALUES(
+		#{jzxxId},
+		#{userId},
+		#{gmxxId},
+		#{czlx},
+		now(),
+		#{ajxxId},
+		#{opPid}
+		);
+	</insert>
+	<select id="lastInsertId" resultMap="CzrzMapper">
+		select c.*,
+		j.jzbh jz_jzbh,
+		a.ajmc aj_ajmc,
+		gm.xsbh gm_xsbh,
+		y.xm yh_xm ,
+		jzg.mc jzg_mc,
+		z.z z
+		from
+		czrz c left join jzxx j on c.jzxx_id = j.id
+		left join yh y on c.user_id =
+		y.id
+		left join gmxx gm on c.gmxx_id = gm.id
+		left join ajxx a on
+		c.ajxx_id = a.id
+		left join jzg jzg on gm.jzg_id = jzg.id
+		left join zd z
+		on z.zj = c.czlx
+
+		where z.zdlx = 'czrz_czlx'
+		and c.id=(select max(id)
+		from czrz)
+	</select>
+
+	<update id="updateCzrz" parameterType="com.zhixin.zhfz.jzgl.entity.CzrzEntity">
+		UPDATE czrz SET
+		jzxx_id=#{jzxxId},
+		user_id=#{userId},
+		gmxx_id=#{gmxxId},
+		czlx=#{czlx},
+		czsj=now(),
+		zplj=#{zplj},
+		czms=#{czms}
+		WHERE
+		id=#{id}
+	</update>
+
+	<delete id="deleteCzrzById" parameterType="Long">
+		DELETE FROM czrz WHERE
+		id=#{id}
+	</delete>
+	
+	<!-- queryCqBy30Count 近30 天 -->
+	<select id="queryCqBy30Count" resultMap="CzrzMapper" parameterType="java.util.Map">
+		SELECT
+		cz.*
+		FROM
+		jz_czrz cz
+		LEFT JOIN xt_user user on cz.user_id = user.id
+		LEFT JOIN xt_organization org on org.id = user.organization_id
+		LEFT JOIN ba_case aj ON cz.ajxx_id = aj.id
+		LEFT JOIN jz_jzg_gmxx gm on cz.gmxx_id = gm.id
+		where
+		DATE_SUB(CURDATE(), INTERVAL 30 DAY) &lt;=date(czsj)
+		<if test="jzgId != null and jzgId != ''">
+			and org.id =(SELECT org_id from jz_jzg where id=#{jzgId})
+		</if>
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+		GROUP BY
+		org.name,cz.czlx
+	</select>
+
+
+</mapper>
+
+

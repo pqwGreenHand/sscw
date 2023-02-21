@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.belongtemp.IBelongDetailTempMapper">
+    <resultMap id="BaseResultMap" type="BelongDetailTempEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="temp_id" property="tempId" />
+        <result column="wp_uuid" property="wpUuid" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="detail_count" property="detailCount" jdbcType="INTEGER"/>
+        <result column="unit" property="unit" jdbcType="VARCHAR"/>
+        <result column="save_method" property="saveMethod" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="list" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT *  from  ba_belongings_detail_temp
+        <where>
+            1=1
+            <if test="tempId!=null and tempId!=''">
+                and temp_id =#{tempId}
+            </if>
+        </where>
+        limit ${pageStart},${rows}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT count(1)  from  ba_belongings_detail_temp
+        <where>
+            1=1
+            <if test="tempId!=null and tempId!=''">
+                and temp_id =#{tempId}
+            </if>
+        </where>
+    </select>
+
+
+    <!-- 创建临时物品记录记录 -->
+    <insert id="saveBelongTemp" parameterType="BelongDetailTempEntity"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ba_belongings_detail_temp
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tempId != null">
+                temp_id,
+            </if>
+            <if test="wpUuid != null">
+                wp_uuid,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="detailCount != null">
+                detail_count,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="unit != null">
+                unit,
+            </if>
+            <if test="saveMethod != null">
+                save_method,
+            </if>
+            updated_time,
+            created_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tempId != null">
+                #{tempId},
+            </if>
+            <if test="wpUuid != null">
+                #{wpUuid},
+            </if>
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="detailCount != null">
+                #{detailCount},
+            </if>
+            <if test="description != null">
+                #{description},
+            </if>
+            <if test="unit != null">
+                #{unit},
+            </if>
+            <if test="saveMethod != null">
+                #{saveMethod},
+            </if>
+            now(),
+            now()
+        </trim>
+    </insert>
+
+    <select id="getListByTempId" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        bbdt.*
+        from
+        ba_belongings_detail_temp  bbdt
+        LEFT JOIN  ba_belongings_temp bbt ON bbt.id= bbdt.temp_id
+        where 1=1 and ISNULL(yjjg)
+        <if test="tempId != null">
+            and temp_id=#{tempId}
+        </if>
+        <!--<if test="belongId != null">-->
+            <!--and belong_id=#{belongId}-->
+        <!--</if>-->
+        <if test="wpUuid != null">
+            and wp_uuid=#{wpUuid}
+        </if>
+    </select>
+
+    <select id="getByWpUuid" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT
+            *
+        FROM
+             ba_belongings_detail_temp bbdt
+       LEFT JOIN  ba_belongings_temp bbt ON bbt.id= bbdt.temp_id
+        WHERE
+            wp_uuid IN (
+                SELECT
+                    wp_uuid
+                FROM
+                    ba_belongings_detail
+                WHERE
+                    belongings_id = (
+                        SELECT
+                            belongings_id
+                        FROM
+                            ba_belongings_detail
+                        WHERE
+                            wp_uuid = #{wpUuid}
+                             ORDER BY id desc  LIMIT 1
+                    )
+            )
+            and ISNULL(bbt.yjjg)
+    </select>
+</mapper>

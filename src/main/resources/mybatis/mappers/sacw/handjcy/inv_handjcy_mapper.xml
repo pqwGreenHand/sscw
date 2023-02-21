@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.sacw.dao.handjcy.IHandJcyMapper">
+
+    <resultMap id="involvedMap" type="com.zhixin.zhfz.sacw.entity.InvolvedEntity">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="detail_count" column="detail_count" jdbcType="VARCHAR"/>
+        <result property="outputCount" column="output_count" jdbcType="VARCHAR"/>
+        <result property="leftCount" column="leftCount" jdbcType="VARCHAR"/>
+        <result property="unit" column="unit" jdbcType="VARCHAR"/>
+        <result property="weight" column="weight"/>
+        <result property="worth" column="worth"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="involved_type_id" column="involved_type_id" jdbcType="INTEGER"/>
+        <result property="input_type_id" column="input_type_id" jdbcType="INTEGER"/>
+        <result property="barcode" column="barcode" jdbcType="VARCHAR"/>
+        <result property="law_case_id" column="case_id" jdbcType="INTEGER"/>
+        <result property="involved_owner" column="involved_owner" jdbcType="VARCHAR"/>
+        <result property="number" column="no" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="expired_time" column="expired_time" jdbcType="TIMESTAMP"/>
+        <result property="register_user_id" column="register_user_id" jdbcType="VARCHAR"/>
+        <result property="registerUserName" column="registerUserName" jdbcType="VARCHAR"/>
+        <result property="created_time" column="created_time" jdbcType="TIMESTAMP"/>
+        <result property="updated_time" column="updated_time" jdbcType="TIMESTAMP"/>
+        <result property="caseNo" column="ajbh"/>
+        <result property="caseName" column="ajmc"/>
+        <result property="typeName" column="typeName"/>
+        <result property="inputCode" column="inputCode"/>
+        <result property="url" column="url"/>
+        <result property="type" column="type"/>
+        <result property="orgName" column="orgName" jdbcType="VARCHAR"/>
+        <result column="location" property="location" jdbcType="VARCHAR"/>
+        <result column="shelf_id" property="shelfId" jdbcType="INTEGER"/>
+        <result column="location_id" property="locationId" jdbcType="INTEGER"/>
+        <result column="warehouse_id" property="warehouseId" jdbcType="INTEGER"/>
+        <result column="recordId" property="recordId" jdbcType="INTEGER"/>
+        <result property="labelNo" column="label_no" jdbcType="VARCHAR"/>
+        <result property="labelId" column="label_id" jdbcType="VARCHAR"/>
+        <result property="uuid" column="uuid" jdbcType="VARCHAR"/>
+        <result property="getPoliceName" column="getPoliceName" jdbcType="VARCHAR"/>
+        <result property="getUnit" column="getUnit" jdbcType="VARCHAR"/>
+        <result column="outputType" property="outputType" jdbcType="VARCHAR"/>
+        <result property="outputTime" column="output_time" jdbcType="TIMESTAMP"/>
+        <result property="involvedId" column="involved_id" jdbcType="INTEGER"/>
+        <!-- 	<result property="uuid" column="uuid"/> -->
+    </resultMap>
+
+    <select id="list" resultMap="involvedMap" parameterType="java.util.Map">
+        select distinct i.id ,i.barcode ,i.created_time,l.ajbh,l.ajmc,
+        i.name,code.code_value typeName,i.case_id,
+        i.detail_count,i.unit ,i.status,i.uuid,i.warehouse_id,
+        i.type,u.real_name registerUserName,a.id as areaId,a.`name` as areaName from sa_output_record o
+        left join sa_involved i on o.involved_id=i.id
+        left join ba_case l on l.id=o.case_id
+        left join xt_code code on code.code_key = i.involved_type_id and code.type = 'INVOLVED_TYPE'
+        left join xt_user u on u.id=i.register_user_id
+        left join sa_warehouse a on a.id=i.warehouse_id
+        left join xt_organization t on a.org_id = t.id
+        where o.output_type_id=9 and i.type='1'
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="caseNo!=null and caseNo!=''">
+            and l.ajbh like '%${caseNo}%'
+        </if>
+        <if test="caseName!=null and caseName!=''">
+            and l.ajmc like '%${caseName}%'
+        </if>
+        <if test="name!=null and name!=''">
+            and i.name like '%${name}%'
+        </if>
+        <if test="barcode !=null and barcode!=''">
+            and i.barcode=#{barcode}
+        </if>
+        <if test="status!=99 and status!=null">
+            and i.status= #{status}
+        </if>
+
+        order by i.created_time desc limit ${pageStart},${rows}
+    </select>
+
+    <select id="count" resultType="int" parameterType="java.util.Map">
+        select count(distinct i.id) from sa_output_record o
+        left join sa_involved i on o.involved_id=i.id
+        left join ba_case l on l.id=o.case_id
+        left join xt_code code on code.code_key = i.involved_type_id and code.type = 'INVOLVED_TYPE'
+        left join xt_user u on u.id=i.register_user_id
+        left join sa_warehouse a on a.id=i.warehouse_id
+        left join xt_organization t on a.org_id = t.id
+        where o.output_type_id=9 and i.type='1'
+        <if test="caseNo!=null and caseNo!=''">
+            and l.ajbh like '%${caseNo}%'
+        </if>
+        <if test="caseName!=null and caseName!=''">
+            and l.ajmc like '%${caseName}%'
+        </if>
+        <if test="name!=null and name!=''">
+            and i.name like '%${name}%'
+        </if>
+        <if test="barcode !=null and barcode!=''">
+            and i.barcode=#{barcode}
+        </if>
+        <if test="status!=99 and status!=null">
+            and i.status= #{status}
+        </if>
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+
+    </select>
+    <select id="listOutputRecordById" resultMap="involvedMap" parameterType="java.util.Map">
+        select ord.*,u.real_name getPoliceName,
+        d.name getUnit,re.real_name registerUserName,goods.name,cd.code_value as outputType
+        from sa_output_record ord
+        left join xt_code cd on cd.type='INV_OUTPUT_TYPE' and ord.output_type_id=cd.code_key
+        left join sa_involved goods on ord.involved_id=goods.id
+        left join xt_user u on ord.police_id=u.id
+        left join xt_organization d on ord.organization_id=d.id
+        left join xt_user re on re.id=ord.register_user_id
+        where ord.involved_id=#{involvedId}
+        order by ord.created_time desc limit ${pageStart},${rows}
+    </select>
+
+    <select id="recordCount" resultType="int" parameterType="java.util.Map">
+        select count(1)
+        from sa_output_record ord
+        left join xt_code cd on cd.type='INV_OUTPUT_TYPE' and ord.output_type_id=cd.code_key
+        left join sa_involved goods on ord.involved_id=goods.id
+        left join xt_user u on ord.police_id=u.id
+        left join xt_organization d on ord.organization_id=d.id
+        left join xt_user re on re.id=ord.register_user_id
+        where ord.involved_id=#{involvedId}
+    </select>
+
+</mapper>

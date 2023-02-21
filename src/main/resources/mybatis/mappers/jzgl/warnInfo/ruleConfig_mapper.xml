@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.jzgl.dao.warnInfo.IRuleConfigMapper">
+    <resultMap id="IRuleConfigMapper" type="com.zhixin.zhfz.jzgl.entity.RuleConfigEntity">
+        <id property="id" column="id"/>
+        <result property="ruleId" column="rule_id"/>
+        <result property="sendRoleIds" column="send_role_ids"/>
+        <result property="sendRoleNames" column="send_role_names"/>
+        <result property="sendHour" column="send_hour"/>
+    </resultMap>
+        
+    <select id="getRuleConfigByClassName" parameterType="java.lang.String" resultMap="IRuleConfigMapper" >
+    	select * from jz_rule_config rc 
+		LEFT JOIN   rule_info  ri ON rc.rule_id =ri.id
+       where  ri.class_name=#{classname}  ORDER BY send_hour  asc 
+    </select>
+    <select id="getRuleConfigByRuleId" parameterType="java.util.Map" resultMap="IRuleConfigMapper" resultType="java.util.List">
+    	select * from jz_rule_config
+        where 1=1
+		<if test="ruleId != null and ruleId != ''">
+			and rule_id = #{ruleId}
+		</if>
+		<if test="dataAuth != null and dataAuth != ''">
+			and ${dataAuth}
+		</if>	
+			
+    </select>
+    
+    <select id="countRuleConfig" parameterType="java.util.Map" resultType="int">
+    	select count(1) from jz_rule_config
+    	where 1=1
+		<if test="ruleId != null and ruleId != ''">
+			and rule_id = #{ruleId}
+		</if>		 
+    </select>
+    
+    <insert id="insertRuleConfig" parameterType="com.zhixin.zhfz.jzgl.entity.RuleConfigEntity"  keyProperty="id" useGeneratedKeys="true" >  
+            INSERT INTO jz_rule_config (
+	    		rule_id,
+	    		send_role_ids,
+	    		send_role_names,
+	    		send_hour,
+	    		op_pid,
+	    		op_user_id	 
+	    		)
+             VALUES(
+	    		#{ruleId},
+	    		#{sendRoleIds},
+	    		#{sendRoleNames},
+	    		#{sendHour},
+	    		#{opPid},
+	    		#{opUserId}	  	  	    		
+				)
+    </insert>
+    
+    
+</mapper>
+
+

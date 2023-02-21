@@ -1,0 +1,11 @@
+@charset "utf-8";
+#left {
+    float: left;
+    width: 60%;
+    height: 100%;
+}
+#right {
+    float: right;
+    width: 40%;
+    height: 100%;
+}

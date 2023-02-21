@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+
+	<!-- 周期更新页面权限缓存 -->
+	<bean id="powerCacheUtil" class="com.zhixin.zhfz.common.utils.PowerCacheUtil" />
+	<bean id="methodInvokingCacheUtil"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="powerCacheUtil" />
+		</property>
+		<property name="targetMethod">
+			<!-- loop user <value>loadCacheData</value> -->
+			<value>refreshCacheAsyc</value>
+		</property>
+	</bean>
+	<bean id="cronTriggerCacheUtil"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="methodInvokingCacheUtil" />
+		</property>
+		<property name="cronExpression">
+			<!-- 每1小时一次 -->
+			<value>0 0 */1 * * ?</value>
+		</property>
+	</bean>
+
+	<!--&lt;!&ndash; 周期计算羁押超时的嫌疑人 &ndash;&gt;-->
+	<!--<bean id="overtimeQuartz" class="com.zhixin.zhfz.bacs.controller.quartz.OvertimeQuartz" />-->
+	<!--<bean id="methodInvokingOvertimeQuartz"-->
+		  <!--class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+		<!--<property name="targetObject">-->
+			<!--<ref bean="overtimeQuartz" />-->
+		<!--</property>-->
+		<!--<property name="targetMethod">-->
+			<!--<value>overtimeWakeup</value>-->
+		<!--</property>-->
+	<!--</bean>-->
+	<!--<bean id="cronTriggerOvertime"-->
+		  <!--class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">-->
+		<!--<property name="jobDetail">-->
+			<!--<ref bean="methodInvokingOvertimeQuartz" />-->
+		<!--</property>-->
+		<!--<property name="cronExpression">-->
+			<!--&lt;!&ndash; 每30分钟一次 &ndash;&gt;-->
+			<!--<value>0 */1 * * * ?</value>-->
+		<!--</property>-->
+	<!--</bean>-->
+
+	<!-- 周期告警插入 -->
+	<bean id="alarmtimeQuartz" class="com.zhixin.zhfz.sacw.quartz.cwalarmquartz.CwalarmQuartz" />
+	<bean id="methodAlarmOvertimeQuartz"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="alarmtimeQuartz" />
+		</property>
+		<property name="targetMethod">
+			<value>timeTaskInsertAlarm</value>
+		</property>
+	</bean>
+	<bean id="alarmTasktime"
+		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="methodAlarmOvertimeQuartz" />
+		</property>
+		<property name="cronExpression">
+			<!-- 每10s一次 -->
+			<value>0/10 * * * * ?</value>
+		</property>
+	</bean>
+	<!--&lt;!&ndash; 周期计算侯问容积告警   &ndash;&gt;-->
+	<!--<bean id="witTimeQuartz" class="com.zhixin.zhfz.bacs.controller.quartz.WaitTimeQuartz" />-->
+	<!--<bean id="methodInvokingWaitTimeQuartz"-->
+		  <!--class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+		<!--<property name="targetObject">-->
+			<!--<ref bean="witTimeQuartz" />-->
+		<!--</property>-->
+		<!--<property name="targetMethod">-->
+			<!--<value>waitTimeQuartz</value>-->
+		<!--</property>-->
+	<!--</bean>-->
+	<!--<bean id="cronTriggerWaitTime"-->
+		  <!--class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">-->
+		<!--<property name="jobDetail">-->
+			<!--<ref bean="methodInvokingWaitTimeQuartz" />-->
+		<!--</property>-->
+		<!--<property name="cronExpression">-->
+			<!--&lt;!&ndash; 每30分钟一次 &ndash;&gt;-->
+			<!--<value>0/10 * * * * ?</value>-->
+		<!--</property>-->
+	<!--</bean>-->
+	<!-- 周期计算入区未审讯告警   -->
+	<!--<bean id="noRecordPersonQuartz" class="com.zhixin.zhfz.bacs.controller.quartz.NoRecordPersonQuartz" />-->
+	<!--<bean id="methodInvokingNoRecordPersonQuartz"-->
+		  <!--class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+		<!--<property name="targetObject">-->
+			<!--<ref bean="noRecordPersonQuartz" />-->
+		<!--</property>-->
+		<!--<property name="targetMethod">-->
+			<!--<value>noRecordPersonQuartz</value>-->
+		<!--</property>-->
+	<!--</bean>-->
+	<!--<bean id="cronTriggerNoRecordPersonQuartz"-->
+		  <!--class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">-->
+		<!--<property name="jobDetail">-->
+			<!--<ref bean="methodInvokingNoRecordPersonQuartz" />-->
+		<!--</property>-->
+		<!--<property name="cronExpression">-->
+			<!--&lt;!&ndash; 每30分钟一次 &ndash;&gt;-->
+			<!--<value>0 */1 * * * ?</value>-->
+		<!--</property>-->
+	<!--</bean>-->
+	<!-- 周期计算临时出区超时告警   -->
+	<!--<bean id="outPersonQuartz" class="com.zhixin.zhfz.bacs.controller.quartz.OutPersonQuartz" />-->
+	<!--<bean id="methodInvokingOutPersonQuartz"-->
+		  <!--class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+		<!--<property name="targetObject">-->
+			<!--<ref bean="outPersonQuartz" />-->
+		<!--</property>-->
+		<!--<property name="targetMethod">-->
+			<!--<value>outPersonQuartz</value>-->
+		<!--</property>-->
+	<!--</bean>-->
+	<!--<bean id="cronTriggerOutPersonQuartz"-->
+		  <!--class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">-->
+		<!--<property name="jobDetail">-->
+			<!--<ref bean="methodInvokingOutPersonQuartz" />-->
+		<!--</property>-->
+		<!--<property name="cronExpression">-->
+			<!--&lt;!&ndash; 每30分钟一次 &ndash;&gt;-->
+			<!--<value>0 */1 * * * ?</value>-->
+		<!--</property>-->
+	<!--</bean>-->
+
+	<!-- 周期更新审讯状态 -->
+	<!--<bean id="recordQuartz" class="com.zhixin.zhfz.bacs.controller.quartz.RecordQuartz" />-->
+	<!--<bean id="methodInvokingRecordQuartz"-->
+		  <!--class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+		<!--<property name="targetObject">-->
+			<!--<ref bean="recordQuartz" />-->
+		<!--</property>-->
+		<!--<property name="targetMethod">-->
+			<!--<value>query</value>-->
+		<!--</property>-->
+	<!--</bean>-->
+	<!--<bean id="cronTriggerRecordQuartz"-->
+		  <!--class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">-->
+		<!--<property name="jobDetail">-->
+			<!--<ref bean="methodInvokingRecordQuartz" />-->
+		<!--</property>-->
+		<!--<property name="cronExpression">-->
+			<!--&lt;!&ndash; 每3分钟一次 &ndash;&gt;-->
+			<!--<value>0 */3 * * * ?</value>-->
+		<!--</property>-->
+	<!--</bean>-->
+
+	<!-- 抽取数据 -->
+	 <!--job bean begin-->
+	<bean class="com.zhixin.zhfz.bacs.quartz.getDateJob.GetXzAjxxDataOracleToMysqlJob"/>
+	<bean class="com.zhixin.zhfz.bacs.quartz.getDateJob.GetXsAjxxDataOracleToMysqlJob"/>
+	<bean class="com.zhixin.zhfz.bacs.quartz.getDateJob.GetXsPersonDataOracleToMysqlJob"/>
+	<bean class="com.zhixin.zhfz.bacs.quartz.getDateJob.GetXzPersonDataOracleToMysqlJob"/>
+	<bean class="com.zhixin.zhfz.bacs.quartz.getDateJob.GetRyxxCljdDataOracleToMysqlJob"/>
+	<!-- job bean end -->
+	<bean id="getDataBean" class="com.zhixin.zhfz.bacs.quartz.MainGetDataQuartz" />
+	<bean id="getDataQuartz"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="getDataBean" />
+		</property>
+		<property name="targetMethod">
+			<value>execute</value>
+		</property>
+	</bean>
+	<bean id="getDataTriggerOvertime"
+		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="getDataQuartz" />
+		</property>
+		<property name="cronExpression">
+			<value>0 0 */2 * * ?</value>
+			<!--<value>0/20 * * * * ?</value>-->
+		</property>
+	</bean>
+
+
+	<!-- 我的通知查询时间间隔 间隔370-630分钟  10分钟一次 -->
+	<!--<bean id="warntimeQuartz" class="com.zhixin.zhfz.bacs.controller.quartz.WarnTimeQuartz" />-->
+	<!--<bean id="methodInvokingWarntimeQuartz"-->
+		  <!--class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+		<!--<property name="targetObject">-->
+			<!--<ref bean="warntimeQuartz" />-->
+		<!--</property>-->
+		<!--<property name="targetMethod">-->
+			<!--<value>warnTimeQuartz</value>-->
+		<!--</property>-->
+	<!--</bean>-->
+	<!--<bean id="cronTriggerWarntime"-->
+		  <!--class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">-->
+		<!--<property name="jobDetail">-->
+			<!--<ref bean="methodInvokingWarntimeQuartz" />-->
+		<!--</property>-->
+		<!--<property name="cronExpression">-->
+			<!--&lt;!&ndash; 每310分钟一次 &ndash;&gt;-->
+			<!--<value>0 */10 * * * ?</value>-->
+		<!--</property>-->
+	<!--</bean>-->
+
+
+
+
+
+	<!-- 配置项目启动后任务就执行一次 -->
+	<bean id="rsh_simpleTrigger1" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+		<property name="jobDetail" ref="getDataQuartz" />
+		<property name="startDelay" value="500" />
+		<property name="repeatInterval" value="0" />
+		<property name="repeatCount" value="0" />
+	</bean>
+
+	<!-- 注册全部定时器 -->
+	<bean name="startQuertz" lazy-init="false" autowire="no" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+                <ref bean="cronTriggerCacheUtil" />
+				<!-- <ref bean="cronTriggerRecordQuartz" />
+				<ref bean="cronTriggerOvertime" />
+				<ref bean="cronTriggerWaitTime" />
+				<ref bean="cronTriggerNoRecordPersonQuartz" />
+				<ref bean="cronTriggerOutPersonQuartz" />
+				<ref bean="alarmTasktime" />
+				<ref bean="rsh_simpleTrigger1"/>
+				<ref bean="getDataTriggerOvertime"/>
+				<ref bean="cronTriggerWarntime" />
+				  -->
+			</list>
+		</property>
+	</bean>
+
+</beans>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.infocollection.IInfocollectionMapper" >
+
+   <resultMap id="BaseResultMap" type="com.zhixin.zhfz.bacs.entity.InfoCollectionEntity">
+       <id column="id" property="id" />
+       <result column="serial_id" property="serialId" jdbcType="BIGINT" />
+       <result column="person_id" property="personId" jdbcType="BIGINT" />
+       <result column="register_user_id" property="registerUserId" jdbcType="INTEGER" />
+       <result column="register_time" property="registerTime" jdbcType="TIMESTAMP" />
+       <result column="law_case_id" property="lawCaseId" jdbcType="INTEGER" />
+       <result column="area_id" property="AreaId" jdbcType="INTEGER" />
+       <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+       <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+       <result column="op_pid" property="opPid" jdbcType="VARCHAR" />
+       <result column="op_user_id" property="opUserId" jdbcType="INTEGER" />
+
+       <result column="personName" property="personName" jdbcType="VARCHAR" />
+       <result column="certificate_no" property="certificateNo" jdbcType="VARCHAR" />
+       <result column="real_name" property="realName" jdbcType="VARCHAR" />
+       <result column="collect_time" property="collectTime" jdbcType="TIMESTAMP" />
+       <result column="involved_reason" property="involvedReason" jdbcType="VARCHAR" />
+       <result column="case_name" property="caseName" jdbcType="VARCHAR" />
+       <result column="case_type" property="caseType" jdbcType="VARCHAR" />
+       <result column="case_nature" property="caseNature" jdbcType="VARCHAR" />
+       <result column="areaName" property="areaName" jdbcType="VARCHAR" />
+       <result column="serial_no" property="serialNo" jdbcType="VARCHAR" />
+       <result column="infoid" property="infoid" jdbcType="INTEGER" />
+   </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, serial_id, person_id, register_user_id, register_time, law_case_id,
+        area_id, created_time, updated_time
+    </sql>
+
+    <select id="getAllInfocollection" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select ict.id,ict.serial_id,ict.person_id,ict.register_user_id,ict.register_time,
+        ict.law_case_id,ict.area_id,ict.created_time,ict.updated_time,
+        igs.serial_no,
+        p.certificate_no,p.`name`  personName,ue.real_name,icd.collect_time,ctr.code_desc case_nature,ic.ajlx case_type,
+        ia.id,ia.`name` areaName
+        from ba_collection ict
+        left join ba_person p on  ict.person_id=p.id
+        left join ba_area ia on ict.area_id=ia.id
+        left join ba_serial igs on ict.serial_id=igs.id
+        left join xt_user ue on ict.register_user_id=ue.id
+        left join ba_case ic on ict.law_case_id=ic.id
+        left join xt_crime_define ctr on ctr.id = ic.ab
+        left join ba_collection_detail icd on ict.id=icd.id
+        where 1=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="personName !=null and personName !=''">
+            and p.name like '%${personName}%'
+        </if>
+        <if test="certificateNo !=null and certificateNo !=''">
+            and p.certificate_no like '%${certificateNo}%'
+        </if>
+        <if test="serialNo !=null and serialNo !=''">
+            and igs.serial_no like '%${serialNo}%'
+        </if>
+        <if test="areaId !=null and areaId !=''">
+            and ict.area_id = ${areaId}
+        </if>
+        order by ict.id desc
+        limit ${pageStart},${rows}
+    </select>
+    <!-- 查询总数 -->
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(1)
+        from ba_collection ict
+        left join ba_person p on  ict.person_id=p.id
+        left join ba_area ia on ict.area_id=ia.id
+        left join ba_serial igs on ict.serial_id=igs.id
+        left join xt_user ue on ict.register_user_id=ue.id
+        left join ba_case ic on ict.law_case_id=ic.id
+        left join xt_crime_define ctr on ctr.id = ic.ab
+        left join ba_collection_detail icd on ict.id=icd.id
+        where 1=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="personName !=null and personName !=''">
+            and p.name like '%${personName}%'
+        </if>
+        <if test="certificateNo !=null and certificateNo !=''">
+            and p.certificate_no like '%${certificateNo}%'
+        </if>
+        <if test="serialNo !=null and serialNo !=''">
+            and igs.serial_no like '%${serialNo}%'
+        </if>
+        order by ict.id desc
+    </select>
+
+
+    <!-- 查询serialNo字段，判断专属编号是否存在 -->
+    <select id="getSerialByNo" resultType="java.lang.Integer" parameterType="java.lang.Long">
+         SELECT COUNT(1) as `count` FROM ba_serial where id = #{serialId}
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+         id, serial_id, person_id, register_user_id, register_time, law_case_id,
+        area_id, created_time, updated_time
+        from ba_collection
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectByInterrogateSerialId" resultMap="BaseResultMap" parameterType="java.util.Map" >
+        select
+         id, serial_id, person_id, register_user_id, register_time, law_case_id,
+        area_id, created_time, updated_time
+        from ba_collection
+        where serial_id = #{serialId}
+    </select>
+
+
+    <insert id="insert" parameterType="com.zhixin.zhfz.bacs.entity.InfoCollectionEntity" >
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+
+            SELECT LAST_INSERT_ID() AS id
+
+        </selectKey>
+        insert into ba_collection ( serial_id, person_id,
+        register_user_id, register_time, law_case_id,
+        area_id, created_time, updated_time,op_pid,op_user_id
+        )
+        values (#{serialId,jdbcType=BIGINT}, #{personId,jdbcType=BIGINT},
+        #{registerUserId,jdbcType=INTEGER}, sysdate(), #{lawCaseId,jdbcType=INTEGER},
+        #{AreaId,jdbcType=INTEGER}, sysdate(), null,#{opPid},#{opUserId}
+        )
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.zhixin.zhfz.bacs.entity.InfoCollectionEntity" >
+        update ba_collection
+        <set >
+            <if test="serialId != null" >
+                serial_id = #{serialId,jdbcType=BIGINT},
+            </if>
+            <if test="personId != null" >
+                person_id = #{personId,jdbcType=BIGINT},
+            </if>
+            <if test="registerUserId != null" >
+                register_user_id = #{registerUserId,jdbcType=INTEGER},
+            </if>
+            <if test="registerTime != null" >
+                register_time = #{registerTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lawCaseId != null" >
+                law_case_id = #{lawCaseId,jdbcType=INTEGER},
+            </if>
+            <if test="AreaId != null" >
+                area_id = #{AreaId,jdbcType=INTEGER},
+            </if>
+            <if test="createdTime != null" >
+                created_time = #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+
+            updated_time = sysdate()
+
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!-- 根据入区id查询 -->
+    <select id="getInfoCollectionBySerialId"   resultMap="BaseResultMap" parameterType="com.zhixin.zhfz.bacs.entity.InfoCollectionEntity">
+        select * from ba_collection where serial_id=#{serialId} order by id desc
+    </select>
+</mapper>

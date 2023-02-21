@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.common.dao.region.RegionMapper">
+
+    <resultMap id="regionMap" type="RegionEntity">
+       <id property="id" column="id"/>
+        <result property="code" column="code"/>
+       <result property="parentId" column="parent_id"/>
+       <result property="name" column="name"/>
+       <result property="level" column="level"/>
+    </resultMap>
+
+	<select id="list" resultMap="regionMap" parameterType="java.util.Map">
+	 SELECT * from xt_region WHERE level=#{level}
+	 <if test="parentId!=null and parentId!=''">
+		and parent_id= #{parentId}
+    </if>
+	</select>
+    <select id="selectByCode" resultMap="regionMap" parameterType="java.util.Map">
+        SELECT * from xt_region WHERE code=#{code}
+    </select>
+</mapper>

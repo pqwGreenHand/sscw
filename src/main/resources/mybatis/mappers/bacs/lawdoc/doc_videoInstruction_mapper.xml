@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.lawdoc.IDocVideoInstructionMapper" >
+    <resultMap id="BaseResultMap" type="com.zhixin.zhfz.bacs.entity.DocVideoInstructionEntity" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="serial_id" property="serialId" jdbcType="BIGINT" />
+        <result column="person_id" property="personId" jdbcType="BIGINT" />
+        <result column="information_content" property="informationContent" jdbcType="VARCHAR" />
+        <result column="extract_time" property="extractTime" jdbcType="VARCHAR" />
+        <result column="extract_sites" property="extractSites" jdbcType="VARCHAR" />
+        <result column="extract_method" property="extractMethod" jdbcType="VARCHAR" />
+        <result column="vedio_resouce" property="vedioResouce" jdbcType="VARCHAR" />
+        <result column="is_original" property="isOriginal" jdbcType="VARCHAR" />
+        <result column="reason" property="reason" jdbcType="VARCHAR" />
+        <result column="save_space" property="saveSpace" jdbcType="VARCHAR" />
+        <result column="witnesses" property="witnesses" jdbcType="VARCHAR" />
+        <result column="maker" property="maker" jdbcType="VARCHAR" />
+        <result column="policemen" property="policemen" jdbcType="VARCHAR" />
+        <result column="workspce" property="workspce" jdbcType="VARCHAR" />
+        <result column="fomate" property="fomate" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="getVideoInstructionBySerialId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        SELECT
+            id,
+            serial_id,
+            person_id,
+            information_content,
+            extract_time,
+            extract_sites,
+            extract_method,
+            vedio_resouce,
+            is_original,
+            reason,
+            save_space,
+            witnesses,
+            maker,
+            policemen,
+            workspce,
+            fomate
+        FROM ba_doc_video_instruction
+        WHERE
+            serial_id=#{serialId}
+    </select>
+</mapper>

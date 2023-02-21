@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.zhag.dao.xsajtj.IXsajtjMapper">
+    <resultMap id="BaseResultMap" type="com.zhixin.zhfz.zhag.entity.CriminalAndAdministrationCaseEntity" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="ajmc" property="ajmc" jdbcType="VARCHAR" />
+        <result column="ajbh" property="ajbh" jdbcType="VARCHAR" />
+        <result column="afsj" property="afsj" jdbcType="TIMESTAMP" />
+        <result column="afdd" property="afdd" jdbcType="VARCHAR" />
+        <result column="ajlx" property="ajlx" jdbcType="INTEGER" />
+        <result column="ab" property="ab" jdbcType="INTEGER" />
+        <result column="jz_ajzt" property="jzAjzt" jdbcType="INTEGER" />
+        <result column="jz_rkzt" property="jzRkzt" jdbcType="INTEGER" />
+        <result column="zbmj_id" property="zbmjId" jdbcType="INTEGER" />
+        <result column="zbdw_id" property="zbdwId" jdbcType="INTEGER" />
+        <result column="jqbh" property="jqbh" jdbcType="VARCHAR" />
+        <result column="zyaq" property="zyaq" jdbcType="VARCHAR" />
+        <result column="ajly" property="ajly" jdbcType="INTEGER" />
+        <result column="cjr" property="cjr" jdbcType="INTEGER" />
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+        <result column="uuid" property="uuid" jdbcType="VARCHAR" />
+        <result column="afdd_code" property="afddCode" jdbcType="VARCHAR" />
+        <result column="zbmj_pid" property="zbmjPid" jdbcType="VARCHAR" />
+        <result column="xbmj_ids" property="xbmjIds" jdbcType="VARCHAR" />
+        <result column="op_pid" property="opPid" jdbcType="VARCHAR" />
+        <result column="xbmj_xm" property="xbmjXm" jdbcType="VARCHAR" />
+        <result column="ajzt" property="ajzt" jdbcType="VARCHAR" />
+        <result column="lasj" property="lasj" jdbcType="TIMESTAMP" />
+        <result column="zbmjxm" property="zbmjxm" jdbcType="VARCHAR" />
+        <result column="zbmjjh" property="zbmjjh" jdbcType="VARCHAR" />
+        <result column="zbdwdm" property="zbdwdm" jdbcType="VARCHAR" />
+        <result column="zbdwmc" property="zbdwmc" jdbcType="VARCHAR" />
+        <result column="xbmjjh" property="xbmjjh" jdbcType="VARCHAR" />
+        <result column="abmc" property="abmc" jdbcType="VARCHAR" />
+        <result column="jasj" property="jasj" jdbcType="TIMESTAMP" />
+        <result column="slsj" property="slsj" jdbcType="TIMESTAMP" />
+        <result column="pasj" property="pasj" jdbcType="TIMESTAMP" />
+        <result column="xasj" property="xasj" jdbcType="TIMESTAMP" />
+        <result column="yssj" property="yssj" jdbcType="TIMESTAMP" />
+        <!-- 关联-->
+        <result column="zbdwName" property="zbdwName" jdbcType="VARCHAR" />
+        <result column="caseNature" property="caseNature" jdbcType="VARCHAR" />
+        <result column="zbmjName" property="zbmjName" jdbcType="VARCHAR" />
+        <result column="areaId" property="areaId" jdbcType="INTEGER" />
+        <result column="zbmjCertificateNo" property="zbmjCertificateNo" jdbcType="VARCHAR" />
+        <result column="warehouse_id" property="warehouseId" jdbcType="VARCHAR" />
+        <result column="areaName" property="areaName" jdbcType="VARCHAR" />
+        <result column="jz_ajzt" property="jzAjzt" jdbcType="INTEGER" />
+        <result column="jz_rkzt" property="jzRkzt" jdbcType="INTEGER" />
+    </resultMap>
+
+    <resultMap id="RateSignMapper" type="com.zhixin.zhfz.jxkp.entity.RateSignEntity">
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="value" property="value" jdbcType="VARCHAR"/>
+    </resultMap>
+    <!-- 查询多少天内受理立案折线图 -->
+    <select id="selectSLLAByDay" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT * from ba_case
+        where 1=1
+        <if test="day != '' and day != null">
+            and created_time > DATE_ADD(NOW(), INTERVAL - ${day} DAY)
+        </if>
+    </select>
+    <!--案件来源统计结果查询-->
+    <select id="quyAJSourceByDay" resultType="com.zhixin.zhfz.zhag.entity.CriminalAndAdministrationCaseEntity" parameterType="java.util.Map">
+        SELECT x.code_value as tj_ajly,COUNT(1) total FROM
+        (SELECT b.* FROM ba_case b LEFT JOIN xt_code x ON b.ajlx=x.code_key where x.code_value='刑事案件') xz
+        LEFT JOIN xt_code x ON xz.ajly = x.code_key
+        where x.type = 'AJLY'
+        <if test="day != '' and day != null">
+            and xz.created_time > DATE_ADD(NOW(), INTERVAL - ${day} DAY)
+        </if>
+        GROUP BY tj_ajly
+    </select>
+
+    <!--案件类型统计结果查询-->
+    <select id="quyAJTypeByDay" resultType="com.zhixin.zhfz.zhag.entity.CriminalAndAdministrationCaseEntity" parameterType="java.util.Map">
+        SELECT x.code_value as tj_ajlx,COUNT(1) total FROM ba_case b LEFT JOIN xt_code x ON b.ajlx=x.code_key
+        WHERE x.type = 'AJLX'
+        <if test="day != '' and day != null">
+            and b.created_time > DATE_ADD(NOW(), INTERVAL - ${day} DAY)
+        </if>
+        GROUP BY tj_ajlx
+    </select>
+
+    <!--案件状态统计结果查询-->
+    <select id="quyAJStateByDay" resultType="com.zhixin.zhfz.zhag.entity.CriminalAndAdministrationCaseEntity" parameterType="java.util.Map">
+        SELECT x.code_value as tj_ajzt,COUNT(1) total FROM
+        (SELECT b.* FROM ba_case b LEFT JOIN xt_code x ON b.ajlx=x.code_key where x.code_value='刑事案件') xz
+        LEFT JOIN xt_code x ON xz.ajzt=x.code_key
+        where x.type = 'ajzt'
+        <if test="day != '' and day != null">
+            and xz.created_time > DATE_ADD(NOW(), INTERVAL - ${day} DAY)
+        </if>
+        GROUP BY tj_ajzt
+    </select>
+
+    <!--案由统计结果查询-->
+    <select id="quyAJCauseByDay" resultType="com.zhixin.zhfz.zhag.entity.CriminalAndAdministrationCaseEntity" parameterType="java.util.Map">
+        SELECT c.abmc,COUNT(1) total FROM ba_case c LEFT JOIN xt_code x on c.ajlx = x.code_key
+        where 1=1
+        and  x.code_value='刑事案件'
+        <if test="day != '' and day != null">
+            and created_time > DATE_ADD(NOW(), INTERVAL - ${day} DAY)
+        </if>
+        GROUP BY abmc
+    </select>
+
+    <!-- 查询多少天内刑事告警折线图 -->
+    <select id="selectXSGJByDay" resultType="com.zhixin.zhfz.zhag.entity.GjxxEntity" parameterType="java.util.Map">
+        SELECT g.* from ag_gjxx g
+        where 1=1  and g.gjly = 2
+        <if test="day != '' and day != null">
+            and cjsj > DATE_ADD(NOW(), INTERVAL - ${day} DAY)
+        </if>
+    </select>
+    <!--刑事案件数量查询-->
+    <select id="quyXSAJAllNumberByDay" resultType="com.zhixin.zhfz.zhag.entity.CriminalAndAdministrationCaseEntity" parameterType="java.util.Map">
+        SELECT COUNT(1) total FROM ba_case c LEFT JOIN xt_code x on c.ajlx = x.code_key
+        where x.code_value = '刑事案件'
+        <if test="day != '' and day != null">
+            and created_time > DATE_ADD(NOW(), INTERVAL - ${day} DAY)
+        </if>
+    </select>
+
+    <!--告警类型统计结果查询-->
+    <select id="quyGJTypeByDay" resultType="com.zhixin.zhfz.zhag.entity.GjxxEntity" parameterType="java.util.Map">
+        SELECT x.code_value AS tj_gjlx,COUNT(1) total FROM ag_gjxx a
+        LEFT JOIN ba_case c ON a.ajbh = c.ajbh
+        LEFT JOIN xt_code x ON a.wtlxdm = x.code_key
+        WHERE 1=1
+        AND x.type = 'ag_wtlx'
+        AND a.gjly = 2
+        <if test="day != '' and day != null">
+            and a.gjsj > DATE_ADD(NOW(), INTERVAL - ${day} DAY)
+        </if>
+        GROUP BY tj_gjlx
+    </select>
+
+    <!--刑事/行政案件数量查询-->
+    <select id="quyXSXZAJAllNumberByDay" resultMap="RateSignMapper">
+        SELECT x.code_value as name ,COUNT(1) as value FROM ba_case c LEFT JOIN xt_code x on c.ajlx = x.code_key
+        where x.code_value = '刑事案件' or x.code_value = '行政案件'
+        <if test="day != '' and day != null">
+            and created_time > DATE_ADD(NOW(), INTERVAL - ${day} DAY)
+        </if>
+            GROUP BY x.code_value
+    </select>
+    <!--告警数量查询-->
+    <select id="listGjly" resultMap="RateSignMapper">
+        SELECT (
+		CASE g.gjly
+		WHEN '0' THEN
+			'警情'
+		WHEN '1' THEN
+			'行政'
+		WHEN '2' THEN
+			'刑事'
+		WHEN '3' THEN
+			'强制措施'
+		WHEN '4' THEN
+			'行政处罚'
+		END
+	) AS NAME, count(0) as value from ag_gjxx g
+        where 1=1
+        GROUP BY g.gjly
+    </select>
+
+
+</mapper>

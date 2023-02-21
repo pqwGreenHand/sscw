@@ -1,0 +1,141 @@
+/* 信息弹窗 */
+.m-info-popup.m-popup {
+  z-index: 10;
+}
+.m-info-popup.m-popup .hd {
+  height: 160px;
+  width: 100%;
+  background: #23447a;
+  background: rgba(50,87,149,.5);
+  position: relative;
+  text-align: center;
+}
+.m-info-popup.m-popup .hd .steps {
+  display: inline-block;
+  margin: auto;
+  margin-top: 55px;
+}
+.m-info-popup.m-popup .hd .item {
+  width: 60px;
+  height: 60px;
+  background: #12274a;
+  background: rgba(7,25,47,.5);
+  border: none;
+  float: left;
+  margin-left: 90px;
+}
+.m-info-popup.m-popup .hd .item:before {
+  content: '';
+  display: inline-block;
+  width: 90px;
+  height: 8px;
+  background: #12274a;
+  background: rgba(7,25,47,.5);
+  position: absolute;
+  left: -90px;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+.m-info-popup.m-popup .hd .item:first-child {
+  margin-left: 0;
+}
+.m-info-popup.m-popup .hd .item:first-child:before {
+  display: none;
+}
+.m-info-popup.m-popup .hd .item .edges {
+  display: none;
+}
+.m-info-popup.m-popup .hd .item.now .edges{
+  display: block;
+}
+.m-info-popup.m-popup .hd .item .inner {
+  width: 42px;
+  height: 42px;
+  background: #1f4075;
+  background: -moz-linear-gradient( 90deg, rgba(29,60,112,1), rgba(35,73,130,1));
+  background: -webkit-linear-gradient( 90deg, rgba(29,60,112,1), rgba(35,73,130,1));
+  background: -ms-linear-gradient( 90deg, rgba(29,60,112,1), rgba(35,73,130,1));
+  border: 1px solid #1a4076;
+  margin-left: 8px;
+  margin-top: 8px;
+}
+.m-info-popup.m-popup .hd .item.now .inner {
+  background: #0b74b0;
+  background: -moz-linear-gradient( 90deg, rgba(32,83,151,1), rgba(51,168,251,1));
+  background: -webkit-linear-gradient( 90deg, rgba(32,83,151,1), rgba(51,168,251,1));
+  background: -ms-linear-gradient( 90deg, rgba(32,83,151,1), rgba(51,168,251,1));
+  border: 1px solid #164a86;
+}
+.m-info-popup.m-popup .hd .item .inner i {
+  width: 40px;
+  height: 40px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: inline-block;
+}
+.m-info-popup.m-popup .hd .item.i1 .inner i {
+  background-image: url(../static/step-1.png);
+}
+.m-info-popup.m-popup .hd .item.i1.now .inner i {
+  background-image: url(../static/step-1_active.png);
+}
+.m-info-popup.m-popup .hd .item.i2 .inner i {
+  background-image: url(../static/step-2.png);
+}
+.m-info-popup.m-popup .hd .item.i2.now .inner i {
+  background-image: url(../static/step-2_active.png);
+}
+.m-info-popup.m-popup .hd .item.i3 .inner i {
+  background-image: url(../static/step-3.png);
+}
+.m-info-popup.m-popup .hd .item.i3.now .inner i {
+  background-image: url(../static/step-3_active.png);
+}
+.m-info-popup.m-popup .hd .item.i4 .inner i {
+  background-image: url(../static/step-4.png);
+}
+.m-info-popup.m-popup .hd .item.i4.now .inner i {
+  background-image: url(../static/step-4_active.png);
+}
+.m-info-popup.m-popup .hd .item span {
+  font-size: 14px;
+  color: #8aaadd;
+  position: absolute;
+  height: 20px;
+  bottom: -30px;
+  width: 100px;
+  left: -20px;
+}
+.m-info-popup.m-popup .hd .item.now span {
+  color: #fff;
+}
+.m-info-popup.m-popup .bd {
+  padding: 20px 10px;
+  overflow: auto;
+}
+.m-info-popup.m-popup .bd .m-input {
+  width: 50%;
+  height: 30px;
+  float: left;
+  margin-bottom: 13px;
+}
+.m-info-popup.m-popup .bd .m-select {
+  width: 50%;
+  height: 30px;
+  float: left;
+  margin-bottom: 13px;
+}
+.m-info-popup.m-popup .bd .next {
+  float: left;
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 10px;
+}
+.m-info-popup.m-popup .bd .next button {
+  display: inline-block;
+  padding: 0 20px;
+  height: 35px;
+  line-height: 35px;
+}

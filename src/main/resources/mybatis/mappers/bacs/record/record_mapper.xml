@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacs.dao.record.IRecordMapper">
+
+    <resultMap id="resultMap" type="com.zhixin.zhfz.bacs.entity.RecordEntity">
+        <id property="id" column="id"/>
+        <result column="serial_id" property="serialId"/>
+        <result column="uuid" property="uuid"/>
+        <result column="temp_file_path" property="tempFilePath"/>
+        <result column="word" property="word"/>
+        <result column="person_id" property="personId"/>
+        <result column="record_type_id" property="recordTypeId"/>
+        <result column="record_template_id" property="recordTemplateId"/>
+        <result column="status" property="status"/>
+        <!--<result column="register_user_id" property="registerUserId"/>-->
+        <result column="created_time" property="createdTime"/>
+        <result column="case_id" property="caseId"/>
+        <result column="area_id" property="areaId"/>
+        <result column="room_id" property="roomId"/>
+        <result column="room_name" property="roomName"/>
+        <result column="updated_time" property="updatedTime"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="police_ask_id" property="policeAskId"/>
+        <result column="police_record_id" property="policeRecordId"/>
+        <result column="police_ask_name" property="policeAskName"/>
+        <result column="police_record_name" property="policeRecordName"/>
+        <result column="person_name" property="personName"/>
+        <result column="case_no" property="caseNo"/>
+        <result column="area_name" property="areaName"/>
+        <result column="organization_name" property="organizationName"/>
+        <result column="case_type" property="caseType"/>
+        <result column="code_desc" property="caseDesc"/>
+        <result column="serial_uuid" property="serialUuid"/>
+    </resultMap>
+    <!--嫌疑人出区添加 -->
+    <resultMap id="RoomResultMap" type="com.zhixin.zhfz.bacs.entity.RecordEntity">
+        <result column="group_id" property="groupId" jdbcType="INTEGER"/>
+        <result column="group_name" property="groupName" jdbcType="VARCHAR"/>
+        <result column="room_id" property="rmId" jdbcType="INTEGER"/>
+        <result column="room_name" property="roomName" jdbcType="VARCHAR"/>
+        <result column="record_id" property="recordId" jdbcType="INTEGER"/>
+        <result column="status" property="roomStatus" jdbcType="INTEGER"/>
+        <result column="room_status" property="roomStatus" jdbcType="INTEGER"/>
+        <result column="discribe" property="discribe" jdbcType="VARCHAR"/>
+        <result column="room_type_id" property="roomTypeId" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="askNo" property="askNo" jdbcType="VARCHAR"/>
+        <result column="personName" property="personName" jdbcType="VARCHAR"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="serialId" property="serialId"/>
+        <result column="personId" property="personId"/>
+    </resultMap>
+    <select id="list" resultMap="resultMap" parameterType="java.util.Map">
+        SELECT
+            r.*,
+            s.uuid as uuid,
+            p.`name` AS person_name,
+            au.real_name AS police_ask_name,
+            ru.real_name AS police_record_name,
+            m.`name` AS room_name,
+            a.`name` AS area_name,
+            c.ajbh AS case_no,
+            c.ajlx AS case_type,
+            o.`name` AS organization_name,
+            cr.code_desc
+
+        FROM
+            ba_record AS r
+            LEFT JOIN ba_person AS p ON r.person_id = p.id
+            LEFT JOIN ba_serial AS s ON r.serial_id = s.id
+            LEFT JOIN xt_user AS au ON r.police_ask_id = au.id
+            LEFT JOIN xt_user AS ru ON r.police_record_id = ru.id
+            LEFT JOIN ba_room AS m ON r.room_id = m.id
+            LEFT JOIN ba_area AS a ON r.area_id = a.id
+            LEFT JOIN ba_case AS c ON r.case_id = c.id
+            LEFT JOIN xt_crime_define AS cr ON c.ab = cr.id
+            LEFT JOIN xt_organization AS o ON au.organization_id = o.id
+        <include refid="query_where"/>
+         order by start_time DESC
+		limit ${pageStart},${rows}
+    </select>
+
+
+     <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+         SELECT
+         count(1)
+         FROM
+         ba_record AS r
+         LEFT JOIN ba_person AS p ON r.person_id = p.id
+         LEFT JOIN ba_serial AS s ON r.serial_id = s.id
+         LEFT JOIN xt_user AS au ON r.police_ask_id = au.id
+         LEFT JOIN xt_user AS ru ON r.police_record_id = ru.id
+         LEFT JOIN ba_room AS m ON r.room_id = m.id
+         LEFT JOIN ba_area AS a ON r.area_id = a.id
+         LEFT JOIN ba_case AS c ON r.case_id = c.id
+         LEFT JOIN ba_knowledge_crime AS cr ON c.ab = cr.id
+         LEFT JOIN xt_organization AS o ON au.organization_id = o.id
+         <include refid="query_where"/>
+    </select>
+    
+	<insert id="insert" parameterType="com.zhixin.zhfz.bacs.entity.RecordEntity">
+      INSERT INTO ba_record
+        (record_template_id,uuid,room_id,serial_id, person_id, police_ask_id,police_record_id, case_id, area_id, record_type_id, created_time, `status`,`count` ,start_time,op_pid,op_user_id)
+      VALUES
+	    (#{recordTemplateId},#{uuid},#{roomId},#{serialId},#{personId},#{policeAskId},#{policeRecordId},#{caseId},#{areaId},1,now(), #{status},#{count},now(),#{opPid},#{opUserId})
+    </insert>
+
+    <select id="getMaxId" resultType="java.lang.Long">
+        SELECT LAST_INSERT_ID()
+    </select>
+
+    <delete id="delete" parameterType="long">
+        delete from ba_record where id=#{id}
+    </delete>
+
+    <update id="update" parameterType="com.zhixin.zhfz.bacs.entity.RecordEntity">
+        update ba_record
+        <set>
+            updated_time = now(),
+            <if test="serialId != null and serialId != ''">serial_id = #{serialId},</if>
+            <if test="status != null and status != '' or status == 0"> `status` = #{status},</if>
+            <if test="personId != null and personId != ''">person_id = #{personId},</if>
+            <if test="policeAskId != null and policeAskId != ''">`police_ask_id` = #{policeAskId},</if>
+            <if test="policeRecordId != null and policeRecordId != ''">`police_record_id` = #{policeRecordId},</if>
+            <if test="caseId != null and caseId != ''">case_id = #{caseId}, </if>
+            <if test="startTime != null">start_time = #{startTime}, </if>
+            <if test="areaId != null and areaId != ''">area_id = #{areaId}, </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="getSerialRecording" resultType="java.lang.Integer"
+            parameterType="java.util.Map">
+			SELECT
+                count(r.id)
+            FROM
+                ba_record r
+            WHERE
+                r.`status` IN (0, 1)
+              AND r.serial_id = #{serialId}
+
+	</select>
+
+    <select id="getRecordingRoomName" resultType="java.lang.String"
+            parameterType="java.util.Map">
+			select m.name from ba_record r,ba_room m where r.room_id=m.id
+            and r.serial_id= #{serialId} LIMIT 1
+	</select>
+
+    <select id="getRecordIps" parameterType="java.lang.Long" resultType="java.util.HashMap">
+        select m.`name`,m.ips from ba_record r inner join ba_room m on r.room_id = m.id where r.id = #{recordId}
+    </select>
+
+    <select id="queryNextCount" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        SELECT
+        IF
+            ( count IS NOT NULL, max( count ) + 1, 1 )
+        FROM
+            ba_record
+        WHERE
+            serial_id = #{serialId}
+    </select>
+
+    <select id="getRoomRecording" resultType="java.lang.Integer"
+            parameterType="java.util.Map">
+		select
+		count(r.id)
+		from
+			ba_record r,
+			ba_room m
+		where
+			r.room_id = m.id
+		and r.`status` in (0, 1, 2)
+		and m.ips like '%${ip}%'
+		and r.area_id = #{areaid}
+		and r.created_time > adddate(r.created_time,interval - 3 day)
+	</select>
+
+    <!-- 更新笔录的状态 -->
+    <update id="updateStatus" parameterType="java.util.Map">
+        update ba_record set status=#{status},updated_time=now()
+        <if test="status==3">
+            ,end_time=now()
+        </if>
+        where id=#{id}
+    </update>
+
+
+    <!-- 查询笔录的信息 -->
+    <select id="getRecordInfo" resultMap="resultMap"
+            parameterType="java.lang.Long">
+		SELECT
+            r.*,
+            p.`name` AS person_name,
+            au.real_name AS police_ask_name,
+            ru.real_name AS police_record_name,
+            m.`name` AS room_name,
+            a.`name` AS area_name,
+            c.ajbh AS case_no,
+            c.ajlx AS case_type,
+            o.`name` AS organization_name,
+            cr.code_desc
+        FROM
+            ba_record AS r
+            LEFT JOIN ba_person AS p ON r.person_id = p.id
+            LEFT JOIN xt_user AS au ON r.police_ask_id = au.id
+            LEFT JOIN xt_user AS ru ON r.police_record_id = ru.id
+            LEFT JOIN ba_room AS m ON r.room_id = m.id
+            LEFT JOIN ba_area AS a ON r.area_id = a.id
+            LEFT JOIN ba_case AS c ON r.case_id = c.id
+            LEFT JOIN ba_knowledge_crime AS cr ON c.ab = cr.id
+            LEFT JOIN xt_organization AS o ON au.organization_id = o.id
+        WHERE
+            r.id = #{id}
+	</select>
+
+    <select id="getRoomCameraNo" resultType="java.lang.String"
+    parameterType="java.util.Map">
+        select c.camera_no from ba_camera c where c.screen='主画面' and c.room_id=#{roomId}
+    </select>
+
+
+    <select id="selectBySerialId" resultMap="resultMap" parameterType="java.util.Map">
+        SELECT
+            ire.*, iro.`name` room_name,
+            (SELECT  p.`name` FROM ba_person p WHERE p.id = ire.person_id) person_name,
+            (SELECT  au.real_name FROM xt_user au WHERE au.id = ire.police_ask_id) ask,
+            (SELECT  ru.real_name FROM xt_user ru WHERE ru.id = ire.police_record_id) recode
+        FROM
+            ba_record ire
+        LEFT JOIN ba_room iro ON iro.id = ire.room_id
+        WHERE
+	        ire.serial_id = #{serialId}
+    </select>
+
+
+    <sql id="query_where">
+        <where>
+            <if test="personName!=null and personName !=''">
+                and p.name like '%${personName}%'
+            </if>
+            <if test="caseNo!=null and caseNo !=''">
+                and c.ajbh like '%${caseNo}%'
+            </if>
+            <if test="status!=null and status !=''">
+                and r.status = #{status}
+            </if>
+            <if test="areaId!=null and areaId !=''">
+                and r.area_id = #{areaId}
+            </if>
+            <if test="dataAuth!=null and dataAuth!=''">
+                and ${dataAuth}
+            </if>
+        </where>
+    </sql>
+    <select id="getRecordRoomInfoBySerialId" resultMap="RoomResultMap" parameterType="java.util.Map">
+		select id as record_id,status,room_id from ba_record where  `status`  in (0,1,2) and serial_id=#{serialId}
+   </select>
+    <!-- 根据serialId和personid判断嫌疑人是否已审讯 -->
+    <select id="selectBySerialIdAndPersonId" resultMap="resultMap" parameterType="java.util.Map">
+        SELECT
+            br.*
+        FROM
+            ba_record br
+        LEFT JOIN ba_serial bs ON br.serial_id = bs.id
+        WHERE
+            br.serial_id = #{serialId}
+        AND br.person_id = #{personId}
+    </select>
+
+    <update id="updateStatusNew" parameterType="com.zhixin.zhfz.bacs.entity.RecordEntity">
+        update ba_record set status = #{status}
+        <if test="status == 3">
+            ,end_time=now()
+        </if>
+        where id = #{id}
+    </update>
+
+    <select id="listRecordQuartz" resultMap="resultMap" >
+        select r.id, r.uuid,r.status, r.area_id area_id, r.serial_id serial_id,r.room_id  from ba_record r where r.status in (1,2)
+    </select>
+
+    <update id="updateStatusQuartz" parameterType="com.zhixin.zhfz.bacs.entity.RecordEntity">
+        update ba_record set status = #{status}
+        <if test="status == 0">
+            ,end_time=now()
+        </if>
+        where id = #{id}
+    </update>
+</mapper>

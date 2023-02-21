@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacs.dao.policeEntrance.IPoliceEntranceMapper">
+    <resultMap id="BaseResultMap" type="com.zhixin.zhfz.bacs.entity.PoliceEntranceEntity">
+        <id property="id" column="id"/>
+        <result property="caseId" column="case_id"/>
+        <result property="areaId" column="area_id"/>
+		<result property="orderRequestId" column="order_request_id"/>
+        <result property="policeId" column="police_id"/>
+        <result property="policeType" column="police_type"/>
+        <result property="cuffId" column="cuff_id"/>
+		<result property="cuffNo" column="cuff_no"/>
+        <result property="inTime" column="in_time"/>
+        <result property="outTime" column="out_time"/>
+        <result property="policeInCount" column="policeInCount"/>
+        <result property="policeTotalCount" column="policeTotalCount"/>
+        <result property="caseNature" column="caseNature"/>
+        <result property="certificateNo" column="certificateNo"/>
+		<result property="policeNo" column="policeNo"/>
+        <result property="name" column="name"/>
+        <result property="areaName" column="areaName"/>
+        <result property="ajlx" column="ajlx"/>
+		<result property="orgName" column="orgName"/>
+		<result property="opPid" column="op_pid"/>
+		<result property="opUserId" column="op_user_id"/>
+    </resultMap>
+    
+    <select id="list" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select * from (		  
+		  select (select count(*) from ba_police_entrance a WHERE a.out_time is null and a.case_id = ca.id) policeInCount,
+		         (select count(*) from ba_police_entrance b where b.case_id = ca.id) policeTotalCount,
+		         pe.*,cd.code_desc caseNature ,u.certificate_no certificateNo,u.real_name name,ar.name areaName,ca.ajlx,a.`name` orgName,bc.cuff_no
+		         from ba_police_entrance pe
+                 left join xt_user u on u.id = pe.police_id
+                 left join ba_area ar on ar.id = pe.area_id
+                 left join ba_order_request ca on ca.id = pe.order_request_id
+                 left join xt_crime_define cd on cd.id = ca.ab
+		         left join xt_organization a on a.id = u.organization_id
+		         left join ba_cuff bc on bc.id = pe.cuff_id and bc.type = 1
+		  ) t		          
+         where 1=1
+		 <if test="areaId !=null and areaId!=''">
+			and t.area_id = #{areaId}
+		 </if>
+         <if test="name !=null and name!=''">
+			and t.name like "%${name}%"
+		 </if>
+		 <if test="certificateNo!=null and certificateNo!=''">
+			and t.certificateNo like "%${certificateNo}%"
+		 </if>
+		 <if test="startDate!=null and startDate!=''">
+			and t.in_time &gt;=#{startDate}
+		</if>
+		<if test="endDate!=null and endDate!=''">
+			and t.in_time &lt;=#{endDate}
+		</if>
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+		
+		<if test="status!=null and status!=''">
+		       <!-- 未出区 -->
+		      <if test='status=="1"'>
+			           and  t.out_time is null
+		      </if>
+			   <!-- 已出区 -->
+			  <if test='status=="2"'>
+			          and  t.out_time is not null
+		      </if>
+		</if>
+		
+		
+      order by t.id desc
+      <if test="pageStart != null and rows != null">
+            limit ${pageStart},${rows}
+       </if>    
+	</select>
+	
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+	      select count(*) from (		  
+		      select pe.*,cd.code_desc caseNature ,u.certificate_no certificateNo,u.real_name name,ar.name areaName,ca.ajlx,a.`name` orgName,bc.cuff_no
+			from ba_police_entrance pe
+			left join xt_user u on u.id = pe.police_id
+			left join ba_area ar on ar.id = pe.area_id
+			left join ba_order_request ca on ca.id = pe.order_request_id
+			left join xt_crime_define cd on cd.id = ca.ab
+			left join xt_organization a on a.id = u.organization_id
+		    left join ba_cuff bc on bc.id = pe.cuff_id and bc.type = 1
+		   ) t	
+           where 1=1
+			<if test="areaId !=null and areaId!=''">
+				and t.area_id = #{areaId}
+			</if>
+	   		<if test="name !=null and name!=''">
+				and t.name like "%${name}%"
+			 </if>
+			 <if test="certificateNo!=null and certificateNo!=''">
+				and t.certificateNo like "%${certificateNo}%"
+			 </if>
+			 <if test="startDate!=null and startDate!=''">
+				and t.in_time &gt;=#{startDate}
+			</if>
+			<if test="endDate!=null and endDate!=''">
+				and t.in_time &lt;=#{endDate}
+			</if>
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+		<if test="status!=null and status!=''">
+		       <!-- 未出区 -->
+		      <if test='status=="1"'>
+			           and  t.out_time is null
+		      </if>
+			   <!-- 已出区 -->
+			  <if test='status=="2"'>
+			          and  t.out_time is not null
+		      </if>
+		</if>
+    </select>
+    
+    <select id="list2" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select distinct ca.id bCaseId,ca.ajlx,ca.ajmc,ca.ajbh,ar.`name` areaName,
+			 u.real_name `name`,u.certificate_no certificateNo ,pe.area_id
+		from ba_case ca
+		inner join ba_police_entrance pe on pe.case_id = ca.id
+		left join xt_user u on u.id = ca.zbmj_id
+		left join xt_organization ar on ar.id = ca.zbdw_id
+		left join xt_user u1 on u1.id = pe.police_id
+		where pe.out_time is null
+		<if test="areaId !=null and areaId!=''">
+			and pe.area_id = #{areaId}
+		</if>
+         <if test="ajmc !=null and ajmc!=''">
+			and ca.ajmc like "%${ajmc}%"
+		 </if>
+		 <if test="name!=null and name!=''">
+			and u1.real_name like "%${name}%"
+		 </if>
+		 <if test="certificateNo!=null and certificateNo!=''">
+			and u1.certificate_no like "%${certificateNo}%"
+		 </if>
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+      <if test="pageStart != null and rows != null">
+            limit ${pageStart},${rows}
+       </if>     
+	</select>
+	
+    <select id="count2" resultType="java.lang.Integer" parameterType="java.util.Map">
+	    select count(distinct ca.id)	  
+		from ba_case ca
+		inner join ba_police_entrance pe on pe.case_id = ca.id
+		left join xt_user u on u.id = ca.zbmj_id
+		left join xt_organization ar on ar.id = ca.zbdw_id
+		left join xt_user u1 on u1.id = pe.police_id
+		where pe.out_time is null
+		<if test="areaId !=null and areaId!=''">
+			and pe.area_id = #{areaId}
+		</if>
+         <if test="ajmc !=null and ajmc!=''">
+			and ca.ajmc like "%${ajmc}%"
+		 </if>
+		 <if test="name!=null and name!=''">
+			and u1.real_name like "%${name}%"
+		 </if>
+		 <if test="certificateNo!=null and certificateNo!=''">
+			and u1.certificate_no like "%${certificateNo}%"
+		 </if>
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+    </select>
+    
+    <select id="policeList" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select u.real_name name,u.certificate_no policeNo,pe.id,pe.police_id,pe.police_type,pe.out_time,pe.cuff_id cuffId,pe.area_id areaId,c.cuff_no cuffNo
+		from ba_police_entrance pe
+		left join xt_user u on u.id = pe.police_id
+		left join ba_cuff c on c.id = pe.cuff_id
+		where pe.out_time is null
+		<if test="orderRequestId !=null and orderRequestId!=''">
+			and pe.order_request_id = #{orderRequestId}
+		</if>
+        <if test="pageStart != null and rows != null">
+            limit ${pageStart},${rows}
+        </if>
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+	</select>
+	
+	<select id="policeListCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+	    select count(*)
+		from ba_police_entrance pe
+		left join xt_user u on u.id = pe.police_id
+		left join ba_cuff c on c.id = pe.cuff_id
+		where pe.out_time is null
+		<if test="orderRequestId !=null and orderRequestId!=''">
+			and pe.order_request_id = #{orderRequestId}
+		</if>
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+    </select>
+          
+    <insert id="insertPoliceEntrance" parameterType="com.zhixin.zhfz.bacs.entity.PoliceEntranceEntity"  keyProperty="id" useGeneratedKeys="true" >  
+     INSERT INTO ba_police_entrance (
+	    		case_id,
+	    		area_id,
+	    		police_id,
+	    		police_type,
+	    		cuff_id,
+				op_pid,
+				op_user_id,
+	    		in_time,
+	    		out_time,
+				order_request_id
+				)
+             VALUES(
+	    		#{caseId},
+	    		#{areaId},
+	    		#{policeId},
+	    		#{policeType},
+	    		#{cuffId},
+	    		#{opPid},
+	    		#{opUserId},
+				<choose>
+					<when test="inTime != null and inTime != ''">
+						#{inTime,jdbcType=TIMESTAMP},
+					</when>
+					<otherwise>
+						now(),
+					</otherwise>
+				</choose>
+	    		null,
+				#{orderRequestId}
+				)
+    </insert>
+    
+    <update id="updateOutTime" parameterType="com.zhixin.zhfz.bacs.entity.PoliceEntranceEntity">
+    	update ba_police_entrance
+    	set out_time = now()
+    	where 1=1
+    	<if test="cuffId != null and cuffId != ''">
+    		and cuff_id = #{cuffId}
+    	</if>
+    	<if test="policeId != null and policeId != ''">
+    		and police_id = #{policeId}
+    	</if>
+    	<if test="id != null and id != ''">
+    		and id = #{id}
+    	</if>
+    </update>
+	<!--获取在区民警 -->
+	<select id="getPoliceEnteance" resultMap="BaseResultMap"  parameterType="java.util.Map">
+		select pe.id,pe.police_id,xu.certificate_no certificateNo,xu.real_name name
+		from ba_police_entrance pe
+		left JOIN xt_user xu on pe.police_id = xu.id
+		where pe.out_time is null
+		<if test="areaId != null and areaId != ''">
+			and pe.area_id = #{areaId}
+		</if>
+		<if test="caseId != null and caseId != ''">
+			and pe.case_id = #{caseId}
+		</if>
+		<if test="policeId != null and policeId != ''">
+			and pe.police_id = #{policeId}
+		</if>
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+	</select>
+
+	<!-- 根据policeId获取民警入区信息 -->
+	<select id="findPoliceEntranceByPoliceId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+      select a.*,b.certificate_no policeNo
+      from ba_police_entrance a
+      left join xt_user b on a.police_id = b.id
+      where a.police_id = #{policeId} and a.out_time is null
+    </select>
+
+	<!-- 根据policeId和cuffId获取嫌疑人信息 -->
+	<select id="getSerialByPolice"  parameterType="java.util.Map"  resultType="com.zhixin.zhfz.bacs.entity.SerialEntity">
+      	select bs.id,bs.serial_no serialNo from ba_serial bs
+		where bs.in_register_user_id = #{policeId}
+		and bs.cuff_id = #{cuffId}
+    </select>
+</mapper>
+
+

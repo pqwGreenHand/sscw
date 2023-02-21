@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacsapp.dao.information.ITodoMapper">
+    <resultMap id="resultMap" type="com.zhixin.zhfz.bacsapp.entity.InformationEntity" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="sender_id" property="senderId" />
+        <result column="receiver_id" property="receiverId" />
+        <result column="title" property="title" />
+        <result column="content" property="content" />
+        <result column="handler_content" property="handLerContent" />
+        <result column="happen_time" property="createTime" />
+        <result column="handler_time" property="dealTime" />
+        <result column="status" property="status" />
+        <result column="type" property="type" />
+    </resultMap>
+
+
+    <select id="list" parameterType="java.util.Map" resultMap="resultMap">
+        SELECT t.*,1 AS type FROM xt_schedule AS t
+        <include refid="query_where"/>
+        ORDER BY t.status ASC , t.id DESC
+        LIMIT ${pageStart},${rows}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT COUNT(t.id) FROM xt_schedule AS t
+        <include refid="query_where"/>
+    </select>
+
+
+    <update id="deal" parameterType="java.util.Map">
+        update xt_schedule
+        set
+            handler_time = now(),
+            status = 1,
+            handler_content = #{handlerContent}
+        where id=#{id}
+    </update>
+
+    <sql id="query_where">
+        <where>
+            <if test="receiverId!=null and receiverId !=''">
+                and t.receiver_id = #{receiverId}
+            </if>
+            <if test="content!=null and content !=''">
+                and t.`content` LIKE "%${content}%"
+            </if>
+            <if test="status!=null and status !='' or status == 0 ">
+                and t.status = #{status}
+           </if>
+        </where>
+    </sql>
+
+</mapper>

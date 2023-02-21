@@ -1,0 +1,55 @@
+#inSerialPhotoTips,#inSerialPhotoTips2,#inSerialFaceRecognition,#outSerialPhotoTips,#outSerialPhotoTips2,#eidtPhotoTips{
+	width: 100px;
+	height:40px;
+	display: inline-block;
+	margin: 10px 10px;
+	margin-left:0;
+	background-color: #193a6c;
+	cursor: pointer;
+	border: 1px solid #064d79;
+	position: relative;
+	text-decoration: none;
+}
+#inSerialPhotoTips:hover,#inSerialPhotoTips2:hover,#inSerialFaceRecognition:hover,
+#outSerialPhotoTips:hover,#eidtPhotoTips:hover,#outSerialPhotoTips2:hover{
+	background-color: rgba(37,73,136,.6);
+}
+#inSerialPhotoTips span ,#inSerialPhotoTips2 span,#outSerialPhotoTips span,#eidtPhotoTips span,#outSerialPhotoTips2 span{
+	font-size: 15px;
+	color: #fff;
+	font-weight: bold;
+	line-height: 40px;
+	padding-left: 7px;
+	position: relative;
+}
+#inSerialFaceRecognition span{
+	font-size: 15px;
+	color: #fff;
+	font-weight: bold;
+	line-height: 40px;
+	position: relative;
+}
+#inSerialPhotoTips span:before ,#inSerialPhotoTips2 span:before,#inSerialFaceRecognition span:before,
+#outSerialPhotoTips span:before,#eidtPhotoTips span:before,#outSerialPhotoTips2 span:before{
+	content: '';
+	display: inline-block;
+	position: absolute;
+	width: 35px;
+	height: 35px;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	margin: auto;
+	background-size: 100% 100%;
+}
+.detailTip{
+	/*background: (54,169,63,.5);*/
+	background: #0a6aa1;
+}
+.detailTip tr td{
+	width: 100px;
+	margin-left: 15px;
+	height: 30px;
+	color: white;
+	font-size: 15px;
+}

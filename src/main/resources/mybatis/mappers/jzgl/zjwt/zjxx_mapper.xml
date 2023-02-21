@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhixin.zhfz.jzgl.dao.zjwt.IZjxxMapper">
+	<resultMap id="IZjxxMapper" type="com.zhixin.zhfz.jzgl.entity.ZjxxEntity">
+		<id property="id" column="id" />
+		<result property="ajxxId" column="ajxx_id" />
+		<result property="jzxxId" column="jzxx_id" />
+		<result property="yhId" column="yh_id" />
+		<result property="zrrId" column="zrr_id" />
+		<result property="wtlx" column="wtlx" />
+		<result property="wtlxName" column="wtlx_name" />
+		<result property="wtjy" column="wtjy" />
+		<result property="wtnr" column="wtnr" />
+		<result property="fssj" column="fssj" />
+		<result property="cjDate" column="cj_date" />
+		<result property="zgsj" column="zgsj" />
+	</resultMap>
+
+	<select id="listZjxx" parameterType="java.util.Map" resultMap="IZjxxMapper" resultType="java.util.List">
+		select 
+		zj.*,
+		aj.ajbh,
+		aj.ajmc,
+		jz.jzbh,
+		(select real_name from xt_user u where u.id = zj.yh_id) zrr,
+		(select real_name from xt_user u where u.id = zj.zrr_id) realName,
+		(select u.certificate_no from ba_case a,xt_user u where a.zbmj_id = u.id AND  a.id = jz.ajxx_id) zbmjXm,
+		(SELECT c.code_value FROM xt_code c WHERE TYPE='wtlx' AND zj.wtlx=c.code_key) wtlx_name
+		from jz_zjxx zj
+		left join ba_case aj on aj.id = zj.ajxx_id
+		left join jz_jzxx jz on jz.id = zj.jzxx_id
+		LEFT JOIN xt_user yh ON yh.id = zj.yh_id
+		LEFT JOIN xt_user zrr ON zrr.id=zj.zrr_id
+		where 1=1
+		<if test=" wtjy!= null and wtjy != ''">
+			and zj.wtjy like '%${wtjy}%'
+		</if>
+		<if test="wtnr != null and wtnr != ''">
+			and zj.wtnr like '%${wtnr}%'
+		</if>
+		<if test=" wtlx!= null and wtlx != ''">
+			and zj.wtlx =#{wtlx}
+		</if>
+		<if test="startTime!=null and startTime!=''">
+            and zj.fssj &gt;= #{startTime}
+        </if>
+        <if test="endTime!=null and endTime!='' ">
+            and zj.fssj  &lt;= #{endTime}
+        </if>
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+		order by zj.id
+	</select>
+
+	<select id="countZjxx" parameterType="java.util.Map" resultType="int">
+		select count(1)
+		from jz_zjxx zj
+		left join ba_case aj on aj.id = zj.ajxx_id
+		left join jz_jzxx jz on jz.id = zj.jzxx_id
+		LEFT JOIN xt_user yh ON yh.id = zj.yh_id
+		LEFT JOIN xt_user zrr ON zrr.id=zj.zrr_id
+		where 1=1
+		<if test=" wtjy!= null and wtjy != ''">
+			and zj.wtjy like '%${wtjy}%'
+		</if>
+		<if test="wtnr != null and wtnr != ''">
+			and zj.wtnr like '%${wtnr}%'
+		</if>
+		<if test=" wtlx!= null and wtlx != ''">
+			and zj.wtlx =#{wtlx}
+		</if>
+		<if test="startTime!=null and startTime!=''">
+            and zj.fssj &gt;= #{startTime}
+        </if>
+        <if test="endTime!=null and endTime!='' ">
+            and zj.fssj  &lt;= #{endTime}
+        </if>
+        <if test="dataAuth!=null and dataAuth!=''">
+				and ${dataAuth}
+			</if>
+        
+	</select>
+
+	<insert id="insertZjxx" parameterType="com.zhixin.zhfz.jzgl.entity.ZjxxEntity" keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO jz_zjxx (
+		ajxx_id,
+		jzxx_id,
+		yh_id,
+		zrr_id,
+		wtlx,
+		wtjy,
+		wtnr,
+		zgsj,
+		fssj,
+		cj_date,
+		op_pid,
+		op_user_id
+		)
+		VALUES(
+		#{ajxxId},
+		#{jzxxId},
+		#{yhId},
+		#{zrrId},
+		#{wtlx},
+		#{wtjy},
+		#{wtnr},
+		#{zgsj},
+		now(),
+		now(),
+		#{opPid},
+		#{opUserId}
+		)
+	</insert>
+	
+	<select id="queryJzxx" resultType="java.util.HashMap" parameterType="java.util.Map">
+		select
+		j.id,
+		j.ajxx_id ajxxId,
+		j.jzbh,
+		j.zrr zrrId,
+		j.user_id userId,
+		(select u.real_name from xt_user u where u.id = j.zrr) zrr,
+		(select u.real_name from xt_user u where u.id = j.user_id) userName,
+		a.ajmc,
+		u.certificate_no,
+		(select g.xsbh from jz_jzg_gmxx g where g.id = j.gmxx_id) xsbh
+		from jz_jzxx j,ba_case a ,xt_user u
+		where j.ajxx_id = a.id and u.id=a.zbmj_id
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+		order by j.id desc
+	</select>
+
+</mapper>
+
+

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhixin.zhfz.sacw.dao.sapersonalconfig.ISaPersonalConfigMapper">
+
+    <resultMap id="SaPersonalConfigResultMap" type="SaPersonalConfig">
+        <id property="id" column="id"/>
+        <result property="type" column="type"/>
+        <result property="desc" column="desc"/>
+        <result property="warehouseName" column="warehouseName"/>
+        <result property="warehouseId" column="warehouse_id"/>
+        <result property="isEnable" column="is_enable"/>
+        <result property="op_pid" column="op_pid" jdbcType="VARCHAR"/>
+        <result property="op_user_id" column="op_user_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap id="fusionResultMap" type="com.zhixin.zhfz.sacw.entity.SaPersonalConfigFusionEntity">
+        <!--<id property="id" column="id" />-->
+        <result property="warehouseId" column="warehouseId"/>
+        <result property="configId" column="config_id"/>
+        <result property="paramKey" column="param_key"/>
+        <result property="paramValue" column="param_value"/>
+    </resultMap>
+
+    <!-- id is same to interface'methmod -->
+    <select id="list" resultMap="SaPersonalConfigResultMap" parameterType="java.util.Map">
+        SELECT pc.*,ic.name warehouseName FROM sa_personal_config pc
+        INNER JOIN sa_warehouse ic ON pc.warehouse_id=ic.id
+        LEFT JOIN xt_organization o ON ic.org_id = o.id
+        where 1=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="type !=null and type !=''">
+            and pc.type like '%${type}%'
+        </if>
+        order by id desc
+        limit ${pageStart},${rows}
+
+    </select>
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(1) from sa_personal_config pc
+        left join sa_warehouse ic on pc.warehouse_id=ic.id
+        LEFT JOIN xt_organization o ON ic.org_id = o.id
+        where 1=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="type !=null and type !=''">
+            and pc.type like '%${type}%'
+        </if>
+    </select>
+    <select id="listFn" resultMap="SaPersonalConfigResultMap" parameterType="java.util.Map">
+        SELECT pc.* FROM sa_personal_config pc
+        where warehouse_id=#{warehouseId} and code_key=#{codeKey}
+    </select>
+
+    <insert id="insert" parameterType="SaPersonalConfig" useGeneratedKeys="true" keyProperty="id">
+        insert into sa_personal_config (type,`desc`,warehouse_id,is_enable,op_pid,op_user_id)
+        values(#{type},#{desc},#{warehouseId},#{isEnable},#{op_pid},#{op_user_id})
+    </insert>
+
+    <delete id="delete" parameterType="int">
+        delete from sa_personal_config where id=#{id}
+    </delete>
+
+    <update id="update" parameterType="SaPersonalConfig">
+        update sa_personal_config set type = #{type},`desc`=#{desc},warehouse_id = #{warehouseId},is_enable =
+        #{isEnable}
+        where id=#{id}
+    </update>
+
+    <select id="getDetailByType" resultMap="fusionResultMap" parameterType="java.util.Map">
+        SELECT
+        p.warehouse_id,
+        p.id AS config_id,
+        d.param_key,
+        d.param_value
+        FROM
+        sa_personal_config p,
+        sa_personal_config_detail d
+        WHERE
+        p.id = d.personal_config_id
+        AND p.is_enable = 1
+        AND p.type = #{type}
+        AND p.warehouse_id = #{warehouseId}
+    </select>
+</mapper>

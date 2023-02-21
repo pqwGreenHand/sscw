@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.sacw.dao.searchinvolved.ISearchInvolvedMapper">
+
+    <resultMap id="searchInvolvedMap" type="SearchInvolvedEntity">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="caseNo" column="ajbh" jdbcType="VARCHAR"/>
+        <result property="caseName" column="ajmc" jdbcType="VARCHAR"/>
+        <result property="mainPoliceName" column="mainPoliceName" jdbcType="VARCHAR"/>
+        <result property="policeName1" column="policeName1" jdbcType="VARCHAR"/>
+        <result property="policeNo1" column="policeNo1" jdbcType="VARCHAR"/>
+        <result property="organizationName1" column="organizationName1" jdbcType="VARCHAR"/>
+        <result property="organizationUserId" column="organization_user_id" jdbcType="VARCHAR"/>
+        <result property="involvedOwner" column="involved_owner" jdbcType="VARCHAR"/>
+        <result property="mainPoliceId" column="zbmj_id" jdbcType="VARCHAR"/>
+        <result property="involvedName" column="name" jdbcType="VARCHAR"/>
+        <result property="involvedTypeName" column="involvedTypeName" jdbcType="VARCHAR"/>
+        <result property="detailCount" column="detail_count" jdbcType="VARCHAR"/>
+        <result property="unit" column="unit" jdbcType="VARCHAR"/>
+        <result property="barcode" column="barcode" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>
+        <result property="areaId" column="areaId" jdbcType="INTEGER"/>
+        <result property="warehouseId" column="warehouseId" jdbcType="INTEGER"/>
+        <result property="areaName" column="areaName" jdbcType="VARCHAR"/>
+        <result property="warehouseName" column="warehouseName" jdbcType="VARCHAR"/>
+
+    </resultMap>
+
+    <select id="list" resultMap="searchInvolvedMap"
+            parameterType="java.util.Map">
+        select distinct l.ajbh,l.ajmc,ul.real_name as mainPoliceName,
+        ir.police_id1 as policeNo1,o.name as organizationName1,ur.real_name as policeName1,
+        i.involved_owner,i.name as involvedName,i.barcode,i.status,
+        i.detail_count,i.unit,cd.code_value as involvedTypeName,i.created_time,a.id as warehouseId,a.`name` as
+        warehouseName
+        from sa_involved i
+        left join ba_case l on i.case_id=l.id
+        left join xt_user ul on l.zbmj_id=ul.id
+        left join sa_input_record ir on i.id=ir.involved_id
+        left join sa_output_record rt on i.id=rt.involved_id
+        left join xt_user ur on ir.police_id1=ur.id
+        left join xt_organization o on o.id=ir.organization_id
+        left join xt_code cd on cd.code_key=i.involved_type_id and cd.type='INVOLVED_TYPE'
+        left join xt_code cp on cp.code_key=i.input_type_id and cp.type='INV_INPUT_TYPE'
+        left join xt_code cr on cr.code_key=rt.output_type_id and cr.type='INV_OUTPUT_TYPE'
+        left join sa_warehouse a on a.id=i.warehouse_id
+        <where>
+            <if test="dataAuth!=null and dataAuth!=''">
+                and ${dataAuth}
+            </if>
+            <if test="caseNo!=null and caseNo !=''">
+                and l.ajbh like '%${caseNo}%'
+            </if>
+            <if test="caseName !=null and caseName !=''">
+                and l.ajmc like '%${caseName}%'
+            </if>
+            <if test="mainPoliceNo !=null and mainPoliceNo !=''">
+                and ul.login_name= #{mainPoliceNo}
+            </if>
+            <if test="policeNo1 !=null and policeNo1 !=''">
+                and ir.police_id1= #{policeNo1}
+            </if>
+
+            <if test="organizationId1 !=null and organizationId1 !=''">
+                and ir.organization_id= #{organizationId1}
+            </if>
+            <if test=" involvedName!=null and involvedName !=''">
+                and i.name= #{involvedName}
+            </if>
+            <if test=" involvedOwner!=null and involvedOwner !=''">
+                and i.involved_owner= #{involvedOwner}
+            </if>
+            <if test="status!=99 and status!=null">
+                and i.status= #{status}
+            </if>
+            <if test=" involvedType!=null and involvedType !=''">
+                and cd.code_key= #{involvedType}
+            </if>
+            <if test=" inputType!=null and inputType !=''">
+                and cp.code_key= #{inputType}
+            </if>
+            <if test=" outputType!=null and outputType !=''">
+                and cr.code_key= #{outputType}
+            </if>
+            <if test=" barcode!=null and barcode !=''">
+                and i.barcode= #{barcode}
+            </if>
+            <if test=" beginTime!=null and endTime !=''">
+                and i.created_time between #{beginTime} and #{endTime}
+            </if>
+        </where>
+        order by i.created_time desc limit ${pageStart},${rows}
+    </select>
+
+
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(1)
+        from
+        (select distinct i.id
+        from sa_involved i
+        left join ba_case l on i.case_id=l.id
+        left join xt_user ul on l.zbmj_id=ul.id
+        left join sa_input_record ir on i.id=ir.involved_id
+        left join sa_output_record rt on i.id=rt.involved_id
+        left join xt_user ur on ir.police_id1=ur.id
+        left join xt_organization o on o.id=ir.organization_id
+        left join xt_code cd on cd.code_key=i.involved_type_id and cd.type='INVOLVED_TYPE'
+        left join xt_code cp on cp.code_key=i.input_type_id and cp.type='INV_INPUT_TYPE'
+        left join xt_code cr on cr.code_key=rt.output_type_id and cr.type='INV_OUTPUT_TYPE'
+        left join ba_area a on a.id=i.warehouse_id
+        <where>
+            <if test="dataAuth!=null and dataAuth!=''">
+                and ${dataAuth}
+            </if>
+            <if test="ajbh!=null and ajbh !=''">
+                and l.ajbh like '%${ajbh}%'
+            </if>
+            <if test="ajmc !=null and ajmc !=''">
+                and l.ajmc like '%${ajmc}%'
+            </if>
+            <if test="login_name !=null and login_name !=''">
+                and ul.login_name= #{login_name}
+            </if>
+            <if test="policeNo1 !=null and policeNo1 !=''">
+                and ur.login_name= #{policeNo1}
+            </if>
+            <if test="organizationId1 !=null and organizationId1 !=''">
+                and ir.organization_id= #{organizationId1}
+            </if>
+            <if test=" name!=null and name !=''">
+                and i.name= #{name}
+            </if>
+            <if test=" involvedOwner!=null and involvedOwner !=''">
+                and i.involved_owner= #{involvedOwner}
+            </if>
+            <if test="status!=99 and status!=null">
+                and i.status= #{status}
+            </if>
+            <if test=" involvedType!=null and involvedType !=''">
+                and cd. code_key= #{involvedType}
+            </if>
+            <if test=" inputType!=null and inputType !=''">
+                and cp.code_key= #{inputType}
+            </if>
+            <if test=" outputType!=null and outputType !=''">
+                and cr.code_key= #{outputType}
+            </if>
+            <if test=" barcode!=null and barcode !=''">
+                and i.barcode= #{barcode}
+            </if>
+            <if test=" beginTime!=null and endTime !=''">
+                and i.created_time between #{beginTime} and #{endTime}
+            </if>
+        </where>
+        ) as a
+    </select>
+
+
+</mapper>

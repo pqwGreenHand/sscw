@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper	namespace="com.zhixin.zhfz.bacs.dao.nvr.INvrMapper">
+
+	<resultMap id="nvrMap" type="NvrEntity">
+		<id property="id" column="id" jdbcType="INTEGER"/>
+		<result property="name" column="name" jdbcType="VARCHAR"/>
+		<result property="ip" column="ip" jdbcType="VARCHAR"/>
+		<result property="ipBack" column="ip_back" jdbcType="VARCHAR"/>
+		<result property="account" column="account" jdbcType="VARCHAR"/>
+		<result property="password" column="password" jdbcType="VARCHAR"/>
+		<result property="port" column="port" jdbcType="INTEGER"/>
+		<result property="areaName" column="areaname" jdbcType="VARCHAR"/>
+		<result property="areaId" column="area_id" jdbcType="INTEGER"/>
+		<result property="vender" column="vender" jdbcType="VARCHAR"/>
+		<result property="type" column="type" jdbcType="INTEGER"/>
+		<result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>
+		<result property="updatedTime" column="updated_time" jdbcType="TIMESTAMP"/>
+		<result column="op_pid" property="op_Pid" jdbcType="VARCHAR" />
+		<result column="op_user_id" property="op_User_Id" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<select id="list" resultMap="nvrMap"
+		parameterType="java.util.Map">
+		select n.*,r.name as areaname from ba_nvr n
+		left join ba_area r on n.area_id=r.id
+		<where>
+			1=1
+			<if test="dataAuth!=null and dataAuth!=''">
+				and ${dataAuth}
+			</if>
+			<if test="areaId!=null and areaId !=''">
+        	     and n.area_id=#{areaId}
+       		</if>
+       		<if test="name!=null and name !=''">
+       			 and n.name like '%${name}%'
+       		</if>
+       	</where>
+       	limit ${pageStart},${rows}	
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map"> 
+		select count(1) from ba_nvr n
+		left join ba_area r on n.area_id=r.id
+		<where>
+			1=1
+			<if test="dataAuth!=null and dataAuth!=''">
+				and ${dataAuth}
+			</if>
+			<if test="areaId!=null and areaId !=''">
+        	     and n.area_id=#{areaId}
+       		</if>
+       		<if test="name!=null and name !=''">
+       			 and n.name like '%${name}%'
+       		</if>
+       	</where>
+	</select>
+	
+	<insert id="insert" parameterType="NvrEntity" keyProperty="id" useGeneratedKeys="true">
+        insert into ba_nvr (name,ip, ip_back, account,
+		password, port, area_id, vender, type, created_time,op_pid,op_user_id )
+		values (#{name},#{ip},#{ipBack},#{account},#{password},#{port},#{areaId},
+		#{vender},#{type},now(),#{op_Pid},#{op_User_Id})
+    </insert>
+	<insert id="insertList" parameterType="java.util.List"  useGeneratedKeys="true">
+        insert into ba_nvr (name,ip, ip_back, account,
+		password, port, area_id, vender, type, created_time,op_pid,op_user_id )
+		values
+		<foreach collection="nvrList" item="item" index="index" separator=",">
+			(#{item.name},#{item.ip},#{item.ipBack},#{item.account},#{item.password},#{item.port},#{item.areaId},
+			#{item.vender},#{item.type},now(),#{item.op_Pid},#{item.op_User_Id})
+		</foreach>
+    </insert>
+	
+    <update id="update" parameterType="java.util.Map" >  
+       update ba_nvr set updated_time=now()
+       <if test="name!= null and name!=''" >
+        	,name = #{name}
+      </if>
+      <if test="ip!= null and ip!=''" >
+        	,ip = #{ip}
+      </if>
+      <if test="ipBack!= null and ipBack!=''" >
+        	,ip_back = #{ipBack}
+      </if>
+      <if test="account!= null and account!=''" >
+        	,account = #{account}
+      </if>
+      <if test="password!= null and password!=''" >
+        	,password = #{password}
+      </if>
+      <if test="port!= null and port!=''" >
+        	,port = #{port}
+      </if>
+      <if test="areaId!= null and areaId!=''" >
+        	,area_id = #{areaId}
+      </if>
+      <if test="vender!= null and vender!=''" >
+        	,vender = #{vender}
+      </if>
+      <if test="type!= null and type!=''" >
+        	,type = #{type}
+      </if>
+       where id=#{id} 
+    </update>
+
+
+	<delete id="delete" parameterType="int">  
+            delete from ba_nvr where id=#{id}
+    </delete>
+    
+    <delete id="deleteCameraByNvrId" parameterType="int">  
+            delete from ba_camera where nvr_id=#{nvrId}
+    </delete>
+    
+    <select id="comboNvr" resultMap="nvrMap"
+		parameterType="java.util.Map">
+		select distinct id,name from ba_nvr where area_id=#{areaId}
+	</select>
+
+</mapper>

@@ -1,0 +1,111 @@
+.layout {
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  z-index: 0;
+}
+.layout-panel {
+  position: absolute;
+  overflow: hidden;
+}
+.layout-body {
+  min-width: 1px;
+  min-height: 1px;
+  border: 1px solid #073a65;
+}
+.layout-panel-east,
+.layout-panel-west {
+  z-index: 2;
+}
+.layout-panel-north,
+.layout-panel-south {
+  z-index: 3;
+}
+.layout-expand {
+  position: absolute;
+  padding: 0px;
+  font-size: 1px;
+  cursor: pointer;
+  z-index: 1;
+}
+.layout-expand .panel-header,
+.layout-expand .panel-body {
+  background: transparent;
+  filter: none;
+  overflow: hidden;
+}
+.layout-expand .panel-header {
+  border-bottom-width: 0px;
+}
+.layout-split-proxy-h,
+.layout-split-proxy-v {
+  position: absolute;
+  font-size: 1px;
+  display: none;
+  z-index: 5;
+}
+.layout-split-proxy-h {
+  width: 5px;
+  cursor: e-resize;
+}
+.layout-split-proxy-v {
+  height: 5px;
+  cursor: n-resize;
+}
+.layout-mask {
+  position: absolute;
+  background: #fafafa;
+  filter: alpha(opacity=10);
+  opacity: 0.10;
+  z-index: 4;
+}
+.layout-button-up {
+  background: url('images/layout_arrows.png') no-repeat -22px -22px;
+  background-color: transparent;
+}
+.layout-button-down {
+  background: url('images/layout_arrows.png') no-repeat -22px 0;
+}
+.layout-button-left {
+  background: url('images/layout_arrows.png') no-repeat 0 0;
+  background-color: transparent;
+}
+.layout-button-right {
+  background: url('images/layout_arrows.png') no-repeat 0 -22px;
+  background-color: transparent;
+}
+.layout-split-proxy-h,
+.layout-split-proxy-v {
+  background-color: #cccccc;
+}
+.layout-split-north {
+
+}
+.layout-split-south {
+
+}
+.layout-split-east {
+
+}
+.layout-split-west {
+
+}
+.layout-expand {
+  background-color: #092c54;
+}
+.layout-expand-over {
+  background-color: #046aa0;
+}
+.layout-expand .panel-tool {
+  right: 2px;
+}
+.layout-expand .panel-tool a {
+  background-color: transparent;
+}
+.layout-panel .panel-tool {
+  right: 2px;
+}
+.layout-panel .panel-tool a {
+  background-color: transparent;
+}

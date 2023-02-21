@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.sacw.dao.remotelook.IRemoteLookMapper">
+
+    <resultMap id="remoteLookMap" type="RemoteLookEntity">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="caseId" column="case_id" jdbcType="INTEGER"/>
+        <result property="caseNo" column="ajbh" jdbcType="VARCHAR"/>
+        <result property="caseName" column="ajmc" jdbcType="VARCHAR"/>
+        <result property="involvedId" column="involved_id" jdbcType="INTEGER"/>
+        <result property="involvedName" column="name" jdbcType="VARCHAR"/>
+        <result property="requestPoliceId" column="request_police_id" jdbcType="INTEGER"/>
+        <result property="requestPoliceNo" column="requestPoliceNo" jdbcType="INTEGER"/>
+        <result property="requestPoliceName" column="requestPoliceName" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="randomPasswd" column="random_passwd" jdbcType="VARCHAR"/>
+        <result property="organizationName" column="organizationName" jdbcType="VARCHAR"/>
+        <result property="showDate" column="show_date" jdbcType="TIMESTAMP"/>
+        <result property="failDesc" column="fail_desc" jdbcType="VARCHAR"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="mobile" column="mobile" jdbcType="VARCHAR"/>
+        <result property="registerUserId" column="register_user_id" jdbcType="INTEGER"/>
+        <result property="registerUserName" column="registerUserName" jdbcType="VARCHAR"/>
+        <result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>
+        <result property="updatedTime" column="updated_time" jdbcType="TIMESTAMP"/>
+        <result property="warehouseId" column="warehouse_id" jdbcType="INTEGER"/>
+        <result property="warehouseName" column="warehouseName" jdbcType="VARCHAR"/>
+        <result property="op_pid" column="op_pid" jdbcType="VARCHAR"/>
+        <result property="op_user_id" column="op_user_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="list" resultMap="remoteLookMap"
+            parameterType="java.util.Map">
+        SELECT r.*, ba.ajbh,ba.ajmc, si.name AS involvedName, xu.login_name AS requestPoliceNo,xu.login_name AS
+        requestPoliceName,
+        re.name AS registerUserName, xo.name AS organizationName, sw. NAME AS warehouseName
+        FROM sa_remote_look r
+        LEFT JOIN ba_case ba ON r.case_id = ba.id
+        LEFT JOIN sa_involved si ON r.involved_id = si.id
+        LEFT JOIN xt_user xu ON r.request_police_id = xu.id
+        LEFT JOIN xt_user ru ON r.register_user_id = ru.id
+        LEFT JOIN xt_role re ON re.id = ru.role_id
+        LEFT JOIN xt_organization xo ON xu.organization_id = xo.id
+        LEFT JOIN sa_warehouse sw ON sw.id = r.warehouse_id
+        <where>
+            <if test="dataAuth!=null and dataAuth!=''">
+                and ${dataAuth}
+            </if>
+            <if test="caseNo!=null and caseNo !=''">
+                and ba.ajbh like '%${caseNo}%'
+            </if>
+            <if test="caseName !=null and caseName !=''">
+                and ba.ajmc like '%${caseName}%'
+            </if>
+        </where>
+        order by r.created_time desc limit ${pageStart},${rows}
+    </select>
+
+
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(1)
+        FROM
+        sa_remote_look r
+        LEFT JOIN ba_case ba ON r.case_id = ba.id
+        LEFT JOIN sa_involved si ON r.involved_id = si.id
+        LEFT JOIN xt_user xu ON r.request_police_id = xu.id
+        LEFT JOIN xt_organization xo ON xu.organization_id = xo.id
+        LEFT JOIN sa_warehouse sw ON sw.id = r.warehouse_id
+        <where>
+            <if test="dataAuth!=null and dataAuth!=''">
+                and ${dataAuth}
+            </if>
+            <if test="ajbh!=null and ajbh !=''">
+                and ba.ajbh like '%${ajbh}%'
+            </if>
+            <if test="ajmc !=null and ajmc !=''">
+                and ba.ajmc like '%${ajmc}%'
+            </if>
+        </where>
+    </select>
+
+    <insert id="insert" parameterType="RemoteLookEntity" keyProperty="id" useGeneratedKeys="true">
+		insert into sa_remote_look (case_id,involved_id,register_user_id,request_police_id,
+		status,random_passwd,show_date, fail_desc,description,created_time,warehouse_id,op_pid,op_user_id) values (#{caseId},#{involvedId},#{registerUserId},
+		#{requestPoliceId},1,#{randomPasswd},#{showDate},#{failDesc},#{description},now(),#{warehouseId},#{op_pid},#{op_user_id})
+    </insert>
+
+
+    <update id="update" parameterType="java.util.Map">
+        update sa_remote_look
+        <set>
+            <if test="caseId != null and caseId!='' ">
+                case_id=#{caseId},
+            </if>
+            <if test="involvedId != null and involvedId!='' ">
+                involved_id=#{involvedId},
+            </if>
+            <if test="requestPoliceId != null and requestPoliceId!='' ">
+                request_police_id=#{requestPoliceId},
+            </if>
+            <if test="requestPoliceNo != null and requestPoliceNo!='' ">
+                requestPoliceNo=#{requestPoliceNo},
+            </if>
+            <if test="status != null and status!='' ">
+                status=#{status},
+            </if>
+            <if test="showDate != null and showDate!='' ">
+                show_date=#{showDate},
+            </if>
+            <if test="description != null and description!='' ">
+                description=#{description},
+            </if>
+            <if test="randomPasswd != null and randomPasswd!='' ">
+                random_passwd=#{randomPasswd},
+            </if>
+            <if test="failDesc != null and failDesc!='' ">
+                fail_desc=#{failDesc},
+            </if>
+            <if test="warehouseId != null and warehouseId!='' ">
+                warehouse_id=#{warehouseId},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+
+    <delete id="delete" parameterType="int">
+            delete from sa_remote_look where id=#{id}
+    </delete>
+
+    <select id="listById" resultMap="remoteLookMap"
+            parameterType="java.util.Map">
+
+		select * from sa_remote_look where id=#{id}
+	</select>
+
+    <select id="queryRequestInvolved" resultMap="remoteLookMap"
+            parameterType="java.util.Map">
+			select r.*,ba.ajbh,ba.ajmc,si.name as involvedName,
+		xu.real_name as requestPoliceName,xu.login_name as requestPoliceNo,
+		xu.real_name as registerUserName,xu.real_name as name,
+		sw.name as warehouseName
+		from sa_remote_look r
+		left join ba_case ba on r.case_id=ba.id
+		left join sa_involved si on r.involved_id=si.id
+		left join xt_user xu on r.request_police_id=xu.id
+		left join xt_organization xo on xu.organization_id=xo.id
+		left join sa_warehouse sw on sw.id=r.warehouse_id
+		where r.id=#{id}
+	</select>
+
+    <!--物品登记、无主财物登记通过案件查询保管场所-->
+    <select id="listCaseById" resultMap="remoteLookMap" parameterType="java.util.Map">
+        select * from ba_case
+        <where>
+            <if test="id != null and id!='' ">
+                and id=#{id}
+            </if>
+
+        </where>
+    </select>
+
+</mapper>

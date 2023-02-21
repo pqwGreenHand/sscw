@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhixin.zhfz.bacs.dao.recognizeRecord.IRecognizeRecordMapper">
+     <resultMap id="recognizeMap" type="com.zhixin.zhfz.bacs.entity.RecognizeRecordEntity">
+         <id column="id" property="id" jdbcType="INTEGER" />
+         <result column="case_id" property="caseId" jdbcType="INTEGER" />
+         <result column="area_id" property="areaId" jdbcType="INTEGER" />
+         <result property="areaName" column="areaName" jdbcType="VARCHAR"/>
+         <result column="serial_id" property="serialId" jdbcType="INTEGER" />
+         <result column="person_id" property="personId" jdbcType="INTEGER" />
+         <result column="address" property="address" jdbcType="VARCHAR" />
+         <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+         <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+         <result column="policeman" property="policeman" jdbcType="VARCHAR" />
+         <result column="victim" property="victim" jdbcType="VARCHAR" />
+         <result column="recognize" property="recognize" jdbcType="VARCHAR" />
+         <result column="witniss" property="witniss" jdbcType="VARCHAR" />
+         <result column="target" property="target" jdbcType="VARCHAR" />
+         <result column="result" property="result" jdbcType="VARCHAR" />
+         <result column="status" property="status" jdbcType="INTEGER" />
+         <result column="recognize_type" property="recognizeType" jdbcType="INTEGER" />
+         <result column="user_id" property="userId" jdbcType="INTEGER" />
+         <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+         <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+
+         <result column="op_pid" property="opPid" jdbcType="VARCHAR" />
+         <result column="op_user_id" property="opUserId" jdbcType="INTEGER" />
+
+     </resultMap>
+
+    <select id="list" resultMap="recognizeMap"  parameterType="java.util.Map">
+        SELECT
+        r.*, i.`name` AS areaName
+        FROM
+            ba_recognize_record r
+        LEFT JOIN ba_area i ON r.area_id = i.id
+        <where>
+            <if test="policeman !=null and policeman !=''">
+                and (r.policeman like '%${policeman}%')
+            </if>
+            <if test="areaId!=null and areaId !=''">
+                and r.area_id = ${areaId}
+            </if>
+            <if test="dataAuth!=null and dataAuth!=''">
+                and ${dataAuth}
+            </if>
+        </where>
+        limit ${pageStart},${rows}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(1) from ba_recognize_record r
+        left join ba_area i on r.area_id=i.id
+        <where>
+            <if test="policeman !=null and policeman !=''">
+                and (r.policeman like '%${policeman}%')
+            </if>
+            <if test="areaId!=null and areaId !=''">
+                and ${areaId}
+            </if>
+            <if test="dataAuth!=null and dataAuth!=''">
+                and ${dataAuth}
+            </if>
+        </where>
+    </select>
+
+
+    <insert id="insert" parameterType="com.zhixin.zhfz.bacs.entity.RecognizeRecordEntity" >
+          INSERT INTO `ba_recognize_record` (
+        `area_id`, `address`,`case_id`,`person_id`,`start_time`,
+        `policeman`, `victim`, `recognize`, `witniss`, `target`, `result`,
+        `created_time`,`recognize_type`, `user_id`,`serial_id`,`op_pid`,`op_user_id`) VALUES (#{areaId},
+        #{address},#{caseId},#{personId}, now(), #{policeman}, #{victim},#{recognize},#{witniss}, #{target},
+        #{result}, now(), #{recognizeType}, #{userId},#{serialId},#{opPid},#{opUserId});
+    </insert>
+    <select id="getMaxId" resultType="java.lang.Integer">
+        SELECT LAST_INSERT_ID()
+    </select>
+    <update id="update" parameterType="com.zhixin.zhfz.bacs.entity.RecognizeRecordEntity" >
+        update ba_recognize_record set created_time=now(),start_time=now()
+        <if test="areaId!= null and areaId!=''" >
+            ,area_id = #{areaId}
+        </if>
+        <if test="address!= null and address!='' " >
+            ,address = #{address}
+        </if>
+        <if test="caseId!= null and caseId!='' " >
+            ,case_id = #{caseId}
+        </if>
+        <if test="personId!= null and personId!='' " >
+            ,person_id = #{personId}
+        </if>
+        <if test="policeman!= null and policeman!=''" >
+            ,policeman = #{policeman}
+        </if>
+        <if test="recognize!= null and recognize!=''" >
+            ,recognize = #{recognize}
+        </if>
+        <if test="victim!= null and victim!=''" >
+            ,victim = #{victim}
+        </if>
+        <if test="witniss!= null and witniss!=''" >
+            ,witniss = #{witniss}
+        </if>
+        <if test="target!= null and target!=''" >
+            ,target = #{target}
+        </if>
+        <if test="result!= null and result!=''" >
+            ,result = #{result}
+        </if>
+        <if test="recognizeType!= null and recognizeType!=''" >
+            ,recognize_type = #{recognizeType}
+        </if>
+        <if test="serialId != null and serialId != ''">
+            ,serial_id = #{serialId}
+        </if>
+        <if test="userId != null and userId != ''">
+            ,user_id = #{userId}
+        </if>
+        where id=#{id}
+    </update>
+</mapper>

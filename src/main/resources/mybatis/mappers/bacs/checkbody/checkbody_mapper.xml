@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.checkbody.ICheckBodyMapper" >
+    <resultMap id="BaseResultMap" type="com.zhixin.zhfz.bacs.entity.CheckBodyEntity" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="interrogate_serial_id" property="interrogateSerialId" jdbcType="BIGINT" />
+        <result column="person_id" property="personId" jdbcType="BIGINT" />
+        <result column="check_user_id" property="checkUserId" jdbcType="INTEGER" />
+        <result column="check_time" property="checkTime" jdbcType="TIMESTAMP" />
+        <result column="law_case_id" property="lawCaseId" jdbcType="INTEGER" />
+        <result column="checkbody_picture_content" property="checkbodyPictureContent" jdbcType="VARCHAR" />
+        <result column="checkbody_picture_path" property="checkbodyPicturePath" jdbcType="VARCHAR" />
+        <result column="interrogate_area_id" property="interrogateAreaId" jdbcType="INTEGER" />
+        <result column="interrogate_area_name" property="interrogateAreaName" jdbcType="VARCHAR" />
+
+        <!--没用s -->
+        <result column="medical_history" property="medicalHistory" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="physical" property="physical" jdbcType="INTEGER" />
+        <result column="physical_description" property="physicalDescription" jdbcType="VARCHAR" />
+        <result column="injury" property="injury" jdbcType="INTEGER" />
+        <result column="injury_description" property="injuryDescription" jdbcType="VARCHAR" />
+        <result column="other_description" property="otherDescription" jdbcType="VARCHAR" />
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+        <!--没用e-->
+
+
+        <result column="weight" property="weight" jdbcType="VARCHAR" />
+        <result column="height" property="height" jdbcType="VARCHAR" />
+        <result column="footsize" property="footsize" jdbcType="VARCHAR" />
+        <result column="health" property="health" jdbcType="VARCHAR" />
+        <result column="marital_status" property="maritalstatus" jdbcType="VARCHAR" />
+        <result column="history_healthy" property="historyhealthy" jdbcType="VARCHAR" />
+        <result column="drug_history" property="drughistory" jdbcType="VARCHAR" />
+        <result column="contagion" property="contagion" jdbcType="VARCHAR" />
+        <result column="check_status" property="checkstatus" jdbcType="VARCHAR" />
+        <result column="language_competence" property="languagecompetence" jdbcType="VARCHAR" />
+        <result column="mouth_sound" property="mouthsound" jdbcType="VARCHAR" />
+        <result column="physical_activity" property="physicalactivity" jdbcType="VARCHAR" />
+        <result column="doctor_signature" property="doctorsignature" jdbcType="VARCHAR" />
+        <result column="leader_signature" property="leadersignature" jdbcType="VARCHAR" />
+
+
+
+
+
+        <result column="sender_signature" property="sendersignature" jdbcType="VARCHAR" />
+        <result column="send_unit" property="sendunit" jdbcType="VARCHAR" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+        <result column="check_space" property="checkspace" jdbcType="VARCHAR" />
+        <result column="urine_pregnancy_result" property="urinepregnancyresult" jdbcType="VARCHAR" />
+        <result column="women_last_periodTime" property="womenlastperiodtime" jdbcType="VARCHAR" />
+        <result column="body_temperature" property="bodytemperature" jdbcType="VARCHAR" />
+        <result column="pulse" property="pulse" jdbcType="VARCHAR" />
+        <result column="blood_pressure" property="bloodpressure" jdbcType="VARCHAR" />
+        <result column="breathing" property="breathing" jdbcType="VARCHAR" />
+        <result column="bodysize" property="bodysize" jdbcType="VARCHAR" />
+        <result column="face_shape" property="faceshape" jdbcType="VARCHAR" />
+        <result column="blood_type" property="bloodtype" jdbcType="VARCHAR" />
+        <result column="nutritional_status" property="nutritionalstatus" jdbcType="VARCHAR" />
+        <result column="consciousness" property="consciousness" jdbcType="VARCHAR" />
+        <result column="words" property="words" jdbcType="VARCHAR" />
+        <result column="gait" property="gait" jdbcType="VARCHAR" />
+        <result column="double_pupil" property="doublepupil" jdbcType="VARCHAR" />
+        <result column="skin_sclera_yellow_dye" property="skinsclerayellowdye" jdbcType="VARCHAR" />
+        <result column="double_lung" property="doublelung" jdbcType="VARCHAR" />
+        <result column="heart_rate" property="heartrate" jdbcType="VARCHAR" />
+        <result column="heart_rate_status" property="heartratestatus" jdbcType="VARCHAR" />
+        <result column="noise" property="noise" jdbcType="VARCHAR" />
+        <result column="abdomen" property="abdomen" jdbcType="VARCHAR" />
+        <result column="rebound_tenderness" property="reboundtenderness" jdbcType="VARCHAR" />
+        <result column="muscle_tension" property="muscletension" jdbcType="VARCHAR" />
+        <result column="liver_and_spleen" property="liverandspleen" jdbcType="VARCHAR" />
+        <result column="spinal_limbs" property="spinallimbs" jdbcType="VARCHAR" />
+        <result column="surface_inspection" property="surfaceinspection" jdbcType="VARCHAR" />
+        <result column="abnormal_signs" property="abnormalsigns" jdbcType="VARCHAR" />
+        <result column="routine_blood" property="routineblood" jdbcType="VARCHAR" />
+        <result column="b_ultrasonic" property="bultrasonic" jdbcType="VARCHAR" />
+        <result column="electrocardiogram" property="electrocardiogram" jdbcType="VARCHAR" />
+        <result column="rabat" property="rabat" jdbcType="VARCHAR" />
+        <result column="doctor_advice" property="doctoradvice" jdbcType="VARCHAR" />
+        <result column="checktime_start" property="checktimeStart" jdbcType="TIMESTAMP" />
+        <result column="checktime_end" property="checktimeEnd" jdbcType="TIMESTAMP" />
+        <result column="body_tag" property="bodyTag" jdbcType="VARCHAR" />
+        <result column="self_reported" property="selfReported" jdbcType="VARCHAR" />
+
+
+
+        <!-- 链表信息 -->
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="certificateNo" property="certificateNo" jdbcType="VARCHAR" />
+        <result column="checkName" property="checkName" jdbcType="VARCHAR" />
+        <result column="serialNo" property="serialNo" jdbcType="VARCHAR" />
+        <result column="sex" property="sex" jdbcType="VARCHAR" />
+        <result column="nation" property="nation" jdbcType="VARCHAR" />
+        <result column="education" property="education" jdbcType="VARCHAR" />
+        <result column="birth" property="birth" jdbcType="VARCHAR" />
+        <result column="personId" property="personId" jdbcType="INTEGER" />
+    </resultMap>
+
+
+    <!-- queryDataByid -->
+    <select id="queryDataByid"   resultMap="BaseResultMap">
+        <!-- no ";" at the end -->
+        SELECT
+        ints.case_id AS lawCaseId,
+        ints.area_id AS interrogateAreaId,
+        p.id AS personId,
+        p.name AS `name`,
+        p.sex AS sex,p.nation AS nation,
+        p.education AS education,p.
+        certificate_no AS certificateNo ,
+        p.birth,
+        cb.id AS id,
+        interrogate_serial_id,
+        check_user_id,
+        check_time,
+        law_case_id,
+        checktime_start,
+        checktime_end,
+        weight,
+        height,
+        footsize,
+        health,
+        marital_status,
+        history_healthy,
+        drug_history,
+        contagion,
+        check_status,
+        language_competence,
+        mouth_sound,
+        physical_activity,
+        doctor_signature,
+        leader_signature,
+        sender_signature,
+        send_unit,
+        check_space,
+        urine_pregnancy_result,
+        women_last_periodTime,
+        body_temperature,
+        pulse,
+        blood_pressure,
+        breathing,
+        bodysize,
+        face_shape,
+        blood_type,
+        nutritional_status,
+        consciousness,
+        words,
+        gait,
+        double_pupil,
+        skin_sclera_yellow_dye,
+        double_lung,
+        heart_rate,
+        heart_rate_status,
+        noise,
+        abdomen,
+        rebound_tenderness,
+        muscle_tension,
+        liver_and_spleen,
+        spinal_limbs,
+        surface_inspection,
+        abnormal_signs,
+        routine_blood,
+        b_ultrasonic,
+        electrocardiogram,
+        rabat,
+        doctor_advice,
+        body_tag,
+        self_reported,
+        checkbody_picture_content AS checkbodyPictureContent,
+        checkbody_picture_path AS 	checkbodyPicturePath
+        FROM ba_check_body cb LEFT JOIN ba_serial ints ON cb.interrogate_serial_id=ints.id
+        LEFT JOIN ba_person p ON  ints.person_id=p.id
+        left join xt_code ct on  p.certificate_type_id=ct.code_key and ct.type = 'ZJZLID'
+        LEFT JOIN  ba_area ia ON ints.area_id=ia.id
+        LEFT JOIN  ba_case ic ON ints.case_id=ic.id
+        LEFT JOIN  ba_cuff c ON ints.cuff_id=c.id
+        LEFT JOIN  xt_user inregister ON ints.in_register_user_id=inregister.id
+        LEFT JOIN  xt_user outregister ON ints.out_register_user_id=outregister.id
+        WHERE cb.id=#{cid}
+
+    </select>
+
+    <!-- 根据入区编号查询999体检 -->
+    <select id="getCheckBodyBySerialId"   resultMap="BaseResultMap" parameterType="com.zhixin.zhfz.bacs.entity.CheckBodyEntity">
+        select
+        id,
+        interrogate_serial_id,
+        person_id,
+        check_user_id,
+        check_time,
+        law_case_id,
+        interrogate_area_id,
+        checktime_start,
+        checktime_end,
+        weight,
+        height,
+        footsize,
+        health,
+        marital_status,
+        history_healthy,
+        drug_history,
+        contagion,
+        check_status,
+        language_competence,
+        mouth_sound,
+        physical_activity,
+        doctor_signature,
+        leader_signature,
+        sender_signature,
+        send_unit,
+        remark,
+        check_space,
+        urine_pregnancy_result,
+        women_last_periodTime,
+        body_temperature,
+        pulse,
+        blood_pressure,
+        breathing,
+        bodysize,
+        face_shape,
+        blood_type,
+        nutritional_status,
+        consciousness,
+        words,
+        gait,
+        double_pupil,
+        skin_sclera_yellow_dye,
+        double_lung,
+        heart_rate,
+        heart_rate_status,
+        noise,
+        abdomen,
+        rebound_tenderness,
+        muscle_tension,
+        liver_and_spleen,
+        spinal_limbs,
+        surface_inspection,
+        abnormal_signs,
+        routine_blood,
+        b_ultrasonic,
+        electrocardiogram,
+        rabat,
+        doctor_advice,
+        body_tag,
+        self_reported,
+        checkbody_picture_content as checkbodyPictureContent,
+        checkbody_picture_path as  checkbodyPicturePath
+        from ba_check_body where interrogate_serial_id=#{interrogateSerialId} order by id desc
+    </select>
+
+</mapper>

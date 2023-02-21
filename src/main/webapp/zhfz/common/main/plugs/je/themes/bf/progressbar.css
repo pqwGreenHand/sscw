@@ -1,0 +1,27 @@
+.progressbar {
+  border-width: 0px;
+  border-style: solid;
+  overflow: hidden;
+  position: relative;
+}
+.progressbar-text {
+  text-align: center;
+  position: absolute;
+}
+.progressbar-value {
+  position: relative;
+  overflow: hidden;
+  width: 0;
+}
+.progressbar {
+  border-color: #091534;
+  background-color: #091534;
+}
+.progressbar-text {
+  color: #fff;
+  font-size: 14px;
+}
+.progressbar-value .progressbar-text {
+  background-color: #046aa0;
+  color: #fff;
+}

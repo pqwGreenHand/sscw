@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacs.dao.actionlog.IActionLogMapper">
+	<!-- <typeAlias alias="actionLog" type="com.zhixin.rd.interrogate.web.entity.ActionLogEntity" /> -->
+	<resultMap id="ActionLogMapper" type="com.zhixin.zhfz.bacs.entity.ActionLogEntity">
+    	<id property="id" column="id"/>
+    	<result property="roomId" column="room_id"/>
+    	<result property="personId" column="person_id"/>
+    	<result property="userid" column="user_id"/>
+    	<result property="actionTime" column="action_time"/>
+    	<result property="resaon" column="resaon"/>
+    </resultMap>
+
+    <!-- insertActionLog -->
+    <insert id="insertActionLog" parameterType="com.zhixin.zhfz.bacs.entity.ActionLogEntity"  keyProperty="id" useGeneratedKeys="true" >
+            INSERT INTO ba_action_log (
+	    		room_id,
+	    		person_id,
+	    		user_id,
+	    		action_time,
+	    		resaon
+				)
+             VALUES(
+	    		#{roomId},
+	    		#{personId},
+	    		#{userId},
+	    		now(),
+	    		#{resaon}
+				)
+    </insert>
+</mapper>
+
+

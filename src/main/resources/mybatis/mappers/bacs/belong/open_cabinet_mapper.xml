@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.belong.IOpenCabinetMapper" >
+  <resultMap id="BaseResultMap" type="OpenCabinetEntity" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="area_id" property="areaId" jdbcType="INTEGER" />
+    <result column="locker_id" property="lockerId" jdbcType="VARCHAR" />
+    <result column="opener" property="opener" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+	<result column="areaName" property="areaName" jdbcType="VARCHAR" />    
+	<result column="show_no" property="showNo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, area_id, locker_id, opener, created_time
+  </sql>
+  <!-- 增加开柜日志 -->
+  <insert id="insertSelective" parameterType="OpenCabinetEntity" >
+    insert into ba_open_cabinet_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="areaId != null" >
+        area_id,
+      </if>
+      <if test="lockerId != null" >
+        locker_id,
+      </if>
+      <if test="opener != null" >
+        opener,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="areaId != null" >
+        #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="lockerId != null" >
+        #{lockerId,jdbcType=VARCHAR},
+      </if>
+      <if test="opener != null" >
+        #{opener,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <!-- 开柜记录查询start -->
+  <select id="list" parameterType="java.util.Map" resultMap="BaseResultMap">
+    <!-- no ";" at the end -->
+    SELECT
+    pcl.*, ina.`name` AS areaName,ccd.show_no
+    FROM
+    ba_open_cabinet_log pcl
+    LEFT JOIN ba_area ina ON ina.id = pcl.area_id
+    LEFT JOIN ba_cabinet_config_detail ccd ON ccd.id = pcl.locker_id
+    WHERE
+    1 = 1
+    <if test="dataAuth!=null and dataAuth!=''">
+      and ${dataAuth}
+    </if>
+    <if test="lockerId!=null and lockerId!=''">
+      and pcl.locker_id   = #{lockerId}
+    </if>
+    <if test="opener!=null and opener!=''">
+      and pcl.opener like '%${opener}%'
+    </if>
+    <if test="start_date!=null and start_date!=''">
+      and pcl.created_time &gt;=#{start_date}
+    </if>
+    <if test="end_date!=null and end_date!=''">
+      and pcl.created_time &lt;=#{end_date}
+    </if>
+    ORDER BY created_time desc
+    limit ${pageStart},${rows}
+  </select>
+  <!-- 开柜总数start -->
+  <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+    select count(1) from ba_open_cabinet_log pcl
+    WHERE 1=1
+    <if test="dataAuth!=null and dataAuth!=''">
+      and ${dataAuth}
+    </if>
+    <if test="lockerId!=null and lockerId!=''">
+      and pcl.locker_id   = #{lockerId}
+    </if>
+    <if test="opener!=null and opener!=''">
+      and pcl.opener like '%${opener}%'
+    </if>
+    <if test="start_date!=null and start_date!=''">
+      and pcl.created_time &gt;=#{start_date}
+    </if>
+    <if test="end_date!=null and end_date!=''">
+      and pcl.created_time &lt;=#{end_date}
+    </if>
+  </select>
+</mapper>

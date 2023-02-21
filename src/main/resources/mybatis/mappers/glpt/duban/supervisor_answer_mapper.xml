@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.glpt.dao.duban.ISupervisorAnswerMapper">
+
+    <resultMap id="resultMap" type="com.zhixin.zhfz.glpt.entity.SupervisorAnswerEntity">
+        <id property="id" column="id"/>
+        <result column="duban_id" property="requestId"/>
+        <result column="receive_userId" property="receiveUserId"/>
+        <result column="receive_time" property="receiveTime"/>
+        <result column="content" property="content"/>
+        <result column="status" property="status"/>
+        <result column="audit_orgId" property="auditOrgId"/>
+        <result column="audit_userId" property="auditUserId"/>
+        <result column="audit_time" property="auditTime"/>
+        <result column="audit_content" property="auditContent"/>
+        <result column="op_pid" property="opPid"/>
+        <result column="op_user_id" property="opUserId"/>
+
+        <result column="receive_user_name" property="receiveUserName"/>
+        <result column="audit_org_name" property="auditOrgName"/>
+        <result column="audit_user_name" property="auditUserName"/>
+    </resultMap>
+
+    <select id="list" resultMap="resultMap" parameterType="java.util.Map">
+        SELECT
+            a.*,
+            ru.real_name AS receive_user_name,
+            org.`name` AS audit_org_name,
+            au.real_name AS audit_user_name
+        FROM
+            xt_duban_answer AS a
+            LEFT JOIN xt_user AS ru ON a.receive_userId = ru.id
+            LEFT JOIN xt_organization AS org ON a.audit_orgId = org.p_id
+            LEFT JOIN xt_user AS au ON a.audit_userId = au.id
+        <include refid="query_where"/>
+		limit ${pageStart},${rows}
+    </select>
+
+
+     <select id="get" resultMap="resultMap" parameterType="com.zhixin.zhfz.glpt.form.SupervisorForm">
+		 select * from xt_duban_answer where id = #{id}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(a.id) from xt_duban_answer as a
+        <include refid="query_where"/>
+    </select>
+    
+	<insert id="insert" parameterType="com.zhixin.zhfz.glpt.entity.SupervisorAnswerEntity">
+      INSERT INTO xt_duban_answer
+        ( duban_id, receive_userId, receive_time, content, status, op_pid, op_user_id,audit_orgId)
+      VALUES
+	    (#{requestId},#{receiveUserId},now(),#{content},0,#{opPid},#{opUserId},#{auditOrgId})
+    </insert>
+    
+    <delete id="delete" parameterType="long">
+        delete from xt_duban_answer where id=#{id}
+    </delete>
+
+    <update id="status" parameterType="com.zhixin.zhfz.glpt.form.SupervisorForm">
+        update xt_duban_answer
+        <set>
+            audit_time = now(),
+            <if test="auditContent != null and auditContent != ''">audit_content = #{auditContent},</if>
+            <if test="auditUserId != null and auditUserId != ''">audit_userId = #{auditUserId},</if>
+            <if test="auditOrgId != null and auditOrgId != ''">`audit_orgId` = #{auditOrgId},</if>
+            <if test="opUserId != null and opUserId != ''">`op_user_id` = #{opUserId},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <sql id="query_where">
+        <where>
+            <if test="requestId!=null and requestId !=''">
+                and a.duban_id = #{requestId}
+            </if>
+        </where>
+    </sql>
+</mapper>

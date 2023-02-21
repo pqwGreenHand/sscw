@@ -1,0 +1,1271 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?mso-application progid="Word.Document"?>
+<w:wordDocument xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:ve="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:wsp="http://schemas.microsoft.com/office/word/2003/wordml/sp2" xmlns:sl="http://schemas.microsoft.com/schemaLibrary/2003/core" w:macrosPresent="no" w:embeddedObjPresent="no" w:ocxPresent="no" xml:space="preserve">
+<w:ignoreSubtree w:val="http://schemas.microsoft.com/office/word/2003/wordml/sp2" />
+<o:DocumentProperties>
+    <o:Author>yangyang</o:Author>
+    <o:LastAuthor>徐鑫龙</o:LastAuthor>
+    <o:Revision>9</o:Revision>
+    <o:TotalTime>4</o:TotalTime>
+    <o:LastPrinted>2014-11-24T06:07:00Z</o:LastPrinted>
+    <o:Created>2016-07-03T05:30:00Z</o:Created>
+    <o:LastSaved>2016-07-27T05:09:00Z</o:LastSaved>
+    <o:Pages>1</o:Pages>
+    <o:Words>45</o:Words>
+    <o:Characters>258</o:Characters>
+    <o:Lines>2</o:Lines>
+    <o:Paragraphs>1</o:Paragraphs>
+    <o:CharactersWithSpaces>302</o:CharactersWithSpaces>
+    <o:Version>12</o:Version>
+</o:DocumentProperties>
+<w:fonts>
+    <w:defaultFonts w:ascii="Times New Roman" w:fareast="宋体" w:h-ansi="Times New Roman" w:cs="Times New Roman" />
+    <w:font w:name="Times New Roman">
+        <w:panose-1 w:val="02020603050405020304" />
+        <w:charset w:val="00" />
+        <w:family w:val="Roman" />
+        <w:pitch w:val="variable" />
+        <w:sig w:usb-0="E0002EFF" w:usb-1="C0007843" w:usb-2="00000009" w:usb-3="00000000" w:csb-0="000001FF" w:csb-1="00000000" />
+    </w:font>
+    <w:font w:name="宋体">
+        <w:altName w:val="SimSun" />
+        <w:panose-1 w:val="02010600030101010101" />
+        <w:charset w:val="86" />
+        <w:family w:val="auto" />
+        <w:pitch w:val="variable" />
+        <w:sig w:usb-0="00000003" w:usb-1="288F0000" w:usb-2="00000016" w:usb-3="00000000" w:csb-0="00040001" w:csb-1="00000000" />
+    </w:font>
+    <w:font w:name="Cambria Math">
+        <w:panose-1 w:val="02040503050406030204" />
+        <w:charset w:val="00" />
+        <w:family w:val="Roman" />
+        <w:pitch w:val="variable" />
+        <w:sig w:usb-0="E00002FF" w:usb-1="420024FF" w:usb-2="00000000" w:usb-3="00000000" w:csb-0="0000019F" w:csb-1="00000000" />
+    </w:font>
+    <w:font w:name="楷体_GB2312">
+        <w:altName w:val="楷体" />
+        <w:charset w:val="86" />
+        <w:family w:val="Modern" />
+        <w:pitch w:val="fixed" />
+        <w:sig w:usb-0="00000000" w:usb-1="080E0000" w:usb-2="00000010" w:usb-3="00000000" w:csb-0="00040000" w:csb-1="00000000" />
+    </w:font>
+    <w:font w:name="@宋体">
+        <w:panose-1 w:val="02010600030101010101" />
+        <w:charset w:val="86" />
+        <w:family w:val="auto" />
+        <w:pitch w:val="variable" />
+        <w:sig w:usb-0="00000003" w:usb-1="288F0000" w:usb-2="00000016" w:usb-3="00000000" w:csb-0="00040001" w:csb-1="00000000" />
+    </w:font>
+    <w:font w:name="@楷体_GB2312">
+        <w:charset w:val="86" />
+        <w:family w:val="Modern" />
+        <w:pitch w:val="fixed" />
+        <w:sig w:usb-0="00000000" w:usb-1="080E0000" w:usb-2="00000010" w:usb-3="00000000" w:csb-0="00040000" w:csb-1="00000000" />
+    </w:font>
+</w:fonts>
+<w:styles>
+    <w:versionOfBuiltInStylenames w:val="7" />
+    <w:latentStyles w:defLockedState="off" w:latentStyleCount="267">
+        <w:lsdException w:name="Normal" />
+        <w:lsdException w:name="heading 1" />
+        <w:lsdException w:name="heading 2" />
+        <w:lsdException w:name="heading 3" />
+        <w:lsdException w:name="heading 4" />
+        <w:lsdException w:name="heading 5" />
+        <w:lsdException w:name="heading 6" />
+        <w:lsdException w:name="heading 7" />
+        <w:lsdException w:name="heading 8" />
+        <w:lsdException w:name="heading 9" />
+        <w:lsdException w:name="caption" />
+        <w:lsdException w:name="Title" />
+        <w:lsdException w:name="Subtitle" />
+        <w:lsdException w:name="Strong" />
+        <w:lsdException w:name="Emphasis" />
+        <w:lsdException w:name="No Spacing" />
+        <w:lsdException w:name="List Paragraph" />
+        <w:lsdException w:name="Quote" />
+        <w:lsdException w:name="Intense Quote" />
+        <w:lsdException w:name="Subtle Emphasis" />
+        <w:lsdException w:name="Intense Emphasis" />
+        <w:lsdException w:name="Subtle Reference" />
+        <w:lsdException w:name="Intense Reference" />
+        <w:lsdException w:name="Book Title" />
+        <w:lsdException w:name="TOC Heading" />
+    </w:latentStyles>
+    <w:style w:type="paragraph" w:default="on" w:styleId="a">
+        <w:name w:val="Normal" />
+        <wx:uiName wx:val="正文" />
+        <w:rsid w:val="009C468E" />
+        <w:pPr>
+            <w:widowControl w:val="off" />
+            <w:jc w:val="both" />
+        </w:pPr>
+        <w:rPr>
+            <wx:font wx:val="Times New Roman" />
+            <w:kern w:val="2" />
+            <w:sz w:val="21" />
+            <w:sz-cs w:val="24" />
+            <w:lang w:val="EN-US" w:fareast="ZH-CN" w:bidi="AR-SA" />
+        </w:rPr>
+    </w:style>
+    <w:style w:type="character" w:default="on" w:styleId="a0">
+        <w:name w:val="Default Paragraph Font" />
+        <wx:uiName wx:val="默认段落字体" />
+    </w:style>
+    <w:style w:type="table" w:default="on" w:styleId="a1">
+        <w:name w:val="Normal Table" />
+        <wx:uiName wx:val="普通表格" />
+        <w:rPr>
+            <wx:font wx:val="Times New Roman" />
+            <w:lang w:val="EN-US" w:fareast="ZH-CN" w:bidi="AR-SA" />
+        </w:rPr>
+        <w:tblPr>
+            <w:tblInd w:w="0" w:type="dxa" />
+            <w:tblCellMar>
+                <w:top w:w="0" w:type="dxa" />
+                <w:left w:w="108" w:type="dxa" />
+                <w:bottom w:w="0" w:type="dxa" />
+                <w:right w:w="108" w:type="dxa" />
+            </w:tblCellMar>
+        </w:tblPr>
+    </w:style>
+    <w:style w:type="list" w:default="on" w:styleId="a2">
+        <w:name w:val="No List" />
+        <wx:uiName wx:val="无列表" />
+    </w:style>
+    <w:style w:type="paragraph" w:styleId="a3">
+        <w:name w:val="header" />
+        <wx:uiName wx:val="页眉" />
+        <w:basedOn w:val="a" />
+        <w:link w:val="Char" />
+        <w:rsid w:val="00B96927" />
+        <w:pPr>
+            <w:pBdr>
+                <w:bottom w:val="single" w:sz="6" wx:bdrwidth="15" w:space="1" w:color="auto" />
+            </w:pBdr>
+            <w:tabs>
+                <w:tab w:val="center" w:pos="4153" />
+                <w:tab w:val="right" w:pos="8306" />
+            </w:tabs>
+            <w:snapToGrid w:val="off" />
+            <w:jc w:val="center" />
+        </w:pPr>
+        <w:rPr>
+            <wx:font wx:val="Times New Roman" />
+            <w:sz w:val="18" />
+            <w:sz-cs w:val="18" />
+            <w:lang />
+        </w:rPr>
+    </w:style>
+    <w:style w:type="character" w:styleId="Char">
+        <w:name w:val="页眉 Char" />
+        <w:link w:val="a3" />
+        <w:rsid w:val="00B96927" />
+        <w:rPr>
+            <w:kern w:val="2" />
+            <w:sz w:val="18" />
+            <w:sz-cs w:val="18" />
+        </w:rPr>
+    </w:style>
+    <w:style w:type="paragraph" w:styleId="a4">
+        <w:name w:val="footer" />
+        <wx:uiName wx:val="页脚" />
+        <w:basedOn w:val="a" />
+        <w:link w:val="Char0" />
+        <w:rsid w:val="00B96927" />
+        <w:pPr>
+            <w:tabs>
+                <w:tab w:val="center" w:pos="4153" />
+                <w:tab w:val="right" w:pos="8306" />
+            </w:tabs>
+            <w:snapToGrid w:val="off" />
+            <w:jc w:val="left" />
+        </w:pPr>
+        <w:rPr>
+            <wx:font wx:val="Times New Roman" />
+            <w:sz w:val="18" />
+            <w:sz-cs w:val="18" />
+            <w:lang />
+        </w:rPr>
+    </w:style>
+    <w:style w:type="character" w:styleId="Char0">
+        <w:name w:val="页脚 Char" />
+        <w:link w:val="a4" />
+        <w:rsid w:val="00B96927" />
+        <w:rPr>
+            <w:kern w:val="2" />
+            <w:sz w:val="18" />
+            <w:sz-cs w:val="18" />
+        </w:rPr>
+    </w:style>
+    <w:style w:type="paragraph" w:styleId="a5">
+        <w:name w:val="Document Map" />
+        <wx:uiName wx:val="文档结构图" />
+        <w:basedOn w:val="a" />
+        <w:link w:val="Char1" />
+        <w:rsid w:val="000A50C9" />
+        <w:rPr>
+            <w:rFonts w:ascii="宋体" />
+            <wx:font wx:val="Times New Roman" />
+            <w:sz w:val="18" />
+            <w:sz-cs w:val="18" />
+        </w:rPr>
+    </w:style>
+    <w:style w:type="character" w:styleId="Char1">
+        <w:name w:val="文档结构图 Char" />
+        <w:basedOn w:val="a0" />
+        <w:link w:val="a5" />
+        <w:rsid w:val="000A50C9" />
+        <w:rPr>
+            <w:rFonts w:ascii="宋体" />
+            <w:kern w:val="2" />
+            <w:sz w:val="18" />
+            <w:sz-cs w:val="18" />
+        </w:rPr>
+    </w:style>
+</w:styles>
+<w:shapeDefaults>
+    <o:shapedefaults v:ext="edit" spidmax="17410" />
+    <o:shapelayout v:ext="edit">
+        <o:idmap v:ext="edit" data="1" />
+    </o:shapelayout>
+</w:shapeDefaults>
+<w:docPr>
+    <w:view w:val="print" />
+    <w:zoom w:percent="100" />
+    <w:bordersDontSurroundHeader />
+    <w:bordersDontSurroundFooter />
+    <w:stylePaneFormatFilter w:val="3F01" />
+    <w:defaultTabStop w:val="420" />
+    <w:drawingGridVerticalSpacing w:val="156" />
+    <w:displayHorizontalDrawingGridEvery w:val="0" />
+    <w:displayVerticalDrawingGridEvery w:val="2" />
+    <w:punctuationKerning />
+    <w:characterSpacingControl w:val="CompressPunctuation" />
+    <w:optimizeForBrowser />
+    <w:allowPNG />
+    <w:validateAgainstSchema />
+    <w:saveInvalidXML w:val="off" />
+    <w:ignoreMixedContent w:val="off" />
+    <w:alwaysShowPlaceholderText w:val="off" />
+    <w:hdrShapeDefaults>
+        <o:shapedefaults v:ext="edit" spidmax="17410" />
+    </w:hdrShapeDefaults>
+    <w:footnotePr>
+        <w:footnote w:type="separator">
+            <w:p wsp:rsidR="00D53E3C" wsp:rsidRDefault="00D53E3C" wsp:rsidP="00B96927">
+                <w:r>
+                    <w:separator />
+                </w:r>
+            </w:p>
+        </w:footnote>
+        <w:footnote w:type="continuation-separator">
+            <w:p wsp:rsidR="00D53E3C" wsp:rsidRDefault="00D53E3C" wsp:rsidP="00B96927">
+                <w:r>
+                    <w:continuationSeparator />
+                </w:r>
+            </w:p>
+        </w:footnote>
+    </w:footnotePr>
+    <w:endnotePr>
+        <w:endnote w:type="separator">
+            <w:p wsp:rsidR="00D53E3C" wsp:rsidRDefault="00D53E3C" wsp:rsidP="00B96927">
+                <w:r>
+                    <w:separator />
+                </w:r>
+            </w:p>
+        </w:endnote>
+        <w:endnote w:type="continuation-separator">
+            <w:p wsp:rsidR="00D53E3C" wsp:rsidRDefault="00D53E3C" wsp:rsidP="00B96927">
+                <w:r>
+                    <w:continuationSeparator />
+                </w:r>
+            </w:p>
+        </w:endnote>
+    </w:endnotePr>
+    <w:compat>
+        <w:spaceForUL />
+        <w:balanceSingleByteDoubleByteWidth />
+        <w:doNotLeaveBackslashAlone />
+        <w:ulTrailSpace />
+        <w:doNotExpandShiftReturn />
+        <w:adjustLineHeightInTable />
+        <w:breakWrappedTables />
+        <w:snapToGridInCell />
+        <w:wrapTextWithPunct />
+        <w:useAsianBreakRules />
+        <w:dontGrowAutofit />
+        <w:useFELayout />
+    </w:compat>
+    <wsp:rsids>
+        <wsp:rsidRoot wsp:val="00A03461" />
+        <wsp:rsid wsp:val="0001625E" />
+        <wsp:rsid wsp:val="000304DA" />
+        <wsp:rsid wsp:val="00034B86" />
+        <wsp:rsid wsp:val="000439DF" />
+        <wsp:rsid wsp:val="0004603D" />
+        <wsp:rsid wsp:val="0005122E" />
+        <wsp:rsid wsp:val="00054010" />
+        <wsp:rsid wsp:val="000607D0" />
+        <wsp:rsid wsp:val="00072E5A" />
+        <wsp:rsid wsp:val="000811CB" />
+        <wsp:rsid wsp:val="000850E9" />
+        <wsp:rsid wsp:val="0008651B" />
+        <wsp:rsid wsp:val="000A05E0" />
+        <wsp:rsid wsp:val="000A4828" />
+        <wsp:rsid wsp:val="000A50C9" />
+        <wsp:rsid wsp:val="000B17AD" />
+        <wsp:rsid wsp:val="000F2D68" />
+        <wsp:rsid wsp:val="000F37FD" />
+        <wsp:rsid wsp:val="00100D1F" />
+        <wsp:rsid wsp:val="00103DD7" />
+        <wsp:rsid wsp:val="00105561" />
+        <wsp:rsid wsp:val="0013391C" />
+        <wsp:rsid wsp:val="001453BC" />
+        <wsp:rsid wsp:val="00160E25" />
+        <wsp:rsid wsp:val="001648D8" />
+        <wsp:rsid wsp:val="0017361F" />
+        <wsp:rsid wsp:val="00173BE3" />
+        <wsp:rsid wsp:val="00177824" />
+        <wsp:rsid wsp:val="0019173C" />
+        <wsp:rsid wsp:val="00197CF7" />
+        <wsp:rsid wsp:val="001A5666" />
+        <wsp:rsid wsp:val="001C4F9B" />
+        <wsp:rsid wsp:val="001D261B" />
+        <wsp:rsid wsp:val="00200869" />
+        <wsp:rsid wsp:val="002115EC" />
+        <wsp:rsid wsp:val="00215FFA" />
+        <wsp:rsid wsp:val="00216325" />
+        <wsp:rsid wsp:val="002207A5" />
+        <wsp:rsid wsp:val="00223296" />
+        <wsp:rsid wsp:val="002312D6" />
+        <wsp:rsid wsp:val="0023343C" />
+        <wsp:rsid wsp:val="002B03EB" />
+        <wsp:rsid wsp:val="002C3391" />
+        <wsp:rsid wsp:val="002C6DF0" />
+        <wsp:rsid wsp:val="002C7E36" />
+        <wsp:rsid wsp:val="002D7DAB" />
+        <wsp:rsid wsp:val="00311C42" />
+        <wsp:rsid wsp:val="00323BF6" />
+        <wsp:rsid wsp:val="00351A05" />
+        <wsp:rsid wsp:val="003576B8" />
+        <wsp:rsid wsp:val="0037620B" />
+        <wsp:rsid wsp:val="003844A9" />
+        <wsp:rsid wsp:val="00396BBF" />
+        <wsp:rsid wsp:val="00397074" />
+        <wsp:rsid wsp:val="003A05A1" />
+        <wsp:rsid wsp:val="003D2079" />
+        <wsp:rsid wsp:val="003E33B4" />
+        <wsp:rsid wsp:val="003E5C5B" />
+        <wsp:rsid wsp:val="003F3D85" />
+        <wsp:rsid wsp:val="00450B50" />
+        <wsp:rsid wsp:val="004627C5" />
+        <wsp:rsid wsp:val="00465184" />
+        <wsp:rsid wsp:val="00475C79" />
+        <wsp:rsid wsp:val="00476E29" />
+        <wsp:rsid wsp:val="004B605C" />
+        <wsp:rsid wsp:val="004B63EF" />
+        <wsp:rsid wsp:val="004C0E15" />
+        <wsp:rsid wsp:val="004C753B" />
+        <wsp:rsid wsp:val="004E2780" />
+        <wsp:rsid wsp:val="004F44D3" />
+        <wsp:rsid wsp:val="004F5D90" />
+        <wsp:rsid wsp:val="004F6E97" />
+        <wsp:rsid wsp:val="00532BBC" />
+        <wsp:rsid wsp:val="00534A77" />
+        <wsp:rsid wsp:val="00535760" />
+        <wsp:rsid wsp:val="00536A2B" />
+        <wsp:rsid wsp:val="0054624D" />
+        <wsp:rsid wsp:val="00556F3E" />
+        <wsp:rsid wsp:val="0057639A" />
+        <wsp:rsid wsp:val="005A1A75" />
+        <wsp:rsid wsp:val="005B09DF" />
+        <wsp:rsid wsp:val="005B4B5D" />
+        <wsp:rsid wsp:val="005C1D50" />
+        <wsp:rsid wsp:val="005E00C6" />
+        <wsp:rsid wsp:val="005E5EAB" />
+        <wsp:rsid wsp:val="005F1DDE" />
+        <wsp:rsid wsp:val="00604BA1" />
+        <wsp:rsid wsp:val="006176B5" />
+        <wsp:rsid wsp:val="00635BC6" />
+        <wsp:rsid wsp:val="0064062C" />
+        <wsp:rsid wsp:val="006539FA" />
+        <wsp:rsid wsp:val="00660C00" />
+        <wsp:rsid wsp:val="00663B28" />
+        <wsp:rsid wsp:val="00664AFA" />
+        <wsp:rsid wsp:val="00672538" />
+        <wsp:rsid wsp:val="0068253B" />
+        <wsp:rsid wsp:val="006A31C9" />
+        <wsp:rsid wsp:val="006A3F4C" />
+        <wsp:rsid wsp:val="006D211F" />
+        <wsp:rsid wsp:val="007230A2" />
+        <wsp:rsid wsp:val="007320E6" />
+        <wsp:rsid wsp:val="007330BA" />
+        <wsp:rsid wsp:val="00733CB1" />
+        <wsp:rsid wsp:val="00737693" />
+        <wsp:rsid wsp:val="007476C1" />
+        <wsp:rsid wsp:val="007477EF" />
+        <wsp:rsid wsp:val="00772402" />
+        <wsp:rsid wsp:val="007C6E51" />
+        <wsp:rsid wsp:val="007D072B" />
+        <wsp:rsid wsp:val="007F3BE1" />
+        <wsp:rsid wsp:val="00807A88" />
+        <wsp:rsid wsp:val="0082139E" />
+        <wsp:rsid wsp:val="0084324A" />
+        <wsp:rsid wsp:val="00865D00" />
+        <wsp:rsid wsp:val="00875BF0" />
+        <wsp:rsid wsp:val="00876A21" />
+        <wsp:rsid wsp:val="0088133A" />
+        <wsp:rsid wsp:val="00883922" />
+        <wsp:rsid wsp:val="008B3820" />
+        <wsp:rsid wsp:val="008B5A02" />
+        <wsp:rsid wsp:val="008B725D" />
+        <wsp:rsid wsp:val="008C1FDC" />
+        <wsp:rsid wsp:val="008E0DE2" />
+        <wsp:rsid wsp:val="008E2545" />
+        <wsp:rsid wsp:val="008E3C85" />
+        <wsp:rsid wsp:val="008E7D09" />
+        <wsp:rsid wsp:val="008F35B2" />
+        <wsp:rsid wsp:val="00922F84" />
+        <wsp:rsid wsp:val="00923217" />
+        <wsp:rsid wsp:val="00925021" />
+        <wsp:rsid wsp:val="009334DE" />
+        <wsp:rsid wsp:val="00944E03" />
+        <wsp:rsid wsp:val="009776AB" />
+        <wsp:rsid wsp:val="00977EB8" />
+        <wsp:rsid wsp:val="00993456" />
+        <wsp:rsid wsp:val="009C468E" />
+        <wsp:rsid wsp:val="009C5659" />
+        <wsp:rsid wsp:val="009C6729" />
+        <wsp:rsid wsp:val="009E13E1" />
+        <wsp:rsid wsp:val="00A03461" />
+        <wsp:rsid wsp:val="00A0362B" />
+        <wsp:rsid wsp:val="00A120BC" />
+        <wsp:rsid wsp:val="00A12EF0" />
+        <wsp:rsid wsp:val="00A148B1" />
+        <wsp:rsid wsp:val="00A221E4" />
+        <wsp:rsid wsp:val="00A31254" />
+        <wsp:rsid wsp:val="00A336D8" />
+        <wsp:rsid wsp:val="00A35232" />
+        <wsp:rsid wsp:val="00A65F53" />
+        <wsp:rsid wsp:val="00A70EB2" />
+        <wsp:rsid wsp:val="00A73746" />
+        <wsp:rsid wsp:val="00A84983" />
+        <wsp:rsid wsp:val="00A933F5" />
+        <wsp:rsid wsp:val="00A96A60" />
+        <wsp:rsid wsp:val="00AA20F3" />
+        <wsp:rsid wsp:val="00AA2CF9" />
+        <wsp:rsid wsp:val="00AA4B9B" />
+        <wsp:rsid wsp:val="00AB4E7B" />
+        <wsp:rsid wsp:val="00AD36C8" />
+        <wsp:rsid wsp:val="00AD43BF" />
+        <wsp:rsid wsp:val="00AE2ABF" />
+        <wsp:rsid wsp:val="00AF6AB0" />
+        <wsp:rsid wsp:val="00B016B6" />
+        <wsp:rsid wsp:val="00B01B04" />
+        <wsp:rsid wsp:val="00B16308" />
+        <wsp:rsid wsp:val="00B1666C" />
+        <wsp:rsid wsp:val="00B17E11" />
+        <wsp:rsid wsp:val="00B240C8" />
+        <wsp:rsid wsp:val="00B33212" />
+        <wsp:rsid wsp:val="00B3329C" />
+        <wsp:rsid wsp:val="00B33EBC" />
+        <wsp:rsid wsp:val="00B46D80" />
+        <wsp:rsid wsp:val="00B55459" />
+        <wsp:rsid wsp:val="00B55A62" />
+        <wsp:rsid wsp:val="00B5610E" />
+        <wsp:rsid wsp:val="00B83D74" />
+        <wsp:rsid wsp:val="00B96927" />
+        <wsp:rsid wsp:val="00BB0F5B" />
+        <wsp:rsid wsp:val="00BB10E0" />
+        <wsp:rsid wsp:val="00BB62E3" />
+        <wsp:rsid wsp:val="00BC351D" />
+        <wsp:rsid wsp:val="00BC3A2F" />
+        <wsp:rsid wsp:val="00BD5B2B" />
+        <wsp:rsid wsp:val="00BF237B" />
+        <wsp:rsid wsp:val="00BF2E61" />
+        <wsp:rsid wsp:val="00BF4B72" />
+        <wsp:rsid wsp:val="00BF65CF" />
+        <wsp:rsid wsp:val="00C06914" />
+        <wsp:rsid wsp:val="00C26FC4" />
+        <wsp:rsid wsp:val="00C37442" />
+        <wsp:rsid wsp:val="00C40437" />
+        <wsp:rsid wsp:val="00C40A3D" />
+        <wsp:rsid wsp:val="00C46200" />
+        <wsp:rsid wsp:val="00C53B11" />
+        <wsp:rsid wsp:val="00CA4BF0" />
+        <wsp:rsid wsp:val="00CA7E1A" />
+        <wsp:rsid wsp:val="00CB4E1D" />
+        <wsp:rsid wsp:val="00CB6E69" />
+        <wsp:rsid wsp:val="00CB7201" />
+        <wsp:rsid wsp:val="00CC355A" />
+        <wsp:rsid wsp:val="00CF08A3" />
+        <wsp:rsid wsp:val="00D30FBC" />
+        <wsp:rsid wsp:val="00D458BB" />
+        <wsp:rsid wsp:val="00D51929" />
+        <wsp:rsid wsp:val="00D53E3C" />
+        <wsp:rsid wsp:val="00DA0D19" />
+        <wsp:rsid wsp:val="00DA7E0D" />
+        <wsp:rsid wsp:val="00DB3675" />
+        <wsp:rsid wsp:val="00DD193C" />
+        <wsp:rsid wsp:val="00DE5C78" />
+        <wsp:rsid wsp:val="00DF2390" />
+        <wsp:rsid wsp:val="00DF5E9F" />
+        <wsp:rsid wsp:val="00DF672B" />
+        <wsp:rsid wsp:val="00E0762B" />
+        <wsp:rsid wsp:val="00E225D9" />
+        <wsp:rsid wsp:val="00E26BE0" />
+        <wsp:rsid wsp:val="00E31A5F" />
+        <wsp:rsid wsp:val="00E37475" />
+        <wsp:rsid wsp:val="00E54C99" />
+        <wsp:rsid wsp:val="00E65361" />
+        <wsp:rsid wsp:val="00E75792" />
+        <wsp:rsid wsp:val="00ED3900" />
+        <wsp:rsid wsp:val="00ED45B0" />
+        <wsp:rsid wsp:val="00ED6760" />
+        <wsp:rsid wsp:val="00EE5D76" />
+        <wsp:rsid wsp:val="00EF128B" />
+        <wsp:rsid wsp:val="00F153C5" />
+        <wsp:rsid wsp:val="00F24B63" />
+        <wsp:rsid wsp:val="00F31764" />
+        <wsp:rsid wsp:val="00F37A6A" />
+        <wsp:rsid wsp:val="00F40AEF" />
+        <wsp:rsid wsp:val="00F731AB" />
+        <wsp:rsid wsp:val="00FA1243" />
+        <wsp:rsid wsp:val="00FA5D0E" />
+        <wsp:rsid wsp:val="00FB4C11" />
+        <wsp:rsid wsp:val="00FB6ADD" />
+        <wsp:rsid wsp:val="00FE1386" />
+        <wsp:rsid wsp:val="00FE1B63" />
+    </wsp:rsids>
+</w:docPr>
+<w:body>
+    <w:p wsp:rsidR="0088133A" wsp:rsidRPr="004F44D3" wsp:rsidRDefault="0088133A" wsp:rsidP="000F2D68">
+        <w:pPr>
+            <w:jc w:val="center" />
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" />
+                <wx:font wx:val="宋体" />
+                <w:b />
+                <w:sz w:val="44" />
+                <w:sz-cs w:val="44" />
+            </w:rPr>
+        </w:pPr>
+        <w:r wsp:rsidRPr="004F44D3">
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                <wx:font wx:val="宋体" />
+                <w:b />
+                <w:sz w:val="44" />
+                <w:sz-cs w:val="44" />
+            </w:rPr>
+            <w:t>进入</w:t>
+        </w:r>
+        <w:r wsp:rsidR="000A50C9" wsp:rsidRPr="004F44D3">
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                <wx:font wx:val="宋体" />
+                <w:b />
+                <w:sz w:val="44" />
+                <w:sz-cs w:val="44" />
+            </w:rPr>
+            <w:t>${areaName1}</w:t>
+        </w:r>
+        <w:r wsp:rsidRPr="004F44D3">
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                <wx:font wx:val="宋体" />
+                <w:b />
+                <w:sz w:val="44" />
+                <w:sz-cs w:val="44" />
+            </w:rPr>
+            <w:t>凭证</w:t>
+        </w:r>
+    </w:p>
+    <w:p wsp:rsidR="00B33EBC" wsp:rsidRPr="004F44D3" wsp:rsidRDefault="00B33EBC" wsp:rsidP="00B33EBC">
+        <w:pPr>
+            <w:ind w:first-line-chars="200" w:first-line="602" />
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" />
+                <wx:font wx:val="宋体" />
+                <w:b />
+                <w:sz w:val="30" />
+                <w:sz-cs w:val="30" />
+            </w:rPr>
+        </w:pPr>
+    </w:p>
+    <w:p wsp:rsidR="0088133A" wsp:rsidRPr="009C6729" wsp:rsidRDefault="00FA1243" wsp:rsidP="009C6729">
+        <w:pPr>
+            <w:ind w:first-line-chars="200" w:first-line="640" />
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+        </w:pPr>
+        <w:r wsp:rsidRPr="009C6729">
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+            <w:t>嫌疑人专属</w:t>
+        </w:r>
+        <w:r wsp:rsidR="008B5A02" wsp:rsidRPr="009C6729">
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+            <w:t>编号</w:t>
+        </w:r>
+        <w:r wsp:rsidR="00B96927" wsp:rsidRPr="009C6729">
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+            <w:t>:</w:t>
+        </w:r>
+        <w:r wsp:rsidR="00C40A3D" wsp:rsidRPr="009C6729">
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+            <w:t> ${serailNO}</w:t>
+        </w:r>
+    </w:p>
+    <w:p wsp:rsidR="00AF6AB0" wsp:rsidRPr="009C6729" wsp:rsidRDefault="00AF6AB0" wsp:rsidP="009C6729">
+        <w:pPr>
+            <w:ind w:first-line-chars="200" w:first-line="640" />
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+        </w:pPr>
+        <w:r wsp:rsidRPr="009C6729">
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+            <w:t>警员编号为</w:t>
+        </w:r>
+        <w:r wsp:rsidR="004B605C" wsp:rsidRPr="009C6729">
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+            <w:t>${sendUser}</w:t>
+        </w:r>
+        <!--<w:r wsp:rsidR="00D30FBC" wsp:rsidRPr="009C6729">
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+            <w:t>,</w:t>
+        </w:r>-->
+       <!-- <w:r wsp:rsidR="00B83D74" wsp:rsidRPr="009C6729">
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+            <w:t>${policeNO2}</w:t>
+        </w:r>-->
+        <w:r wsp:rsidRPr="009C6729">
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+            <w:t>的办案民警，于</w:t>
+        </w:r>
+        <w:r wsp:rsidR="005E5EAB" wsp:rsidRPr="009C6729">
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+            <w:t>${date}</w:t>
+        </w:r>
+        <w:r wsp:rsidRPr="009C6729">
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+            <w:t>，将</w:t>
+        </w:r>
+        <w:r wsp:rsidR="00C46200" wsp:rsidRPr="009C6729">
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+            <w:t>违法</w:t>
+        </w:r>
+        <w:r wsp:rsidR="00C46200" wsp:rsidRPr="009C6729">
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+            <w:t>犯罪</w:t>
+        </w:r>
+        <w:r wsp:rsidR="00993456" wsp:rsidRPr="009C6729">
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+            <w:t>嫌疑人</w:t>
+        </w:r>
+        <w:r wsp:rsidR="00AD36C8" wsp:rsidRPr="009C6729">
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+            <w:t>${personName}</w:t>
+        </w:r>
+        <w:r wsp:rsidR="00C46200" wsp:rsidRPr="009C6729">
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+            <w:t>（</w:t>
+        </w:r>
+        <w:r wsp:rsidR="00AD36C8" wsp:rsidRPr="009C6729">
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+            <w:t>${certificateType}</w:t>
+        </w:r>
+        <w:r wsp:rsidR="00C46200" wsp:rsidRPr="009C6729">
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+            <w:t>：</w:t>
+        </w:r>
+        <w:r wsp:rsidR="00AD36C8" wsp:rsidRPr="009C6729">
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+            <w:t>${certificateNO}</w:t>
+        </w:r>
+        <w:r wsp:rsidR="00C46200" wsp:rsidRPr="009C6729">
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+            <w:t>）</w:t>
+        </w:r>
+        <w:r wsp:rsidRPr="009C6729">
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+            <w:t>带入</w:t>
+        </w:r>
+        <w:r wsp:rsidR="00AD36C8" wsp:rsidRPr="009C6729">
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+            <w:t>${areaName2}</w:t>
+        </w:r>
+        <w:r wsp:rsidRPr="009C6729">
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+            <w:t>，</w:t>
+        </w:r>
+        <w:r wsp:rsidR="00C46200" wsp:rsidRPr="009C6729">
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+            <w:t>依法进行案件</w:t>
+        </w:r>
+        <w:r wsp:rsidR="00C46200" wsp:rsidRPr="009C6729">
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+            <w:t>办理工作</w:t>
+        </w:r>
+        <w:r wsp:rsidRPr="009C6729">
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+            <w:t>。</w:t>
+        </w:r>
+    </w:p>
+    <w:p wsp:rsidR="00103DD7" wsp:rsidRPr="004F44D3" wsp:rsidRDefault="00103DD7" wsp:rsidP="00AF6AB0">
+        <w:pPr>
+            <w:ind w:first-line-chars="200" w:first-line="640" />
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+        </w:pPr>
+    </w:p>
+    <w:p wsp:rsidR="00ED3900" wsp:rsidRPr="004F44D3" wsp:rsidRDefault="00B01B04" wsp:rsidP="00E65361">
+        <w:pPr>
+            <w:jc w:val="center" />
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+        </w:pPr>
+        <w:r wsp:rsidRPr="00B01B04">
+            <w:rPr>
+                <w:rFonts w:ascii="楷体_GB2312" w:fareast="楷体_GB2312" w:h-ansi="宋体" />
+                <wx:font wx:val="楷体_GB2312" />
+            </w:rPr>
+            <w:pict>
+                <v:shapetype id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t" path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+                    <v:stroke joinstyle="miter" />
+                    <v:formulas>
+                        <v:f eqn="if lineDrawn pixelLineWidth 0" />
+                        <v:f eqn="sum @0 1 0" />
+                        <v:f eqn="sum 0 0 @1" />
+                        <v:f eqn="prod @2 1 2" />
+                        <v:f eqn="prod @3 21600 pixelWidth" />
+                        <v:f eqn="prod @3 21600 pixelHeight" />
+                        <v:f eqn="sum @0 0 1" />
+                        <v:f eqn="prod @6 1 2" />
+                        <v:f eqn="prod @7 21600 pixelWidth" />
+                        <v:f eqn="sum @8 21600 0" />
+                        <v:f eqn="prod @7 21600 pixelHeight" />
+                        <v:f eqn="sum @10 21600 0" />
+                    </v:formulas>
+                    <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect" />
+                    <o:lock v:ext="edit" aspectratio="t" />
+                </v:shapetype>
+                <w:binData w:name="wordml://02000001.jpg" xml:space="preserve">${image}</w:binData>
+                <v:shape id="_x0000_i1025" type="#_x0000_t75" style="width:180.6pt;height:102pt">
+                    <v:imagedata src="wordml://02000001.jpg" o:title="88829-106" />
+                </v:shape>
+            </w:pict>
+        </w:r>
+    </w:p>
+    <w:p wsp:rsidR="009C5659" wsp:rsidRPr="009C5659" wsp:rsidRDefault="009C5659" wsp:rsidP="00E31A5F">
+        <w:pPr>
+            <w:jc w:val="center" />
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                <wx:font wx:val="宋体" />
+                <w:sz-cs w:val="21" />
+                <w:u w:val="single" />
+            </w:rPr>
+        </w:pPr>
+    </w:p>
+    <w:p wsp:rsidR="00993456" wsp:rsidRPr="004F44D3" wsp:rsidRDefault="00B01B04" wsp:rsidP="00E31A5F">
+        <w:pPr>
+            <w:jc w:val="center" />
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+        </w:pPr>
+        <w:r wsp:rsidRPr="00B01B04">
+            <w:pict>
+                <w:binData w:name="wordml://02000002.jpg" xml:space="preserve">${barcode}</w:binData>
+                <v:shape id="_x0000_i1026" type="#_x0000_t75" style="width:131.4pt;height:21.6pt">
+                    <v:imagedata src="wordml://02000002.jpg" o:title="98603-106" />
+                </v:shape>
+            </w:pict>
+        </w:r>
+    </w:p>
+    <w:p wsp:rsidR="00993456" wsp:rsidRPr="004F44D3" wsp:rsidRDefault="00993456" wsp:rsidP="00B46D80">
+        <w:pPr>
+            <w:rPr>
+                <w:rFonts w:ascii="宋体" w:h-ansi="宋体" />
+                <wx:font wx:val="宋体" />
+                <w:sz w:val="32" />
+                <w:sz-cs w:val="32" />
+                <w:u w:val="single" />
+            </w:rPr>
+        </w:pPr>
+    </w:p>
+    <wx:sub-section>
+        <w:p wsp:rsidR="00E37475" wsp:rsidRPr="009C6729" wsp:rsidRDefault="00B55A62" wsp:rsidP="000A50C9">
+            <w:pPr>
+                <w:outlineLvl w:val="0" />
+                <w:rPr>
+                    <w:rFonts w:ascii="宋体" w:h-ansi="宋体" />
+                    <wx:font wx:val="宋体" />
+                    <w:sz w:val="32" />
+                    <w:sz-cs w:val="32" />
+                    <w:u w:val="single" />
+                </w:rPr>
+            </w:pPr>
+            <w:r wsp:rsidRPr="009C6729">
+                <w:rPr>
+                    <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                    <wx:font wx:val="宋体" />
+                    <w:sz w:val="32" />
+                    <w:sz-cs w:val="32" />
+                    <w:u w:val="single" />
+                </w:rPr>
+                <w:t>${areaName3}</w:t>
+            </w:r>
+        </w:p>
+        <w:p wsp:rsidR="00ED3900" wsp:rsidRPr="004F44D3" wsp:rsidRDefault="00BD5B2B" wsp:rsidP="00C53B11">
+            <w:pPr>
+                <w:rPr>
+                    <w:rFonts w:ascii="宋体" w:h-ansi="宋体" />
+                    <wx:font wx:val="宋体" />
+                    <w:sz w:val="32" />
+                    <w:sz-cs w:val="32" />
+                    <w:u w:val="single" />
+                </w:rPr>
+            </w:pPr>
+            <w:r wsp:rsidRPr="004F44D3">
+                <w:rPr>
+                    <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                    <wx:font wx:val="宋体" />
+                    <w:sz w:val="32" />
+                    <w:sz-cs w:val="32" />
+                    <w:u w:val="single" />
+                </w:rPr>
+                <w:t>嫌疑人</w:t>
+            </w:r>
+            <w:r wsp:rsidR="003A05A1" wsp:rsidRPr="004F44D3">
+                <w:rPr>
+                    <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                    <wx:font wx:val="宋体" />
+                    <w:sz w:val="32" />
+                    <w:sz-cs w:val="32" />
+                    <w:u w:val="single" />
+                </w:rPr>
+                <w:t>签名</w:t>
+            </w:r>
+            <w:r wsp:rsidR="002312D6" wsp:rsidRPr="004F44D3">
+                <w:rPr>
+                    <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                    <wx:font wx:val="宋体" />
+                    <w:sz w:val="32" />
+                    <w:sz-cs w:val="32" />
+                    <w:u w:val="single" />
+                </w:rPr>
+                <w:t>:</w:t>
+            </w:r>
+            <w:r wsp:rsidR="003A05A1" wsp:rsidRPr="004F44D3">
+                <w:rPr>
+                    <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                    <wx:font wx:val="宋体" />
+                    <w:sz w:val="32" />
+                    <w:sz-cs w:val="32" />
+                    <w:u w:val="single" />
+                </w:rPr>
+                <w:t>　　　　　　</w:t>
+            </w:r>
+            <aml:annotation aml:id="0" w:type="Word.Bookmark.Start" w:name="PIC" />
+            <aml:annotation aml:id="0" w:type="Word.Bookmark.End" />
+        </w:p>
+        <w:p wsp:rsidR="007330BA" wsp:rsidRDefault="002C7E36" wsp:rsidP="002C7E36">
+            <w:pPr>
+                <w:ind w:left="1" w:hanging="1" />
+                <w:rPr>
+                    <w:rFonts w:ascii="宋体" w:h-ansi="宋体" />
+                    <wx:font wx:val="宋体" />
+                    <w:b />
+                    <w:sz w:val="32" />
+                    <w:sz-cs w:val="32" />
+                    <w:u w:val="single" />
+                </w:rPr>
+            </w:pPr>
+            <w:r wsp:rsidRPr="004F44D3">
+                <w:rPr>
+                    <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                    <wx:font wx:val="宋体" />
+                    <w:b />
+                    <w:sz w:val="32" />
+                    <w:sz-cs w:val="32" />
+                    <w:u w:val="single" />
+                </w:rPr>
+                <w:t>注明:</w:t>
+            </w:r>
+            <w:r wsp:rsidR="00177824" wsp:rsidRPr="004F44D3">
+                <w:rPr>
+                    <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                    <wx:font wx:val="宋体" />
+                    <w:b />
+                    <w:sz w:val="32" />
+                    <w:sz-cs w:val="32" />
+                    <w:u w:val="single" />
+                </w:rPr>
+                <w:t>该凭证一式两份，均需签名</w:t>
+            </w:r>
+            <w:r wsp:rsidR="007C6E51" wsp:rsidRPr="004F44D3">
+                <w:rPr>
+                    <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                    <wx:font wx:val="宋体" />
+                    <w:b />
+                    <w:sz w:val="32" />
+                    <w:sz-cs w:val="32" />
+                    <w:u w:val="single" />
+                </w:rPr>
+                <w:t>捺指纹</w:t>
+            </w:r>
+            <w:r wsp:rsidRPr="004F44D3">
+                <w:rPr>
+                    <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                    <wx:font wx:val="宋体" />
+                    <w:b />
+                    <w:sz w:val="32" />
+                    <w:sz-cs w:val="32" />
+                    <w:u w:val="single" />
+                </w:rPr>
+                <w:t>印,</w:t>
+            </w:r>
+            <w:r wsp:rsidR="00177824" wsp:rsidRPr="004F44D3">
+                <w:rPr>
+                    <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                    <wx:font wx:val="宋体" />
+                    <w:b />
+                    <w:sz w:val="32" />
+                    <w:sz-cs w:val="32" />
+                    <w:u w:val="single" />
+                </w:rPr>
+                <w:t>一份</w:t>
+            </w:r>
+            <w:r wsp:rsidR="00AA20F3" wsp:rsidRPr="004F44D3">
+                <w:rPr>
+                    <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                    <wx:font wx:val="宋体" />
+                    <w:b />
+                    <w:sz w:val="32" />
+                    <w:sz-cs w:val="32" />
+                    <w:u w:val="single" />
+                </w:rPr>
+                <w:t>由</w:t>
+            </w:r>
+            <w:r wsp:rsidR="00AA20F3" wsp:rsidRPr="004F44D3">
+                <w:rPr>
+                    <w:rFonts w:ascii="宋体" w:h-ansi="宋体" />
+                    <wx:font wx:val="宋体" />
+                    <w:b />
+                    <w:sz w:val="32" />
+                    <w:sz-cs w:val="32" />
+                    <w:u w:val="single" />
+                </w:rPr>
+                <w:t>办案单位</w:t>
+            </w:r>
+            <w:r wsp:rsidR="00177824" wsp:rsidRPr="004F44D3">
+                <w:rPr>
+                    <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                    <wx:font wx:val="宋体" />
+                    <w:b />
+                    <w:sz w:val="32" />
+                    <w:sz-cs w:val="32" />
+                    <w:u w:val="single" />
+                </w:rPr>
+                <w:t>留存，一份交</w:t>
+            </w:r>
+            <w:r wsp:rsidR="00BD5B2B" wsp:rsidRPr="004F44D3">
+                <w:rPr>
+                    <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                    <wx:font wx:val="宋体" />
+                    <w:b />
+                    <w:sz w:val="32" />
+                    <w:sz-cs w:val="32" />
+                    <w:u w:val="single" />
+                </w:rPr>
+                <w:t>办案</w:t>
+            </w:r>
+            <w:r wsp:rsidR="00AA20F3" wsp:rsidRPr="004F44D3">
+                <w:rPr>
+                    <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                    <wx:font wx:val="宋体" />
+                    <w:b />
+                    <w:sz w:val="32" />
+                    <w:sz-cs w:val="32" />
+                    <w:u w:val="single" />
+                </w:rPr>
+                <w:t>场所</w:t>
+            </w:r>
+            <w:r wsp:rsidR="00BD5B2B" wsp:rsidRPr="004F44D3">
+                <w:rPr>
+                    <w:rFonts w:ascii="宋体" w:h-ansi="宋体" />
+                    <wx:font wx:val="宋体" />
+                    <w:b />
+                    <w:sz w:val="32" />
+                    <w:sz-cs w:val="32" />
+                    <w:u w:val="single" />
+                </w:rPr>
+                <w:t>存档</w:t>
+            </w:r>
+            <w:r wsp:rsidR="00177824" wsp:rsidRPr="004F44D3">
+                <w:rPr>
+                    <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                    <wx:font wx:val="宋体" />
+                    <w:b />
+                    <w:sz w:val="32" />
+                    <w:sz-cs w:val="32" />
+                    <w:u w:val="single" />
+                </w:rPr>
+                <w:t>。</w:t>
+            </w:r>
+        </w:p>
+        <w:p wsp:rsidR="00200869" wsp:rsidRDefault="00BC351D" wsp:rsidP="002C7E36">
+            <w:pPr>
+                <w:ind w:left="1" w:hanging="1" />
+                <w:rPr>
+                    <w:rFonts w:ascii="宋体" w:h-ansi="宋体" />
+                    <wx:font wx:val="宋体" />
+                    <w:sz w:val="32" />
+                    <w:sz-cs w:val="32" />
+                    <w:u w:val="single" />
+                </w:rPr>
+            </w:pPr>
+            <w:r wsp:rsidRPr="00BC351D">
+                <w:rPr>
+                    <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                    <wx:font wx:val="宋体" />
+                    <w:sz w:val="32" />
+                    <w:sz-cs w:val="32" />
+                    <w:u w:val="single" />
+                </w:rPr>
+                <w:t>主办民警：${mainusername}</w:t>
+            </w:r>
+            <w:r>
+                <w:rPr>
+                    <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                    <wx:font wx:val="宋体" />
+                    <w:sz w:val="32" />
+                    <w:sz-cs w:val="32" />
+                    <w:u w:val="single" />
+                </w:rPr>
+                <w:t>  </w:t>
+            </w:r>
+            <w:r wsp:rsidR="00200869">
+                <w:rPr>
+                    <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                    <wx:font wx:val="宋体" />
+                    <w:sz w:val="32" />
+                    <w:sz-cs w:val="32" />
+                    <w:u w:val="single" />
+                </w:rPr>
+                <w:t>办案单位 : ${workspce}</w:t>
+            </w:r>
+        </w:p>
+        <w:p wsp:rsidR="00BC351D" wsp:rsidRPr="00BC351D" wsp:rsidRDefault="00BC351D" wsp:rsidP="002C7E36">
+            <w:pPr>
+                <w:ind w:left="1" w:hanging="1" />
+                <w:rPr>
+                    <w:rFonts w:ascii="宋体" w:h-ansi="宋体" />
+                    <wx:font wx:val="宋体" />
+                    <w:sz w:val="32" />
+                    <w:sz-cs w:val="32" />
+                    <w:u w:val="single" />
+                </w:rPr>
+            </w:pPr>
+            <w:r>
+                <w:rPr>
+                    <w:rFonts w:ascii="宋体" w:h-ansi="宋体" w:hint="fareast" />
+                    <wx:font wx:val="宋体" />
+                    <w:sz w:val="32" />
+                    <w:sz-cs w:val="32" />
+                    <w:u w:val="single" />
+                </w:rPr>
+                <w:t>传唤时间 : ${calltime}</w:t>
+            </w:r>
+        </w:p>
+    </wx:sub-section>
+    <w:sectPr wsp:rsidR="00BC351D" wsp:rsidRPr="00BC351D" wsp:rsidSect="00B17E11">
+        <w:pgSz w:w="11906" w:h="16838" />
+        <w:pgMar w:top="1440" w:right="1741" w:bottom="1440" w:left="1741" w:header="851" w:footer="992" w:gutter="0" />
+        <w:cols w:space="425" />
+        <w:docGrid w:type="lines" w:line-pitch="312" />
+    </w:sectPr>
+</w:body>
+</w:wordDocument>

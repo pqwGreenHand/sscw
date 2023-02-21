@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacs.dao.ajxx.IAjxxMysqlMapper">
+	<resultMap id="AjxxMapper" type="com.zhixin.zhfz.bacs.entity.JzAjxxEntity">
+    	<id property="id" column="id"/>
+    	<result property="ajmc" column="ajmc"/>
+    	<result property="ajbh" column="ajbh"/>
+    	<result property="ajlb" column="ajlb"/>
+    	<result property="ajzt" column="ajzt"/>
+    	<result property="zbmj" column="zbmj"/>
+    	<result property="zbmjName" column="zbmj_name"/>
+    	<result property="zbmjId" column="zbmj_id"/>
+    	<result property="slsj" column="slsj"/>
+    	<result property="bmId" column="bm_id"/>
+    	<result property="bmmc" column="bmmc"/>
+    	<result property="badw" column="badw"/>
+    	<result property="cjsj" column="cjsj"/>
+    	<result property="ajlbz" column="ajlbz"/>
+    	<result property="ajztz" column="ajztz"/>
+    	<result property="count" column="count"/>
+    	<result property="jqbh" column="jqbh"/>
+    	<result property="rkzt" column="rkzt"/>
+		<result property="afsj" column="afsj"/>
+		<result property="jyaq" column="jyaq"/>
+    </resultMap>
+
+      <select id="queryAjxxSlsjMaxXs" resultMap="AjxxMapper" parameterType="java.util.Map">
+          SELECT *  FROM ajxx_temp WHERE  slsj=(SELECT  MAX(slsj) FROM  ajxx_temp where ajlb=2)  limit 1
+	  </select>
+
+      <select id="queryAjxxSlsjMaxXz" resultMap="AjxxMapper" parameterType="java.util.Map">
+        SELECT *  FROM ajxx_temp WHERE  slsj=(SELECT  MAX(slsj) FROM  ajxx_temp where ajlb=1)  limit 1
+	  </select>
+
+     <insert id="insert" parameterType="com.zhixin.zhfz.bacs.entity.JzAjxxEntity"  keyProperty="id" useGeneratedKeys="true" >
+            INSERT INTO ajxx_temp (
+	    		ajmc,
+	    		ajbh,
+	    		ajlb,
+	    		ajzt,
+	    		zbmj,
+	    		zbmj_name,
+	    		slsj,
+	    		bm_id,
+	    		badw,
+	    		cjsj,
+	    		jqbh,
+	    		rkzt,
+	    		jyaq,
+	    		afsj,
+	    		afdd
+				)
+             VALUES(
+	    		#{ajmc},
+	    		#{ajbh},
+	    		#{ajlb},
+	    		#{ajzt},
+	    		#{zbmj},
+	    		#{zbmjName},
+	    		#{slsj},
+	    		#{bmId},
+	    		#{badw},
+	    		now(),
+	    		#{jqbh},
+	    		#{rkzt},
+	    		#{jyaq},
+	    		#{afsj},
+	    		#{afdd}
+				)
+    </insert>
+</mapper>
+
+

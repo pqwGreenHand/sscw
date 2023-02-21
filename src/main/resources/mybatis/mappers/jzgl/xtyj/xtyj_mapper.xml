@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.jzgl.dao.xtyj.IXtyjMapper">
+    <resultMap id="IXtyjMapper" type="com.zhixin.zhfz.jzgl.entity.XtyjEntity">
+        <id property="id" column="id"/>
+        <result property="ajxxId" column="ajxx_id"/>
+        <result property="jzxxId" column="jzxx_id"/>
+        <result property="ruleId" column="rule_id"/>
+        <result property="ruleConfId" column="rule_conf_id"/>
+        <result property="cjDate" column="cj_date"/>
+    </resultMap>
+      
+        <!-- 查询告警信息是否存在gjxx表-->
+     <select id="queryYjxxSame" parameterType="com.zhixin.zhfz.jzgl.entity.XtyjEntity" resultMap="IXtyjMapper" >
+    	select * from jz_xtyj yj where  ajxx_id=#{ajxxId} and rule_id=#{ruleId} and   rule_conf_id=#{ruleConfId}
+    </select>  
+    <select id="listXtyj" parameterType="java.util.Map" resultMap="IXtyjMapper" resultType="java.util.List">
+    	select x.*,aj.ajbh,aj.ajmc,jz.jzbh,jz.user_id userId,jz.zrr zrrId,rc.send_role_names sendRoleNames,rc.send_hour sendHour,
+        (select gm.xsbh from jz_jzg_gmxx gm where gm.id = jz.gmxx_id) xsbh
+        from jz_xtyj x
+        left join ba_case aj on aj.id = x.ajxx_id
+        left join jz_jzxx jz on jz.id = x.jzxx_id
+        left join jz_rule_config rc on rc.id = x.rule_conf_id
+        where 1=1
+		<if test="ajmc != null and ajmc != ''">
+			and aj.ajmc like '%${ajmc}%'
+		</if>
+		<if test="startTime!=null and startTime!=''">
+            and x.cj_date &gt;= #{startTime}
+        </if>
+        <if test="endTime!=null and endTime!='' ">
+            and x.cj_date  &lt;= #{endTime}
+        </if>
+        <if test="dataAuth!=null and dataAuth!='' ">
+            and ${dataAuth}
+        </if>
+		order by x.id		
+    </select>
+    
+    <select id="countXtyj" parameterType="java.util.Map" resultType="int">
+    	select count(1) 
+    	from jz_xtyj x
+        left join ba_case aj on aj.id = x.ajxx_id
+        left join jz_jzxx jz on jz.id = x.jzxx_id
+        left join jz_rule_config rc on rc.id = x.rule_conf_id
+        where 1=1
+		<if test="ajmc != null and ajmc != ''">
+			and aj.ajmc like '%${ajmc}%'
+		</if>
+		<if test="startTime!=null and startTime!=''">
+            and x.cj_date &gt;= #{startTime}
+        </if>
+        <if test="endTime!=null and endTime!='' ">
+            and x.cj_date  &lt;= #{endTime}
+        </if>		
+         <if test="dataAuth!=null and dataAuth!='' ">
+            and ${dataAuth}
+        </if> 
+    </select>
+       <!-- 连不不存插入告警信息 -->
+    <insert id="insert" parameterType="com.zhixin.zhfz.jzgl.entity.XtyjEntity"  keyProperty="id" useGeneratedKeys="true" >  
+     INSERT INTO jz_xtyj (
+	    		ajxx_id,
+	    		jzxx_id,
+	    		rule_id,
+	    		rule_conf_id,
+	    		cj_date
+				)
+             VALUES(
+	    		#{ajxxId},
+	    		#{jzxxId},
+	    		#{ruleId},
+	    		#{ruleConfId},
+	    		now()
+				)
+    </insert>
+</mapper>
+
+

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper	namespace="com.zhixin.zhfz.bacs.dao.camera.ICameraMapper">
+
+	<resultMap id="cameraMap" type="CameraEntity">
+		<id property="id" column="id" jdbcType="INTEGER"/>
+		<result property="name" column="name" jdbcType="VARCHAR"/>
+		<result property="channel" column="channel" jdbcType="VARCHAR"/>
+		<result property="ip" column="ip" jdbcType="VARCHAR"/>
+		<result property="account" column="account" jdbcType="VARCHAR"/>
+		<result property="password" column="password" jdbcType="VARCHAR"/>
+		<result property="port" column="port" jdbcType="INTEGER"/>
+		<result property="screen" column="screen" jdbcType="VARCHAR"/>
+		<result property="type" column="type" jdbcType="INTEGER"/>
+		<result property="download" column="is_download" jdbcType="INTEGER"/>
+		<result property="description" column="description" jdbcType="VARCHAR"/>
+		<result property="nvrName" column="nvrname" jdbcType="VARCHAR"/>
+		<result property="nvrId" column="nvr_id" jdbcType="INTEGER"/>
+		<result property="vender" column="vender" jdbcType="VARCHAR"/>
+		<result property="areaName" column="areaname" jdbcType="VARCHAR"/>
+		<result property="areaId" column="area_id" jdbcType="INTEGER"/>
+		<result property="roomName" column="roomname" jdbcType="VARCHAR"/>
+		<result property="roomId" column="room_id" jdbcType="INTEGER"/>
+		<result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>
+		<result property="updatedTime" column="updated_time" jdbcType="TIMESTAMP"/>
+		<result property="cameraNo" column="camera_no" jdbcType="VARCHAR"/>
+		<result column="op_pid" property="op_Pid" jdbcType="VARCHAR" />
+		<result column="op_user_id" property="op_User_Id" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<select id="list" resultMap="cameraMap"
+		parameterType="java.util.Map">
+		select c.*,n.`name` as nvrname,r.name as areaname,m.`name` as roomname 
+		from ba_camera c
+		left join ba_nvr n on c.nvr_id=n.id
+		left join ba_area r on c.area_id=r.id
+		left join ba_room m on c.room_id=m.id
+		<where>
+			<if test="dataAuth!=null and dataAuth!=''">
+				and ${dataAuth}
+			</if>
+			<if test="areaId!=null and areaId !=''">
+				 and c.area_id=#{areaId}
+			</if>
+			<if test="nvrId!=null and nvrId !=''">
+				 and c.nvr_id=#{nvrId}
+			</if>
+			<if test="roomId!=null and roomId !=''">
+				and c.room_id=#{roomId}
+			</if>
+			<if test="name!=null and name !=''">
+				 and c.name like '%${name}%'
+			</if>
+       	</where>
+       	limit ${pageStart},${rows}	
+	</select>
+	
+	
+	
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map"> 
+		select count(1) from ba_camera c
+		left join ba_nvr n on c.nvr_id=n.id
+		left join ba_area r on c.area_id=r.id
+		left join ba_room m on c.room_id=m.id
+		<where>
+			<if test="dataAuth!=null and dataAuth!=''">
+				and ${dataAuth}
+			</if>
+			<if test="areaId!=null and areaId !=''">
+				and c.area_id=#{areaId}
+			</if>
+			<if test="nvrId!=null and nvrId !=''">
+				and c.nvr_id=#{nvrId}
+			</if>
+			<if test="roomId!=null and roomId !=''">
+				and c.room_id=#{roomId}
+			</if>
+			<if test="name!=null and name !=''">
+				and c.name like '%${name}%'
+			</if>
+       	</where>
+	</select>
+	
+	<select id="getCameraByRoomID" resultMap="cameraMap" parameterType="java.util.Map">
+		select * from camera  where screen='主画面' and interrogate_room_id=#{roomId}
+
+	</select>
+	
+	<insert id="insert" parameterType="CameraEntity" keyProperty="id" useGeneratedKeys="true">  
+        insert into ba_camera (name, channel, ip, account, password,
+		port, screen, type,is_download,
+		description,nvr_id, vender,camera_no, area_id, room_id,
+		created_time,op_pid,op_user_id) values
+		(#{name},#{channel},#{ip},#{account},#{password},#{port},
+		#{screen},#{type},#{download},#{description},
+		#{nvrId},#{vender},#{cameraNo},#{areaId},#{roomId},now(),#{op_Pid},#{op_User_Id})
+    </insert>
+
+	
+    <update id="update" parameterType="java.util.Map" >  
+        update ba_camera set updated_time=now(),is_download = #{download}
+       <if test="name!= null and name!=''" >
+        	,name = #{name}
+      </if>
+      <if test="channel!= null and channel!=''" >
+        	,channel = #{channel}
+      </if>
+      <if test="ip!= null and ip!=''" >
+        	,ip = #{ip}
+      </if>
+      <if test="account!= null and account!=''" >
+        	,account = #{account}
+      </if>
+      <if test="password!= null and password!=''" >
+        	,password = #{password}
+      </if>
+      <if test="port!= null and port!=''" >
+        	,port = #{port}
+      </if>
+      <if test="screen!= null and screen!=''" >
+        	,screen = #{screen}
+      </if>
+      <if test="type!= null and type!=''" >
+        	,type = #{type}
+      </if>
+      <if test="description!= null and description!=''" >
+        	,description = #{description}
+      </if>
+      <if test="nvrId!= null and nvrId!=''" >
+        	,nvr_id = #{nvrId}
+      </if>
+      <if test="vender!= null and vender!=''" >
+        	,vender = #{vender}
+      </if>
+      <if test="cameraNo!= null and cameraNo!=''" >
+        	,camera_no = #{cameraNo}
+      </if>
+      <if test="areaId!= null and areaId!=''" >
+        	,area_id = #{areaId}
+      </if>
+      <if test="roomId!= null and roomId!=''" >
+        	,room_id = #{roomId}
+      </if>
+       where id=#{id} 
+    </update>
+
+
+	<delete id="delete" parameterType="int">  
+            delete from ba_camera where id=#{id}
+    </delete>
+
+    <insert id="insertList" parameterType="java.util.List"  useGeneratedKeys="true">
+        insert into ba_camera (name, channel, ip, account, password,
+        port, screen, type,is_download,
+        description,nvr_id, vender,camera_no, area_id, room_id,
+        created_time,op_pid,op_user_id) values
+        <foreach collection="cameraList" item="item" index="index" separator=",">
+            (#{item.name},#{item.channel},#{item.ip},#{item.account},#{item.password},#{item.port},#{item.screen},
+            #{item.type},#{item.download},#{item.description},#{item.nvrId},#{item.vender},#{item.cameraNo},
+            #{item.areaId},#{item.roomId},now(),#{item.op_Pid},#{item.op_User_Id})
+        </foreach>
+    </insert>
+</mapper>

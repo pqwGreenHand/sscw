@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacsapp.dao.common.ICommonMapper">
+    <resultMap id="SerialResultMap" type="com.zhixin.zhfz.bacsapp.entity.SerialAppEntity">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="serial_no" property="serialNo" jdbcType="VARCHAR"/>
+        <result column="uuid" property="uuid" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="status_change_time" property="statusChangeTime" jdbcType="TIMESTAMP"/>
+        <result column="person_id" property="personId" jdbcType="BIGINT"/>
+        <result column="send_user_id" property="sendUserId" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="birth" property="birth" jdbcType="TIMESTAMP"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="order_request_id" property="orderId" jdbcType="INTEGER"/>
+        <result column="order_no" property="orderNo" jdbcType="VARCHAR"/>
+        <result column="area_id" property="areaId" jdbcType="INTEGER"/>
+        <result column="case_id" property="caseId" jdbcType="INTEGER"/>
+        <result column="interrogate_case_name" property="interrogateCaseName" jdbcType="VARCHAR"/>
+        <result column="involved_reason" property="involvedReason" jdbcType="VARCHAR"/>
+        <result column="case_type" property="caseType" jdbcType="INTEGER"/>
+        <result column="case_nature" property="caseNature" jdbcType="VARCHAR"/>
+        <result column="cuff_id" property="cuffId" jdbcType="INTEGER"/>
+        <result column="police_cuff_id1" property="policeCuffId1" jdbcType="INTEGER"/>
+        <result column="police_cuff_id2" property="policeCuffId2" jdbcType="INTEGER"/>
+        <result column="cuff_no" property="cuffNo" jdbcType="VARCHAR"/>
+        <result column="police_cuff_no1" property="policeCuffNo1" jdbcType="VARCHAR"/>
+        <result column="police_cuff_no2" property="policeCuffNo2" jdbcType="VARCHAR"/>
+        <result column="in_photo_name" property="inPhotoId" jdbcType="VARCHAR"/>
+        <result column="in_user_id1" property="inUserId1" jdbcType="INTEGER"/>
+        <result column="in_user_real_name1" property="inUserRealName1" jdbcType="VARCHAR"/>
+        <result column="organization" property="organization" jdbcType="VARCHAR"/>
+        <result column="in_user_id2" property="inUserId2" jdbcType="INTEGER"/>
+        <result column="in_user_real_name1" property="inUserRealName1" jdbcType="VARCHAR"/>
+        <result column="in_user_real_name2" property="inUserRealName2" jdbcType="VARCHAR"/>
+        <result column="in_register_user_id" property="inRegisterUserId" jdbcType="INTEGER"/>
+        <result column="in_register_user_real_name" property="inRegisterUserRealName" jdbcType="VARCHAR"/>
+        <result column="in_time" property="inTime" jdbcType="TIMESTAMP"/>
+        <result column="out_reason" property="outReason" jdbcType="VARCHAR"/>
+        <result column="out_photo_name" property="outPhotoId" jdbcType="VARCHAR"/>
+        <result column="out_time" property="outTime" jdbcType="TIMESTAMP"/>
+        <result column="out_type" property="outType" jdbcType="INTEGER"/>
+        <result column="out_register_user_id" property="outRegisterUserId" jdbcType="INTEGER"/>
+        <result column="out_register_user_real_name" property="outRegisterUserRealName" jdbcType="VARCHAR"/>
+        <result column="out_user_id1" property="outUserId1" jdbcType="INTEGER"/>
+        <result column="out_user_real_name1" property="outUserRealName1" jdbcType="VARCHAR"/>
+        <result column="out_user_id2" property="outUserId2" jdbcType="INTEGER"/>
+        <result column="out_user_real_name2" property="outUserRealName2" jdbcType="VARCHAR"/>
+        <result column="certificate_type_id" property="certificateTypeId" jdbcType="INTEGER"/>
+        <result column="certificate_type_name" property="certificateTypeName" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" jdbcType="INTEGER"/>
+        <result column="in_user_no1" property="inUserNo1" jdbcType="VARCHAR"/>
+        <result column="in_user_no2" property="inUserNo2" jdbcType="VARCHAR"/>
+        <result column="confirm_time" property="confirmTime" jdbcType="TIMESTAMP"/>
+        <result column="confirm_result" property="confirmResult" jdbcType="VARCHAR"/>
+        <result column="person_info" property="personInfo" jdbcType="VARCHAR"/>
+        <result column="entrance_procedure" property="entranceProcedure" jdbcType="VARCHAR"/>
+        <result column="written_time" property="writtenTime" jdbcType="TIMESTAMP"/>
+
+        <result column="perName" property="perName" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="RoomResultMap" type="com.zhixin.zhfz.bacs.entity.RoomEntity" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="room_type_id" property="roomTypeId" jdbcType="INTEGER" />
+        <result column="description" property="description" jdbcType="VARCHAR" />
+        <result column="area_id" property="interrogateAreaId" jdbcType="INTEGER" />
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+        <result column="sid" property="sid" jdbcType="VARCHAR" />
+        <result column="gname" property="gname" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="VARCHAR" />
+        <result column="ips" property="ips" jdbcType="VARCHAR" />
+        <result column="is_active" property="isActive" />
+        <result column="axis" property="axis" />
+        <result column="trigger_no" property="triggerNo" />
+        <result column="volume" property="volume" />
+        <result column="location_group" property="ledAddress" />
+        <result column="count_num" property="countNum" />
+    </resultMap>
+
+
+    <select id="listAllPerson" resultMap="SerialResultMap" parameterType="java.util.Map">
+        SELECT a.id,a.serial_no,a.uuid,a.area_id,a.in_photo_name,a.`status`,a.in_time,b.`name`AS perName FROM ba_serial a , ba_person b WHERE a.person_id = b.id
+        AND a.type=0 AND  a.status &lt; 10 AND a.status &gt; 0
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="id!=null and id != 0">
+            AND a.id = #{id}
+        </if>
+        ORDER BY a.in_time DESC
+
+    </select>
+
+    <select id="listAllRoom" resultMap="RoomResultMap" parameterType="java.util.Map">
+          select
+    	i.id,i.`name`,i.description,i.area_id,t.`name` as type,t.id as sid,i.ips
+    	 ,i.is_active,i.volume,i.location_group,i.trigger_no,i.axis
+    from
+		ba_room i,
+		ba_room_type t
+
+    where
+	     i.room_type_id = t.id
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+
+    </select>
+
+
+    <select id="listAllSerial" resultMap="SerialResultMap" parameterType="java.util.Map">
+        SELECT a.id,a.serial_no,a.`status`,a.uuid,a.in_photo_name,a.area_id,a.in_time,b.`name`AS perName FROM ba_serial a , ba_person b WHERE a.person_id = b.id
+        AND a.type=0 AND  a.status &lt; 10 AND a.status &gt; 0 AND b.area_id = #{areaId}
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="name!=null and name !=''">
+            AND b.`name` LIKE '%${name}%'
+        </if>
+        ORDER BY a.in_time DESC
+        limit ${pageStart},${rows}
+
+    </select>
+
+    <select id="countAllSerial" resultType="int" parameterType="java.util.Map">
+        SELECT COUNT(1) FROM ba_serial a , ba_person b WHERE a.person_id = b.id
+        AND a.type=0 AND a.status &lt;10 AND  a.status &gt; 0 AND b.area_id = #{areaId}
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="name!=null and name !=''">
+            AND b.`name` LIKE '%${name}%'
+        </if>
+
+
+    </select>
+
+
+
+
+</mapper>

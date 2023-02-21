@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>首页</title>
+<link rel="stylesheet" href="./css/main.css"/>
+<link rel="stylesheet" href="./js/new_common/css/style.css"/>
+<link rel="stylesheet" type="text/css" href="./css/common.css">
+<link rel="stylesheet" type="text/css" href="./css/main2.css">
+<link rel="stylesheet" type="text/css" href="./js/jquery-easyui-1.7.0/themes/bf/easyui2.css" />
+<script type="text/javascript" src="./js/jquery-easyui-1.7.0/jquery.min.js"></script>
+<script type="text/javascript" src="./js/jquery-easyui-1.7.0/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="./js/jquery.cookie.js"></script>
+<script type="text/javascript" src="./js/json2.js"></script>
+<script type="text/javascript" src="./js/common.js"></script>
+<script type="text/javascript" src="./js/common3.js"></script>
+<script type="text/javascript" src="./js/extraFunction.js"></script>
+<script>
+	var systemMenuIds = [];
+	$(function() {
+		mHead();
+		initUserName();
+		initMenu();
+		initTzCountHome();
+	});
+	
+	function initUserName(){
+		$.get("common/getSessionInfo.do", function(data){
+			var sessionObj = eval('('+data+')');
+			$("#userName").html(sessionObj.user.realName);
+		});
+	}
+	
+	function closeSelectedTab() {
+		var tab = $('#maintabs').tabs('getSelected');
+		var index = $('#maintabs').tabs('getTabIndex', tab);
+		if (isClosable(index)) {
+			$('#maintabs').tabs('close', index);
+		}
+	}
+
+	function initMenu(){
+		$.ajax({
+			url:'common/listSystemMenu.do',
+			dataType:'json',
+			success:function(data) {
+				$.messager.progress('close');
+				for(var i=0;i<data.length;i++){
+					systemMenuIds.push(data[i].id);
+				}
+			}
+		});
+	}
+	
+	function toIndexPage(pid){
+		location.href='index_page.html?pid='+pid;
+	}
+	
+	function queryNoticeAndSchedule(){
+		$.ajax({
+			contentType:'applicaiton/json',
+			type:'POST',
+			url:'./interrogate/notice/listInform.do',
+			dataType:'json',
+			success:function(data){
+				if(data.length>0){
+					$('#tzNum').html(data.length);
+					var tzUlHtml = "";
+					for(var i=0;i<data.length;i++){
+						tzUlHtml += '<li><a href="#" onclick="showTzInfo('+data[i].id+')"><i class="icon"></i>来自'+data[i].senderName+'的通知信息</a></li>';
+					}
+					$("#tzUl").html(tzUlHtml);
+				}else{
+					$('#tzNum').hide();
+				}
+			},
+			error:function(){
+				$.messager.alert('错误', '网络连接已断开，请重新登录','warning',function(){
+					location.href='login.jsp';
+				});
+			}
+		});
+	}
+	
+	function showTzInfo(id){
+		$("#tzIframe").attr('src', './interrogate/notice/noticedetail.jsp?id='+id);
+		showDialog($("#tzDiglog"));
+	}
+	
+	function openUserInfo(){
+		showDialog($('#userInfo'), "用户信息");
+	}
+	
+	function closeUserInfo(){
+		$("#userInfo").dialog('close');
+	}
+
+	// 修改密码
+	function openUpdatePw(){
+		$('#keyForm').form('clear');
+		showDialog($('#updatePw'), "修改密码");
+	}
+
+	// 修改密码保存
+	function updatePwdSave(){
+		var entForm = $('#keyForm');
+		var obj = entForm.serializeObject();
+		if(!obj.oldPwd) {
+			alert("请输入旧密码！");
+			return;
+		}
+		if(obj.newPwd.length<6){
+			alert("请输入6位及6位以上的新密码！");
+			return;
+		}
+		if(obj.newPwd != obj.confirmPwd){
+			alert("输入的两次密码不一致！");
+			return;
+		}
+		var enterpriseinfo = JSON.stringify(obj);
+		jQuery.ajax({
+			type : 'POST',
+			contentType : 'application/json',
+			url : './zhfz/common/user/changePsw.do',
+			data : enterpriseinfo,
+			dataType : 'json',
+			success : function(data){
+				if(data.msg=='密码修改成功！'){
+					closeUpdatePw();
+					$.messager.show({
+						title:'提示',
+						msg:data.msg,
+						timeout:3000
+					});
+				}else{
+					$.messager.alert('错误', data.msg);
+				}
+			},
+			error : function(data){
+				$.messager.progress('close');
+				$.messager.alert('Error', '系统错误!'+data.Msg);
+			}
+		});
+	}
+
+	function closeUpdatePw(){
+		$("#updatePw").dialog('close');
+	}
+	
+	function closeTzDiglog(){
+		$("#tzDiglog").dialog('close');
+	}
+	
+	function toMain(id){
+		if($.inArray(id, systemMenuIds)>-1){
+			window.location.href = "zhfz/common/main/main.html?pid="+id+"&flag=one";
+		}else{
+			$.messager.alert('提示','该用户无此模块权限');
+		}
+	}
+
+	//查看消息按钮
+	function lookInformButtonHome(){
+		showDialog($('#informInfoHome'), "消息");
+
+		$("#informInfoIframeHome").attr('src','./zhfz/common/inform/inform.jsp');
+	}
+
+	//查看待办按钮
+
+	function lookScheduleButtonHome(){
+		showDialog($('#scheduleInfoHome'), "待办");
+
+		$("#scheduleInfoIframeHome").attr('src','./zhfz/common/schedule/schedule.jsp');
+	}
+
+	function initTzCountHome() {
+		jQuery.ajax({
+			type : 'get',
+			contentType : 'application/json',
+			url : './zhfz/common/inform/listInform.do',
+			data : {
+				trefresh:new Date().getDate(),
+				page:1,
+				rows:10
+			},
+			dataType : 'json',
+			success : function(data){
+
+				var str= '<p id="pIdTZCount" style="color: red;margin-left: 39px;margin-top: 20px;">'+data.total+'</p>';
+
+				$("#TZCount").append(str);
+
+
+			},
+			error : function(data){
+
+			}
+		});
+
+		jQuery.ajax({
+			type : 'get',
+			contentType : 'application/json',
+			url : './zhfz/common/schedule/listSchedule.do',
+			data : {
+				trefresh:new Date().getDate(),
+				page:1,
+				rows:10
+			},
+			dataType : 'json',
+			success : function(data){
+
+				var str= '<p id="pIdDBCount" style="color: red;margin-left: 25px">'+data.total+'</p>';
+
+				$("#DBCount").append(str);
+
+				count1=data.total;
+
+			},
+			error : function(data){
+
+			}
+		});
+	}
+	
+</script>
+</head>
+
+<body>
+	<div class="page home">
+		<div class="m-head">
+			<a class="logo"><span>门头沟公安分局“智慧法制+”综合办案管理平台</span></a>
+			<!-- <a class="exit" href="logout.do"> <i></i></a> --> 
+			<div class="message">
+
+				<i class="has-new"></i><div id="TZCount"></div></span>
+
+				<ul class="message-box">
+					<li><a class="i1" href="#" onclick="lookInformButtonHome()"><span>消息</span></a></li>
+				</ul>
+
+
+			</div>
+			<div class="hd-news">
+				<ul id="tzUl"></ul>
+			</div>
+			<div class="e-mail">
+				<i class="has-new"><div id="DBCount"></div></i>
+
+				<ul class="mail-box">
+					<li><a class="i1" href="#" onclick="lookScheduleButtonHome()"><span>待办</span></a></li>
+				</ul>
+
+			</div>
+			<div class="user">
+				<div>
+					<img src="static/icon-1.png">					
+				</div>
+				<span id="userName" style="color: white;padding-left: 10px;"></span>
+				<ul class="user-box">
+					<li><a class="i1" href="#" onclick="openUserInfo()"><i></i><span>个人信息</span></a></li>
+					<li><a class="i2" href="#" onclick="openUpdatePw()"><i></i><span>修改密码</span></a></li>
+					<li><a class="i3" href="home.html"><i></i><span>返回首页</span></a></li>
+					<li><a class="i4" href="logout.do"><i></i><span>退出登录</span></a></li>
+				</ul>
+			</div>
+			<div class="head-bg"></div>
+			<img class="head-bg-2" src="static/head-6.png">
+		</div>
+		 <!-- id随数据库改变 -->
+		<div class="home-nav" id="menuDiv">
+		    <!--<a class="item i1" href="javascript:void(0);" onclick="toMain(7);">
+				<i style="background-image: url(static/home-nav-1.png);"></i><span>管理平台</span>
+			</a>-->
+			<a class="item i6" href="javascript:void(0);" onclick="toMain(8);"> <i
+				style="background-image: url(static/home-nav-2.png);"></i> <span>办案中心配置</span>
+			</a> 
+			<a class="item i7" href="javascript:void(0);" onclick="toMain(1);"> <i
+					style="background-image: url(static/home-nav-2.png);"></i> <span>系统配置</span>
+			</a>
+		</div>
+
+		<div id="userInfo" style="width: 700px; height: 550px; overflow: hidden;" class="easyui-dialog" closed="true">
+			<iframe id="userInfoIframe" style="width: 100%; height: 100%" src="../interrogate/personalinfo/personalinfo.jsp"></iframe>
+		</div>
+
+		<div id="informInfoHome" style="width: 700px; height: 550px; overflow: hidden;" class="easyui-dialog" closed="true">
+			<iframe id="informInfoIframeHome" style="width: 100%; height: 100%;background: none"></iframe>
+		</div>
+
+		<div id="scheduleInfoHome" style="width: 700px; height: 550px; overflow: hidden;" class="easyui-dialog" closed="true">
+			<iframe id="scheduleInfoIframeHome" style="width: 100%; height: 100%;background: none"></iframe>
+		</div>
+
+		<div id="updatePw" style="width: 400px; height: 270px; overflow: hidden; text-align: center; background-image: url('zhfz/common/main/new_common/images/loginbj.png')" class="easyui-dialog" closed="true">
+			<form id="keyForm" method="post" style="margin: 0; padding: 10px 30px;">
+				<input type="hidden" id="id" name="id" />
+				<br/>
+				<div class="fitem">
+					<label>旧&nbsp;&nbsp;&nbsp;密&nbsp;&nbsp;&nbsp;码：</label>
+					<input id="oldPwd" name="oldPwd" type="password" class="easyui-validatebox" />
+				</div>
+				<br/>
+				<div class="fitem">
+					<label>新&nbsp;&nbsp;&nbsp;密&nbsp;&nbsp;&nbsp;码：</label>
+					<input id="newPwd" name="newPwd" type="password" class="easyui-validatebox" />
+				</div>
+				<br/>
+				<div class="fitem">
+					<label>确认新密码：</label>
+					<input id="confirmPwd" name="confirmPwd" type="password" class="easyui-validatebox" />
+				</div>
+				<br/>
+			</form>
+			<div id="changeps-buttons">
+				<a href="#" class="easyui-linkbutton" iconCls="icon-ok" name="noButton" onclick="updatePwdSave()">保存</a>
+				<a href="#" class="easyui-linkbutton" iconCls="icon-cancel" name="noButton" onclick="closeUpdatePw();">关闭</a>
+			</div>
+		</div>
+		
+		<div id="tzDiglog" style="width: 700px;height: 550px;overflow: hidden;" class="easyui-dialog" closed="true">
+			<iframe id="tzIframe" style="width: 100%;height: 100%" src=""></iframe>
+		</div>
+
+		<div class="footer">Copyright © 2019上海致昕信息科技有限公司<br/>全国客服热线 400-878-6668</div>
+		<div class="sky-bg" id="particles-js"></div>
+		<img class="page-bg" src="static/home-1.png">
+	</div>
+	<script src="js/plugs/sky/particles.min.js"></script>
+	<script src="js/plugs/sky/app.js"></script>
+</body>
+</html>

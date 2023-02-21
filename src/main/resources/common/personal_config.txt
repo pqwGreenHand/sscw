@@ -1,0 +1,34 @@
+[
+	{
+		'type':'video','name':'视频平台','isEnable':1,
+		'detail':[
+			{'key':'ip','value':'127.0.0.1','type':1},
+			{'key':'port','value':'7000','type':1}
+		]
+	},
+	{
+		'type':'faceRecognition','name':'人像平台','isEnable':1,
+		'detail':[
+			{'key':'ip','value':'127.0.0.1','type':1},
+			{'key':'port','value':'8080','type':1}
+		]
+	},
+	{
+		'type':'longDistance','name':'远程示证','isEnable':1,
+		'detail':[
+			{'key':'ip','value':'11010604001310000041','type':1},
+			{'key':'port','value':'8000','type':1},
+			{'key':'username','value':'admin','type':1},
+			{'key':'password','value':'admin','type':1}
+		]
+	},
+	{
+		'type':'cms','name':'海康CMS平台','isEnable':1,
+		'detail':[
+			{'key':'ip','value':'127.0.0.1','type':1},
+			{'key':'port','value':'80','type':1},
+			{'key':'username','value':'admin','type':1},
+			{'key':'password','value':'admin','type':1}
+		]
+	}
+]

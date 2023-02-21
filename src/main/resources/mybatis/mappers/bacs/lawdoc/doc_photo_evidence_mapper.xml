@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.lawdoc.IDocPhotoEvidenceMapper" >
+    <resultMap id="BaseResultMap" type="com.zhixin.zhfz.bacs.entity.DocPhotoEvidenceEntity" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="serial_id" property="serialId" jdbcType="BIGINT" />
+        <result column="make_time" property="makeTime" jdbcType="VARCHAR" />
+        <result column="make_address" property="makeAddress" jdbcType="VARCHAR" />
+        <result column="evidence_explain" property="evidenceExplain" jdbcType="VARCHAR" />
+        <result column="storage_address" property="storageAddress" jdbcType="VARCHAR" />
+        <result column="checks" property="checks" jdbcType="VARCHAR" />
+        <result column="shooting_person" property="shootingPerson" jdbcType="VARCHAR" />
+        <result column="witness_person" property="witnessPerson" jdbcType="VARCHAR" />
+        <result column="party" property="party" jdbcType="VARCHAR" />
+        <result column="producer" property="producer" jdbcType="VARCHAR" />
+        <result column="unit" property="unit" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="getDocPhotoEvidence" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        SELECT
+            id,
+            serial_id,
+            make_time,
+            make_address,
+            evidence_explain,
+            storage_address,
+            checks,
+            shooting_person,
+            witness_person,
+            party,
+            producer,
+            unit
+        FROM
+            ba_doc_photo_evidence
+        WHERE
+            serial_id = #{serialId}
+    </select>
+
+</mapper>

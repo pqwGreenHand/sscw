@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacs.dao.cabinetConfig.ICabinetConfigMapper">
+
+    <resultMap id="cabinetConfigResultMap" type="com.zhixin.zhfz.bacs.entity.CabinetConfigEntity">
+       <id property="id" column="ID"/>
+       <result property="name" column="name"/>
+       <result property="type" column="type"/>
+       <result property="areaId" column="area_id"/>
+       <result property="areaName" column="area_name"/>
+       <result property="isEnable" column="is_enable"/>
+       <result property="ip" column="ip"/>
+       <result property="port" column="port"/>
+       <result property="group" column="group"/>
+       <result property="openIp" column="open_ip"/>
+       <result property="columnCount" column="column_count"/>
+       <result property="rowCount" column="row_count"/>
+       <result property="orderType" column="order_type"/>
+		<result column="op_pid" property="op_Pid" jdbcType="VARCHAR" />
+		<result column="op_user_id" property="op_User_Id" jdbcType="INTEGER" />
+    </resultMap>
+
+    <sql id="cabinet_config_columns" >
+        id, name, type, area_id, is_enable,
+        ip, port, group, open_ip, column_count, row_count, order_type
+    </sql>
+
+	<insert id="insert" parameterType="com.zhixin.zhfz.bacs.entity.CabinetConfigEntity"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into ba_cabinet_config (name, type, area_id, is_enable,
+        ip, `port`, `group`, open_ip, column_count, row_count, order_type,op_pid,op_user_id)
+		values (#{name}, #{type},
+		#{areaId}, #{isEnable}, #{ip},
+		#{port}, #{group}, #{openIp}, #{columnCount}, #{rowCount},#{orderType},#{op_Pid},#{op_User_Id})
+	</insert>
+
+    <select id="list" resultMap="cabinetConfigResultMap" parameterType="java.util.Map">
+        select
+        bc.*,ba.name area_name
+        from ba_cabinet_config bc
+        left join ba_area ba on bc.area_id = ba.id
+      
+        <where>
+			1=1
+			<if test="dataAuth!=null and dataAuth!=''">
+				and ${dataAuth}
+			</if>
+			<if test="name!=null and name!=''">
+				and bc.name like '%${name}%'
+			</if>
+			<if test="type!=null and type!=''">
+				and bc.type like '%${type}%'
+			</if>
+					order  by  id desc
+			<if test="pageStart != null and rows != null">
+				limit ${pageStart},${rows}
+			</if>
+		</where>
+    </select>
+
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select
+            count(1) count
+        from ba_cabinet_config bc
+        left join ba_area ba on bc.area_id = ba.id
+        <where>
+			1=1
+			<if test="dataAuth!=null and dataAuth!=''">
+				and ${dataAuth}
+			</if>
+			<if test="name!=null and name!=''">
+				and bc.name like '%${name}%'
+			</if>
+			<if test="type!=null and type!=''">
+				and bc.type like '%${type}%'
+			</if>
+		</where>
+    </select>
+
+	<update id="update" parameterType="com.zhixin.zhfz.bacs.entity.CabinetConfigEntity">
+		update ba_cabinet_config
+		set 
+		name=#{name}, type=#{type}, area_id=#{areaId}, is_enable=#{isEnable},
+        ip=#{ip}, `port`=#{port}, `group`=#{group}, open_ip=#{openIp}, 
+        column_count=#{columnCount}, row_count=#{rowCount}, order_type=#{orderType}
+		where id = #{id}
+	</update>
+	
+	
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from ba_cabinet_config
+		where id = #{id}
+	</delete>
+	<!-- 根据种类和办案中心查询个性化配置 -->
+	<select id="listFn" resultMap="cabinetConfigResultMap" parameterType="java.util.Map">
+		SELECT pc.* FROM ba_cabinet_config  pc
+        	where area_id=#{areaId} and type=#{codeKey}
+    </select>
+</mapper>

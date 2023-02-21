@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.sacw.dao.consoledesk.IConsoleDeskMapper">
+    <resultMap id="ConsoleDeskMap" type="com.zhixin.zhfz.sacw.entity.ConsoleDeskEntity">
+        <id column="id" property="id"/>
+        <result column="total" property="total"/>
+        <result column="drk" property="drk"/>
+        <result column="bgz" property="bgz"/>
+        <result column="yck" property="yck"/>
+        <result column="jcy" property="jcy"/>
+        <result column="fy" property="fy"/>
+        <result column="ls" property="ls"/>
+        <result column="orgId" property="orgId"/>
+        <result column="status" property="status"/>
+        <result column="wareName" property="wareName"/>
+        <result column="name" property="name"/>
+        <result column="orgName" property="orgName"/>
+        <result column="status" property="status"/>
+        <result column="detail_count" property="detail_count"/>
+        <result column="unit" property="unit"/>
+        <result column="created_time" property="created_time"/>
+    </resultMap>
+
+
+    <!--查询按案件性质统计数量-->
+    <select id="listInvolve" resultMap="ConsoleDeskMap" parameterType="java.util.Map">
+        SELECT
+        a.id,
+        cc.orgId,
+        cc.orgName,
+        a.`name`,
+        cc.wareName,
+        a.`status`,
+        a.detail_count,
+        a.created_time,
+        a.unit
+        FROM
+        sa_involved a
+        INNER JOIN (
+        SELECT
+        b.id,
+        b.`name` wareName,
+        o.id AS orgId,
+        o.`name` AS orgName,
+        o.p_id
+        FROM
+        sa_warehouse b,
+        xt_organization o
+        WHERE
+        b.org_id = o.id
+        ) cc ON cc.id = a.warehouse_id
+        left JOIN ba_case l ON a.case_id = l.id
+        <if test="warehouseId !=0 and warehouseId !=''">
+            AND a.warehouse_id =#{warehouseId}
+        </if>
+        INNER JOIN xt_code CODE ON CODE .code_key = a.involved_type_id
+        AND CODE .type = 'INVOLVED_TYPE'
+        <if test="type!=0 and type!=null">
+            AND a.involved_type_id = #{type}
+        </if>
+        <if test="name!=null and name!=''">
+            and a.name like '%${name}%'
+        </if>
+        <if test="status!=99 and status!=null">
+            and a.status= #{status}
+        </if>
+        <if test="dataAuth!='' and dataAuth!=null">
+            and ${dataAuth}
+        </if>
+
+        order by a.created_time desc limit ${pageStart},${rows}
+
+    </select>
+
+    <!--查询按案件性质统计数量-->
+    <select id="countInvolve" resultType="int" parameterType="java.util.Map">
+        SELECT
+        COUNT(1)
+        FROM
+        sa_involved a
+        INNER JOIN (
+        SELECT
+        b.id,
+        b.`name` wareName,
+        o.id AS orgId,
+        o.`name` AS orgName,
+        o.p_id
+        FROM
+        sa_warehouse b,
+        xt_organization o
+        WHERE
+        b.org_id = o.id
+        ) cc ON cc.id = a.warehouse_id
+        left JOIN ba_case l ON a.case_id = l.id
+        <if test="warehouseId !=0 and warehouseId !=''">
+            AND a.warehouse_id =#{warehouseId}
+        </if>
+        INNER JOIN xt_code CODE ON CODE .code_key = a.involved_type_id
+        AND CODE .type = 'INVOLVED_TYPE'
+        <if test="type !=null and type !=0">
+            AND a.involved_type_id = #{type}
+        </if>
+        <if test="dataAuth!='' and dataAuth!=null">
+            and ${dataAuth}
+        </if>
+
+    </select>
+
+
+    <select id="listCountByCaseNature" resultMap="ConsoleDeskMap" parameterType="java.util.Map">
+        SELECT
+        COUNT(1),
+        COUNT(CASE WHEN a.status=1 THEN 1 ELSE NULL END) AS drk,
+        COUNT(CASE WHEN a.status=2 THEN 1 ELSE NULL END) AS bgz,
+        COUNT(CASE WHEN a.status=3 THEN 1 ELSE NULL END) AS yck,
+        COUNT(CASE WHEN a.status=4 THEN 1 ELSE NULL END) AS jcy,
+        COUNT(CASE WHEN a.status=5 THEN 1 ELSE NULL END) AS fy,
+        COUNT(CASE WHEN a.status=6 THEN 1 ELSE NULL END) AS ls
+
+        FROM
+        sa_involved a
+        LEFT JOIN ba_case b ON a.case_id = b.id
+        LEFT JOIN sa_warehouse w on a.warehouse_id = w.id
+        LEFT JOIN xt_organization t on w.org_id = t.id
+        WHERE
+        1=1
+        <if test="warehouseId !=null and warehouseId !=''">
+            AND a.warehouse_id =#{warehouseId}
+        </if>
+        <if test="dataAuth!=null and dataAuth!=''">
+            AND ${dataAuth}
+        </if>
+        <if test="type !=0 and type !=''">
+            AND involved_type_id = #{type}
+        </if>
+    </select>
+
+
+    <!--查看所有涉案财物仓库-->
+    <select id="listWarehouse" resultMap="ConsoleDeskMap" parameterType="java.util.Map">
+        select b.id as id,b.name AS name from sa_warehouse b LEFT JOIN xt_organization a on a.id=b.org_id
+        WHERE
+        <if test="dataAuth!=null and dataAuth!=''">
+            ${dataAuth}
+        </if>
+
+    </select>
+
+
+</mapper>

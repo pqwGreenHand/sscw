@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhixin.zhfz.bacs.dao.person.IPersonLockersMapper">
+    <resultMap id="PersonLockersMapper" type="PersonLockersEntity">
+        <id property="id" column="id"/>
+        <result property="lockerId" column="locker_id"/>
+        <result property="serialId" column="serial_id"/>
+        <result property="isGet" column="is_get"/>
+        <result property="fristLockTime" column="frist_lock_time"/>
+        <result property="lastLockTime" column="last_lock_time"/>
+    </resultMap>
+
+    <!-- 查询所有嫌疑人存取信息 -->
+    <select id="listAllPersonLockers" resultMap="PersonLockersMapper">
+        	SELECT * FROM ba_person_lockers
+    </select>
+
+    <!-- 查询所有嫌疑人存取记录数量统计 -->
+    <select id="countAllPersonLockers" resultType="int">
+        	SELECT COUNT(1) FROM ba_person_lockers
+    </select>
+
+    <!-- 查询所有嫌疑人存取信息 -->
+    <select id="listPersonLockers" resultMap="PersonLockersMapper" parameterType="java.util.Map">
+        	SELECT * FROM ba_person_lockers where 1=1
+    </select>
+
+    <!-- 查询所有嫌疑人存取记录数量统计 -->
+    <select id="countPersonLockers" resultType="int" parameterType="java.util.Map">
+        	SELECT COUNT(1) FROM ba_person_lockers where 1=1
+    </select>
+
+    <!-- 根据id查询嫌疑人开柜记录 -->
+    <select id="getPersonLockersById" resultMap="PersonLockersMapper" parameterType="Long">
+        <!-- no ";" at the end -->
+        SELECT * FROM ba_person_lockers where id=#{id}
+    </select>
+    <!-- 根据柜门id嫌疑人开柜记录 -->
+    <select id="getPersonLockersByLockerId" resultMap="PersonLockersMapper" parameterType="Long">
+        	SELECT * FROM ba_person_lockers WHERE locker_id=#{lockerId}
+    </select>
+    <!-- 根据配置id和柜门查询嫌疑人开柜记录 -->
+    <select id="getPersonLockersByBox" resultMap="PersonLockersMapper" parameterType="java.util.Map">
+        	SELECT
+				p.*
+			FROM
+				ba_person_lockers p
+			LEFT JOIN ba_cabinet_config_detail d ON d.id = p.locker_id
+			WHERE d.open_key=#{boxNum} AND config_id=#{configId}
+    </select>
+    <!-- 增加嫌疑人存取信息 -->
+    <insert id="insertPersonLockers" parameterType="PersonLockersEntity" keyProperty="id" useGeneratedKeys="true">
+            INSERT INTO ba_person_lockers (
+	    		locker_id,
+	    		serial_id,
+	    		is_get,
+	    		frist_lock_time,
+	    		last_lock_time
+				)
+             VALUES(
+	    		#{lockerId},
+	    		#{serialId},
+	    		#{isGet},
+	    		#{fristLockTime},
+	    		#{lastLockTime}
+				)
+    </insert>
+    <!-- 根据id修改信息 -->
+    <update id="updatePersonLockers" parameterType="PersonLockersEntity">
+            UPDATE ba_person_lockers SET
+	    		locker_id=#{lockerId},
+	    		serial_id=#{serialId},
+	    		is_get=#{isGet},
+	    		frist_lock_time=#{fristLockTime},
+	    		last_lock_time=#{lastLockTime}
+            WHERE 
+	    		id=#{id}
+    </update>
+    <!-- 根据id删除信息 -->
+    <delete id="deletePersonLockersById" parameterType="Long">  
+            DELETE FROM ba_person_lockers WHERE id=#{id}
+    </delete>
+    <!-- 根据柜门id查询嫌疑人存取操作 -->
+    <select id="listPersonLockersByLockerId" resultMap="PersonLockersMapper" parameterType="Long">
+        	SELECT * FROM ba_person_lockers WHERE locker_id=#{lockerId}
+    </select>
+    <!-- 根据柜门id查询嫌疑人存取操作总数 -->
+    <select id="countPersonLockersByLockerId" resultType="int" parameterType="Long">
+        	SELECT COUNT(1) FROM ba_person_lockers WHERE locker_id=#{lockerId}
+    </select>
+    <!-- 根据searilid查询所有嫌疑人 -->
+    <select id="listPersonLockersBySerialId" resultMap="PersonLockersMapper" parameterType="Long">
+        	SELECT * FROM ba_person_lockers WHERE serial_id=#{serialId}
+    </select>
+    <!-- 根据searilid查询所有嫌疑人开柜总和 -->
+    <select id="countPersonLockersBySerialId" resultType="int" parameterType="Long">
+        	SELECT COUNT(1) FROM ba_person_lockers WHERE serial_id=#{serialId}
+    </select>
+
+
+</mapper>
+
+

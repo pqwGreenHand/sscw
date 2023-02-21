@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.lawdoc.IDocInjurypictureInstructionMapper" >
+    <resultMap id="BaseResultMap" type="com.zhixin.zhfz.bacs.entity.DocInjurypictureInstructionEntity" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="serial_id" property="serialId" jdbcType="BIGINT" />
+        <result column="person_id" property="personId" jdbcType="BIGINT" />
+        <result column="make_time" property="makeTime" jdbcType="VARCHAR" />
+        <result column="make_sites" property="makeSites" jdbcType="VARCHAR" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
+        <result column="is_original" property="isOriginal" jdbcType="VARCHAR" />
+        <result column="save_space" property="saveSpace" jdbcType="VARCHAR" />
+        <result column="witnesses" property="witnesses" jdbcType="VARCHAR" />
+        <result column="record_person" property="recordPerson" jdbcType="VARCHAR" />
+        <result column="maker" property="maker" jdbcType="VARCHAR" />
+        <result column="The_Lord" property="theLord" jdbcType="VARCHAR" />
+        <result column="workspce" property="workspce" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="queryDocInjueryPicture" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select
+            id as id,
+            serial_id as serialId,
+            person_id as personId,
+            make_time as makeTime,
+            make_sites as makeSites,
+            content as content,
+            is_original as isOriginal,
+            save_space as saveSpace,
+            witnesses as witnesses ,
+            record_person as recordPerson,
+            maker as maker,
+            The_Lord as theLord,
+            workspce as workspce
+        FROM ba_doc_injurypicture_instruction dp
+        WHERE dp.serial_id=#{serialId}
+    </select>
+</mapper>

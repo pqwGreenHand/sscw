@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.common.dao.fileServiceConfig.IFileServiceConfigMapper">
+
+    <resultMap id="resultMap" type="com.zhixin.zhfz.common.entity.FileServiceConfigEntity">
+        <id property="id" column="id"/>
+        <result column="sys_type" property="sysType"/>
+        <result column="file_save_path" property="fileSavePath"/>
+        <result column="service_url" property="serviceUrl"/>
+        <result column="is_enable" property="isEnable"/>
+        <result column="sys_id" property="sysId"/>
+        <result column="desc" property="desc"/>
+        <result column="name" property="areaName"/>
+        <result column="op_pid" property="op_Pid" jdbcType="VARCHAR" />
+        <result column="op_user_id" property="op_User_Id" jdbcType="INTEGER" />
+    </resultMap>
+
+    <select id="list" resultMap="resultMap" parameterType="java.util.Map">
+        SELECT
+            f.*,
+            a.`name`
+        FROM
+            xt_common_file_service_config AS f
+        LEFT JOIN ba_area AS a ON f.sys_id = a.id
+        <include refid="query_where"/>
+		limit ${pageStart},${rows}
+    </select>
+
+
+
+     <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		 select count(1) from xt_common_file_service_config f
+         <include refid="query_where"/>
+    </select>
+
+    <select id="all" resultMap="resultMap" >
+        SELECT
+          f.*
+        FROM
+          xt_common_file_service_config AS f
+    </select>
+
+    <select id="get" resultMap="resultMap" parameterType="java.util.Map">
+        SELECT
+        f.*
+        FROM
+          xt_common_file_service_config AS f
+        <include refid="query_where"/>
+    </select>
+    
+	<insert id="insert" parameterType="com.zhixin.zhfz.bacs.entity.WakeUpEntity">
+      INSERT INTO xt_common_file_service_config
+        ( sys_type, sys_id, service_url, file_save_path, `desc`, is_enable ,op_pid,op_user_id )
+      VALUES
+	    (#{sysType},#{sysId},#{serviceUrl},#{fileSavePath},#{desc},1,#{op_Pid},#{op_User_Id})
+    </insert>
+    
+    <delete id="delete" parameterType="long">
+        delete from xt_common_file_service_config where id=#{id}
+    </delete>
+
+    <update id="update" parameterType="com.zhixin.zhfz.bacs.entity.WakeUpEntity">
+        update xt_common_file_service_config
+        <set>
+            <if test="sysType != null and sysType != ''">sys_type = #{sysType},</if>
+            <if test="sysId != null and sysId != '' or sysId == 0">sys_id = #{sysId},</if>
+            <if test="serviceUrl != null and serviceUrl != ''">`service_url` = #{serviceUrl},</if>
+            <if test="fileSavePath != null and fileSavePath != ''">file_save_path = #{fileSavePath},</if>
+            <if test="desc != null and desc != ''">`desc` = #{desc}, </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <update id="updateEnable" parameterType="java.util.Map">
+        update xt_common_file_service_config f
+        set f.is_enable = #{valid}
+        <include refid="query_where"/>
+    </update>
+
+    <sql id="query_where">
+        <where>
+            <if test="dataAuth!=null and dataAuth!=''">
+                and ${dataAuth}
+            </if>
+            <if test="id!=null and id !=''">
+                and f.id = #{id}
+            </if>
+            <if test=" (id==null or id =='') and sysId!=null and sysId !=''">
+                and f.sys_id = #{sysId}
+            </if>
+            <if test=" (id==null or id =='') and sysType!=null and sysType !=''">
+                and f.sys_type = #{sysType}
+            </if>
+            <if test=" (id==null or id =='') and isEnable!=null and isEnable !=''">
+                and f.is_enable = #{isEnable}
+            </if>
+        </where>
+    </sql>
+</mapper>

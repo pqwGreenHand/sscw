@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacs.dao.jzPerson.IRyCljdMapper">
+	<resultMap id="personResultMap" type="com.zhixin.zhfz.bacs.entity.RycljdMysqlEntity">
+		<id column="id" property="id" />
+		<result property="rybh" column="rybh"/>
+		<result property="ryid" column="ryid"/>
+		<result property="pzr" column="pzr"/>
+		<result property="cljd" column="cljd"/>
+		<result property="pzsj" column="pzsj"/>
+		<result property="czsj" column="czsj"/>
+		<result property="ajbh" column="ajbh"/>
+		<result property="zbmj" column="zbmj"/>
+		<result property="bmId" column="bm_id"/>
+		<result property="ajxxId" column="ajxxId"/>
+		<result property="jzxxId" column="jzxxId"/>
+		<result property="gxsj" column="gxsj"/>
+    </resultMap>
+
+  <select id="queryCljdPzsjMaxXs" resultMap="personResultMap" parameterType="java.util.Map">
+    SELECT *  FROM rycljd WHERE  pzsj=(SELECT  MAX(pzsj) FROM  rycljd ) limit 1
+	</select>
+	 <insert id="insertRYCLJD" parameterType="com.zhixin.zhfz.bacs.entity.RycljdMysqlEntity" useGeneratedKeys="true" keyProperty="id">
+       insert into rycljd
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="rybh != null" >
+        rybh,
+      </if>
+      <if test="ryid != null" >
+        ryid,
+      </if>
+      <if test="pzr != null" >
+        pzr,
+      </if>
+      <if test="pzsj != null" >
+        pzsj,
+      </if>
+       <if test="czsj != null" >
+        czsj,
+      </if>
+       <if test="cljd != null" >
+        cljd
+       </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+       <if test="rybh != null" >
+        #{rybh},
+      </if>
+      <if test="ryid != null" >
+        #{ryid},
+      </if>
+      <if test="pzr != null" >
+        #{pzr},
+      </if>
+      <if test="pzsj != null" >
+        #{pzsj},
+      </if>
+      <if test="czsj != null" >
+        #{czsj},
+      </if>
+       <if test="cljd != null" >
+        #{cljd}
+       </if>
+    </trim>
+    </insert>
+
+    <select id="queryCljdMap" resultType="java.util.HashMap" >
+		select *  from   ryclfs_code
+	</select>
+
+    <select id="queryAjztMap" resultType="java.util.HashMap" >
+		select *  from   sys_ajzt
+	</select>
+
+    <select id="queryUserMap" resultType="java.util.HashMap" >
+		select *  from   sys_user
+	</select>
+
+    <select id="queryOrgMap" resultType="java.util.HashMap" >
+		select *  from   sys_org
+	</select>
+</mapper>
+
+

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacs.dao.rpc.IRecognizePhotoConfigMapper">
+	<resultMap id="resultMap" type="com.zhixin.zhfz.bacs.entity.RecognizePhotoConfigEntity">
+    	<id property="id" column="id"/>
+    	<result property="name" column="name"/>
+    	<result property="path" column="path"/>
+    	<result property="description" column="description"/>
+		<result property="createdTime" column="created_time"/>
+    </resultMap>
+
+
+
+	<select id="list" parameterType="java.util.Map" resultMap="resultMap">
+		SELECT * from `ba_recognize_photo_config`
+		limit ${pageStart},${rows};
+	</select>
+
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT COUNT(*) from `ba_recognize_photo_config`
+    </select>
+
+	<update id="update" parameterType="com.zhixin.zhfz.bacs.entity.RecognizePhotoConfigEntity" >
+		update ba_recognize_photo_config set
+		<if test="name!= null and name!=''" >
+			name = #{name}
+		</if>
+		<if test="certificateNo!= null and certificateNo!=''" >
+			,certificate_no = #{certificateNo}
+		</if>
+		<if test="age!= null and age!=''" >
+			,age = #{age}
+		</if>
+		<if test="censusRegister!= null and censusRegister!=''" >
+			,census_register = #{censusRegister}
+		</if>
+		<if test="sex!= null and sex!=''" >
+			,sex = #{sex}
+		</if>
+		<if test="skin!= null and skin!=''" >
+			,skin = #{skin}
+		</if>
+		<if test="shape!= null and shape!=''" >
+			,shape = #{shape}
+		</if>
+		<if test="hairLength!= null and hairLength!=''" >
+			,hair_length = #{hairLength}
+		</if>
+		<if test="hairColor!= null and hairColor!=''" >
+			,hair_color = #{hairColor}
+		</if>
+		<if test="faceStyle!= null and faceStyle!=''" >
+			,face_style = #{faceStyle}
+		</if>
+		<if test="pictureType!= null and pictureType!=''" >
+			,picture_type = #{pictureType}
+		</if>
+		<if test="clothing!= null and clothing!=''" >
+			,clothing = #{clothing}
+		</if>
+		where id=#{rid}
+	</update>
+
+	<insert id="insert" parameterType="com.zhixin.zhfz.bacs.entity.RecognizePhotoConfigEntity" >
+		INSERT into ba_recognize_photo_config
+			(uuid,`name`,`url`,`description`,created_time)
+		VALUES
+			(#{uuid},#{name},#{url},#{description},now())
+	</insert>
+	<insert id="inserts" parameterType="java.util.List" >
+		INSERT into ba_recognize_photo_config
+			(uuid,`name`,`path`,`description`,created_time)
+		VALUES
+			<foreach collection="list" item="item" index="index" separator=",">
+				(#{item.uuid,jdbcType=VARCHAR},#{item.name,jdbcType=VARCHAR},#{item.path,jdbcType=VARCHAR},#{item.description,jdbcType=VARCHAR},now())
+			</foreach>
+
+	</insert>
+
+</mapper>
+
+

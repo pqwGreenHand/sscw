@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacs.dao.jingwu.GeoPersonInfoCountMapper">
+	<!-- <typeAlias alias="geoData" type="com.zhixin.rd.interrogate.web.entity.GeoDataEntity" /> -->
+	<resultMap id="GeoPersonInfoCountMapper" type="geoPersonInfoCountEntity">
+    	<id property="info" column="info"/>
+    	<result property="num" column="num"/>
+    	
+    </resultMap>
+    
+    <!-- listAllGeoData -->
+    <select id="listPersonInfoCountTypeByOrg" resultMap="GeoPersonInfoCountMapper" parameterType="Long" >  
+			SELECT op.person_type info,COUNT(op.person_type)  num FROM ba_serial s
+            LEFT JOIN ba_person p ON p.id=s.person_id
+            LEFT JOIN ba_order_person op  ON op.person_id=p.id
+			LEFT JOIN xt_user uo ON uo.id=s.send_user_id
+			WHERE  s.in_time >=DATE_SUB(NOW(),INTERVAL 1 DAY)
+			 AND uo.organization_id=#{orgId}
+			GROUP BY op.person_type
+    </select>
+    
+    <select id="listPersonInfoCountSexByOrg" resultMap="GeoPersonInfoCountMapper" parameterType="Long" >  
+			SELECT p.sex info,COUNT(p.sex)  num FROM ba_serial s
+			LEFT JOIN ba_person p ON p.id=s.person_id
+			LEFT JOIN xt_user uo ON uo.id=s.send_user_id
+			WHERE  s.in_time >=DATE_SUB(NOW(),INTERVAL 1 DAY)
+			AND uo.organization_id= #{orgId}
+			GROUP BY p.sex 
+    </select>
+    
+    
+    <select id="listPersonInfoCount7DayByOrg" resultMap="GeoPersonInfoCountMapper" parameterType="Long" >  
+       		SELECT DATE(s.in_time) info,COUNT(1)  num FROM ba_serial s 
+			LEFT JOIN xt_user uo ON uo.id=s.send_user_id
+			WHERE s.in_time &gt;= DATE(DATE_SUB(NOW(),INTERVAL 7 DAY)) AND s.in_time &lt;= DATE(NOW())
+			AND uo.organization_id=#{orgId}
+			GROUP BY DATE(s.in_time)
+    </select>
+    
+</mapper>
+
+

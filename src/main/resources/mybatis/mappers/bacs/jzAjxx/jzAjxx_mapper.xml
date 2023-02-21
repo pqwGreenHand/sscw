@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.jzAjxx.IJzAjxxMapper">
+	<resultMap id="AjxxMapperMap" type="com.zhixin.zhfz.bacs.entity.JzAjxxEntity">
+		<id property="id" column="id"/>
+		<result property="ajmc" column="ajmc"/>
+		<result property="ajbh" column="ajbh"/>
+		<result property="ajlb" column="ajlb"/>
+		<result property="ajzt" column="ajzt"/>
+		<result property="zbmj" column="zbmj"/>
+		<result property="zbmjName" column="zbmj_name"/>
+		<result property="zbmjId" column="zbmj_id"/>
+		<result property="slsj" column="slsj"/>
+		<result property="bmId" column="bm_id"/>
+		<result property="bmmc" column="bmmc"/>
+		<result property="badw" column="badw"/>
+		<result property="cjsj" column="cjsj"/>
+		<result property="ajlbz" column="ajlbz"/>
+		<result property="ajztz" column="ajztz"/>
+		<result property="count" column="count"/>
+		<result property="jqbh" column="jqbh"/>
+		<result property="rkzt" column="rkzt"/>
+		<result property="afsj" column="afsj"/>
+		<result property="jyaq" column="jyaq"/>
+	</resultMap>
+
+	<select id="list" resultMap="AjxxMapperMap" parameterType="java.util.Map">
+		select DISTINCT a.ajmc,a.ajbh,a.afsj,a.ajlb,a.bm_id bmId,a.badw,a.jqbh,a.jyaq,a.zbmj,a.zbmj_name,a.afdd,a.ajzt
+		from ajxx_temp a
+		<where>
+			<if test="ajmc != null and ajmc != ''">
+				and a.ajmc like "%${ajmc}%"
+			</if>
+			<if test="bmId != null and bmId != ''">
+				and a.bm_id = #{bmId}
+			</if>
+			<if test="ajbh != null and ajbh != ''">
+				and a.ajbh like "%${ajbh}%"
+			</if>
+			<if test="ajlb != null and ajlb != ''">
+				and a.ajlb = #{ajlb}
+			</if>
+	    </where>
+		order by a.afsj desc
+        limit ${pageStart},${rows}
+	</select>
+
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(distinct(ajbh)) from ajxx_temp a
+		<where>
+			<if test="ajmc != null and ajmc != ''">
+				and a.ajmc like "%${ajmc}%"
+			</if>
+			<if test="bmId != null and bmId != ''">
+				and a.bm_id = #{bmId}
+			</if>
+			<if test="ajbh != null and ajbh != ''">
+				and a.ajbh like "%${ajbh}%"
+			</if>
+			<if test="ajlb != null and ajlb != ''">
+				and a.ajlb = #{ajlb}
+			</if>
+       </where>
+	</select>
+
+
+	<select id="listRyByAjbh" resultType="java.util.Map" parameterType="java.util.Map">
+		select * from person_temp where ajbh = #{ajbh} GROUP BY ajbh
+	</select>
+
+	<select id="countListRyByAjbh" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(distinct(ajbh)) from person_temp where ajbh = #{ajbh}
+	</select>
+	
+	<select id="queryRybhByZjhm" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT  a.ajmc,p.zjhm,p.rybh,p.ajbh,p.xm  FROM person_temp p
+		LEFT JOIN   ajxx_temp a ON p.ajbh=a.ajbh
+		WHERE p.zjhm=#{zjhm} GROUP BY p.ajbh
+	</select>
+	
+</mapper>

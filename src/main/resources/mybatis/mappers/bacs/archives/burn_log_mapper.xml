@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.archives.IBurnLogMapper">
+	<resultMap id="burnLogResultMap" type="com.zhixin.zhfz.bacs.entity.BurnLogEntity">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="serial_id" property="serialId" jdbcType="INTEGER" />
+		<result column="person_id" property="personId" jdbcType="INTEGER" />
+		<result column="burn_user_id" property="burnUserId" jdbcType="INTEGER" />
+		<result column="burn_time" property="burnTime" jdbcType="VARCHAR" />
+		<result column="case_id" property="caseId" jdbcType="INTEGER" />
+		<result column="area_id" property="areaId" jdbcType="INTEGER" />
+		<result column="areaName" property="areaName" jdbcType="VARCHAR" />
+		<result column="userName" property="userName" jdbcType="VARCHAR" />
+		<result column="ajmc" property="ajmc" jdbcType="VARCHAR" />
+		<result column="personName" property="personName" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap id="ReArchivesTreeMap" type="com.zhixin.zhfz.bacs.entity.ArchivesTreeEntity">
+        <result column="case_id" property="caseId"/>
+        <result column="area_id" property="areaId"/>
+        <result column="ajmc" property="ajmc"/>
+        <result column="ajbh" property="ajbh"/>
+        <result column="person_id" property="personId"/>
+        <result column="person_name" property="personName"/>
+        <result column="certificate_no" property="certificateNo"></result>
+    </resultMap>
+
+	<select id="list" resultMap="burnLogResultMap" parameterType="java.util.Map">
+		select l.*,c.ajmc,a.name areaName,u.real_name userName,p.name personName
+		from ba_burn_log l
+		left join ba_area a on l.area_id=a.id
+		left join ba_case c on l.case_id=c.id
+		left join xt_user u on l.burn_user_id=u.id
+		left join ba_person p on l.person_id = p.id
+		<where>
+	       <if test="id != null and id != ''">
+	          and l.id = #{id}
+	       </if>
+	       <if test="caseId != null and caseId != ''">
+	          and l.case_id = #{caseId}
+	       </if>
+	       <if test="areaId != null and areaId != ''">
+	          and l.area_id = #{areaId}
+	       </if>
+	       <if test="personId != null and personId != ''">
+	          and l.person_id = #{personId}
+	       </if>
+			<if test="dataAuth!=null and dataAuth!=''">
+				and ${dataAuth}
+			</if>
+	    </where>
+		<if test="pageStart != null and rows != null">
+			limit ${pageStart},${rows}
+		</if>
+	</select>
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1)
+		from ba_burn_log l
+		left join ba_area a on l.area_id=a.id
+		left join ba_case c on l.case_id=c.id
+		left join xt_user u on l.burn_user_id=u.id
+		left join ba_person p on l.person_id = p.id
+		<where>
+	       <if test="id != null and id != ''">
+	          and l.id = #{id}
+	       </if>
+	       <if test="caseId != null and caseId != ''">
+	          and l.case_id = #{caseId}
+	       </if>
+	       <if test="areaId != null and areaId != ''">
+	          and l.area_id = #{areaId}
+	       </if>
+	       <if test="personId != null and personId != ''">
+	          and l.person_id = #{personId}
+	       </if>
+			<if test="dataAuth!=null and dataAuth!=''">
+				and ${dataAuth}
+			</if>
+       </where>
+	</select>
+	
+	 <select id="listCase" parameterType="java.util.Map" resultMap="ReArchivesTreeMap">
+        select distinct a.id caseId,a.ajmc,a.ajbh 
+        from ba_case a
+		 left join ba_person b on b.case_id = a.id
+		 where  !ISNULL(b.id)
+	       <if test="areaId != null and areaId != ''">
+	          and b.area_id = #{areaId}
+	       </if>
+	       <if test="ajmc != null and ajmc != ''">
+	          and a.ajmc like "%${ajmc}%"
+	       </if>
+			<if test="dataAuth!=null and dataAuth!=''">
+				and ${dataAuth}
+			</if>
+			<if test="personName != null and personName != ''">
+-- 	           AND   EXISTS (SELECT * FROM ba_person person WHERE b.`person_id`=person.id AND person.`name` LIKE '%${personName}%')
+				AND b.name LIKE '%${personName}%'
+	       </if>
+       order by a.id desc
+         <if test="pageStart != null and rows != null">
+			limit ${pageStart},${rows}
+		</if>
+     </select>
+    
+    <select id="listCaseCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(distinct a.id) 
+        from ba_case a
+		left join ba_person b on b.case_id = a.id
+        <where>	   
+	       <if test="areaId != null and areaId != ''">
+	          and b.area_id = #{areaId}
+	       </if>
+			<if test="ajmc != null and ajmc != ''">
+				and a.ajmc like "%${ajmc}%"
+			</if>
+			<if test="dataAuth!=null and dataAuth!=''">
+				and ${dataAuth}
+			</if>
+			<if test="personName != null and personName != ''">
+	           AND b.name LIKE '%${personName}%'
+	       </if>
+       </where>
+    </select>
+
+    <select id="listCaseTree" resultMap="ReArchivesTreeMap" parameterType="java.util.Map">
+        select distinct c.id caseId,c.ajmc,CONCAT(c.id,'_',p.id) personId,p.name personName,p.area_id areaId
+        from ba_case c
+		left join ba_person p on p.case_id =c.id
+        where 1=1
+        <if test="caseIdList!=null and caseIdList.size()!=0">
+            and c.id in
+            <foreach collection="caseIdList" item="caseId" index="index" open="(" close=")" separator=",">
+                #{caseId}
+            </foreach>
+        </if>
+        order by c.id
+    </select>
+
+	<select id="listCaseTreeCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+		select count(1)
+		from ba_case c
+		left join ba_person p on p.case_id =c.id
+		where 1=1
+		<if test="caseIdList!=null and caseIdList.size()!=0">
+			and c.id in
+			<foreach collection="caseIdList" item="caseId" index="index" open="(" close=")" separator=",">
+				#{caseId}
+			</foreach>
+		</if>
+		order by c.id desc limit 10
+	</select>
+
+    
+</mapper>

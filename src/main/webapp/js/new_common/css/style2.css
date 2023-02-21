@@ -1,0 +1,10 @@
+.login-btn{ padding: 10px 0 0 0; width: 441px; margin: 0 auto;}
+/* .login-btn a{ width: 160px; height: 50px; display: inline-block; text-align: center; padding-top: 10px; border-radius: 6px; border: 0; font-size: 18px;  background-position: left top; background-repeat: no-repeat; margin: 0 29px;} */
+.login-btn a{ width: 118px; height: 34px; display: inline-block; text-align: center; padding-top: 2px; border-radius: 8px; border: 0; font-size: 18px;  background-position: left top; background-repeat: no-repeat;margin-top: -10px;} 
+.login-btn a.submit-btn{ background-image:url(../images/login_btn02.png); color: #fff; cursor: pointer}
+.login-btn a.empty-btn{ background-image:url(../images/login_btn01.png); color: #42525d; cursor: pointer}
+
+/*plugin*/
+#plugin_download_dialog {width: 670px; height: 400px; padding: 10px 20px; overflow: hidden;background-image: url('../images/loginbj.png')}
+.plugin-header {font-size: 20px;text-align: center;font-weight: bold}
+

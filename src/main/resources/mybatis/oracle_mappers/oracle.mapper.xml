@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhixin.zhfz.bacs.daoOracle.IOracleMapper">
+
+    <select id="queryJzDataAjxx" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT * FROM (SELECT tt.*, ROWNUM AS rowno
+        FROM (  SELECT distinct
+        AJBH,AJMC,FADDXZ,TO_CHAR(FXSJ,'yyyy-MM-dd HH:mm:ss') as FXSJ
+        FROM SJJH_WA_AJXX where 1=1
+        <if test="ajbh!=null and ajbh!=''">
+            and AJBH in (${ajbh})
+        </if>
+        <if test="caseName!=null and caseName!=''">
+            and AJMC  like '%' || #{caseName} || '%'
+        </if>
+        <if test="orgCode!=null and orgCode!=''">
+            and ZBDW_BH  in (${orgCode})
+        </if>
+        ORDER BY FXSJ DESC) tt) table_alias
+        <if test="start!=null and start!=''">
+            WHERE table_alias.rowno BETWEEN #{start} AND #{end}
+        </if>
+    </select>
+
+
+    <select id="queryJzDataAjxxCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT count(1) FROM SJJH_WA_AJXX where  1=1
+        <if test="ajbh!=null and ajbh!=''">
+            and AJBH in (${ajbh})
+        </if>
+        <if test="caseName!=null and caseName!=''">
+            and AJMC  like '%' || #{caseName} || '%'
+        </if>
+        <if test="orgCode!=null and orgCode!=''">
+            and ZBDW_BH  in (${orgCode})
+        </if>
+
+    </select>
+
+
+    <select id="queryJzDataPerson" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT
+            RYXM,XB,ZJHM,AJBH,RYBH,TO_CHAR(LRSJ,'yyyy-MM-dd hh:mi:ss am') as LRSJ,XZDXZ
+        FROM SJJH_WA_RYXX
+        where  1=1
+        <if test="caseNo!=null and caseNo!=''">
+            and AJBH = #{caseNo}
+        </if>
+        <if test="zjhm!=null and zjhm!=''">
+            and ZJHM = #{zjhm}
+        </if>
+    </select>
+
+    <select id="jzFillByRybhAndAJbh" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT AJBH,RYBH FROM SJJH_WA_RYXX
+         where ZJHM = #{zjhm} and  to_char(LRSJ, 'yy-mm-dd hh24:mi:ss') >= to_char(sysdate-3,'yy-mm-dd hh24:mi:ss') ORDER BY LRSJ desc
+    </select>
+</mapper>

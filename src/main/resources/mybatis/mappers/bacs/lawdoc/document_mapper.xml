@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacs.dao.document.IDocumentMapper">
+    <select id="selectdocument" resultType="com.zhixin.zhfz.bacs.entity.DocumenEntity" parameterType="java.util.Map">
+    	SELECT
+			p.certificate_type_id cardtype,
+			p.certificate_no cardno,
+			p.birth birth,
+			p.age age,
+			p.sex sex,
+			c.id caseid,
+			c.ajmc casename,
+			s.person_id serid,
+			p.`name` sername,
+			p.address address,
+			a.id areaid,
+			a.`name` areaname
+		FROM
+			ba_serial s,
+			ba_case c,
+			ba_person p,
+			ba_area a
+		WHERE
+			s.case_id = c.id
+		AND s.area_id = a.id
+		AND s.person_id = p.id
+		AND s.id = #{ serid }
+    </select>
+</mapper>
+
+

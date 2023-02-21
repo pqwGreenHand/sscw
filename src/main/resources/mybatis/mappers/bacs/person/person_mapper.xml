@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.person.IPersonMapper">
+    <resultMap id="PersonResultMap" type="com.zhixin.zhfz.bacs.entity.PersonEntity">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="certificate_type_id" property="certificateTypeId" jdbcType="INTEGER"/>
+        <result column="certificate_name" property="certificateTypeName" jdbcType="VARCHAR"/>
+        <result column="certificate_no" property="certificateNo" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="old_name" property="oldName" jdbcType="VARCHAR"/>
+        <result column="nickname" property="nickname" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" jdbcType="INTEGER"/>
+        <result column="birth" property="birth" jdbcType="DATE"/>
+        <result column="education" property="education" jdbcType="INTEGER"/>
+        <result column="politic" property="politic" jdbcType="INTEGER"/>
+        <result column="officer" property="officer" jdbcType="INTEGER"/>
+        <result column="country" property="country" jdbcType="INTEGER"/>
+        <result column="nation" property="nation" jdbcType="INTEGER"/>
+        <result column="census_register" property="censusRegister" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="job" property="job" jdbcType="VARCHAR"/>
+        <result column="job_title" property="jobTitle" jdbcType="VARCHAR"/>
+        <result column="mobile" property="mobile" jdbcType="VARCHAR"/>
+        <result column="telephone" property="telephone" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="qq" property="qq" jdbcType="VARCHAR"/>
+        <result column="weixin" property="weixin" jdbcType="VARCHAR"/>
+        <result column="weibo" property="weibo" jdbcType="VARCHAR"/>
+        <result column="internet_info" property="internetInfo" jdbcType="VARCHAR"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+        <result column="personAge" property="personAge" jdbcType="INTEGER"/>
+        <result column="age" property="age" jdbcType="INTEGER"/>
+        <result column="person_no" property="personNo" jdbcType="VARCHAR"/>
+        <result column="area_id" property="areaId" jdbcType="VARCHAR"/>
+        <result column="areaName" property="areaName" jdbcType="VARCHAR"/>
+        <result column="uuid" property="uuid" jdbcType="VARCHAR"/>
+        <result column="case_id" property="caseId" jdbcType="VARCHAR"/>
+        <result column="op_pid" property="opPid" jdbcType="VARCHAR"/>
+        <result column="ajbh" property="ajbh" jdbcType="VARCHAR"/>
+        <result column="ajmc" property="ajmc" jdbcType="VARCHAR"/>
+        <result column="op_user_id" property="opUserId" jdbcType="INTEGER"/>
+        <result column="isArrive" property="isArrive" jdbcType="INTEGER"/>
+        <result column="caseId" property="caseId" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- 查询所有的无名氏 -->
+    <select id="countWuMs" resultType="java.lang.Integer">
+		SELECT count(1) FROM ba_person where name like "%无名氏%"
+  </select>
+
+    <select id="list" resultMap="PersonResultMap" parameterType="java.util.Map">
+        select bc.id caseId,bc.ajbh,bc.ajmc,p.id,p.certificate_type_id,ct.code_value certificate_name ,
+        p.certificate_no,p.name,p.old_name,p.nickname,
+        cs.code_value sexName,p.sex,p.birth,
+        cz.code_value educationName,p.education,
+        cm.code_value politicName,p.politic,
+        cr.code_value officerName,p.officer,
+        cg.code_value countryName,p.country,
+        cf.code_value nationName,p.nation,
+        p.census_register,p.address,p.job,p.job_title,p.mobile,
+        p.telephone,p.email,p.qq,p.weixin,p.weibo,p.internet_info,
+        p.created_time,p.updated_time,p.person_no,
+        p.area_id,m.name areaName
+        from ba_person p
+        left join ba_case bc ON bc.id=p.case_id
+        left join ba_area m on p.area_id=m.id
+        left join xt_code ct on ct.type='ZJZLID' and p.certificate_type_id=ct.code_key
+        left join xt_code cz on cz.type='WHCDID' and p.education=cz.code_key
+        left join xt_code cm on cm.type='ZZMMID' and p.politic=cm.code_key
+        left join xt_code cg on cg.type='GJID' and p.country=cg.code_key
+        left join xt_code cf on cf.type='MZID' and p.nation=cf.code_key
+        left join xt_code cs on cs.type='XBID' and p.sex=cs.code_key
+        left join xt_code cr on cr.type='RDDBID' and p.officer=cr.code_key
+        where 1=1 and p.case_id is not NULL
+            <if test="dataAuth!=null and dataAuth!=''">
+                and ${dataAuth}
+            </if>
+            <if test="name!=null and name!=''">
+                and p.name like '%${name}%'
+            </if>
+            <if test="certificateNo!=null and certificateNo!=''">
+                and p.certificate_no like '%${certificateNo}%'
+            </if>
+            <if test="sex!=null and sex!=''">
+                and p.sex like '%${sex}%'
+            </if>
+            <if test="ajbh!=null and ajbh!=''">
+                and bc.ajbh like '%${ajbh}%'
+            </if>
+            <if test="ajmc!=null and ajmc!=''">
+                and bc.ajmc like '%${ajmc}%'
+            </if>
+            <if test="start_date!=null and start_date!=''">
+                and p.created_time &gt;=#{start_date}
+            </if>
+            <if test="end_date!=null and end_date!=''">
+                and p.created_time &lt;=#{end_date}
+            </if>
+            <if test="areaId!=null and areaId!=0">
+                and m.id=#{areaId}
+            </if>
+        order by p.id desc
+        limit ${pageStart},${rows}
+    </select>
+
+    <select id="getPersonById" resultMap="PersonResultMap" parameterType="java.lang.Long">
+    select * from ba_person p where id=#{id}
+  </select>
+
+
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(1)
+        from ba_person p
+        left join ba_case bc ON bc.id=p.case_id
+        left join ba_area m on p.area_id=m.id
+        left join xt_code ct on ct.type='ZJZLID' and p.certificate_type_id=ct.code_key
+        left join xt_code cz on cz.type='WHCDID' and p.education=cz.code_key
+        left join xt_code cm on cm.type='ZZMMID' and p.politic=cm.code_key
+        left join xt_code cg on cg.type='GJID' and p.country=cg.code_key
+        left join xt_code cf on cf.type='MZID' and p.nation=cf.code_key
+        left join xt_code cs on cs.type='XBID' and p.sex=cs.code_key
+        left join xt_code cr on cr.type='RDDBID' and p.officer=cr.code_key
+        <where>
+            <if test="dataAuth!=null and dataAuth!=''">
+                and ${dataAuth}
+            </if>
+            <if test="name!=null and name!=''">
+                and p.name like '%${name}%'
+            </if>
+            <if test="certificateNo!=null and certificateNo!=''">
+                and p.certificate_no like '%${certificateNo}%'
+            </if>
+            <if test="sex!=null and sex!=''">
+                and p.sex like '%${sex}%'
+            </if>
+            <if test="ajbh!=null and ajbh!=''">
+                and bc.ajbh like '%${ajbh}%'
+            </if>
+            <if test="start_date!=null and start_date!=''">
+                and p.created_time &gt;=#{start_date}
+            </if>
+            <if test="end_date!=null and end_date!=''">
+                and p.created_time &lt;=#{end_date}
+            </if>
+            <if test="areaId!=null and areaId!=0">
+                and m.id=#{areaId}
+            </if>
+        </where>
+        order by p.id desc
+    </select>
+
+
+    <insert id="insert" parameterType="com.zhixin.zhfz.bacs.entity.PersonEntity" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into ba_person
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id!=0 ">
+                id,
+            </if>
+            <if test="areaId != null and areaId!=0 ">
+                area_id,
+            </if>
+            <if test="caseId != null and caseId!=0 ">
+                case_id,
+            </if>
+            <if test="uuid != null">
+                uuid,
+            </if>
+            <if test="certificateTypeId != null">
+                certificate_type_id,
+            </if>
+            <if test="certificateNo != null">
+                certificate_no,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="oldName != null">
+                old_name,
+            </if>
+            <if test="nickname != null">
+                nickname,
+            </if>
+            <if test="sex != null">
+                sex,
+            </if>
+            <if test="birth != null">
+                birth,
+            </if>
+            <if test="education != null">
+                education,
+            </if>
+            <if test="politic != null">
+                politic,
+            </if>
+            <if test="officer != null">
+                officer,
+            </if>
+            <if test="country != null">
+                country,
+            </if>
+            <if test="nation != null">
+                nation,
+            </if>
+            <if test="censusRegister != null">
+                census_register,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="job != null">
+                job,
+            </if>
+            <if test="jobTitle != null">
+                job_title,
+            </if>
+            <if test="mobile != null">
+                mobile,
+            </if>
+            <if test="telephone != null">
+                telephone,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="qq != null">
+                qq,
+            </if>
+            <if test="weixin != null">
+                weixin,
+            </if>
+            <if test="weibo != null">
+                weibo,
+            </if>
+            <if test="internetInfo != null">
+                internet_info,
+            </if>
+            <if test="personNo != null">
+                person_no,
+            </if>
+            <if test="opPid != null">
+                op_pid,
+            </if>
+            <if test="opUserId != null">
+                op_user_id,
+            </if>
+            created_time,
+            <if test="isArrive != null">
+                isArrive
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="areaId != null and areaId!=0 ">
+                #{areaId},
+            </if>
+            <if test="caseId != null and caseId!=0 ">
+                #{caseId},
+            </if>
+            <if test="uuid != null">
+                #{uuid},
+            </if>
+            <if test="certificateTypeId != null">
+                #{certificateTypeId,jdbcType=INTEGER},
+            </if>
+            <if test="certificateNo != null">
+                #{certificateNo,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="oldName != null">
+                #{oldName,jdbcType=VARCHAR},
+            </if>
+            <if test="nickname != null">
+                #{nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                #{sex,jdbcType=INTEGER},
+            </if>
+            <if test="birth != null">
+                #{birth,jdbcType=DATE},
+            </if>
+            <if test="education != null">
+                #{education,jdbcType=VARCHAR},
+            </if>
+            <if test="politic != null">
+                #{politic,jdbcType=VARCHAR},
+            </if>
+            <if test="officer != null">
+                #{officer,jdbcType=VARCHAR},
+            </if>
+            <if test="country != null">
+                #{country,jdbcType=VARCHAR},
+            </if>
+            <if test="nation != null">
+                #{nation,jdbcType=VARCHAR},
+            </if>
+            <if test="censusRegister != null">
+                #{censusRegister,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="job != null">
+                #{job,jdbcType=VARCHAR},
+            </if>
+            <if test="jobTitle != null">
+                #{jobTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="telephone != null">
+                #{telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="qq != null">
+                #{qq,jdbcType=VARCHAR},
+            </if>
+            <if test="weixin != null">
+                #{weixin,jdbcType=VARCHAR},
+            </if>
+            <if test="weibo != null">
+                #{weibo,jdbcType=VARCHAR},
+            </if>
+            <if test="internetInfo != null">
+                #{internetInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="personNo != null">
+                #{personNo,jdbcType=VARCHAR},
+            </if>
+            <if test="opPid != null">
+                #{opPid,jdbcType=VARCHAR},
+            </if>
+            <if test="opUserId != null">
+                #{opUserId,jdbcType=VARCHAR},
+            </if>
+            now(),
+            <if test="isArrive != null">
+                ${isArrive}
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="PersonEntity">
+        update ba_person set
+        <if test="certificateTypeId != null and certificateTypeId != ''">
+            certificate_type_id = #{certificateTypeId,jdbcType=INTEGER},
+        </if>
+        <if test="certificateNo != null and certificateNo != ''">
+            certificate_no = #{certificateNo,jdbcType=VARCHAR},
+        </if>
+        <if test="name != null and name != ''">
+            name = #{name,jdbcType=VARCHAR},
+        </if>
+        <if test="oldName != null and oldName != ''">
+            old_name = #{oldName,jdbcType=VARCHAR},
+        </if>
+        <if test="nickname != null and nickname != ''">
+            nickname = #{nickname,jdbcType=VARCHAR},
+        </if>
+        <if test="sex != null and sex != ''">
+            sex = #{sex,jdbcType=INTEGER},
+        </if>
+        <if test="birth != null and birth != ''">
+            birth = #{birth,jdbcType=DATE},
+        </if>
+        <if test="education != null and education != ''">
+            education = #{education,jdbcType=VARCHAR},
+        </if>
+        <if test="politic != null and politic != ''">
+            politic = #{politic,jdbcType=VARCHAR},
+        </if>
+        <if test="officer != null and officer != ''">
+            officer = #{officer,jdbcType=VARCHAR},
+        </if>
+        <if test="country != null and country != ''">
+            country = #{country,jdbcType=VARCHAR},
+        </if>
+        <if test="nation != null and nation != ''">
+            nation = #{nation,jdbcType=VARCHAR},
+        </if>
+        <if test="censusRegister != null and censusRegister != ''">
+            census_register = #{censusRegister,jdbcType=VARCHAR},
+        </if>
+        <if test="address != null and address != ''">
+            address = #{address,jdbcType=VARCHAR},
+        </if>
+        <if test="job != null and job != ''">
+            job = #{job,jdbcType=VARCHAR},
+        </if>
+        <if test="jobTitle != null and jobTitle != ''">
+            job_title = #{jobTitle,jdbcType=VARCHAR},
+        </if>
+        <if test="mobile != null and mobile != ''">
+            mobile = #{mobile,jdbcType=VARCHAR},
+        </if>
+        <if test="telephone != null and telephone != ''">
+            telephone = #{telephone,jdbcType=VARCHAR},
+        </if>
+        <if test="email != null and email != ''">
+            email = #{email,jdbcType=VARCHAR},
+        </if>
+        <if test="qq != null and qq != ''">
+            qq = #{qq,jdbcType=VARCHAR},
+        </if>
+        <if test="weixin != null and weixin != ''">
+            weixin = #{weixin,jdbcType=VARCHAR},
+        </if>
+        <if test="weibo != null and weibo != ''">
+            weibo = #{weibo,jdbcType=VARCHAR},
+        </if>
+        <if test="internetInfo != null and internetInfo != ''">
+            internet_info = #{internetInfo,jdbcType=VARCHAR},
+        </if>
+        <if test="personNo != null and personNo != ''">
+            person_no = #{personNo,jdbcType=VARCHAR},
+        </if>
+        <if test="areaId != null and areaId!=0 ">
+            area_id=#{areaId},
+        </if>
+        <if test="uuid != null">
+            uuid=#{uuid},
+        </if>
+        <if test="isArrive != null">
+            isArrive = #{isArrive},
+        </if>
+        updated_time = now() where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long">
+    delete from ba_person where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+    <select id="ishave" resultMap="PersonResultMap" parameterType="com.zhixin.zhfz.bacs.entity.PersonEntity">
+	 select * from ba_person 
+	 where certificate_type_id = #{certificateTypeId,jdbcType=BIGINT} 
+	 and certificate_no=#{certificateNo,jdbcType=VARCHAR}
+  </select>
+
+
+    <!-- 999体检用查询被体检人信息  -->
+    <select id="queryPersonInfoById" resultMap="PersonResultMap" parameterType="java.lang.Long">
+    SELECT * FROM ba_person p WHERE p.id=#{personId}
+  </select>
+    <!--   通过案件信息查询person -->
+    <select id="personListByCase" resultMap="PersonResultMap" parameterType="java.util.Map">
+        select * from ba_person
+        where 1=1
+        <if test="caseId != null">
+            and case_id = #{caseId}
+        </if>
+    </select>
+
+
+    <!-- 给标采 -->
+    <select id="getPersonInfoById" resultMap="PersonResultMap" parameterType="java.lang.Long">
+   select p.id,p.certificate_type_id,ct.code_value certificate_name ,
+    p.certificate_no,p.name,p.old_name,p.nickname,
+    cs.code_value sexName,p.sex,p.birth,
+    cz.code_value educationName,p.education,
+    cm.code_value politicName,p.politic,
+    cr.code_value officerName,p.officer,
+    cg.code_value countryName,p.country,
+    cf.code_value nationName,p.nation,
+    p.census_register,p.address,p.job,p.job_title,p.mobile,
+    p.telephone,p.email,p.qq,p.weixin,p.weibo,p.internet_info,
+    p.created_time,p.updated_time,p.person_no,
+    p.area_id,m.name areaName
+    from ba_person p
+    left join ba_area m on p.area_id=m.id
+    left join xt_code ct on ct.type='ZJZLID' and p.certificate_type_id=ct.code_key
+    left join xt_code cz on cz.type='WHCDID' and p.education=cz.code_key
+    left join xt_code cm on cm.type='ZZMMID' and p.politic=cm.code_key
+    left join xt_code cg on cg.type='GJID' and p.country=cg.code_key
+    left join xt_code cf on cf.type='MZID' and p.nation=cf.code_key
+    left join xt_code cs on cs.type='XBID' and p.sex=cs.code_key
+    left join xt_code cr on cr.type='RDDBID' and p.officer=cr.code_key
+    where p.id=#{id}
+  </select>
+
+    <select id="searchAreaidByCaseId" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        SELECT
+        ia.id AS areaId
+        FROM
+        ba_case ic
+        LEFT JOIN ba_area ia ON ia.organization_id = ic.zbdw_id
+        WHERE
+        1 = 1
+        and ic.id=#{caseId}
+
+        GROUP BY ia.id
+    </select>
+
+</mapper>

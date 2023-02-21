@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+        namespace="com.zhixin.zhfz.sacw.dao.involveddoc.IInvolvedDocMapper">
+
+    <resultMap id="inputBookResultMap" type="com.zhixin.zhfz.sacw.entity.InputBookEntity">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="description" column="description"/>
+        <result property="barcode" column="barcode"/>
+        <result property="caseName" column="ajmc"/>
+        <result property="caseNo" column="ajbh"/>
+        <result property="involvedOwner" column="involved_owner"/>
+        <result property="detailCount" column="detail_count"/>
+        <result property="unit" column="unit"/>
+        <result property="policeName" column="policeName"/>
+        <result property="organization" column="organization"/>
+        <result property="sendOrganization" column="sendOrganization"/>
+        <result property="receivedTime" column="receivedTime"/>
+        <result property="updatedTime" column="updated_time"/>
+        <result property="outputTypeName" column="outputTypeName"/>
+        <result property="handlerPerson" column="handler_person"/>
+        <result property="telephone" column="telephone"/>
+        <result property="reason" column="reason"/>
+        <result property="outputCount" column="outputCount"/>
+        <result property="areaName" column="areaName"/>
+    </resultMap>
+
+    <!-- 入库台账 -->
+    <select id="listInputBook" resultMap="inputBookResultMap"
+            parameterType="java.util.Map">
+        select i.*,l.ajmc,l.ajbh,
+        u.real_name as policeName,o.`name`,
+        r.created_time as receivedTime from sa_involved i
+        left join ba_case l on i.case_id=l.id
+        left join sa_input_record r on r.involved_id=i.id
+        left join xt_user u on r.police_id1=u.id
+        left join xt_organization o on o.id=u.organization_id
+        where i.id=#{involvedId} and r.id=#{recordId}
+    </select>
+
+    <!-- 出库台账 -->
+    <select id="listOutputBook" resultMap="inputBookResultMap"
+            parameterType="java.util.Map">
+        select i.*,l.ajmc,l.ajbh,
+        u.real_name as policeName,
+        (select name from xt_organization where id=o.id) as sendOrganization ,
+        (select name from xt_organization where id=r.organization_id) as organization ,
+        r.created_time as receivedTime,c.code_value as outputTypeName,
+        r.handler_person,r.telephone,r.description as reason,r.count as outputCount,
+        a.name areaName
+        from sa_involved i
+        left join ba_case l on i.case_id=l.id
+        left join sa_output_record r on r.involved_id=i.id
+        left join xt_user u on r.police_id=u.id
+        left join xt_user s on r.register_user_id=s.id
+        left join xt_organization o on o.id=s.organization_id
+        left join sa_warehouse a on a.id=i.warehouse_id
+        left join xt_code c on c.code_key=r.output_type_id and c.type='INV_OUTPUT_TYPE'
+        where i.id=#{involvedId} and r.id=#{recordId}
+    </select>
+
+
+</mapper>

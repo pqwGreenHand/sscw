@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhixin.zhfz.bacs.daoOracle.IAjxxOracleMapper">
+<!-- 处理决定抽取  -->
+	<select id="queryOracleRycljd" resultType="java.util.HashMap" parameterType="java.util.Map">
+		SELECT
+		RYID,CLJD,ORGID,PZR,PZSJ,RYBH,PZSJ CZSJ,ID
+		FROM T_RY_RYCLXX
+		where
+		ORGID like '110105%'
+		<if test="pzsj !=null and pzsj !=''">
+			and  PZSJ &gt; to_date(#{pzsj} , 'yyyy-mm-dd hh24:mi:ss')
+		</if>
+	</select>
+	<select id="getAjxxFromOracleXz" resultType="java.util.HashMap" parameterType="java.util.Map">
+		SELECT
+		aj.AJBH,aj.AJMC,aj.AJZT,aj.ZBMJ,aj.ZBMJCODE  ZH,
+		aj.CBDW ,aj.CBDW  ZBDW ,aj.SLSJ,aj.FAKSSJ AFSJ,aj.JYAQ,aj.FADDXZ,
+		jj.JJBH
+		FROM
+		T_AJ_XZAJFAXX aj
+		left join T_AJ_JJAJGLXX jj on aj.ajbh = jj.asjbh
+		where aj.CBDW like '110105%'
+        <if test="SLSJ!=null and SLSJ !=''">
+				and aj.SLSJ &gt; to_date(#{SLSJ} , 'yyyy-mm-dd hh24:mi:ss')
+		</if>
+	</select>
+	
+	<select id="getAjxxFromOracleXs" resultType="java.util.HashMap" parameterType="java.util.Map">
+		SELECT
+		aj.AJBH,aj.AJMC,aj.AJZT,aj.CBR ZBMJ,aj.CBRZH ZH,
+		aj.CBDW ,aj.CBDW  ZBDW ,aj.SLSJ,aj.FAKSSJ AFSJ,aj.JYAQ,aj.FADDXZ,
+		jj.JJBH
+		FROM
+		T_AJ_XSAJFAXX aj
+		left join T_AJ_JJAJGLXX jj on aj.ajbh = jj.asjbh
+		where aj.CBDW like '110105%'
+        <if test="SLSJ!=null and SLSJ !=''">
+				and aj.SLSJ &gt; to_date(#{SLSJ} , 'yyyy-mm-dd hh24:mi:ss')
+		</if>
+	</select>
+</mapper>
+
+

@@ -1,0 +1,51 @@
+
+
+#tj_btn{text-align:center; }
+#tj_btn input.bc_on9{width:180px;height:50px;border:none;color:#fff;cursor:pointer;padding-left:60px; background:url(image/exportdata.png) no-repeat ;font-size:16px;}
+
+*{padding:0;margin:0}
+a{text-decoration:none}
+ul{list-style:none;}
+img{border:none;vertical-align:middle;}
+#content_vhart{ margin-top:30px; padding-left:50px;overflow-x:visible}
+#content_vhart button{
+    width:40px;
+    height:124px;
+    background:url(image/1_03.png) no-repeat center;
+    border:none;
+    vertical-align:middle;
+    cursor:pointer;
+}
+#content_vhart button:hover{
+    width:40px;
+    height:124px;
+    background: url(image/2_03.png) no-repeat center;
+    border:none;
+    vertical-align:middle;
+    cursor:pointer;
+}
+#content_vhart div{
+    display:inline-block;
+    vertical-align:middle;
+}
+.first{
+    width:60px;
+    height:250px;
+    padding-top:85px;
+    position:relative;
+}
+.first div{
+    width:100%;
+    height:60%;
+    border:1px solid #000;
+}
+.firstshang{position:absolute;top:0px;left:11px;}
+.firstxia{position:absolute;top:150px;left:11px;}
+#zuishang_bao{width:90px;height:60px;padding-top:140px;padding-left:40px;position:relative;}
+#dabao{height:400px;}
+#zuishang{width:100%;}
+#zuis_l{position:absolute;top:0;left:10px;}
+#zuis_r{position:absolute;top:0;right:-30px;}
+#baosan{height:450px;}
+#firstzhong{left:12px;bottom:120px;position:absolute;}
+

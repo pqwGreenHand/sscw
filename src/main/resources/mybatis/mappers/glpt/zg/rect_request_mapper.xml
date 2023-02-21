@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.glpt.dao.zg.IRectRequestMapper">
+
+    <resultMap id="resultMap" type="com.zhixin.zhfz.glpt.entity.RectRequestEntity">
+        <id property="id" column="id"/>
+        <result column="duban_id" property="supId"/>
+        <result column="case_id" property="caseId"/>
+        <result column="ba_sign" property="baSign"/>
+        <result column="sa_sign" property="saSign"/>
+        <result column="jz_sign" property="jzSign"/>
+        <result column="send_orgId" property="sendOrgId"/>
+        <result column="send_userId" property="sendUserId"/>
+        <result column="send_time" property="sendTime"/>
+        <result column="content" property="content"/>
+        <result column="status" property="status"/>
+        <result column="audit_org_id" property="auditOrgId"/>
+        <result column="op_user_id" property="opUserId"/>
+        <result column="receive_org_id" property="receiveOrgId"/>
+        <result column="count" property="count"/>
+
+        <result column="case_name" property="caseName"/>
+        <result column="send_org_name" property="sendOrgName"/>
+        <result column="send_user_name" property="sendUserName"/>
+        <result column="op_org_name" property="opOrgName"/>
+        <result column="op_user_name" property="opUserName"/>
+        <result column="receive_org_name" property="receiveOrgName"/>
+        <result column="his_answer" property="hisAnswer"/>
+    </resultMap>
+
+
+    <select id="list" resultMap="resultMap" parameterType="java.util.Map">
+        SELECT
+            q.*,
+            c.ajmc AS case_name,
+            sorg.`name` AS send_org_name,
+            su.real_name AS send_user_name,
+            ou.real_name AS op_user_name,
+            oporg.`name` AS op_org_name,
+            reorg.`name` AS receive_org_name,
+            IFNULL(a.id,0) AS his_answer
+        FROM
+            xt_zhenggai_request AS q
+        LEFT JOIN ba_case AS c ON q.case_id = c.id
+        LEFT JOIN xt_organization AS sorg ON q.send_orgId = sorg.p_id
+        LEFT JOIN xt_user AS su ON q.send_userId = su.id
+        LEFT JOIN xt_user AS ou ON q.op_user_id = ou.id
+        LEFT JOIN xt_organization AS oporg ON q.audit_org_id = oporg.p_id
+        LEFT JOIN xt_organization AS reorg ON q.receive_org_id = reorg.p_id
+        LEFT JOIN xt_zhenggai_answer AS a ON q.id = a.zg_id AND a.status = 0
+        <include refid="query_where"/>
+        GROUP BY q.id
+		limit ${pageStart},${rows}
+    </select>
+
+
+     <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		 select count(q.id) from xt_zhenggai_request q
+         <include refid="query_where"/>
+    </select>
+    
+	<insert id="insert" parameterType="com.zhixin.zhfz.glpt.entity.SupervisorRequestEntity">
+      INSERT INTO xt_zhenggai_request
+        ( case_id,duban_id, ba_sign, sa_sign, jz_sign, send_orgId, send_userId, send_time, content, status,audit_org_id,op_user_id,receive_org_id )
+      VALUES
+	    (#{caseId},#{supId},#{baSign},#{saSign},#{jzSign},#{sendOrgId},#{sendUserId},now(),#{content},0,#{auditOrgId},#{opUserId},#{receiveOrgId})
+    </insert>
+
+
+    <update id="status" parameterType="com.zhixin.zhfz.glpt.form.SupervisorForm">
+        update xt_zhenggai_request
+        <set>
+            <if test="auditOrgId != null and auditOrgId != ''">`audit_org_id` = #{auditOrgId},</if>
+            <if test="auditUserId != null and auditUserId != ''">`op_user_id` = #{auditUserId},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="count != null and count != ''">`count` = #{count},</if>
+        </set>
+        where id=#{requestId}
+    </update>
+
+    <sql id="query_where">
+        <where>
+            <if test="personId!=null and personId !=''">
+                and w.person_id = #{personId}
+            </if>
+            <if test="name!=null and name !=''">
+                and p.`name` LIKE '%${name}%'
+            </if>
+            <if test="areaId!=null and areaId !=''">
+                and w.area_id = #{areaId}
+            </if>
+        </where>
+    </sql>
+</mapper>

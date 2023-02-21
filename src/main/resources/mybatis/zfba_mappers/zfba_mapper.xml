@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhixin.zhfz.bacs.zfbaDao.IZfbaMapper">
+
+    <select id="queryAjxx" resultType="java.util.HashMap" parameterType="java.util.Map">
+        SELECT
+        c.id,
+        c.ajmc,
+        c.ajbh,
+        c.fxsj afsj,
+        c.faddxz afdd
+        FROM
+        zfba_ajxx_mtg c
+        where  1=1
+        <if test="ajbh!=null and ajbh!=''">
+            and c.ajbh = #{ajbh}
+        </if>
+        <if test="ajmc!=null and ajmc!=''">
+            and c.ajmc like  '%${ajmc}%'
+        </if>
+        ORDER BY c.fxsj DESC
+        limit ${pageStart},${rows*page}
+    </select>
+
+    <select id="queryAjxxCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+        count(1)
+        FROM
+        zfba_ajxx_mtg c
+        where  1=1
+        <if test="ajbh!=null and ajbh!=''">
+            and c.ajbh = #{ajbh}
+        </if>
+        <if test="ajmc!=null and ajmc!=''">
+            and c.ajmc like  '%${ajmc}%'
+        </if>
+    </select>
+
+    <select id="queryPerson" resultType="java.util.HashMap" parameterType="java.util.Map">
+        SELECT
+        p.id,
+        p.ryxm name,
+        p.xb sex,
+        '身份证' certificateTypeName,
+        p.zjhm certificateNo
+        FROM
+        zfba_ryxx_mtg p
+        where  1=1
+        <if test="ajbh!=null and ajbh!=''">
+            and p.ajbh = #{ajbh}
+        </if>
+        <if test="zjhm!=null and zjhm!=''">
+            and p.zjhm = #{zjhm}
+        </if>
+    </select>
+
+    <select id="queryBelong" resultType="java.util.HashMap" parameterType="java.util.Map">
+        SELECT
+            d.mc name,
+            d.sl detail_count,
+            d.tz description
+        FROM
+            zfba_wpxx_mtg d
+        WHERE
+          d.ajbh = #{ajbh}
+    </select>
+    
+    <select id="queryAjxxById" parameterType="java.lang.String" resultType="java.util.HashMap">
+        select * from zfba_ajxx_mtg where id = #{id}
+    </select>
+
+    <select id="queryYyxxById" parameterType="java.lang.String" resultType="java.util.HashMap">
+        select * from zfba_ryxx_mtg where id = #{id}
+    </select>
+
+</mapper>

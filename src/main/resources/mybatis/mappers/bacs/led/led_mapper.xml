@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.led.ILedMapper" >
+  <resultMap id="LedResultMap" type="com.zhixin.zhfz.bacs.entity.LedEntity" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="ip" property="ip" jdbcType="VARCHAR" />
+    <result column="port" property="port" jdbcType="INTEGER" />
+    <result column="room_id" property="roomId" jdbcType="INTEGER" />
+    <result column="room_name" property="roomName" jdbcType="VARCHAR" />
+     <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="area_id" property="areaId" jdbcType="INTEGER" />
+    <result column="area_name" property="areaName" jdbcType="VARCHAR" /> 
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+ 
+  </resultMap>
+  <update id="update" parameterType="com.zhixin.zhfz.bacs.entity.LedEntity" >
+    update ba_led
+    <set >
+      <if test="ip != null" >
+        ip = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="port != null" >
+        port = #{port,jdbcType=INTEGER},
+      </if>
+      <if test="roomId != null" >
+        room_id = #{roomId,jdbcType=INTEGER},
+      </if> 
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <insert id="insert" parameterType="com.zhixin.zhfz.bacs.entity.LedEntity" keyProperty="id" useGeneratedKeys="true">
+    INSERT INTO ba_led (
+		  ip,
+		  port,
+		  room_id,
+		  status,
+		  area_id,
+		  created_time,
+		  op_pid,
+		  op_user_id
+   			)
+		VALUES
+  			( 
+		  #{ip},
+		  #{port},
+		  #{roomId},
+		  #{status},
+		 #{areaId},
+		 now(),
+		 #{opPid},
+		 #{opUserId}
+         )
+  </insert> 
+  
+  <select id="LedByRoomId" parameterType="int" resultMap="LedResultMap">
+     SELECT led.*,room.name room_name FROM ba_led  led 
+     LEFT JOIN ba_room room ON led.room_id=room.id
+      where  led.room_id = #{roomId} 
+  </select>
+  <select id="LedByRoom"  resultMap="LedResultMap">
+     SELECT led.*,room.name room_name FROM ba_led  led
+     LEFT JOIN ba_room room ON led.room_id=room.id
+  </select>
+
+</mapper>

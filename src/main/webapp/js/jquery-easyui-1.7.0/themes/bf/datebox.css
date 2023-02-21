@@ -1,0 +1,34 @@
+.datebox-calendar-inner {
+  width: 270px;
+}
+.datebox-button {
+  text-align: center;
+  padding: 3px 0;
+  border-top: 1px solid #046aa0;
+}
+.datebox-button a {
+  font-size: 14px;
+  text-decoration: none;
+  color: #65caff;
+}
+.datebox-button a:hover {
+
+}
+.datebox-current,
+.datebox-close {
+  float: left;
+}
+.datebox-close {
+  float: right;
+}
+.datebox .combo-arrow {
+  background-image: url('images/datebox_arrow.png');
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+.datebox-button {
+  background-color: #0b2d59;
+}
+.datebox-button a {
+
+}

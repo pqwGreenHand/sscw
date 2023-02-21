@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacsapp.dao.zbry.IZbryMapper">
+
+    <resultMap id="personMap" type="com.zhixin.zhfz.bacsapp.entity.ZbryPersonEntity">
+        <!--<id column="id" property="id" jdbcType="INTEGER" />-->
+        <result column="name" property="name" />
+        <result column="uuid" property="uuid" />
+        <result column="serial_id" property="serialId" />
+        <result column="person_id" property="personId" />
+        <result column="area_id" property="areaId" />
+        <result column="case_id" property="caseId" />
+        <result column="in_time" property="inTime" />
+    </resultMap>
+
+    <select id="personList" resultMap="personMap" parameterType="java.util.Map">
+        SELECT
+            s.id AS serial_id,
+            s.uuid,
+            s.`status`,
+            s.person_id,
+            s.area_id,
+            s.case_id,
+            s.in_time,
+            p.`name`
+        FROM
+            ba_serial AS s
+            LEFT JOIN ba_person AS p ON s.person_id = p.id
+        <include refid="query_where"/>
+        limit ${pageStart},${rows}
+    </select>
+
+    <select id="personCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(1) from ba_serial s LEFT JOIN ba_person AS p ON s.person_id = p.id <include refid="query_where"/>
+    </select>
+
+    <select id="menu" parameterType="java.util.Map" resultType="com.zhixin.zhfz.bacsapp.entity.ZbryMenuEntity">
+        SELECT
+            count(b.id) AS sw,
+            count(e.id) AS sa,
+            count(se.id) AS aj,
+            count(u.id) AS nj
+        FROM
+            ba_serial AS s
+            LEFT JOIN ba_belongings AS b ON s.id = b.serial_id
+            LEFT JOIN ba_urinalysis AS u on s.id = u.serial_id
+            LEFT JOIN ba_exhibit AS e on s.id = e.serial_id
+            LEFT JOIN ba_security AS se on s.id = se.serial_id
+        WHERE s.id = #{serialId}
+    </select>
+
+    <sql id="query_where">
+        <where>
+            s.`status` &lt; 10
+            <if test="dataAuth!=null and dataAuth!=''">
+                and ${dataAuth}
+            </if>
+            <if test="areaId!=null and areaId !=''">
+                and s.area_id = #{areaId}
+            </if>
+            <if test="name!=null and name !=''">
+                and p.`name` LIKE '%${name}%'
+            </if>
+        </where>
+    </sql>
+
+</mapper>

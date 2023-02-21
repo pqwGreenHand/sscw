@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacs.dao.geo.IGeoDataMapper">
+	<!-- <typeAlias alias="geoData" type="com.zhixin.rd.interrogate.web.entity.GeoDataEntity" /> -->
+	<resultMap id="GeoDataMapper" type="geoDataEntity">
+    	<id property="id" column="id"/>
+    	<result property="regionCode" column="region_code"/>
+    	<result property="isActive" column="is_active"/>
+    	<result property="datas" column="datas"/>
+    	<result property="nameCp" column="name_cp"/>
+    	<result property="type" column="TYPE"/>
+    	<result property="childNum" column="child_num"/>
+		<result column="op_pid" property="opPid" jdbcType="VARCHAR" />
+		<result column="op_user_id" property="opUserId" jdbcType="INTEGER" />
+    	
+    	<result property="regionName" column="region_name"/>
+    </resultMap>
+    
+    <!-- listAllGeoData -->
+    <select id="listAllGeoData" resultMap="GeoDataMapper" >  
+       		<!-- no ";" at the end -->   
+        	SELECT gd.*,r.name as region_name FROM ba_geo_data gd
+			LEFT JOIN xt_region r ON r.code=gd.region_code
+    </select>
+    
+    <!-- countAllGeoData -->
+    <select id="countAllGeoData" resultType="int" >
+        	SELECT COUNT(1) FROM ba_geo_data
+    </select>
+    
+    <!-- listGeoData -->
+    <select id="listGeoData" resultMap="GeoDataMapper" parameterType="java.util.Map" >  
+       		<!-- no ";" at the end -->   
+        	SELECT * FROM ba_geo_data where 1=1
+    </select>
+    
+    <!-- countGeoData -->
+    <select id="countGeoData" resultType="int" parameterType="java.util.Map" >
+        	SELECT COUNT(1) FROM ba_geo_data where 1=1
+    </select>
+    
+    <!-- getGeoDataById -->
+    <select id="getGeoDataById" resultMap="GeoDataMapper" parameterType="Long" >  
+       		<!-- no ";" at the end -->   
+        	SELECT gd.*,r.name as region_name FROM ba_geo_data gd
+			LEFT JOIN xt_region r ON r.code=gd.region_code
+			where gd.id=#{id}
+    </select>
+    
+    <!-- insertGeoData -->
+    <insert id="insertGeoData" parameterType="geoDataEntity"  keyProperty="id" useGeneratedKeys="true" >
+            INSERT INTO ba_geo_data (
+	    		region_code,
+	    		is_active,
+	    		datas,
+	    		name_cp,
+	    		TYPE,
+	    		child_num,
+	    		op_pid,
+	    		op_user_id
+				)
+             VALUES(
+	    		#{regionCode},
+	    		#{isActive},
+	    		#{datas},
+	    		#{nameCp},
+	    		#{type},
+	    		#{childNum},
+	    		#{opPid},
+	    		#{opUserId}
+				)
+    </insert>
+    
+    <update id="updateGeoData" parameterType="geoDataEntity">
+            UPDATE ba_geo_data SET
+	    		region_code=#{regionCode},
+	    		is_active=#{isActive},
+	    		datas=#{datas},
+	    		name_cp=#{nameCp},
+	    		TYPE=#{type},
+	    		child_num=#{childNum},
+	    		op_pid=#{opPid},
+	    		op_user_id=#{opUserId}
+            WHERE
+	    		id=#{id}
+    </update>
+    
+    <delete id="deleteGeoDataById" parameterType="Long">  
+            DELETE FROM ba_geo_data WHERE id=#{id}
+    </delete> 
+    
+    
+</mapper>
+
+

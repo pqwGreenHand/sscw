@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhixin.zhfz.common.dao.common.ICommonCommonMapper">
+
+    <select id="queryIpFilterByIp" parameterType="java.lang.String" resultType="java.util.HashMap">
+    select * from xt_ip_filter where ip = #{ip}
+    LIMIT 1
+    </select>
+    <!-- 通过系统状态 -->
+    <select id="queryXtStats"  resultType="java.lang.String">
+        select status from xt_status limit 1
+	</select>
+
+    <update id="updateStatus" parameterType="java.util.HashMap">
+        update xt_status set status=#{status},update_time=now()
+    </update>
+
+    <select id="listTimeoutRecode" resultType="java.util.HashMap">
+        SELECT
+        *
+        FROM
+        (
+        SELECT
+        ints.id,
+        ints.uuid,
+        p.name,
+        p.certificate_no,
+        p.sex,
+        u.real_name,
+        o.NAME orgName,
+        ints.in_time,
+        ( SELECT r.start_time FROM ba_record r WHERE r.serial_id = ints.id ORDER BY r.id LIMIT 1 ) sx_date
+        FROM
+        ba_serial ints
+        LEFT JOIN ba_person p ON ints.person_id = p.id
+        LEFT JOIN xt_user u ON ints.send_user_id = u.id
+        LEFT JOIN xt_organization o ON u.organization_id = o.id
+        WHERE
+        1 = 1 and ints.area_id=1 and ints.status &lt; 10 and (ints.is_show_timeout_recode is null or ints.is_show_timeout_recode != 1)
+        ) a
+        WHERE
+        TIMESTAMPDIFF( MINUTE, a.in_time, IFNULL( a.sx_date, now( ) ) ) > 150
+
+    </select>
+
+    <update id="updateTimeoutRecode">
+        update ba_serial set is_show_timeout_recode=1 where id = #{id}
+    </update>
+
+    <select id="listBaqOutAlarmData" resultType="java.util.HashMap">
+        select * from ba_inform where receiver_id = #{receiver_id} and title = '告警通知' and is_read = 0
+    </select>
+
+    <update id="updateBaqOutAlarmById">
+        update ba_inform set is_read = 1 where id = #{id}
+    </update>
+    
+    <select id="queryUserByCuffNo" resultType="java.util.HashMap" parameterType="java.lang.String">
+        SELECT
+            *
+        FROM
+            xt_user u
+        WHERE
+            u.id = (
+        SELECT
+            pe.police_id
+        FROM
+            ba_police_entrance pe
+        WHERE
+            pe.out_time IS NULL
+            AND pe.cuff_id = ( SELECT c.id FROM ba_cuff c WHERE c.cuff_no = #{cuffNo} )
+        ORDER BY
+            in_time DESC
+            LIMIT 1
+            )
+    </select>
+    
+    <select id="querySerailByUser12" resultType="java.util.HashMap" parameterType="java.util.Map">
+        SELECT
+        s.id,
+        s.serial_no,
+				c.cuff_no,
+        p.name,
+        p.certificate_no,
+        s.in_time,
+        u.real_name,
+        o.NAME orgname,
+        (select wr.status from ba_waiting_record wr where wr.serial_id = s.id order by id desc limit 1) isKy,
+		(select wr2.id from ba_waiting_record wr2 where wr2.serial_id = s.id order by id desc limit 1) record_id
+        FROM
+        ba_serial s
+        LEFT JOIN ba_person p ON s.person_id = p.id
+        LEFT JOIN xt_user u ON u.id = s.send_user_id
+        LEFT JOIN xt_organization o ON o.id = u.organization_id
+		left join ba_cuff c on c.id = s.cuff_id
+        WHERE
+        s.STATUS &lt; 10
+        AND (s.order_request_id IN ( SELECT pe.order_request_id FROM ba_police_entrance pe WHERE pe.out_time IS NULL AND pe.police_id IN (#{userids} ) ) or s.send_user_id in (#{userids} ))
+    </select>
+</mapper>

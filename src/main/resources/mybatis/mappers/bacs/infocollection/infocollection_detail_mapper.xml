@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.infocollection.IInfoCollectionDetailMapper">
+    <resultMap id="BaseResultMap" type="com.zhixin.zhfz.bacs.entity.InfoCollectionDetailEntity">
+        <id column="id" property="id" jdbcType="INTEGER"></id>
+        <result column="info_collection_id" property="infoCollectionId" jdbcType="INTEGER" />
+        <result column="coll_key" property="collKey" jdbcType="VARCHAR" />
+        <result column="coll_value" property="collValue" jdbcType="VARCHAR" />
+        <result column="collect_user_id" property="collectUserId" jdbcType="INTEGER" />
+        <result column="collect_time" property="collectTime" jdbcType="TIMESTAMP" />
+        <result column="op_pid" property="opPid" jdbcType="VARCHAR" />
+        <result column="op_user_id" property="opUserId" jdbcType="INTEGER" />
+    </resultMap>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.util.Map">
+           SELECT * from ba_collection_detail
+           where info_collection_id = #{id}
+               <if test="collKey != null and collKey != ''">
+                      and coll_key like '%${collKey}%'
+               </if>
+    </select>
+
+    <!-- 批量插入 -->
+    <insert id="insertAllDeatils" parameterType="java.util.List">
+        insert into ba_collection_detail (id, info_collection_id, coll_key,
+        coll_value, collect_user_id, collect_time,op_pid,op_user_id
+        )
+        values
+        <foreach collection = "list" item="item" index="index"
+                 separator=",">
+            (null,
+            #{item.infoCollectionId},
+            #{item.collKey},
+            #{item.collValue},
+            #{item.collectUserId},
+            sysdate(),#{item.opPid},#{item.opUserId})
+        </foreach>
+    </insert>
+
+    <select id="selectByInfoCollectionId" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select  id, info_collection_id,coll_key,coll_value,collect_user_id,collect_time from ba_collection_detail
+        where info_collection_id = #{infoCollectionId}  and coll_key= '${collKey}'
+    </select>
+
+    <update id="updateDeatils" parameterType="com.zhixin.zhfz.bacs.entity.InfoCollectionDetailEntity" >
+        update ba_collection_detail
+        <set >
+            <if test="infoCollectionId != null" >
+                info_collection_id = #{infoCollectionId,jdbcType=INTEGER},
+            </if>
+            <if test="collKey != null" >
+                coll_key = #{collKey,jdbcType=VARCHAR},
+            </if>
+            <if test="collValue != null" >
+                coll_value = #{collValue,jdbcType=VARCHAR},
+            </if>
+            <if test="collectUserId != null" >
+                collect_user_id = #{collectUserId,jdbcType=INTEGER},
+            </if>
+            <if test="collectTime != null" >
+                collect_time = sysdate(),
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+</mapper>

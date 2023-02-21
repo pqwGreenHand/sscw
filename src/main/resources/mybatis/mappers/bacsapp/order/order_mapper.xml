@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacsapp.dao.order.IOrderMapper">
+
+    <select id="orderList" parameterType="java.util.Map" resultType="com.zhixin.zhfz.bacsapp.entity.OrderEntity">
+        select a.id orderRequestId,a.order_no orderNo,a.status orderStatus,a.plan_time planTime,a.arrive_time arriveTime,
+        b.id caseId,b.ajmc
+        from ba_order_request a
+        inner join ba_case b on b.id = a.case_id
+        <where>
+            a.created_time >= date_sub(now(),interval 24 hour)
+            <if test="dataAuth!=null and dataAuth!=''">
+                and ${dataAuth}
+            </if>
+            <if test="ajmc != null and ajmc != ''">
+                and b.ajmc like "%${ajmc}%"
+            </if>
+        </where>
+        order by a.id desc
+        <if test="pageStart != null and rows != null">
+            limit ${pageStart},${rows}
+        </if>
+    </select>
+
+    <select id="orderCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(1)
+        from ba_order_request a
+        inner join ba_case b on b.id = a.case_id
+        <where>
+            a.created_time >= date_sub(now(),interval 24 hour)
+            <if test="dataAuth!=null and dataAuth!=''">
+                and ${dataAuth}
+            </if>
+            <if test="ajmc != null and ajmc != ''">
+                and b.ajmc like "%${ajmc}%"
+            </if>
+        </where>
+        order by a.id desc
+    </select>
+
+    <select id="orderRequestList" parameterType="java.util.Map" resultType="com.zhixin.zhfz.bacsapp.form.OrderForm">
+        select 	a.id orderRequestId,a.order_no orderNo,a.status orderStatus,a.area_id areaId,
+        a.plan_time planTime,a.arrive_time arriveTime,a.order_user_id orderUserId,
+        a.male_count maleCount,a.female_count femaleCount,a.juveniles_count juvenilesCount,
+        a.special_count specialCount,a.other_count otherCount,a.type,a.noter_id noterId,a.description,
+        a.interpreter,b.id caseId,b.ajmc,b.ajbh,b.zbmj_id zbmjId,e.certificate_no policeNo
+        from ba_order_request a
+        inner join ba_case b on b.id = a.case_id
+        left join xt_user e on e.id = a.order_user_id
+        <where>
+            <if test="orderRequestId != null and orderRequestId != ''">
+                a.id = #{orderRequestId}
+            </if>
+        </where>
+        order by a.id desc
+    </select>
+
+    <select id="orderPersonList" parameterType="java.util.Map" resultType="com.zhixin.zhfz.bacsapp.form.OrderPersonForm">
+        select c.id orderPersonId,d.id personId,d.uuid,
+        c.status orderPersonStatus,c.person_type personType,c.is_guardian isGuardian,c.is_juvenile isJuvenile,
+        c.is_gravida isGravida,c.is_gravida_prove isGravidaProve,c.is_disease isDisease,c.is_disease_prove isDiseaseProve,
+        c.other,d.name personName,d.old_name oldName,d.nickname,d.sex,d.birth,d.certificate_no certificateNo,
+        d.certificate_type_id certificateTypeId,d.education,d.politic,d.officer,d.country,d.nation,
+        d.census_register censusRegister,d.address,d.job,d.job_title jobTitle,d.mobile,d.telephone,d.email,d.qq,
+        d.weixin,d.weibo,d.internet_info internetInfo,d.age,d.person_no personNo
+        from ba_order_request a
+        inner join ba_case b on b.id = a.case_id
+        inner join ba_order_person c on c.order_request_id = a.id
+        inner join ba_person d on d.id = c.person_id
+        <where>
+            <if test="orderRequestId != null and orderRequestId != ''">
+                a.id = #{orderRequestId}
+            </if>
+        </where>
+        order by d.id desc
+    </select>
+</mapper>

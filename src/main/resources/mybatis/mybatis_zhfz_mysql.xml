@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.zhixin.zhfz.common.entity.CodeEntity" alias="CodeEntity"/>
+		<typeAlias type="com.zhixin.zhfz.common.entity.OperLogEntity" alias="OperLogEntity"/>
+		<typeAlias type="com.zhixin.zhfz.bacs.entity.TdOperLogEntity" alias="TdOperLogEntity"/>
+		<typeAlias type="com.zhixin.zhfz.common.entity.AuthorityEntity" alias="AuthorityEntity"/>
+		<typeAlias type="com.zhixin.zhfz.common.entity.RoleEntity" alias="RoleEntity"/>
+		<typeAlias type="com.zhixin.zhfz.common.entity.OrganizationEntity" alias="OrganizationEntity"/>
+		<typeAlias type="com.zhixin.zhfz.common.entity.UserEntity" alias="UserEntity"/>
+		<typeAlias type="com.zhixin.zhfz.bacs.entity.AreaEntity" alias="AreaEntity"/>
+		<typeAlias type="com.zhixin.zhfz.bacs.entity.BelongEntity" alias="BelongEntity"/>
+		<typeAlias type="com.zhixin.zhfz.bacs.entity.BelongDetailTempEntity" alias="BelongDetailTempEntity"/>
+		<typeAlias type="com.zhixin.zhfz.bacs.entity.BelongTempEntity" alias="BelongTempEntity"/>
+		<typeAlias type="com.zhixin.zhfz.bacs.entity.BelongingsPhotoEntity" alias="BelongingsPhotoEntity"/>
+		<typeAlias type="com.zhixin.zhfz.bacs.entity.PersonLockersEntity" alias="PersonLockersEntity"/>
+		<typeAlias type="com.zhixin.zhfz.bacs.entity.SerialStatusEntity" alias="SerialStatusEntity"/>
+		<typeAlias type="com.zhixin.zhfz.bacs.entity.ExhibitPhotoEntity" alias="ExhibitPhotoEntity"/>
+		<typeAlias type="com.zhixin.zhfz.bacs.entity.SerialStatusTypeEntity" alias="SerialStatusTypeEntity"/>
+		<typeAlias type="com.zhixin.zhfz.bacs.entity.OpenCabinetEntity" alias="OpenCabinetEntity"/>
+		<typeAlias type="com.zhixin.zhfz.bacs.entity.CabinetConfigEntity" alias="CabinetConfigEntity"/>
+		<typeAlias type="com.zhixin.zhfz.bacs.entity.ExhibitEntity" alias="ExhibitEntity"/>
+		<typeAlias type="com.zhixin.zhfz.bacs.entity.PoliceBelongEntity" alias="PoliceBelongEntity"/>
+		<typeAlias type="com.zhixin.zhfz.bacs.entity.PoliceBelongingsPhotoEntity" alias="PoliceBelongingsPhotoEntity"/>
+		<typeAlias type="com.zhixin.zhfz.bacs.entity.PoliceLockersEntity" alias="PoliceLockersEntity"/>
+		<typeAlias type="com.zhixin.zhfz.common.entity.UserAuthority" alias="UserAuthority"/>
+		<typeAlias type="com.zhixin.zhfz.common.entity.ComboboxEntity" alias="ComboboxEntity"/>
+		<typeAlias type="com.zhixin.zhfz.common.entity.CombogridEntity" alias="CombogridEntity"/>
+		<typeAlias type="com.zhixin.zhfz.bacs.entity.NvrEntity" alias="NvrEntity"/>
+		<typeAlias type="com.zhixin.zhfz.bacs.entity.CameraEntity" alias="CameraEntity"/>
+		<typeAlias type="com.zhixin.zhfz.bacs.entity.PersonEntity" alias="PersonEntity"/>
+		<typeAlias type="com.zhixin.zhfz.bacs.entity.CrimeDefineEntity" alias="CrimeDefineEntity"/>
+		<typeAlias type="com.zhixin.zhfz.bacs.entity.PositionDeviceEntity" alias="PositionDeviceEntity"/>
+		<typeAlias type="com.zhixin.zhfz.bacs.entity.PositionAlarmEntity" alias="PositionAlarmEntity"/>
+		<typeAlias type="com.zhixin.zhfz.sacw.entity.LocationEntity" alias="LocationEntity"/>
+		<typeAlias type="com.zhixin.zhfz.sacw.entity.LabelEntity" alias="LabelEntity"/>
+		<typeAlias type="com.zhixin.zhfz.sacw.entity.ShelfEntity" alias="ShelfEntity"/>
+		<typeAlias type="com.zhixin.zhfz.sacw.entity.LabelLogEntity" alias="LabelLogEntity"/>
+		<typeAlias type="com.zhixin.zhfz.sacw.entity.RemoteLookEntity" alias="RemoteLookEntity"/>
+		<typeAlias type="com.zhixin.zhfz.sacw.entity.BoundAlarmEntity" alias="BoundAlarmEntity"/>
+		<typeAlias type="com.zhixin.zhfz.sacw.entity.SaNvrEntity" alias="SaNvrEntity"/>
+		<typeAlias type="com.zhixin.zhfz.sacw.entity.SaPersonalConfigDetailEntity" alias="SaPersonalConfigDetail"/>
+		<typeAlias type="com.zhixin.zhfz.sacw.entity.SaPersonalConfigEntity" alias="SaPersonalConfig"/>
+		<typeAlias type="com.zhixin.zhfz.sacw.entity.SaPositionDeviceEntity" alias="SaPositionDeviceEntity"/>
+		<typeAlias type="com.zhixin.zhfz.sacw.entity.SaCameraEntity" alias="SaCameraEntity"/>
+		<typeAlias alias="PersonalConfig" type="com.zhixin.zhfz.bacs.entity.PersonalConfigEntity" />
+		<typeAlias alias="PersonalConfigDetail" type="com.zhixin.zhfz.bacs.entity.PersonalConfigDetailEntity" />
+		<typeAlias alias="SearchInvolvedEntity" type="com.zhixin.zhfz.sacw.entity.SearchInvolvedEntity" />
+		<typeAlias alias="OrderRequestEntity" type="com.zhixin.zhfz.bacs.entity.OrderRequestEntity" />
+		<typeAlias alias="OrderPersonEntity" type="com.zhixin.zhfz.bacs.entity.OrderPersonEntity" />
+		<typeAlias alias="OrderStatusEntity" type="com.zhixin.zhfz.bacs.entity.OrderStatusEntity" />
+		<typeAlias alias="CaseEntity" type="com.zhixin.zhfz.common.entity.CaseEntity" />
+		<typeAlias alias="RegionEntity" type="com.zhixin.zhfz.common.entity.RegionEntity" />
+		<typeAlias alias="UrinalysisEntity" type="com.zhixin.zhfz.bacs.entity.UrinalysisEntity" />
+		<typeAlias alias="UrinalysisPhotoEntity" type="com.zhixin.zhfz.bacs.entity.UrinalysisPhotoEntity" />
+		<typeAlias alias="UrinalysisDetailEntity" type="com.zhixin.zhfz.bacs.entity.UrinalysisDetailEntity" />
+		<typeAlias alias="CuffLogEntity" type="com.zhixin.zhfz.bacs.entity.CuffLogEntity" />
+		<typeAlias alias="CombineInfoEntity" type="com.zhixin.zhfz.bacs.entity.CombineInfoEntity" />
+		<typeAlias alias="BaCaseEntity" type="com.zhixin.zhfz.glpt.entity.BaCaseEntity" />
+		<typeAlias alias="BaSerialEntity" type="com.zhixin.zhfz.glpt.entity.BaSerialEntity" />
+		<typeAlias alias="AlarmEntity" type="com.zhixin.zhfz.glpt.entity.AlarmEntity" />
+		<typeAlias alias="ConsoleEntity" type="com.zhixin.zhfz.sacw.entity.ConsoleEntity" />
+		<typeAlias alias="CwAlarmEntity" type="com.zhixin.zhfz.sacw.entity.CwAlarmEntity" />
+		<typeAlias alias="JingwuInfoEntity" type="com.zhixin.zhfz.bacs.entity.JingwuInfoEntity" />
+		<typeAlias alias="JwTodayPrisonerEntity" type="com.zhixin.zhfz.bacs.entity.JwTodayPrisonerEntity" />
+		<typeAlias alias="JwWeekCaseEntity" type="com.zhixin.zhfz.bacs.entity.JwWeekCaseEntity" />
+		<typeAlias alias="GeoPersonInfoCountEntity" type="com.zhixin.zhfz.bacs.entity.GeoPersonInfoCountEntity" />
+		<typeAlias alias="GeoDataEntity" type="com.zhixin.zhfz.bacs.entity.GeoDataEntity" />
+		<typeAlias alias="caseDataClue" type="com.zhixin.zhfz.bacs.entity.CaseDataClueEntity" />
+		<typeAlias alias="InterrogateCase" type="com.zhixin.zhfz.bacs.entity.InterrogateCaseEntity" />
+		<typeAlias alias="ArchivesTreeEntity" type="com.zhixin.zhfz.bacs.entity.ArchivesTreeEntity" />
+		<typeAlias alias="InterrogateRecordTreeEntity" type="com.zhixin.zhfz.bacs.entity.InterrogateRecordTreeEntity" />
+	</typeAliases>
+	
+</configuration>

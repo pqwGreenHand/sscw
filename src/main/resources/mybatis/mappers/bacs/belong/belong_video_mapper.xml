@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper	namespace="com.zhixin.zhfz.bacs.dao.belong.IBelongVideoMapper">
+
+	<resultMap id="belongVideoEntity" type="com.zhixin.zhfz.bacs.entity.BelongVideoEntity">
+		<id property="id" column="id" jdbcType="INTEGER"/>
+		<result property="belongId" column="belongings_id" jdbcType="INTEGER"/>
+		<result property="url" column="url" jdbcType="VARCHAR"/>
+		<result property="type" column="type" jdbcType="INTEGER"/>
+		<result property="createdUser" column="created_user" jdbcType="INTEGER"/>
+		<result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>
+		<result property="bz" column="bz" jdbcType="VARCHAR"/>
+		<result property="createdUserName" column="created_user_name" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<select id="list" resultMap="belongVideoEntity" parameterType="java.util.Map">
+		select v.*,u.real_name created_user_name
+		from belongings_video v
+		left join xt_user u on v.created_user = u.id
+		<where>
+			<if test="belongId!=null">
+				v.belongings_id = #{belongId}
+			</if>
+		</where>
+       	limit ${pageStart},${rows}	
+	</select>
+
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map"> 
+		select count(1) from belongings_video
+		<where>
+			<if test="belongId!=null">
+				belongings_id = #{belongId}
+			</if>
+		</where>
+	</select>
+	
+	<insert id="insert" parameterType="CameraEntity" keyProperty="id" useGeneratedKeys="true">
+        insert into belongings_video (belongings_id, url, type, created_user, created_time, bz) values
+		(#{belongId},#{url},#{type},#{createdUser},now(),#{bz})
+    </insert>
+
+	<delete id="delete" parameterType="int">
+            delete from belongings_video where id=#{id}
+    </delete>
+
+</mapper>

@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhixin.zhfz.common.dao.combogrid.ICombogridMapper">
+
+    <resultMap id="combogridResultMap" type="CombogridEntity">
+        <id property="id" column="id"/>
+        <result property="sendUserNo" column="sendUserNo"/>
+        <result property="serialNo" column="serial_no"/>
+        <result property="belongingsId" column="belongings_id"/>
+        <result property="shzt" column="shzt"/>
+        <result property="type" column="type"/>
+        <result property="serialId" column="serial_id"/>
+        <result property="status" column="status"/>
+        <result property="orderRequestId" column="order_request_id"/>
+        <result property="inPhotoName" column="in_photo_name"/>
+        <result property="ajlx" column="ajlx"/>
+        <result property="ab" column="ab"/>
+        <result property="orderAjlx" column="orderAjlx"/>
+        <result property="orderAb" column="orderAb"/>
+        <result property="description" column="description"/>
+        <result property="name" column="name"/>
+        <result property="certificateNo" column="certificate_no"/>
+        <result property="sex" column="sex"/>
+        <result property="birth" column="birth"/>
+        <result property="nation" column="nation"/>
+        <result property="education" column="education"/>
+        <result property="personId" column="personId"/>
+        <result property="areaId" column="areaId"/>
+        <result property="caseId" column="case_id"/>
+        <result property="inUserNo1" column="in_user_no1"/>
+        <result property="policeCuffNo1" column="policeCuffNo1"/>
+        <result property="inUserId1" column="in_user_id1"/>
+        <result property="inUserNo2" column="in_user_no2"/>
+        <result property="policeCuffNo2" column="policeCuffNo2"/>
+        <result property="inUserId2" column="in_user_id2"/>
+        <result property="policeName1" column="policeName1"/>
+        <result property="policeName2" column="policeName2"/>
+        <result property="policeId" column="police_id"/>
+        <result property="afdd" column="afdd"/>
+        <result property="afsj" column="afsj"/>
+        <result property="uuid" column="uuid"/>
+        <result property="personCuff" column="personCuff"/>
+        <result property="inTime" column="in_time"/>
+        <!-- 嫌疑人入区添加-->
+        <result column="person_type" property="personType" jdbcType="VARCHAR"/>
+        <result property="certificateTypeId" column="certificate_type_id"/>
+        <result property="timenow" column="timenow"/>
+        <result property="userId" column="user_id"/>
+        <result property="ajmc" column="ajmc"/>
+        <result property="sendUserId" column="sendUserId"/>
+        <result property="sendUserName" column="sendUserName"/>
+        <result property="roomId" column="room_id"/>
+        <result property="roomName" column="room_name"/>
+        <result property="recordId" column="record_id"/>
+        <result property="orderUserNo" column="orderUserNo"/>
+        <result property="orderUserId" column="order_user_id"/>
+        <result property="orderUserName" column="orderUserName"/>
+        <result property="isJuvenile" column="is_juvenile"/>
+        <result property="isGravida" column="is_gravida"/>
+        <result property="isDisease" column="is_disease"/>
+        <result property="sfxxcj" column="sfxxcj"/>
+
+        <result property="ajbh" column="ajbh" />
+        <result property="rybh" column="rybh" />
+        <result property="caseNo" column="caseNo" />
+
+        <result column="order_person_ajmc" property="orderPersonAjmc" />
+
+    </resultMap>
+    <!-- 获取所有嫌疑人入区编号、姓名、身份证号码 -->
+    <select id="getSuspectSerialNo" parameterType="java.util.Map" resultMap="combogridResultMap">
+        SELECT  ints.ajbh caseNo,
+        odr.order_no,
+		orp.person_type,orp.is_juvenile,orp.is_gravida,orp.is_disease,
+        ints.id,
+        ints.serial_no,
+        ints.`status`,
+        ints.order_request_id order_request_id,
+        ints.in_photo_name,
+        ints.uuid as uuid,
+        cs.ajlx,
+        cs.ab,
+        cs.afdd afdd ,
+        cs.afsj afsj ,
+        cs.ajmc  ajmc ,
+        su.real_name  sendUserName ,
+        su.id  sendUserId ,
+        su.certificate_no sendUserNo,
+        p.`name`,
+        p.certificate_no certificate_no,
+        p.sex AS sex,
+        p.birth AS birth,
+        p.nation AS nation,
+        p.education AS education,
+        p.id AS personId,
+        ints.area_id AS areaId,
+        ints.case_id AS caseId,
+        police1.certificate_no in_user_no1,
+        police1.cuff_no policeCuffNo1,
+        police1.id in_user_id1,
+        police1.real_name policeName1,
+        police2.certificate_no in_user_no2,
+        police2.cuff_no policeCuffNo2,
+        police2.id in_user_id2,
+        police2.real_name policeName2,
+        bcp.cuff_no personCuff,
+        ints.in_time,ints.sfxxcj,ints.rybh
+        FROM
+        ba_serial ints
+        LEFT JOIN ba_person p ON ints.person_id = p.id
+        LEFT JOIN xt_code ct ON p.certificate_type_id = ct.code_key
+        LEFT JOIN ba_area ia ON ints.area_id = ia.id
+        LEFT JOIN ba_order_request odr ON ints.order_request_id = odr.id
+        LEFT JOIN ba_order_person orp ON  orp.order_request_id=odr.id
+        LEFT JOIN ba_case cs ON cs.id = ints.case_id
+        LEFT JOIN ba_police_entrance bpe ON bpe.case_id = cs.id
+        LEFT JOIN xt_user bu ON bu.id = bpe.police_id
+        LEFT JOIN ba_cuff bc ON bc.user_id = bpe.police_id
+        LEFT JOIN xt_organization xo ON xo.id = bu.organization_id
+        LEFT JOIN xt_user su ON ints.send_user_id = su.id
+        LEFT JOIN ba_cuff bcp ON bcp.person_id = ints.person_id
+	    LEFT JOIN (
+        SELECT
+        u.id,
+        u.real_name,
+        u.certificate_no,
+        f.cuff_no,
+        c.id AS case_id
+        FROM
+        xt_user u
+        INNER JOIN ba_police_entrance p ON u.id = p.police_id
+        INNER JOIN ba_case AS c ON p.case_id = c.id
+        INNER JOIN ba_cuff f ON u.id = f.user_id
+        WHERE
+        p.police_type = 0
+        AND p.out_time is NULL
+        ORDER BY
+        p.id ASC
+        LIMIT 1
+        ) police1 ON police1.case_id = ints.case_id
+        LEFT JOIN (
+        SELECT
+        u.id,
+        u.real_name,
+        u.certificate_no,
+        f.cuff_no,
+        c.id AS case_id
+        FROM
+        xt_user u
+        INNER JOIN ba_police_entrance p ON u.id = p.police_id
+        INNER JOIN ba_case AS c ON p.case_id = c.id
+        INNER JOIN ba_cuff f ON u.id = f.user_id
+        WHERE
+        p.police_type = 1
+        AND p.out_time is NULL
+        ORDER BY
+        p.id ASC
+        LIMIT 1
+        ) police2 ON police2.case_id = ints.case_id
+        WHERE
+        ints.type = 0
+        <if test="cuffNo != null ">
+        AND bc.cuff_no = #{cuffNo}
+        </if>
+        AND ints. STATUS &lt; 11  
+        <if test="caseFlag != null ">
+            and ints.case_id is not null
+        </if>
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="type!=null and type!=''">
+            and ${type}
+        </if>
+        <if test="caseId != null ">
+            and ints.case_id = #{caseId}
+        </if>
+        GROUP BY ints.id
+        order by ints.id desc
+    </select>
+    <!-- 开始审讯时获取所有嫌疑人入区编号、姓名、身份证号码 -->
+    <select id="getSuspectSerialNoForRecord" parameterType="java.util.Map" resultMap="combogridResultMap">
+        SELECT
+        ints.id,
+        ints.serial_no,
+        ints.`status`,
+        ints.order_request_id order_request_id,
+        ints.in_photo_name,
+        cs.ajlx,
+        cs.ab,
+        p.`name`,
+        p.certificate_no certificate_no,
+        p.sex AS sex,
+        p.birth AS birth,
+        p.nation AS nation,
+        p.education AS education,
+        p.id AS personId,
+        ints.area_id AS areaId,
+        ints.case_id AS caseId,
+        police1.certificate_no in_user_no1,
+        police1.cuff_no policeCuffNo1,
+        police1.id in_user_id1,
+        police1.real_name policeName1,
+        police2.certificate_no in_user_no2,
+        police2.cuff_no policeCuffNo2,
+        police2.id in_user_id2,
+        police2.real_name policeName2
+        FROM
+        ba_serial ints
+        LEFT JOIN ba_person p ON ints.person_id = p.id
+        LEFT JOIN xt_code ct ON p.certificate_type_id = ct.code_key
+        LEFT JOIN ba_area ia ON ints.area_id = ia.id
+        LEFT JOIN ba_order_request odr ON ints.order_request_id = odr.id
+        LEFT JOIN ba_case cs ON cs.id = ints.case_id
+        LEFT JOIN ba_police_entrance bpe ON bpe.case_id = cs.id
+        LEFT JOIN xt_user bu ON bu.id = bpe.police_id
+        LEFT JOIN xt_organization xo ON xo.id = bu.organization_id
+        and  ( ints.case_id is not null
+        and (ints.status &gt; 0 and ints.status &lt; 11
+        and ints.id not in (select r.serial_id from ba_record r
+        where r.`status`=1 or r.`status`=2)
+        and ints.id not in
+        (select serial_id from ba_waiting_record where `status` = 0)))
+        LEFT JOIN (
+        SELECT
+        u.id,
+        u.real_name,
+        u.certificate_no,
+        f.cuff_no,
+        c.id AS case_id
+        FROM
+        xt_user u
+        INNER JOIN ba_police_entrance p ON u.id = p.police_id
+        INNER JOIN ba_case AS c ON p.case_id = c.id
+        INNER JOIN ba_cuff f ON u.id = f.user_id
+        WHERE
+        p.police_type = 0
+        AND p.out_time is NULL
+        ORDER BY
+        p.id ASC
+        LIMIT 1
+        ) police1 ON police1.case_id = ints.case_id
+        LEFT JOIN (
+        SELECT
+        u.id,
+        u.real_name,
+        u.certificate_no,
+        f.cuff_no,
+        c.id AS case_id
+        FROM
+        xt_user u
+        INNER JOIN ba_police_entrance p ON u.id = p.police_id
+        INNER JOIN ba_case AS c ON p.case_id = c.id
+        INNER JOIN ba_cuff f ON u.id = f.user_id
+        WHERE
+        p.police_type = 1
+        AND p.out_time is NULL
+        ORDER BY
+        p.id ASC
+        LIMIT 1
+        ) police2 ON police2.case_id = ints.case_id
+        WHERE
+        ints.type = 0
+        AND ints. STATUS &lt; 11
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="type!=null and type!=''">
+            and ${type}
+        </if>
+        GROUP  BY  p.certificate_no
+        order by ints.id desc
+    </select>
+    <!-- 查询其他人获取所有嫌疑人入区编号、姓名、身份证号码 -->
+    <select id="getRecordOtherSerialNo" parameterType="java.util.Map" resultMap="combogridResultMap">
+        SELECT
+        ints.id,
+        ints.serial_no,
+        ints.`status`,
+        ints.order_request_id order_request_id,
+        ints.in_photo_name,
+        cs.ajlx,
+        cs.ab,
+        p.`name`,
+        p.certificate_no certificate_no,
+        p.sex AS sex,
+        p.birth AS birth,
+        p.nation AS nation,
+        p.education AS education,
+        p.id AS personId,
+        ints.area_id AS areaId,
+        ints.case_id AS caseId,
+        police1.certificate_no in_user_no1,
+        police1.cuff_no policeCuffNo1,
+        police1.id in_user_id1,
+        police1.real_name policeName1,
+        police2.certificate_no in_user_no2,
+        police2.cuff_no policeCuffNo2,
+        police2.id in_user_id2,
+        police2.real_name policeName1
+        FROM
+        ba_serial ints
+        LEFT JOIN ba_person p ON ints.person_id = p.id
+        LEFT JOIN xt_code ct ON p.certificate_type_id = ct.code_key
+        LEFT JOIN ba_area ia ON ints.area_id = ia.id
+        LEFT JOIN ba_order_request odr ON ints.order_request_id = odr.id
+        LEFT JOIN ba_case cs ON cs.id = ints.case_id
+        LEFT JOIN ba_police_entrance bpe ON bpe.case_id = cs.id
+        LEFT JOIN xt_user bu ON bu.id = bpe.police_id
+        LEFT JOIN xt_organization xo ON xo.id = bu.organization_id
+        LEFT JOIN (
+        SELECT
+        u.id,
+        u.real_name,
+        u.certificate_no,
+        f.cuff_no,
+        c.id AS case_id
+        FROM
+        xt_user u
+        INNER JOIN ba_police_entrance p ON u.id = p.police_id
+        INNER JOIN ba_case AS c ON p.case_id = c.id
+        INNER JOIN ba_cuff f ON u.id = f.user_id
+        WHERE
+        p.police_type = 0
+        AND p.out_time is NULL
+        ORDER BY
+        p.id ASC
+        LIMIT 1
+        ) police1 ON police1.case_id = ints.case_id
+        LEFT JOIN (
+        SELECT
+        u.id,
+        u.real_name,
+        u.certificate_no,
+        f.cuff_no,
+        c.id AS case_id
+        FROM
+        xt_user u
+        INNER JOIN ba_police_entrance p ON u.id = p.police_id
+        INNER JOIN ba_case AS c ON p.case_id = c.id
+        INNER JOIN ba_cuff f ON u.id = f.user_id
+        WHERE
+        p.police_type = 1
+        AND p.out_time is NULL
+        ORDER BY
+        p.id ASC
+        LIMIT 1
+        ) police2 ON police2.case_id = ints.case_id
+        WHERE
+        ints.type &lt;>0 and ints.status &lt;11 and ints.`status` &lt;>6
+        AND ints. STATUS &lt; 11
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        order by ints.id desc
+    </select>
+
+    <select id="getAllDetainSerialNo" parameterType="java.util.Map" resultMap="combogridResultMap">
+        SELECT
+        s.id,
+        s.person_id AS personId,
+        s.serial_no,
+        s.id AS serial_id,
+        p.`name`,
+        p.certificate_no,
+        wr.id recordId,
+        wr.room_id,
+        u.certificate_no AS in_user_no1,
+        s.in_register_user_id AS in_user_id1,
+        r. NAME AS room_name
+        FROM
+        ba_waiting_record AS wr
+        JOIN ba_serial AS s ON wr.serial_id = s.id
+        AND wr.id IN (
+        SELECT
+        Max(bwr.id)
+        FROM
+        ba_waiting_record bwr
+        LEFT JOIN ba_serial inss ON inss.id = bwr.serial_id
+        WHERE
+        inss.type = 0
+        AND inss.`status` = 3
+        GROUP BY
+        bwr.serial_id
+        )
+        JOIN ba_person AS p ON s.person_id = p.id
+        JOIN xt_user AS u ON s.in_register_user_id = u.id
+        JOIN ba_room AS r ON r.id = wr.room_id
+        WHERE
+        s.type = 0
+        AND s.`status` = 3
+        <if test="areaId!=null and areaId!=''">
+            AND wr.area_id = #{areaId}
+        </if>
+        <if test="dataAuth!=null and dataAuth!=''">
+            and #{dataAuth}
+        </if>
+        ORDER BY
+        wr.id DESC
+    </select>
+    <select id="getOrderContentForEntrance" resultMap="combogridResultMap" parameterType="java.util.Map">
+        SELECT
+        o.shzt,
+        t.type,
+        p.id,
+        p. NAME,
+        p.certificate_type_id,
+        p.certificate_no,
+        p.sex,
+        t.order_user_id,
+        o.order_request_id,
+        o.person_type,
+        xt.certificate_no orderUserNo,
+        xt.real_name orderUserName,
+        bc.ajmc,
+        bc.id caseId,
+        t.area_id areaId,
+        t.ajlx,
+        t.ab,o.ajbh,o.rybh,o.ajmc as order_person_ajmc
+        FROM
+        ba_order_request t
+        LEFT JOIN ba_order_person o ON o.order_request_id = t.id
+        LEFT JOIN ba_person p ON p.id = o.person_id
+        LEFT JOIN ba_case bc ON bc.id = t.case_id
+        LEFT JOIN xt_user xt ON xt.id = t.order_user_id
+        WHERE o.order_request_id=t.id
+            AND t. STATUS IN (0, 1, 5)
+            AND p.isArrive = 0
+            and now() BETWEEN DATE_ADD(t.created_time,INTERVAL -5 minute)
+            AND DATE_ADD(t.created_time,INTERVAL 24 HOUR)
+            <if test="dataAuth!=null and dataAuth!=''">
+                and ${dataAuth}
+            </if>
+            order by id desc
+    </select>
+    <!-- 获取预约信息  -->
+    <select id="getAllOrderInfo" parameterType="java.util.Map" resultMap="combogridResultMap">
+        SELECT orq.created_time AS timenow, orq.case_id caseId, orq.id AS id, orq.order_no AS orderNo, u.real_name AS
+        `name`,orq.ajlx orderAjlx,orq.ab orderAb,orq.area_id areaId,orq.description,
+        u.certificate_no AS certificateNo, u.id AS user_id, cs.ajlx,cs.ab, u.id policeId
+        FROM ba_order_request orq
+        LEFT JOIN xt_user u ON orq.order_user_id = u.id
+        LEFT JOIN ba_case cs ON cs.id = orq.case_id
+        WHERE (orq.status &lt;3 or orq.status = 5)and now() BETWEEN DATE_ADD(orq.created_time,INTERVAL -5 minute) AND
+        DATE_ADD(orq.created_time,INTERVAL 24 HOUR)
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        ORDER BY orq.id DESC
+    </select>
+    <!-- 获取所有在区民警 -->
+    <select id="getPoliceSerialNo" parameterType="java.util.Map" resultMap="combogridResultMap">
+        SELECT
+            pd.id police_id,
+            u.id personId,
+            u.real_name NAME,
+            u.certificate_no,
+            pd.case_id caseId,
+            pd.area_id areaId,
+            f.cuff_no policeCuffNo1,
+            bs.id ,
+            bs.serial_no
+        FROM
+            ba_police_entrance pd
+        LEFT JOIN xt_user u ON u.id = pd.police_id
+        LEFT JOIN ba_case c ON c.id = pd.case_id
+        LEFT JOIN ba_cuff f ON f.id = pd.cuff_id
+        LEFT JOIN ba_case bc ON pd.case_id = bc.id
+        LEFT JOIN ba_serial bs ON bs.case_id = bc.id
+        WHERE
+            pd.out_time IS NULL
+        and bs.type = 0
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="cuffNo != null ">
+            AND f.cuff_no = #{cuffNo}
+        </if>
+        ORDER BY
+            pd.id DESC
+	</select>
+
+
+    <!-- 查询所有已经存物的嫌疑人 -->
+    <select id="getPersonBelong" parameterType="java.util.Map" resultMap="combogridResultMap">
+        SELECT
+        pn.*,b.id belongings_id
+        FROM
+        ba_person pn
+        LEFT JOIN ba_belongings b  ON pn.id = b.serial_id
+        LEFT JOIN ba_belongings_detail d ON d.belongings_id = b.id
+        LEFT JOIN ba_area ia ON ia.id=b.area_id
+        LEFT JOIN ba_cabinet_config_detail dl ON dl.id = b.locker_id
+        LEFT JOIN ba_cabinet_config cf ON cf.id = dl.config_id
+        WHERE
+        d.is_get = 0
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="lockerId!=null and lockerId!='' and enpId==null">
+            and b.locker_id=#{lockerId}
+        </if>
+        <if test="enpId!=null and enpId!=''">
+            and b.serial_id = #{enpId}
+        </if>
+        <if test="areaId!=null and areaId!=''">
+            and b.area_id=#{areaId}
+        </if>
+        <if test="flag == 'Belong'">
+            and cf.type = 1
+        </if>
+        GROUP BY  pn.id
+    </select>
+</mapper>

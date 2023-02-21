@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.serial.ISerialStatusMapper" >
+    <resultMap id="InterrogateSerialStatusResultMap" type="com.zhixin.zhfz.bacs.entity.SerialStatusEntity" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="status_name" property="statusName" jdbcType="VARCHAR" />
+        <result column="status_time" property="statusTime" jdbcType="TIMESTAMP" />
+        <result column="serial_id" property="serialId" jdbcType="BIGINT" />
+    </resultMap>
+    <resultMap id="CheckSerialStatusResultMap" type="SerialStatusTypeEntity" >
+        <result column="serial_id" property="serialId" jdbcType="BIGINT" />
+        <result column="is_security" property="isSecurity" jdbcType="INTEGER" />
+        <result column="is_waiting" property="isWaiting" jdbcType="INTEGER" />
+        <result column="is_arraign" property="isArraign" jdbcType="INTEGER" />
+        <result column="is_record" property="isRecord" jdbcType="INTEGER" />
+    </resultMap>
+    <!-- 瞬时状态 -->
+    <select id="checkStatus" resultMap="CheckSerialStatusResultMap" parameterType="java.lang.Long">
+        select #{serialId} serial_id,a.is_security,b.is_waiting,c.is_arraign,d.is_record from
+        (select count(1) is_security from ba_security where serial_id=#{serialId}) a,
+        (select if((select status from ba_waiting_record where serial_id=#{serialId} order by id desc  limit 1)=0,1,0) is_waiting) b,
+        (select if((select status from ba_waiting_record where serial_id=#{serialId} order by id desc  limit 1)=1,1,0) is_arraign) c,
+        (select case (select status from ba_record where serial_id=#{serialId} order by id desc limit 1) when 1 then 1 when 2 then 1 else 0 end is_record) d
+  </select>
+
+    <insert id="insert" parameterType="com.zhixin.zhfz.bacs.entity.SerialStatusEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into ba_serial_status
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="statusName != null" >
+                status_name,
+            </if>
+            status_time,
+            <if test="serialId != null" >
+                serial_id,
+            </if>
+            <if test="opPid != null" >
+                op_pid,
+            </if>
+            <if test="opUserId != null" >
+                op_user_id
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="statusName != null" >
+                #{statusName,jdbcType=VARCHAR},
+            </if>
+            now(),
+            <if test="serialId != null" >
+                #{serialId,jdbcType=BIGINT},
+            </if>
+            <if test="opPid != null" >
+                #{opPid,jdbcType=VARCHAR},
+            </if>
+            <if test="opUserId != null" >
+                #{opUserId,jdbcType=BIGINT}
+            </if>
+        </trim>
+    </insert>
+
+
+    <!-- 查询审讯状态 -->
+    <select id="selectRecordStatus" resultType="java.lang.Integer" parameterType="java.lang.Long">
+     select count(1) from ba_record where status in (1,2) and serial_id = #{serialId}
+  </select>
+    <!-- 查询看押状态 -->
+    <select id="selectWaitingStatus" resultType="java.lang.Integer" parameterType="java.lang.Long">
+     select count(1) from ba_waiting_record where status = 0 and serial_id = #{serialId}
+  </select>
+
+    <!-- 查询随身物品状态 -->
+    <select id="selectBelongsStatus" resultType="java.lang.Integer" parameterType="java.lang.Long">
+     select count(1) from ba_belongings where is_get = 0 and serial_id = #{serialId}
+  </select>
+</mapper>

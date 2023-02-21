@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.sacw.dao.warehouse.IWareHouseMapper">
+
+    <resultMap id="wareHouseResultMap" type="com.zhixin.zhfz.sacw.entity.WareHouseEntity">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="orgId" column="org_id" jdbcType="INTEGER"/>
+        <result property="orgName" column="orgName" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="map" column="map" jdbcType="VARCHAR"/>
+        <result property="mapName" column="map_name" jdbcType="VARCHAR"/>
+        <result property="op_pid" column="op_pid" jdbcType="VARCHAR"/>
+        <result property="op_user_id" column="op_user_id" jdbcType="INTEGER"/>
+        <result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>
+        <result property="updatedTime" column="updated_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- id is same to interface'methmod -->
+    <select id="listAllWareHouse" resultMap="wareHouseResultMap" parameterType="java.util.Map">
+        SELECT
+        w.*, o. NAME orgName
+        FROM
+        sa_warehouse w,
+        xt_organization o
+        WHERE
+        w.org_id = o.id
+        <if test="name!=null and name !=''">
+            and w.name like '%${name}%'
+        </if>
+        <if test="orgId!=null and orgId !=''">
+            and w.org_id=${orgId}
+        </if>
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        limit ${pageStart},${rows}
+    </select>
+
+    <select id="AllWareHouse" resultMap="wareHouseResultMap" parameterType="java.util.Map">
+        SELECT
+        w.*, o. NAME orgName
+        FROM
+        sa_warehouse w,
+        xt_organization o
+        WHERE
+        w.org_id = o.id
+        <if test="name!=null and name !=''">
+            and w.name like '%${name}%'
+        </if>
+        <if test="orgId!=null and orgId !=''">
+            and w.org_id=${orgId}
+        </if>
+        <if test="orgStr!=null and orgStr !=''">
+            and w.org_id in (${orgStr})
+        </if>
+
+    </select>
+
+
+    <select id="findAllWareHouse" resultMap="wareHouseResultMap" parameterType="java.util.Map">
+        select w.*,o.name orgName from sa_warehouse w,xt_organization o where w.org_id=o.id
+        <if test="name!=null and name !=''">
+            and w.name like '%${name}%'
+        </if>
+        <if test="orgId!=null and orgId !=''">
+            and w.org_id =${orgId}
+        </if>
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+    </select>
+
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(w.id) from sa_warehouse w,xt_organization o where w.org_id=o.id
+        <if test="name!=null and name !=''">
+            and w.name like '%${name}%'
+        </if>
+        <if test="orgId!=null and orgId !=''">
+            and w.org_id=${orgId}
+        </if>
+    </select>
+
+    <insert id="insertWareHouse" parameterType="com.zhixin.zhfz.sacw.entity.WareHouseEntity">
+        insert into sa_warehouse (org_id,name,description,address,op_pid,op_user_id,created_time)
+        values (#{orgId},#{name},#{description},#{address},#{op_pid},#{op_user_id},now())
+    </insert>
+
+    <delete id="deleteWareHouse" parameterType="int">
+        DELETE a,b FROM sa_warehouse a,sa_location b WHERE a.id=b.warehouse_id AND a.id=#{id}
+    </delete>
+    <delete id="deleteWareHouse1" parameterType="int">
+        DELETE FROM sa_warehouse WHERE id=#{id}
+    </delete>
+
+
+    <update id="updateWareHouse" parameterType="com.zhixin.zhfz.sacw.entity.WareHouseEntity">
+        update sa_warehouse set name = #{name},description = #{description},org_id=#{orgId},
+        address = #{address} where id=#{id}
+    </update>
+
+    <select id="qureyEntityByPram" resultMap="wareHouseResultMap" parameterType="com.zhixin.zhfz.sacw.entity.WareHouseEntity">
+        SELECT
+        w.*
+        FROM
+        sa_warehouse w
+        WHERE
+        1=1
+        <if test="name!=null and name !=''">
+            and w.name = #{name}
+        </if>
+        <if test="orgId!=null and orgId !=''">
+            and w.org_id=${orgId}
+        </if>
+    </select>
+
+</mapper>

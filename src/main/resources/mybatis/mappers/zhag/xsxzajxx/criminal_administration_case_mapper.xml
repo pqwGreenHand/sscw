@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.zhag.dao.xzxsajxx.CriminalAndAdministrationCaseMapper" >
+  <resultMap id="BaseResultMap" type="com.zhixin.zhfz.zhag.entity.CriminalAndAdministrationCaseEntity" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="ajmc" property="ajmc" jdbcType="VARCHAR" />
+    <result column="ajbh" property="ajbh" jdbcType="VARCHAR" />
+    <result column="afsj" property="afsj" jdbcType="TIMESTAMP" />
+    <result column="afdd" property="afdd" jdbcType="VARCHAR" />
+    <result column="ajlx" property="ajlx" jdbcType="INTEGER" />
+    <result column="ab" property="ab" jdbcType="INTEGER" />
+    <result column="jz_ajzt" property="jzAjzt" jdbcType="INTEGER" />
+    <result column="jz_rkzt" property="jzRkzt" jdbcType="INTEGER" />
+    <result column="zbmj_id" property="zbmjId" jdbcType="INTEGER" />
+    <result column="zbdw_id" property="zbdwId" jdbcType="INTEGER" />
+    <result column="jqbh" property="jqbh" jdbcType="VARCHAR" />
+    <result column="zyaq" property="zyaq" jdbcType="VARCHAR" />
+    <result column="ajly" property="ajly" jdbcType="INTEGER" />
+    <result column="cjr" property="cjr" jdbcType="INTEGER" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="uuid" property="uuid" jdbcType="VARCHAR" />
+    <result column="afdd_code" property="afddCode" jdbcType="VARCHAR" />
+    <result column="zbmj_pid" property="zbmjPid" jdbcType="VARCHAR" />
+    <result column="xbmj_ids" property="xbmjIds" jdbcType="VARCHAR" />
+    <result column="op_pid" property="opPid" jdbcType="VARCHAR" />
+    <result column="xbmj_xm" property="xbmjXm" jdbcType="VARCHAR" />
+    <result column="ajzt" property="ajzt" jdbcType="VARCHAR" />
+    <result column="lasj" property="lasj" jdbcType="TIMESTAMP" />
+    <result column="zbmjxm" property="zbmjxm" jdbcType="VARCHAR" />
+    <result column="zbmjjh" property="zbmjjh" jdbcType="VARCHAR" />
+    <result column="zbdwdm" property="zbdwdm" jdbcType="VARCHAR" />
+    <result column="zbdwmc" property="zbdwmc" jdbcType="VARCHAR" />
+    <result column="xbmjjh" property="xbmjjh" jdbcType="VARCHAR" />
+    <result column="abmc" property="abmc" jdbcType="VARCHAR" />
+    <result column="jasj" property="jasj" jdbcType="TIMESTAMP" />
+    <result column="slsj" property="slsj" jdbcType="TIMESTAMP" />
+    <result column="pasj" property="pasj" jdbcType="TIMESTAMP" />
+    <result column="xasj" property="xasj" jdbcType="TIMESTAMP" />
+    <result column="yssj" property="yssj" jdbcType="TIMESTAMP" />
+    <!-- 关联-->
+    <result column="zbdwName" property="zbdwName" jdbcType="VARCHAR" />
+    <result column="caseNature" property="caseNature" jdbcType="VARCHAR" />
+    <result column="zbmjName" property="zbmjName" jdbcType="VARCHAR" />
+    <result column="areaId" property="areaId" jdbcType="INTEGER" />
+    <result column="zbmjCertificateNo" property="zbmjCertificateNo" jdbcType="VARCHAR" />
+    <result column="warehouse_id" property="warehouseId" jdbcType="VARCHAR" />
+    <result column="areaName" property="areaName" jdbcType="VARCHAR" />
+    <result column="jz_ajzt" property="jzAjzt" jdbcType="INTEGER" />
+    <result column="jz_rkzt" property="jzRkzt" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, ajmc, ajbh, afsj, afdd, ajlx, ab, jz_ajzt, jz_rkzt, zbmj_id, zbdw_id, jqbh, zyaq, 
+    ajly, cjr, updated_time, created_time, uuid, afdd_code, zbmj_pid, xbmj_ids, op_pid, 
+    xbmj_xm, ajzt, lasj, zbmjxm, zbmjjh, zbdwdm, zbdwmc, xbmjjh, abmc, jasj, slsj, pasj, 
+    xasj, yssj
+  </sql>
+  <select id="listCriminalCase" resultMap="BaseResultMap" parameterType="java.util.Map">
+    SELECT
+    c.*, org. NAME AS zbdwName,
+    ct.code_desc caseNature,
+    xu.real_name zbmjName,
+    xu.certificate_no zbmjCertificateNo
+    FROM
+    ba_case c
+    LEFT JOIN xt_organization org ON c.zbdw_id = org.id
+    LEFT JOIN xt_crime_define ct ON ct.id = c.ab
+    LEFT JOIN xt_user xu ON xu.id = c.zbmj_id
+    LEFT JOIN xt_code xc ON xc.code_key = c.ajlx and xc.type = 'AJLX'
+    WHERE  1=1 and xc.code_value = '刑事案件'
+    <if test="zbdwId!=null and zbdwId !=''">
+      and c.zbdw_id =#{zbdwId}
+    </if>
+    <if test="ajmc!=null and ajmc !=''">
+      and c.ajmc like '%${ajmc}%'
+    </if>
+    <if test="zbmjId!=null and zbmjId !=''">
+      and c.zbmj_id like #{zbmjId}
+    </if>
+    <if test="policeId!=null and policeId !=''">
+      and (c.zbmj_id = ${policeId} or c.xbmj_ids like '%,${policeId},%')
+    </if>
+    <if test="dataAuth!=null and dataAuth!=''">
+      and ${dataAuth}
+    </if>
+    order by c.id desc
+    <if test="pageStart != null and rows != null">
+      limit ${pageStart},${rows}
+    </if>
+
+  </select>
+
+  <select id="listCriminalCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+    SELECT
+    count(1)
+    FROM
+    ba_case c
+    LEFT JOIN xt_organization org ON c.zbdw_id = org.id
+    LEFT JOIN xt_crime_define ct ON ct.id = c.ab
+    LEFT JOIN xt_user xu ON xu.id = c.zbmj_id
+    LEFT JOIN xt_code xc ON xc.code_key = c.ajlx and xc.type = 'AJLX'
+    WHERE  1=1 and xc.code_value = '刑事案件'
+    <if test="zbdwId!=null and zbdwId !=''">
+      and c.zbdw_id =#{zbdwId}
+    </if>
+    <if test="ajmc!=null and ajmc !=''">
+      and c.ajmc like '%${ajmc}%'
+    </if>
+    <if test="zbmjId!=null and zbmjId !=''">
+      and c.zbmj_id like #{zbmjId}
+    </if>
+    <if test="policeId!=null and policeId !=''">
+      and (c.zbmj_id = ${policeId} or c.xbmj_ids like '%,${policeId},%')
+    </if>
+    <if test="dataAuth!=null and dataAuth!=''">
+      and ${dataAuth}
+    </if>
+    order by c.id desc
+  </select>
+ <select id="lisAdministrationCase" resultMap="BaseResultMap" parameterType="java.util.Map">
+    SELECT
+    c.*, org. NAME AS zbdwName,
+    ct.code_desc caseNature,
+    xu.real_name zbmjName,
+    xu.certificate_no zbmjCertificateNo
+    FROM
+    ba_case c
+    LEFT JOIN xt_organization org ON c.zbdw_id = org.id
+    LEFT JOIN xt_crime_define ct ON ct.id = c.ab
+    LEFT JOIN xt_user xu ON xu.id = c.zbmj_id
+     LEFT JOIN xt_code xc ON xc.code_key = c.ajlx and xc.type = 'AJLX'
+     WHERE  1=1 and xc.code_value = '行政案件'
+    <if test="zbdwId!=null and zbdwId !=''">
+      and c.zbdw_id =#{zbdwId}
+    </if>
+    <if test="ajmc!=null and ajmc !=''">
+      and c.ajmc like '%${ajmc}%'
+    </if>
+    <if test="zbmjId!=null and zbmjId !=''">
+      and c.zbmj_id like #{zbmjId}
+    </if>
+    <if test="policeId!=null and policeId !=''">
+      and (c.zbmj_id = ${policeId} or c.xbmj_ids like '%,${policeId},%')
+    </if>
+    <if test="dataAuth!=null and dataAuth!=''">
+      and ${dataAuth}
+    </if>
+    order by c.id desc
+    <if test="pageStart != null and rows != null">
+      limit ${pageStart},${rows}
+    </if>
+
+  </select>
+
+  <select id="listAdministrationCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+    SELECT
+    count(1)
+    FROM
+    ba_case c
+    LEFT JOIN xt_organization org ON c.zbdw_id = org.id
+    LEFT JOIN xt_crime_define ct ON ct.id = c.ab
+    LEFT JOIN xt_user xu ON xu.id = c.zbmj_id
+    LEFT JOIN xt_code xc ON xc.code_key = c.ajlx and xc.type = 'AJLX'
+    WHERE  1=1 and xc.code_value = '行政案件'
+    <if test="zbdwId!=null and zbdwId !=''">
+      and c.zbdw_id =#{zbdwId}
+    </if>
+    <if test="ajmc!=null and ajmc !=''">
+      and c.ajmc like '%${ajmc}%'
+    </if>
+    <if test="zbmjId!=null and zbmjId !=''">
+      and c.zbmj_id like #{zbmjId}
+    </if>
+    <if test="policeId!=null and policeId !=''">
+      and (c.zbmj_id = ${policeId} or c.xbmj_ids like '%,${policeId},%')
+    </if>
+    <if test="dataAuth!=null and dataAuth!=''">
+      and ${dataAuth}
+    </if>
+    order by c.id desc
+  </select>
+  
+  
+  <select id="xsajList" resultMap="BaseResultMap" parameterType="java.util.Map">
+    SELECT c.*, org. NAME AS zbdwName,
+    ct.code_desc caseNature,  xu.real_name zbmjName,
+    xu.certificate_no zbmjCertificateNo
+    FROM ba_case c
+    LEFT JOIN xt_organization org ON c.zbdw_id = org.id
+    LEFT JOIN xt_crime_define ct ON ct.id = c.ab
+    LEFT JOIN xt_user xu ON xu.id = c.zbmj_id
+    WHERE 1=1
+    <if test="ajlx!=null and ajlx !=''">
+      and c.ajlx =#{ajlx}
+    </if>
+    <if test="zbdwId!=null and zbdwId !=''">
+      and c.zbdw_id =#{zbdwId}
+    </if>
+    <if test="ajmc!=null and ajmc !=''">
+      and c.ajmc like '%${ajmc}%'
+    </if>
+    <if test="dataAuth!=null and dataAuth!=''">
+      and ${dataAuth}
+    </if>
+    order by c.id desc
+    
+
+  </select>
+
+  <select id="xsajCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+    SELECT count(1)  FROM ba_case c 
+    LEFT JOIN xt_organization org ON c.zbdw_id = org.id
+    LEFT JOIN xt_crime_define ct ON ct.id = c.ab
+    LEFT JOIN xt_user xu ON xu.id = c.zbmj_id
+    WHERE  1=1
+     <if test="ajlx!=null and ajlx !=''">
+      and c.ajlx =#{ajlx}
+    </if>
+    <if test="zbdwId!=null and zbdwId !=''">
+      and c.zbdw_id =#{zbdwId}
+    </if>
+    <if test="ajmc!=null and ajmc !=''">
+      and c.ajmc like '%${ajmc}%'
+    </if>
+    <if test="dataAuth!=null and dataAuth!=''">
+      and ${dataAuth}
+    </if>
+    order by c.id desc
+  </select>
+</mapper>

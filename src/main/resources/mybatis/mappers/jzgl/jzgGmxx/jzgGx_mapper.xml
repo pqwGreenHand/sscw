@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhixin.zhfz.jzgl.dao.jzgGmxx.IJzgGxMapper">
+
+	<resultMap id="userGmxxResultMap" type="com.zhixin.zhfz.jzgl.entity.JzgGxEntity">
+		<id property="id" column="id" />
+		<result property="jzgId" column="jzg_id" />
+		<result property="jzgLieId" column="jzg_lie_id" />
+		<result property="jzgGmxxId" column="jzg_gmxx_id" />
+		<result property="userId" column="user_id" />
+		<result property="cjsj" column="cjsj" />
+		<result property="gmxs" column="gmxs" />
+	</resultMap>
+
+	<!-- queryAllJzgGmxx -->
+	<select id="queryAllUserGmxx" resultMap="userGmxxResultMap"
+		parameterType="java.util.Map">
+		SELECT
+		gx.*,
+		(select xsbh from jz_jzg_gmxx where id = #{Id} ) xsbh,
+		(SELECT mc from jz_jzg where id=gx.jzg_id) mc,
+		(select real_name from xt_user where id= gx.user_id) realName,
+				(select login_name from xt_user where id= gx.user_id) loginName
+		FROM
+		jz_jzg_gx gx
+		WHERE
+		gx.jzg_gmxx_id = #{Id}
+		order by id DESC
+	</select>
+
+	<!-- countAllJzgGmxx -->
+	<select id="countAllUserGmxx" resultType="int" parameterType="java.util.Map">
+		SELECT COUNT(1) FROM jz_jzg_gx where jzg_gmxx_id= #{Id}
+	</select>
+   <delete id="deleteGxByjzgGmxxId" parameterType="Long">
+		DELETE FROM jz_jzg_gx
+		WHERE jzg_gmxx_id=#{jzgGmxxId}
+	</delete>
+	
+	<!-- insertJzg -->
+	<insert id="insertJzgGx" parameterType="com.zhixin.zhfz.jzgl.entity.JzgGxEntity" keyProperty="id"
+		useGeneratedKeys="true">
+		INSERT INTO jz_jzg_gx (
+		jzg_id,
+		jzg_lie_id,
+		jzg_gmxx_id,
+		user_id,
+		cjsj,
+		gmxs
+		)
+		VALUES(
+		#{jzgId},
+		#{jzgLieId},
+		#{jzgGmxxId},
+		#{userId},
+		now(),
+		#{gmxs}
+		)
+	</insert>
+
+ 
+	<update id="updateJzgGxGmxs" parameterType="com.zhixin.zhfz.jzgl.entity.JzgGxEntity">
+		UPDATE jz_jzg_gx SET
+		gmxs = #{gmxs}
+		where jzg_gmxx_id = #{jzgGmxxId}
+		<if test="id!=null and id>0">
+			and id=#{id}
+		</if>
+	</update>
+
+	
+	<delete id="deletejzgGxById" parameterType="Long">
+		DELETE FROM jz_jzg_gx
+		WHERE id=#{id}
+	</delete>
+ 
+   
+</mapper>
+
+

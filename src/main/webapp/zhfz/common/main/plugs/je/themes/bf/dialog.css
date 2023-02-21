@@ -1,0 +1,36 @@
+.dialog-content {
+  overflow: auto;
+}
+.dialog-toolbar {
+  padding: 2px 5px;
+}
+.dialog-tool-separator {
+  float: left;
+  height: 24px;
+  border-left: 0px solid #444;
+  border-right: 0px solid #777;
+  margin: 2px 5px;
+}
+.dialog-button {
+  padding: 5px;
+  text-align: right;
+}
+.dialog-button .l-btn {
+  margin-left: 5px;
+}
+.dialog-toolbar,
+.dialog-button {
+  background: #091c3c;
+  border-width: 1px;
+  border-style: solid;
+}
+.dialog-toolbar {
+  border-color: #046aa0;
+  border-bottom-color: #073a65;
+  padding: 10px!important;
+}
+.dialog-button {
+  border-color: #046aa0;
+  border-top-color: #073a65;
+  padding: 10px!important;
+}

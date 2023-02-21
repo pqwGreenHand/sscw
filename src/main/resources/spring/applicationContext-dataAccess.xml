@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:p="http://www.springframework.org/schema/p"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+
+
+http://www.springframework.org/schema/tx
+http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
+
+	<!-- DataSource zhfz Mysql -->
+	<bean id="dataSourceInterrogate" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="${zhfz.jdbc.connection.driver}" />
+		<property name="jdbcUrl" value="${zhfz.jdbc.connection.url}" />
+		<property name="user" value="${zhfz.jdbc.connection.username}" />
+		<property name="password" value="${zhfz.jdbc.connection.password}" />
+		<property name="initialPoolSize" value="${zhfz.c3p0.initialPoolSize}" />
+		<property name="minPoolSize" value="${zhfz.c3p0.minPoolSize}" />
+		<property name="maxPoolSize" value="${zhfz.c3p0.maxPoolSize}" />
+		<property name="acquireIncrement" value="${zhfz.c3p0.acquireIncrement}" />
+		<property name="maxIdleTime" value="${zhfz.c3p0.maxIdleTime}" />
+		<property name="idleConnectionTestPeriod" value="${zhfz.c3p0.idleConnectionTestPeriod}" />
+		<property name="maxStatements" value="${zhfz.c3p0.maxStatements}" />
+		<property name="checkoutTimeout" value="${zhfz.c3p0.checkoutTimeout}" />
+		<property name="acquireRetryAttempts" value="${zhfz.c3p0.acquireRetryAttempts}" />
+		<property name="breakAfterAcquireFailure" value="${zhfz.c3p0.breakAfterAcquireFailure}" />
+		<property name="autoCommitOnClose" value="${zhfz.c3p0.autoCommitOnClose}" />
+		<property name="testConnectionOnCheckout" value="${zhfz.c3p0.testConnectionOnCheckout}" />
+		<property name="numHelperThreads" value="${zhfz.c3p0.numHelperThreads}" />
+		<property name="preferredTestQuery" value="${zhfz.c3p0.preferredTestQuery}" />
+	</bean>
+
+	<bean id="mysqlInterceptor"
+		class="com.zhixin.zhfz.common.filter.MySqlleInterceptor">
+		<property name="showInfo" value="true" />
+	</bean>
+
+	<!-- SqlSessionFactory -->
+	<bean id="sqlSessionFactoryInterrogate" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSourceInterrogate" />
+		<property name="configLocation" value="classpath:mybatis/mybatis_zhfz_mysql.xml" />
+		<property name="mapperLocations">
+			<list>
+				<value>classpath:mybatis/mappers/**/*.xml</value>
+			</list>
+		</property>
+
+		<property name="plugins">
+			<array>
+				<ref bean="mysqlInterceptor" />
+			</array>
+		</property>
+	</bean>
+
+	<!-- TransactionManager -->
+	<bean id="transactionManagerInterrogate" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSourceInterrogate" />
+	</bean>
+	
+    <!--启动spring事务注解功能-->
+    <tx:annotation-driven transaction-manager="transactionManagerInterrogate" />	
+	
+	<!-- spring与mybatis整合配置，扫描所有dao -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"
+		p:sqlSessionFactoryBeanName="sqlSessionFactoryInterrogate"
+		p:basePackage="com.zhixin.zhfz.**.dao">
+	</bean>
+	
+	<!-- 柜门配置 -->
+	<bean class="com.zhixin.zhfz.jzgl.common.PowerCacheUtilForJZ"></bean>
+</beans>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.serial.SerialFileMapper" >
+  <resultMap id="BaseResultMap" type="com.zhixin.zhfz.bacs.entity.SerialFileEntity" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="serial_id" property="serialId" jdbcType="INTEGER" />
+    <result column="file_name" property="fileName" jdbcType="VARCHAR" />
+    <result column="creat_time" property="creatTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, serial_id, file_name, creat_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ba_serial_file
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ba_serial_file
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zhixin.zhfz.bacs.entity.SerialFileEntity" >
+    insert into ba_serial_file (id, serial_id, file_name, 
+      creat_time)
+    values (#{id,jdbcType=INTEGER}, #{serialId,jdbcType=INTEGER}, #{fileName,jdbcType=VARCHAR}, 
+      #{creatTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhixin.zhfz.bacs.entity.SerialFileEntity" >
+    insert into ba_serial_file
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="serialId != null" >
+        serial_id,
+      </if>
+      <if test="fileName != null" >
+        file_name,
+      </if>
+      <if test="creatTime != null" >
+        creat_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="serialId != null" >
+        #{serialId,jdbcType=INTEGER},
+      </if>
+      <if test="fileName != null" >
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="creatTime != null" >
+        #{creatTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhixin.zhfz.bacs.entity.SerialFileEntity" >
+    update ba_serial_file
+    <set >
+      <if test="serialId != null" >
+        serial_id = #{serialId,jdbcType=INTEGER},
+      </if>
+      <if test="fileName != null" >
+        file_name = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="creatTime != null" >
+        creat_time = #{creatTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhixin.zhfz.bacs.entity.SerialFileEntity" >
+    update ba_serial_file
+    set serial_id = #{serialId,jdbcType=INTEGER},
+      file_name = #{fileName,jdbcType=VARCHAR},
+      creat_time = #{creatTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getLastSerialFile" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    from ba_serial_file
+    where serial_id = #{serialId,jdbcType=BIGINT}
+    order by creat_time DESC limit 0,1
+  </select>
+</mapper>

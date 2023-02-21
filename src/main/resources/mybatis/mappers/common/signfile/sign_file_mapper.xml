@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.common.dao.signfile.SignFileMapper" >
+  <resultMap id="BaseResultMap" type="com.zhixin.zhfz.common.entity.SignFileEntity" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="serial_id" property="serialId" jdbcType="INTEGER" />
+    <result column="file_type" property="fileType" jdbcType="INTEGER" />
+    <result column="file_name" property="fileName" jdbcType="VARCHAR" />
+    <result column="creat_time" property="creatTime" jdbcType="TIMESTAMP" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, serial_id,file_type,file_name, creat_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ba_sign_file
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ba_sign_file
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zhixin.zhfz.common.entity.SignFileEntity" >
+    insert into ba_sign_file (id, serial_id,file_type ,file_name,
+      creat_time)
+    values (#{id,jdbcType=INTEGER}, #{serialId,jdbcType=INTEGER},#{fileType,jdbcType=INTEGER}, #{fileName,jdbcType=VARCHAR},
+      now())
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhixin.zhfz.common.entity.SignFileEntity" >
+    insert into ba_sign_file
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="serialId != null" >
+        serial_id,
+      </if>
+      <if test="fileType != null">
+        file_type,
+      </if>
+      <if test="fileName != null" >
+        file_name,
+      </if>
+        creat_time
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="serialId != null" >
+        #{serialId,jdbcType=INTEGER},
+      </if>
+      <if test="fileType != null">
+        #{fileType,jdbcType=INTEGER},
+      </if>
+      <if test="fileName != null" >
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      now()
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhixin.zhfz.common.entity.SignFileEntity" >
+    update ba_sign_file
+    <set >
+      <if test="serialId != null" >
+        serial_id = #{serialId,jdbcType=INTEGER},
+      </if>
+      <if test="fileType != null">
+        file_type =  #{fileType,jdbcType=INTEGER},
+      </if>
+      <if test="fileName != null" >
+        file_name = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="creatTime != null" >
+        creat_time = #{creatTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhixin.zhfz.common.entity.SignFileEntity" >
+    update ba_sign_file
+    set serial_id = #{serialId,jdbcType=INTEGER},
+      file_type =  #{fileType,jdbcType=INTEGER},
+      file_name = #{fileName,jdbcType=VARCHAR},
+      creat_time = #{creatTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getLastFileBySerialAndType" resultMap="BaseResultMap" parameterType="com.zhixin.zhfz.common.entity.SignFileEntity" >
+    select
+    <include refid="Base_Column_List" />
+    from ba_sign_file
+    where serial_id = #{serialId,jdbcType=BIGINT}
+    and file_type = #{fileType,jdbcType=BIGINT}
+    order by creat_time DESC limit 0,1
+  </select>
+
+  <select id="getSignatureList" resultMap="BaseResultMap" parameterType="java.util.Map" >
+        select ba.name,bsf.*
+        from ba_area ba
+        LEFT JOIN ba_sign_file bsf on bsf.serial_id = ba.id and bsf.file_type = 99
+        <if test="serialId != null">
+          and ba.id = #{serialId}
+        </if>
+  </select>
+</mapper>

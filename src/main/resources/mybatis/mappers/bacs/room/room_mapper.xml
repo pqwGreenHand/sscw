@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.room.IRoomMapper" >
+  <resultMap id="BaseResultMap" type="com.zhixin.zhfz.bacs.entity.RoomEntity" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="room_type_id" property="roomTypeId" jdbcType="INTEGER" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="area_id" property="interrogateAreaId" jdbcType="INTEGER" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+    <result column="sid" property="sid" jdbcType="VARCHAR" />
+    <result column="gname" property="gname" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="ips" property="ips" jdbcType="VARCHAR" />
+    <result column="is_active" property="isActive" />
+    <result column="axis" property="axis" />
+    <result column="trigger_no" property="triggerNo" />
+    <result column="td_room_id" property="tdRoomId" />
+    <result column="volume" property="volume" />
+    <result column="location_group" property="ledAddress" />
+    <result column="count_num" property="countNum" />
+  </resultMap>
+ 
+  <select id="listAllroom" resultMap="BaseResultMap" parameterType="java.util.Map">
+    select 
+    	i.id,i.`name`,i.description,i.area_id,t.`name` as type,t.id as sid,i.ips
+    	 ,i.is_active,i.volume,i.location_group,i.trigger_no,i.axis
+    from
+		ba_room i,
+		ba_room_type t
+
+    where
+		1 = 1
+	    and i.room_type_id = t.id 
+
+		<if test="name!=null and name!=''">
+		and i.name like '%${name}%'
+		</if>
+		and i.area_id = #{enpId}
+		limit ${pageStart},${rows}
+	</select>
+	
+	<select id="getRoomById" resultMap="BaseResultMap" parameterType="Long">
+		select * from ba_room where id=#{id}
+	</select>
+	
+	<select id="getRecordLocationByRoomID" resultType="String" parameterType="Long">
+	    select concat(area.name,room.name) location from ba_room room,ba_area area
+		  where room.area_id=area.id and room.id=#{id}
+  	</select>
+	
+  <delete id="deleteRoom" parameterType="Long">
+    delete from ba_room
+    where id=#{id}
+  </delete>
+  <insert id="insertRoom" parameterType="com.zhixin.zhfz.bacs.entity.RoomEntity" keyProperty="id" useGeneratedKeys="true">
+     insert into ba_room (id, name, room_type_id,
+      description, area_id,
+      created_time, updated_time,ips,is_active,volume,location_group,trigger_no,axis,op_pid,op_user_id)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{roomTypeId,jdbcType=INTEGER}, 
+       #{description,jdbcType=VARCHAR}, #{interrogateAreaId,jdbcType=INTEGER},
+      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP},#{ips},#{isActive},#{volume},#{ledAddress},#{triggerNo},#{axis},#{opPid},#{opUserId})
+  </insert>
+  
+  <update id="updateRoom" parameterType="com.zhixin.zhfz.bacs.entity.RoomEntity" >
+    update ba_room
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="roomTypeId != null" >
+        room_type_id = #{roomTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="interrogateAreaId != null" >
+        area_id = #{interrogateAreaId,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isActive != null" >
+        is_active = #{isActive},
+      </if>
+      <if test="volume != null" >
+        volume = #{volume},
+      </if>
+      <if test="volume == null" >
+        volume = 10,
+      </if>
+      <if test="ledAddress != null" >
+          location_group = #{ledAddress},
+      </if>
+       <if test="ips != null" >
+        ips = #{ips},
+      </if>
+        <if test="triggerNo != null" >
+            trigger_no = #{triggerNo},
+        </if>
+        <if test="axis != null" >
+            axis = #{axis},
+        </if>
+        updated_time =sysdate() 
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+   <select id="count1" resultType="java.lang.Integer" parameterType="java.util.Map">
+	select count(i.id) from ba_room i ,ba_room_type t
+	where
+	1 = 1
+    and i.room_type_id = t.id
+	and i.area_id = #{enpId}
+	<if test="name!=null and name!=''">
+	and i.name like '%${name}%'
+	</if>
+    </select>
+  
+  <select id="listRoomByIp" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select * from ba_room r where r.ips like '%${ip}%' and r. room_type_id in (2,3,4)
+    <if test="areaId != null and areaId != ''">
+      and r.area_id = #{areaId}
+    </if>
+  </select>
+  
+  <select id="listDisRoomBySerialId" parameterType="java.util.Map" resultMap="BaseResultMap">
+    SELECT
+		wr.room_id id
+	FROM
+		ba_waiting_record wr
+	WHERE
+		wr.`status` = 0
+	AND wr.serial_id IN (
+		SELECT
+			id
+		FROM
+			ba_serial ints
+		WHERE
+			ints.case_id IN (
+				SELECT
+					ins.case_id
+				FROM
+					ba_serial ins
+				WHERE
+					ins.id = ${serialId}
+			)
+		  and ints.area_id = ${areaId}
+	)
+  </select>
+  
+  <!-- 修改功能室状态 -->
+  <update id="updateRoomStatus" parameterType="java.util.Map">
+        update ba_room
+		set room_status = #{status},updated_time = now()
+		where id = #{id}
+  </update>
+    <select id="countRoomByArea" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT room_type_id,COUNT(1) AS count_num FROM ba_room
+        WHERE area_id=#{AreaId}
+        GROUP BY room_type_id
+    </select>
+
+    <select id="findRoomByIps" resultMap="BaseResultMap" parameterType="java.util.Map" resultType="com.zhixin.zhfz.bacs.entity.RoomEntity">
+          select a.* from ba_room a
+            where a.ips = #{ip}
+            order by a.id
+            limit 1
+    </select>
+</mapper>

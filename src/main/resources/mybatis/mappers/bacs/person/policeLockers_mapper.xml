@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacs.dao.person.IPoliceLockersMapper">
+	<resultMap id="PoliceLockersMapper" type="PoliceLockersEntity">
+    	<id property="id" column="id"/>
+    	<result property="lockerId" column="locker_id"/>
+    	<result property="policeId" column="police_id"/>
+    	<result property="isGet" column="is_get"/>
+    	<result property="firstLockTime" column="first_lock_time"/>
+    	<result property="lastLockTime" column="last_lock_time"/>
+    </resultMap>
+    <!-- 查询全部 -->
+    <select id="listPersonLockers" resultMap="PoliceLockersMapper" parameterType="java.util.Map" >
+        	SELECT * FROM ba_police_lockers
+    </select>
+    <!-- 查询全部 -->
+    <select id="countPersonLockers" resultType="int" parameterType="java.util.Map" >
+        	SELECT COUNT(1) FROM ba_police_lockers
+    </select>
+    <!-- 根据id查询信息 -->
+    <select id="getPersonLockersById" resultMap="PoliceLockersMapper" parameterType="Long" >
+        	SELECT * FROM ba_police_lockers where id=#{id}
+    </select>
+    <!-- 根据开柜柜号查询信息 -->
+    <select id="getPersonLockersByBox" resultMap="PoliceLockersMapper" parameterType="java.util.Map" >
+        	SELECT
+				p.*
+			FROM
+				ba_police_lockers p
+			LEFT JOIN ba_cabinet_config_detail d ON d.id = p.locker_id
+			WHERE
+				d.open_key = #{boxNum} AND config_id=#{personalConfigId}
+    </select>
+    <!--增加信息 -->
+    <insert id="insertPersonLockers" parameterType="PoliceLockersEntity"  keyProperty="id" useGeneratedKeys="true" >
+            INSERT INTO ba_police_lockers (
+	    		locker_id,
+	    		police_id,
+	    		is_get,
+	    		first_lock_time,
+	    		last_lock_time
+				)
+             VALUES(
+	    		#{lockerId},
+	    		#{policeId},
+	    		#{isGet},
+	    		#{firstLockTime},
+	    		#{lastLockTime}
+				)
+    </insert>
+    <!-- 修改信息 -->
+    <update id="updatePersonLockers" parameterType="PoliceLockersEntity">
+            UPDATE ba_police_lockers SET
+	    		locker_id=#{lockerId},
+	    		police_id=#{policeId},
+	    		is_get=#{isGet},
+	    		first_lock_time=#{firstLockTime},
+	    		last_lock_time=#{lastLockTime}
+            WHERE
+	    		id=#{id}
+    </update>
+    <!-- 删除信息 -->
+    <delete id="deletePersonLockersById" parameterType="Long">
+            DELETE FROM ba_police_lockers WHERE id=#{id}
+    </delete>
+    <!-- 根据柜门查询信息 -->
+    <select id="listPersonLockersByLockerId" resultMap="PoliceLockersMapper" parameterType="Long" >
+        	SELECT * FROM ba_police_lockers WHERE locker_id=#{lockerId}
+    </select>
+    <!-- 根据柜门id查询总数 -->
+    <select id="countPersonLockersByLockerId" resultType="int" parameterType="Long" >
+        	SELECT COUNT(1) FROM ba_police_lockers WHERE locker_id=#{lockerId}
+    </select>
+	<!-- 查询民警存物统计 -->
+    <select id="listPersonLockersByPoliceId" resultMap="PoliceLockersMapper" parameterType="Long" >
+        	SELECT * FROM ba_police_lockers WHERE police_id=#{policeId}
+    </select>
+    <!-- 统计民警存物统计 -->
+    <select id="countPersonLockersByPoliceId" resultType="int" parameterType="Long" >
+        	SELECT COUNT(1) FROM ba_police_lockers WHERE police_id=#{policeId}
+    </select>
+	<!-- 根据柜门查询 -->
+	<select id="getPersonLockersByLockerId" resultMap="PoliceLockersMapper" parameterType="Long" >
+        	SELECT * FROM ba_police_lockers WHERE locker_id=#{lockerId}
+    </select>
+</mapper>
+
+

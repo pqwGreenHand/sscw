@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.zhag.dao.xsajyj.IXsajyjMapper">
+
+    <select id="list" resultType="com.zhixin.zhfz.zhag.entity.YjxxEntity" parameterType="java.util.Map">
+        SELECT yj.*,ca.ajzt,ca.abmc FROM ag_yjxx yj
+        left join ba_case ca on ca.ajbh=yj.ajbh
+        WHERE 1=1 and yj.yjly=2 and yj.yjzt != 2
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="yjlx!=null and yjlx !=''">
+            and yj.yjlx = #{yjlx}
+        </if>
+        <if test="yjjb !=null and yjjb !=''">
+            and yj.yjjb = #{yjjb}
+        </if>
+        <if test="yjzt!=null and yjzt!=''">
+            and yj.yjzt = #{yjzt}
+        </if>
+        <if test="yjsj!=null and yjsj!=''">
+            and yj.yjsj= #{yjsj}
+        </if>
+        order by yj.cjsj desc limit ${pageStart},${rows}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+
+        SELECT count(1) FROM ag_yjxx yj
+        left join ba_case ca on ca.ajbh=yj.ajbh
+        WHERE 1=1 and yj.yjly=2 and yj.yjzt != 2
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="yjlx!=null and yjlx !=''">
+            and yj.yjlx = #{yjlx}
+        </if>
+        <if test="yjjb !=null and yjjb !=''">
+            and yj.yjjb = #{yjjb}
+        </if>
+        <if test="yjzt!=null and yjzt!=''">
+            and yj.yjzt = #{yjzt}
+        </if>
+        <if test="yjsj!=null and yjsj!=''">
+            and yj.yjsj= #{yjsj}
+        </if>
+
+    </select>
+
+
+    <select id="hisListXsanyj" resultType="com.zhixin.zhfz.zhag.entity.YjxxEntity" parameterType="java.util.Map">
+        SELECT yj.*,ca.ajzt,ca.abmc FROM ag_yjxx yj
+        left join ba_case ca on ca.ajbh=yj.ajbh
+        WHERE 1=1 and yj.yjly=2 and yj.yjzt=2
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="yjlx!=null and yjlx !=''">
+            and yj.yjlx = #{yjlx}
+        </if>
+        <if test="ajbh!=null and ajbh !=''">
+            and yj.ajbh = #{ajbh}
+        </if>
+        <if test="yjjb !=null and yjjb !=''">
+            and yj.yjjb = #{yjjb}
+        </if>
+        <if test="yjzt!=null and yjzt!=''">
+            and yj.yjzt = #{yjzt}
+        </if>
+        <if test="yjsj!=null and yjsj!=''">
+            and yj.yjsj= #{yjsj}
+        </if>
+        order by yj.cjsj desc limit ${pageStart},${rows}
+    </select>
+
+    <select id="hisCountXsaj" resultType="java.lang.Integer" parameterType="java.util.Map">
+
+        SELECT count(1) FROM ag_yjxx yj
+        left join ba_case ca on ca.ajbh=yj.ajbh
+        WHERE 1=1 and yj.yjly=2 and yj.yjzt=2
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="yjlx!=null and yjlx !=''">
+            and yj.yjlx = #{yjlx}
+        </if>
+        <if test="ajbh!=null and ajbh !=''">
+            and yj.ajbh = #{ajbh}
+        </if>
+        <if test="yjjb !=null and yjjb !=''">
+            and yj.yjjb = #{yjjb}
+        </if>
+        <if test="yjzt!=null and yjzt!=''">
+            and yj.yjzt = #{yjzt}
+        </if>
+        <if test="yjsj!=null and yjsj!=''">
+            and yj.yjsj= #{yjsj}
+        </if>
+
+    </select>
+
+
+
+
+</mapper>

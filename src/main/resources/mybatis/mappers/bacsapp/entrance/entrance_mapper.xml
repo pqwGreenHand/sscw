@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacsapp.dao.entrance.IEntranceMapper">
+    <select id="entranceList" parameterType="java.util.Map" resultType="com.zhixin.zhfz.bacsapp.entity.EntranceEntity">
+        select a.id serialId,a.serial_no serialNo,a.`status`,a.type,a.area_id areaId,a.case_id caseId,
+        a.in_photo_name inPhotoName,a.out_photo_name outPhotoName,a.in_time inTime,a.out_time outTime,a.uuid,
+        b.name personName,bc.ajmc,bc.ajbh,bc.zbmj_id zbmjId,a.order_request_id orderRequestId,
+        e.locker_id belongLocker,e.is_get belongGet,f.locker_id exhibitLocker,f.is_get exhibitGet
+        from ba_serial a
+        inner join ba_person b on b.id = a.person_id
+        left join ba_case bc on bc.id = a.case_id
+        left join ba_belongings e on e.serial_id = a.id
+        left join ba_exhibit f on f.serial_id = a.id
+        <where>
+            a.status &gt;= 0 and a.status &lt; 11
+            and a.type = 0
+            <if test="dataAuth!=null and dataAuth!=''">
+                and ${dataAuth}
+            </if>
+            <if test="personName != null and personName != ''">
+                and b.name like "%${personName}%"
+            </if>
+        </where>
+        order by a.id desc
+        <if test="pageStart != null and rows != null">
+            limit ${pageStart},${rows}
+        </if>
+    </select>
+
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(1)
+        from ba_serial a
+        inner join ba_person b on b.id = a.person_id
+        left join ba_case bc on bc.id = a.case_id
+        left join ba_belongings e on e.serial_id = a.id
+        left join ba_exhibit f on f.serial_id = a.id
+        <where>
+            a.status &gt; 0 and a.status &lt; 11
+            and a.type = 0
+            <if test="dataAuth!=null and dataAuth!=''">
+                and ${dataAuth}
+            </if>
+            <if test="personName != null and personName != ''">
+                and b.name like "%${personName}%"
+            </if>
+        </where>
+        order by a.id desc
+    </select>
+
+    <select id="orderList" parameterType="java.util.Map" resultType="com.zhixin.zhfz.bacsapp.entity.EntranceEntity">
+        select a.id orderRequestId,a.order_no orderNo,a.status orderStatus,a.plan_time planTime,
+        b.id caseId,b.ajmc,b.ajbh,b.zbmj_id zbmjId,substring(substring_index(b.xbmj_ids, ',', 2),2) xbmjId,
+        c.name areaName,d.real_name policeName,d.mobile,e.real_name zbmj,f.real_name xbmj,g.code_desc caseNature
+        from ba_order_request a
+        inner join ba_case b on b.id = a.case_id
+        left join ba_area c on c.id = a.area_id
+        left join xt_user d on d.id = a.order_user_id
+        left join xt_user e on e.id = b.zbmj_id
+        left join xt_user f on f.id = substring(substring_index(b.xbmj_ids, ',', 2),2)
+        left join xt_crime_define g on g.id = b.ab
+        where a.created_time >= date_sub(now(),interval 24 hour)
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        order by a.id desc
+    </select>
+
+    <select id="orderListNew" parameterType="java.util.Map" resultType="com.zhixin.zhfz.bacsapp.entity.EntranceEntity">
+        select a.id orderRequestId,a.order_no orderNo,a.status orderStatus,a.plan_time planTime,
+        b.id caseId,b.ajmc,b.ajbh,b.zbmj_id zbmjId,substring(substring_index(b.xbmj_ids, ',', 2),2) xbmjId,
+        c.name areaName,d.real_name policeName,d.mobile,e.real_name zbmj,f.real_name xbmj,g.code_desc caseNature
+        from ba_order_request a
+        inner join ba_case b on b.id = a.case_id
+        left join ba_area c on c.id = a.area_id
+        left join xt_user d on d.id = a.order_user_id
+        left join xt_user e on e.id = b.zbmj_id
+        left join xt_user f on f.id = substring(substring_index(b.xbmj_ids, ',', 2),2)
+        left join xt_crime_define g on g.id = b.ab
+        where 1=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        order by a.id desc
+    </select>
+
+    <select id="orderCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(1)
+        from ba_order_request a
+        inner join ba_case b on b.id = a.case_id
+        left join ba_area c on c.id = a.area_id
+        left join xt_user d on d.id = a.order_user_id
+        left join xt_user e on e.id = b.zbmj_id
+        left join xt_user f on f.id = substring(substring_index(b.xbmj_ids, ',', 2),2)
+        where a.created_time >= date_sub(now(),interval 24 hour)
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        order by a.id desc
+    </select>
+
+    <select id="personList" parameterType="java.util.Map" resultType="com.zhixin.zhfz.bacsapp.entity.EntranceEntity">
+        select b.id personId,b.name personName,b.sex,b.certificate_type_id certificateTypeId,
+          b.certificate_no certificateNo,c.id serialId,c.entrance_procedure entranceProcedure,c.in_time inTime
+        from ba_order_person a
+        inner join ba_person b on b.id = a.person_id
+        left join ba_serial c on c.person_id = b.id
+        <where>
+            <if test="orderRequestId != null and orderRequestId != ''">
+                a.order_request_id = #{orderRequestId}
+            </if>
+        </where>
+    </select>
+
+</mapper>

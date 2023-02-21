@@ -1,0 +1,27 @@
+.combobox-item,
+.combobox-group {
+  font-size: 14px;
+  padding: 9px;
+  padding-right: 0px;
+  color: #65caff;
+  border-bottom: 1px solid #073a65;
+}
+.combobox-item-disabled {
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+.combobox-gitem {
+  padding-left: 10px;
+}
+.combobox-group {
+  font-weight: bold;
+  color: #fff;
+}
+.combobox-item-hover {
+  background-color: #05578d;
+  color: #fff;
+}
+.combobox-item-selected {
+  background-color: #05578d;
+  color: #fff;
+}

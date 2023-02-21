@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper	namespace="com.zhixin.rd.interrogate.web.restful.dao.IRecordDataMapper">
+
+	<resultMap id="recordMap" type="com.zhixin.zhfz.bacs.entity.RecordEntity">
+		<id property="id" column="id" jdbcType="BIGINT"/>
+		<result property="uuid" column="uuid" jdbcType="VARCHAR"/>
+		<result property="status" column="status" jdbcType="INTEGER"/>
+		<result property="interrogateSerialId" column="interrogate_serial_id" jdbcType="BIGINT"/>
+		<result property="interrogateCount" column="interrogate_count" jdbcType="INTEGER"/>
+		<result property="personId" column="person_id" jdbcType="BIGINT"/>
+		<result property="interrogateAreaId" column="interrogate_area_id" jdbcType="INTEGER"/>
+		<result property="interrogateCaseId" column="interrogate_case_id" jdbcType="INTEGER"/>
+		<result property="crimeTypeId" column="crime_type_id" jdbcType="INTEGER"/>
+		<result property="subCrimeTypeId" column="subcrime_type_id" jdbcType="INTEGER"/>
+		<result property="startTime" column="start_time" jdbcType="TIMESTAMP"/>
+		<result property="endTime" column="end_time" jdbcType="TIMESTAMP"/>
+		<result property="policeAskId" column="police_ask_id" jdbcType="INTEGER"/>
+		<result property="policeRecordId" column="police_record_id" jdbcType="INTEGER"/>
+		<result property="roomId" column="room_id" jdbcType="INTEGER"/>
+		<result property="roomName" column="roomName" jdbcType="VARCHAR"/>
+		<result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>
+		<result property="updatedTime" column="updated_time" jdbcType="TIMESTAMP"/>
+		<result property="recordTypeId" column="record_type_id" jdbcType="INTEGER"/>
+		<result property="recorTemplateId" column="record_template_id" jdbcType="INTEGER"/>
+		<result property="personType" column="type" jdbcType="INTEGER"/>
+		<result property="inTime" column="in_time" jdbcType="TIMESTAMP"/>
+		<result property="areaName" column="areaname" jdbcType="VARCHAR"/>
+		<result property="caseName" column="case_name" jdbcType="VARCHAR"/>
+		<result property="caseNo" column="case_no" jdbcType="VARCHAR"/>
+		<result property="organization" column="organization" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<resultMap id="ledMap" type="com.zhixin.zhfz.bacs.entity.LedEntity">
+		<id property="id" column="id" jdbcType="INTEGER" />
+		<result property="ip" column="ip" jdbcType="VARCHAR" />
+		<result property="port" column="port" jdbcType="INTEGER" />
+		<result property="roomName" column="name" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<!-- 查询笔录的信息 -->
+	<select id="getRecordInfo" resultMap="recordMap"
+		parameterType="java.util.Map">
+		select m.name as roomName,o.organization,s.in_time,s.type,c.case_name,c.case_no,a.`name` areaname,r.*
+		from organization o,interrogate_serial s,interrogate_case c,interrogate_area a,interrogate_record r
+		left join interrogate_room m on m.id=r.room_id
+		where  o.id=a.organization_id
+		and s.id=r.interrogate_serial_id
+		and c.id=r.interrogate_case_id
+		and a.id=r.interrogate_area_id
+		and r.id=#{id}
+	</select>
+
+    <!-- 更新笔录的状态 -->
+    <update id="updateRecordStatus" parameterType="java.util.Map">  
+           update interrogate_record set status=#{status},updated_time=now()
+           <if test="status==3">
+		      ,end_time=now()
+		    </if>
+            where id=#{recordId}
+    </update>
+    
+   <!-- 提交笔录时更新房间的状态 -->
+   <update id="updateRoom" parameterType="com.zhixin.zhfz.bacs.entity.RoomEntity" >
+    	update interrogate_room set room_status=#{roomStatus},updated_time=now() 
+    	where id=( select room_id from interrogate_record where id=#{recordId} )
+   </update>
+   
+   <!-- 查询要更新的Led房间的IP和房间名 -->
+   <select id="getLedInfo" resultMap="ledMap" parameterType="java.util.Map">
+    	select l.ip,l.port,m.name from led l
+		left join interrogate_room m on l.room_id=m.id
+		where l.room_id=
+		(select r.room_id from interrogate_record r 
+		inner join interrogate_room i on r.room_id=i.id where r.id=#{recordId}
+		) 
+   </select>
+</mapper>

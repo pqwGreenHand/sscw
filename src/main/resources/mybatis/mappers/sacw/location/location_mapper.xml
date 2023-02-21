@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.sacw.dao.location.ILocationMapper">
+
+    <resultMap id="locationResultMap" type="com.zhixin.zhfz.sacw.entity.LocationEntity">
+        <id property="id" column="id"/>
+        <result property="involvedTypeName" column="involvedTypeName"/>
+        <result property="involvedTypeId" column="location_type_id"/>
+        <result property="wareHouseId" column="warehouse_id"/>
+        <result property="name" column="name"/>
+        <result property="description" column="description"/>
+        <result property="createdTime" column="created_time"/>
+        <result property="updatedTime" column="updated_time"/>
+        <result property="op_pid" column="op_pid" jdbcType="VARCHAR"/>
+        <result property="op_user_id" column="op_user_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- id is same to interface'methmod -->
+    <select id="listLocationByWarehouse" resultMap="locationResultMap" parameterType="java.util.Map">
+        select i.*,c.code_value as involvedTypeName from sa_location i
+        inner join xt_code c on i.location_type_id=c.code_key and type='INVOLVED_TYPE'
+        where warehouse_id=#{wareHouseId}
+        <if test="name!=null and name !=''">
+            and i.name like '%${name}%'
+        </if>
+        limit ${pageStart},${rows}
+    </select>
+
+    <select id="findLocationByWarehouse" resultMap="locationResultMap" parameterType="java.util.Map">
+        select i.*,c.code_value as involvedTypeName from sa_location i
+        inner join xt_code c on i.location_type_id=c.code_key and type='INVOLVED_TYPE'
+        where warehouse_id=#{wareHouseId} and location_type_id=#{involvedTypeId}
+
+    </select>
+
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(1) from sa_location i
+        inner join xt_code c on i.location_type_id=c.code_key and type='INVOLVED_TYPE'
+        where warehouse_id=#{wareHouseId}
+        <if test="name!=null and name !=''">
+            and i.name like '%${name}%'
+        </if>
+    </select>
+
+    <insert id="insertLocation" parameterType="com.zhixin.zhfz.sacw.entity.LocationEntity">
+        insert into sa_location (location_type_id,warehouse_id,name,description,op_pid,op_user_id,created_time)
+        values (#{involvedTypeId},#{wareHouseId},#{name},#{description},#{op_pid},#{op_user_id},now())
+    </insert>
+
+    <delete id="deleteLocation" parameterType="int">
+        delete from sa_location where id=#{id}
+    </delete>
+
+    <update id="updateLocation" parameterType="com.zhixin.zhfz.sacw.entity.LocationEntity">
+        update sa_location set location_type_id=#{involvedTypeId},name = #{name},description =
+        #{description},updated_time=now() where id=#{id}
+    </update>
+
+    <select id="qureyEntityByPram" resultMap="locationResultMap" parameterType="com.zhixin.zhfz.sacw.entity.LocationEntity">
+        SELECT
+        w.*
+        FROM
+        sa_location w
+        WHERE
+        1=1
+        <if test="name!=null and name !=''">
+            and w.name = #{name}
+        </if>
+        <if test="wareHouseId!=null and wareHouseId !=''">
+            and w.warehouse_id=${wareHouseId}
+        </if>
+    </select>
+
+</mapper>

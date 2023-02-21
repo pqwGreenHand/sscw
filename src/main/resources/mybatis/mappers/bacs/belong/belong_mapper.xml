@@ -1,0 +1,1155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.belong.IBelongMapper">
+    <resultMap id="BaseResultMap"
+               type="com.zhixin.zhfz.bacs.entity.BelongEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="serial_id" property="serialId" jdbcType="BIGINT"/>
+        <result column="case_id" property="caseId" jdbcType="BIGINT"/>
+        <result column="register_user_id" property="registerUserId" jdbcType="INTEGER"/>
+        <result column="register_time" property="registerTime" jdbcType="TIMESTAMP"/>
+        <result column="area_id" property="areaId" jdbcType="INTEGER"/>
+        <result column="locker_id" property="lockerId" jdbcType="VARCHAR"/>
+        <result column="is_get" property="isGet" jdbcType="INTEGER"/>
+        <result column="get_way" property="getWay" jdbcType="VARCHAR"/>
+        <result column="get_person" property="getPerson" jdbcType="VARCHAR"/>
+        <result column="get_time" property="getTime" jdbcType="TIMESTAMP"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+        <result column="belongings_id" property="belongingsId" jdbcType="INTEGER"/>
+        <result column="casename" property="casename" jdbcType="VARCHAR"/>
+        <result column="caseNo" property="caseNo" jdbcType="VARCHAR"/>
+        <result column="personname" property="personname" jdbcType="VARCHAR"/>
+        <result column="certificate_no" property="certificateNo" jdbcType="VARCHAR"/>
+        <result column="involved_reason" property="involvedReason" jdbcType="VARCHAR"/>
+        <result column="bename" property="bename" jdbcType="VARCHAR"/>
+        <result column="wname" property="wname" jdbcType="VARCHAR"/>
+        <result column="detail_count" property="detailCount" jdbcType="INTEGER"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="unit" property="unit" jdbcType="VARCHAR"/>
+        <result column="save_method" property="saveMethod" jdbcType="VARCHAR"/>
+        <result column="boxname" property="boxname" jdbcType="VARCHAR"/>
+        <result column="serial_no" property="serialNo" jdbcType="VARCHAR"/>
+        <result column="cabinet_group" property="cabinetGroup" jdbcType="VARCHAR"/>
+        <result column="cabinet_no" property="cabinetNo" jdbcType="VARCHAR"/>
+        <result column="boxip" property="boxip" jdbcType="VARCHAR"/>
+        <result column="boxgroup" property="boxgroup" jdbcType="VARCHAR"/>
+        <result column="boxport" property="boxport" jdbcType="VARCHAR"/>
+        <result column="area_name" property="areaName" jdbcType="VARCHAR"/>
+        <result column="policeName" property="policeName" jdbcType="VARCHAR"/>
+        <result column="wp_uuid" property="wpUuid" jdbcType="VARCHAR"/>
+        <result column="cwurl" property="cwurl" jdbcType="VARCHAR"/>
+        <result column="qwurl" property="qwurl" jdbcType="VARCHAR"/>
+        <result column="cr_url" property="crUrl" jdbcType="VARCHAR"/>
+        <result column="lq_url" property="lqUrl" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="BelongingsPhotoResultMap"
+               type="BelongingsPhotoEntity">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="belongings_id" property="belongingsId" jdbcType="BIGINT"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="web_url" property="webUrl" jdbcType="VARCHAR" />
+        <result column="uuid" property="uuid" jdbcType="VARCHAR"/>
+        <result column="area_id" property="areaId" jdbcType="INTEGER"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap id="comboboxResultMap" type="ComboboxEntity">
+        <id property="id" column="id"/>
+        <result property="value" column="value"/>
+        <result property="groupName" column="group_name"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+
+
+    <sql id="Base_Column_List">
+		id, serial_id, register_user_id, register_time, case_id,area_id,locker_id, is_get,  created_time, updated_time
+	</sql>
+
+    <!-- 查询嫌疑人存取物信息 -->
+    <select id="getDocInfoNew" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT
+        CONCAT(a.`name`) casename,
+        p.`name` personname,
+        p.certificate_no,
+        c.abmc involved_reason,
+        d.`name` bename,
+        d.detail_count,
+        d.description,
+        d.unit,
+        d.save_method,
+        CONCAT(
+        pc.`name`,
+        '柜_',
+        pd.show_no,
+        '号'
+        ) boxname,
+        d.get_way,
+        d.get_time,
+        d.get_person
+        FROM
+        ba_person p
+        LEFT JOIN ba_case c ON c.id = p.case_id
+        LEFT JOIN ba_belongings b ON b.serial_id = p.id
+        LEFT JOIN ba_belongings_detail d ON b.id = d.belongings_id
+        LEFT JOIN ba_cabinet_config_detail pd ON pd.id = b.locker_id
+        LEFT JOIN ba_cabinet_config pc ON pd.config_id = pc.id
+        LEFT JOIN ba_area a ON b.area_id = a.id
+        LEFT JOIN xt_organization o ON a.organization_id = o.id
+        WHERE
+        1 = 1
+        <if test="personId!=null and personId!=''">
+            and p.id =#{personId}
+        </if>
+        <if test="id!=null and id!=''">
+            and b.id =#{id}
+        </if>
+    </select>
+
+    <!-- 查询嫌疑人存取物信息 -->
+    <select id="getDocInfo" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT
+        CONCAT(a.`name`) casename,
+        p.`name` personname,
+        p.certificate_no,
+        (
+        SELECT
+        code_desc
+        FROM
+        xt_crime_define
+        WHERE
+        id = c.ab
+        ) involved_reason,
+        d.`name` bename,
+        d.detail_count,
+        d.description,
+        d.unit,
+        d.save_method,
+        CONCAT(
+        pc.`name`,
+        '柜_',
+        pd.show_no,
+        '号'
+        ) boxname,
+        d.get_way,
+        d.get_time,
+        d.get_person
+        FROM
+        ba_serial i
+        LEFT JOIN ba_area a ON i.area_id = a.id
+        LEFT JOIN xt_organization o ON a.organization_id = o.id
+        LEFT JOIN ba_person p ON i.person_id = p.id
+        LEFT JOIN ba_case c ON c.id = i.case_id
+        LEFT JOIN ba_belongings b ON b.serial_id = i.id
+        LEFT JOIN ba_belongings_detail d ON b.id = d.belongings_id
+        LEFT JOIN ba_cabinet_config_detail pd ON pd.id = b.locker_id
+        LEFT JOIN ba_cabinet_config pc ON pd.config_id = pc.id
+        WHERE
+        pc.type = 1
+        <if test="serialId!=null and serialId!=''">
+            and i.id =#{serialId}
+        </if>
+
+    </select>
+    <!-- 查询嫌疑人具体存物信息 -->
+    <select id="getDocInfoNoLockersNew" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT
+        CONCAT(a.`name`) casename,
+        p.`name` personname,
+        p.certificate_no,
+        (
+        SELECT
+        code_desc
+        FROM
+        xt_crime_define
+        WHERE
+        id = c.ab
+        ) involved_reason,
+        d.`name` bename,
+        d.detail_count,
+        d.description,
+        d.unit,
+        d.save_method,
+        CONCAT(
+        SUBSTRING(pc.`desc`, 1, 2),
+        '柜1_',
+        pd.param_key,
+        '号'
+        ) boxname,
+        d.get_way,
+        d.get_time,
+        d.get_person,
+        b.register_time
+        FROM
+        ba_person p
+        LEFT JOIN ba_case c ON c.id = p.case_id
+        LEFT JOIN ba_belongings b ON b.serial_id = p.id
+        LEFT JOIN ba_belongings_detail d ON b.id = d.belongings_id
+        LEFT JOIN ba_personal_config_detail pd ON pd.id = b.locker_id
+        LEFT JOIN ba_personal_config pc ON pd.personal_config_id = pc.id
+        LEFT JOIN ba_area a ON b.area_id = a.id
+        LEFT JOIN xt_organization o ON a.organization_id = o.id
+        WHERE
+        1 = 1
+        <if test="personId!=null and personId!=''">
+            and p.id =#{personId}
+        </if>
+        <if test="id!=null and id!=''">
+            and b.id =#{id}
+        </if>
+    </select>
+    <!-- 查询嫌疑人具体存物信息 -->
+    <select id="getDocInfoNoLockers" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT
+        CONCAT(a.`name`) casename,
+        p.`name` personname,
+        p.certificate_no,
+        (
+        SELECT
+        code_desc
+        FROM
+        xt_crime_define
+        WHERE
+        id = c.ab
+        ) involved_reason,
+        d.`name` bename,
+        d.detail_count,
+        d.description,
+        d.unit,
+        d.save_method,
+        CONCAT(
+        SUBSTRING(pc.`desc`, 1, 2),
+        '柜1_',
+        pd.param_key,
+        '号'
+        ) boxname,
+        d.get_way,
+        d.get_time,
+        d.get_person,
+        b.register_time
+        FROM
+        ba_serial i
+        LEFT JOIN ba_area a ON i.area_id = a.id
+        LEFT JOIN xt_organization o ON a.organization_id = o.id
+        LEFT JOIN ba_person p ON i.person_id = p.id
+        LEFT JOIN ba_case c ON c.id = i.case_id
+        LEFT JOIN ba_belongings b ON b.serial_id = i.id
+        LEFT JOIN ba_belongings_detail d ON b.id = d.belongings_id
+        LEFT JOIN ba_personal_config_detail pd ON pd.id = b.locker_id
+        LEFT JOIN ba_personal_config pc ON pd.personal_config_id = pc.id
+        WHERE
+        1 = 1
+        <if test="serialId!=null and serialId!=''">
+            and i.id =#{serialId}
+        </if>
+    </select>
+    <!-- 查询嫌疑人涉案存物信息 -->
+    <select id="getexDocInfo" resultMap="BaseResultMap" parameterType="java.util.Map">
+        <!-- CONCAT(o.organization,'', a.`name`) casename , -->
+        SELECT
+        a.`name` area_name,
+        c.ajmc casename,
+        p.`name` personname,
+        p.certificate_no,
+        (
+        SELECT
+        code_desc
+        FROM
+        xt_crime_define
+        WHERE
+        id = c.ab
+        ) involved_reason,
+        d.`name` bename,
+        d.detail_count,
+        d.description,
+        CONCAT(
+        SUBSTRING(pc.desc, 1, 2),
+        '柜1_',
+        pd.param_key,
+        '号'
+        ) boxname,
+        b.created_time,
+        d.get_way,
+        d.get_time,
+        d.get_person
+        FROM
+        ba_serial i
+        LEFT JOIN ba_area a ON i.area_id = a.id
+        LEFT JOIN xt_organization o ON a.organization_id = o.id
+        LEFT JOIN ba_person p ON i.person_id = p.id
+        LEFT JOIN ba_case c ON c.id = i.case_id
+        LEFT JOIN ba_exhibit b ON b.serial_id = i.id
+        LEFT JOIN ba_exhibit_detail d ON b.id = d.exhibit_id
+        LEFT JOIN ba_personal_config_detail pd ON pd.id = b.locker_id
+        LEFT JOIN ba_personal_config pc ON pd.personal_config_id = pc.id
+        WHERE
+        pc.type = 'exhibit'
+        <if test="serialId!=null and serialId!=''">
+            and i.id =#{serialId}
+        </if>
+    </select>
+    <!-- 查询嫌疑人所使用柜子信息  -->
+    <select id="listAllBelong" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT
+        b.id,
+        b.locker_id,
+        b.is_get,
+        pn.`name` personname,
+        cf.`name` cabinet_group,
+        dl.open_key cabinet_no,
+        ia.`name` area_name,
+        REPLACE (
+        REPLACE (
+        bp.url,
+        '{startTime}',
+        DATE_FORMAT(
+        DATE_ADD(
+        b.created_time,
+        INTERVAL - 2 MINUTE
+        ),
+        '%Y%m%dT%H%i%s'
+        )
+        ),
+        '{endTime}',
+        DATE_FORMAT(
+        DATE_ADD(
+        b.created_time,
+        INTERVAL 2 MINUTE
+        ),
+        '%Y%m%dT%H%i%s'
+        )
+        ) AS cwurl,
+        REPLACE (
+        REPLACE (
+        bp.url,
+        '{startTime}',
+        DATE_FORMAT(
+        DATE_ADD(
+        bbd.get_time,
+        INTERVAL - 2 MINUTE
+        ),
+        '%Y%m%dT%H%i%s'
+        )
+        ),
+        '{endTime}',
+        DATE_FORMAT(
+        DATE_ADD(
+        bbd.get_time,
+        INTERVAL 2 MINUTE
+        ),
+        '%Y%m%dT%H%i%s'
+        )
+        ) AS qwurl
+        FROM
+        ba_belongings b
+        LEFT JOIN ba_belongings_detail bbd ON b.id = bbd.belongings_id
+        LEFT JOIN ba_person pn ON pn.id = b.serial_id
+        LEFT JOIN ba_cabinet_config_detail dl ON dl.id = b.locker_id
+        LEFT JOIN ba_cabinet_config cf ON cf.id = dl.config_id
+        LEFT JOIN ba_area ia ON b.area_id = ia.id
+        LEFT JOIN ba_case ba ON ba.id = b.case_id
+        LEFT JOIN belong_sp_url bp ON bp.area_id = ia.id
+        where 1=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="lockerId!=null and lockerId!=''">
+            and b.locker_id like '%${lockerId}%'
+        </if>
+        <if test="name!=null and name!=''">
+            and pn.`name` like '%${name}%'
+        </if>
+        <if test="start_date!=null and start_date!=''">
+            and b.created_time &gt;=#{start_date}
+        </if>
+        <if test="end_date!=null and end_date!=''">
+            and b.created_time &lt;=#{end_date}
+        </if>
+        <if test="areaId !=null and areaId !=''">
+            and b.area_id = #{areaId}
+        </if>
+        <if test="flag == 'Belong'">
+--             and cf.type = 1
+        </if>
+        order by b.id desc
+        limit ${pageStart},${rows}
+    </select>
+    <!-- 全部取物时根据唯一编号查询log所需信息 -->
+    <select id="selectloginfo" resultMap="BaseResultMap"
+            parameterType="java.util.Map">
+        SELECT
+        d.belongings_id,
+        b.locker_id
+        FROM
+        ba_belongings b,
+        ba_belongings_detail d
+        WHERE
+        b.id = d.belongings_id
+        AND b.is_get = 0
+        AND b.serial_id = #{s}
+        <!-- 		LIMIT 1 -->
+    </select>
+    <!-- 根据searilId查询其下照片总数 -->
+    <select id="selectpinfo" resultType="java.lang.Integer" parameterType="java.util.Map">
+		SELECT
+			count(4)
+		FROM
+			ba_belongings b,
+			ba_belongings_photo p
+		WHERE
+			b.id = p.belongings_id
+		AND b.serial_id = #{serialID}
+		LIMIT 1
+	</select>
+    <!-- 根据id删除随身物品储存信息 -->
+    <delete id="deleteBelong" parameterType="Long">
+		DELETE
+		FROM
+			ba_belongings
+		WHERE
+			id = #{id}
+	</delete>
+    <!-- 增加随身物品照片  -->
+    <insert id="creatbelongphoto" parameterType="BelongEntity"
+            useGeneratedKeys="true" keyProperty="id">
+			INSERT INTO ba_belongings_photo (
+				id,
+				belongings_id,
+				url,
+				area_id,
+				created_time,
+				updated_time,
+				op_pid,
+				op_user_id
+			)
+
+			VALUES
+				(
+					#{id,jdbcType=INTEGER}, #{belongingsId,jdbcType=INTEGER},
+					#{url,jdbcType=VARCHAR},#{areaId,jdbcType=INTEGER},
+					#{createdTime,jdbcType=TIMESTAMP},
+					#{updatedTime,jdbcType=TIMESTAMP},
+					#{opPid},
+					#{opUserId}
+					)
+	</insert>
+    <!-- 修改随身物品照片 -->
+    <update id="updatebelongphoto" parameterType="BelongEntity">
+        update ba_belongings_photo
+        <set>
+            <if test="belongingsId != null and belongingsId !='' ">
+                belongings_id = #{belongingsId,jdbcType=INTEGER},
+            </if>
+            <if test="url != null and url != ''">
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="areaId != null and areaId != ''">
+                area_id = #{areaId,jdbcType=INTEGER},
+            </if>
+            <if test="updatedTime != null and updatedTime != ''">
+                updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where belongings_id = #{belongingsId}
+    </update>
+    <!-- 根据id修改随身储物数据  -->
+    <update id="updateBelong" parameterType="BelongEntity">
+        update ba_belongings
+        <set>
+            <if test="serialId != null">
+                serial_id = #{serialId,jdbcType=BIGINT},
+            </if>
+            <if test="registerUserId != null">
+                register_user_id = #{registerUserId,jdbcType=INTEGER},
+            </if>
+            <if test="registerTime != null">
+                register_time = #{registerTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="caseId != null">
+                case_id = #{caseId,jdbcType=INTEGER},
+            </if>
+            <if test="areaId != null">
+                area_id = #{areaId,jdbcType=INTEGER},
+            </if>
+            <if test="lockerId != null">
+                locker_id = #{lockerId,jdbcType=VARCHAR},
+            </if>
+            <if test="createdTime != null">
+                created_time = #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedTime != null">
+                updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <!-- 查询嫌疑人所用存物柜的总数 -->
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+        count(1)
+        FROM
+        ba_belongings b
+        LEFT JOIN ba_serial s ON s.id = b.serial_id
+        LEFT JOIN ba_person pn ON pn.id = s.person_id
+        LEFT JOIN ba_cabinet_config_detail dl ON dl.id = b.locker_id
+        LEFT JOIN ba_cabinet_config cf ON cf.id = dl.config_id
+        LEFT JOIN ba_area ia ON b.area_id = ia.id
+        left join ba_case ba on ba.id = b.case_id
+        WHERE
+        1 = 1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="lockerId!=null and lockerId!=''">
+            and b.locker_id like '%${lockerId}%'
+        </if>
+        <if test="name!=null and name!=''">
+            and pn.`name` like '%${name}%'
+        </if>
+        <if test="start_date!=null and start_date!=''">
+            and b.created_time &gt;=#{start_date}
+        </if>
+        <if test="end_date!=null and end_date!=''">
+            and b.created_time &lt;=#{end_date}
+        </if>
+        <if test="areaId !=null and areaId !=''">
+            and b.area_id = #{areaId}
+        </if>
+        <if test="flag == 'Belong'">
+            and cf.type = 1
+        </if>
+    </select>
+    <!-- 根据储物柜编号查询未领取的存物信息 -->
+    <select id="selectinfo" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from ba_belongings
+        where
+        locker_id = #{lockerId}
+        and is_get =0
+    </select>
+    <!-- 根据searilId查询未领取的存物信息  -->
+    <select id="selectSidnfo" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from ba_belongings
+        where
+        is_get =0 and
+        serial_id=#{serialId}
+        LIMIT 1
+    </select>
+
+    <!-- 根据searlid查询未领取的 -->
+    <select id="selectphotoinfonew" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT
+        b.id AS belongings_id,
+        b.area_id
+        FROM
+        ba_belongings b,
+        ba_person s
+        WHERE
+        s.id = b.serial_id
+        AND s.id = #{serialID}
+        ORDER BY b.id desc
+        LIMIT 1
+    </select>
+
+    <!-- 根据searlid查询未领取的 -->
+    <select id="selectphotoinfo" resultMap="BaseResultMap" parameterType="java.util.Map">
+		SELECT
+			b.id AS belongings_id,
+			b.area_id
+		FROM
+			ba_belongings b,
+			ba_person s
+		WHERE
+			s.id = b.serial_id
+		AND b.is_get = 0
+		AND s.id = #{serialID}
+		LIMIT 1
+	</select>
+    <!-- 根据searilId修改存物主表信息 -->
+    <update id="updateBoxopen" parameterType="BelongEntity">
+        update ba_belongings
+        <set>
+            <if test="serialId != null">
+                serial_id = #{serialId,jdbcType=BIGINT},
+            </if>
+            <if test="registerUserId != null">
+                register_user_id = #{registerUserId,jdbcType=INTEGER},
+            </if>
+            <if test="registerTime != null">
+                register_time = #{registerTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="caseId != null">
+                case_id = #{caseId,jdbcType=INTEGER},
+            </if>
+            <if test="areaId != null">
+                area_id = #{areaId,jdbcType=INTEGER},
+            </if>
+            <if test="lockerId != null">
+                locker_id = #{lockerId,jdbcType=VARCHAR},
+            </if>
+            <if test="createdTime != null">
+                created_time = #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedTime != null">
+                updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <!-- 根据searilId修改未领取的存物主表信息 -->
+    <update id="updateBoxopenout" parameterType="BelongEntity">
+        update ba_belongings
+        <set>
+            <if test="registerUserId != null">
+                register_user_id = #{registerUserId,jdbcType=INTEGER},
+            </if>
+            <if test="registerTime != null">
+                register_time = #{registerTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="caseId != null">
+                case_id = #{caseId,jdbcType=INTEGER},
+            </if>
+            <if test="areaId != null">
+                area_id = #{areaId,jdbcType=INTEGER},
+            </if>
+            <if test="lockerId != null">
+                locker_id = #{lockerId,jdbcType=VARCHAR},
+            </if>
+            <if test="isGet != null">
+                is_get = #{isGet,jdbcType=INTEGER},
+            </if>
+            <if test="createdTime != null">
+                created_time = #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedTime != null">
+                updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where is_get=0 and serial_id = #{serialId}
+    </update>
+    <!-- 根据存物详情id查询未领取的存物详情总数 -->
+    <select id="selectbelonginfo" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+		SELECT
+			count(2)
+		FROM
+			ba_belongings_detail d
+		WHERE
+			d.is_get = 0
+		AND d.belongings_id = (
+			SELECT
+				belongings_id
+			FROM
+				ba_belongings_detail
+			WHERE
+				id = #{s})
+	</select>
+    <!-- 根据dearilId查询未领取的总数 -->
+    <select id="isGetBelongBySerialId" resultType="java.lang.Integer" parameterType="java.lang.Long">
+		SELECT
+			count(2)
+		FROM
+			ba_belongings d
+		WHERE
+			d.is_get = 0
+		AND d.serial_id = #{s}
+	</select>
+    <!-- 根据储物柜编号查询没有领取的存物信息的searilId -->
+    <select id="getSerialIdByLockId" resultType="java.lang.Long" parameterType="java.util.Map">
+		SELECT
+			serial_id
+		FROM
+			ba_belongings
+		WHERE
+			is_get = 0
+		AND locker_id = #{lockId}
+	</select>
+    <!-- 根据储物柜编号查询未领取的涉案物品信息 -->
+    <select id="getBelongInfoByLockId" resultMap="BaseResultMap" parameterType="java.util.Map">
+		SELECT
+			ex.*,
+			(
+				SELECT
+					NAME
+				FROM
+					ba_person
+				WHERE
+					id = ints.person_id
+			) personname
+		FROM
+			ba_exhibit ex
+		LEFT JOIN ba_serial ints ON ints.id = ex.serial_id
+		WHERE
+			is_get = 0
+		AND locker_id = #{lockId}
+	</select>
+    <!-- 根据存物id查询入区主表seariId -->
+    <select id="selectserialid" resultType="java.lang.Long" parameterType="java.util.Map">
+	     SELECT
+			serial_id
+		 FROM
+			ba_belongings
+		 WHERE
+			id = #{id}
+	</select>
+    <!-- 根据id选柜号,ip.groupw.xb -->
+    <select id="selectlockNo" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		SELECT
+		a.locker_id,
+		a.boxip,
+		b.boxgroup,
+		c.boxport
+			FROM
+				(
+					SELECT
+						n.param_key AS locker_id,
+						pd.param_value AS boxip
+					FROM
+						(
+							SELECT
+								d.param_key,
+								'随身储物柜1配置' AS bname,
+								p.area_id
+							FROM
+								ba_personal_config_detail d,
+								ba_personal_config p
+							WHERE
+								p.id = d.personal_config_id
+							AND d.id = #{lockid}) n ,personal_config pc,
+							ba_personal_config_detail pd
+							WHERE
+								pc.`name` = n.bname
+							AND pd.personal_config_id = pc.id
+							AND pd.param_key = 'ip'
+							AND pc.area_id = n.area_id
+						) a,
+						(
+							SELECT
+								pd.param_value AS boxgroup
+							FROM
+								(
+									SELECT
+										d.param_key,
+										'随身储物柜1配置' AS bname,
+										p.area_id
+									FROM
+										ba_personal_config_detail d,
+										ba_personal_config p
+									WHERE
+										p.id = d.personal_config_id
+									AND d.id = #{lockid}) n ,personal_config pc,
+									ba_personal_config_detail pd
+									WHERE
+										pc.`name` = n.bname
+									AND pd.personal_config_id = pc.id
+									AND pd.param_key = 'group'
+									AND pc.area_id = n.area_id
+								) b,
+								(
+									SELECT
+										pd.param_value AS boxport
+									FROM
+										(
+											SELECT
+												d.param_key,
+												'随身储物柜1配置' AS bname,
+												p.area_id
+											FROM
+												ba_personal_config_detail d,
+												ba_personal_config p
+											WHERE
+												p.id = d.personal_config_id
+											AND d.id = #{lockid}) n ,ba_personal_config pc,
+											ba_personal_config_detail pd
+											WHERE
+												pc.`name` = n.bname
+											AND pd.personal_config_id = pc.id
+											AND pd.param_key = 'port'
+											AND pc.area_id = n.area_id
+										) c
+
+	</select>
+    <!-- 根据唯一编号选柜号,ip.groupw.xb -->
+    <select id="selectlockNobysid" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+			SELECT
+			a.locker_id,
+			a.boxip,
+			b.boxgroup,
+			c.boxport
+				FROM
+				(
+					SELECT
+						n.param_key AS locker_id,
+						pd.param_value AS boxip
+					FROM
+						(
+							SELECT
+								d.param_key,
+								'随身储物柜1配置' AS bname,
+								p.area_id
+							FROM
+								ba_personal_config_detail d,
+								ba_personal_config p
+							WHERE
+								p.id = d.personal_config_id
+							AND d.id = (
+								SELECT
+									bs.locker_id
+								FROM
+									ba_belongings bs
+								WHERE
+									bs.serial_id = #{sid} order by bs.created_time desc limit 1)) n ,ba_personal_config pc,
+									ba_personal_config_detail pd
+								WHERE
+									pc.`name` = n.bname
+								AND pd.personal_config_id = pc.id
+								AND pd.param_key = 'ip'
+								AND pc.area_id = n.area_id
+							) a,
+							(
+								SELECT
+									pd.param_value AS boxgroup
+								FROM
+									(
+										SELECT
+											d.param_key,
+											'随身储物柜1配置' AS bname,
+											p.area_id
+										FROM
+											ba_personal_config_detail d,
+											ba_personal_config p
+										WHERE
+											p.id = d.personal_config_id
+										AND d.id = (
+											SELECT
+												bs.locker_id
+											FROM
+												ba_belongings bs
+											WHERE
+												bs.serial_id = #{sid} order by bs.created_time desc limit 1)) n ,ba_personal_config pc,
+												ba_personal_config_detail pd
+											WHERE
+												pc.`name` = n.bname
+											AND pd.personal_config_id = pc.id
+											AND pd.param_key = 'group'
+											AND pc.area_id = n.area_id
+										) b,
+										(
+											SELECT
+												pd.param_value AS boxport
+											FROM
+												(
+													SELECT
+														d.param_key,
+														'随身储物柜1配置' AS bname,
+														p.area_id
+													FROM
+														ba_personal_config_detail d,
+														ba_personal_config p
+													WHERE
+														p.id = d.personal_config_id
+													AND d.id = (
+														SELECT
+															bs.locker_id
+														FROM
+															ba_belongings bs
+														WHERE
+															bs.serial_id = #{sid} order by bs.created_time desc limit 1)) n ,ba_personal_config pc,
+															ba_personal_config_detail pd
+														WHERE
+															pc.`name` = n.bname
+														AND pd.personal_config_id = pc.id
+														AND pd.param_key = 'port'
+														AND pc.area_id = n.area_id
+													) c
+
+	</select>
+    <!-- 根据存物id查询照片信息 -->
+    <select id="selectPhotoByBelongingsId" parameterType="java.lang.Long" resultMap="BelongingsPhotoResultMap">
+		SELECT
+            p.*,bis.web_url
+        FROM
+            ba_belongings_photo p
+        LEFT JOIN ba_belongings bb ON p.belongings_id = bb.id
+        LEFT JOIN belongings_image_server bis on bb.area_id=p.area_id
+            WHERE
+	        p.belongings_id = #{belongingsId}
+	</select>
+    <!-- 检查当前柜子是否被其他人占用 -->
+    <select id="checkOtherPersonUse" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT
+			*
+		FROM
+			ba_belongings
+		WHERE
+			serial_id != #{serialId} and is_get=0 and locker_id=
+			(
+		SELECT
+			locker_id
+		FROM
+			ba_belongings
+		WHERE
+			serial_id = #{serialId} order by created_time desc limit 1)
+		LIMIT 1
+	</select>
+    <!-- 根据id查询全部数据 -->
+    <select id="getBelongById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+       select * from ba_belongings where id = #{id}
+  	</select>
+    <!-- 根据未领取的储物柜编号查询总数量 -->
+    <select id="countDetByLockerId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+       SELECT COUNT(1) FROM ba_belongings WHERE locker_id= #{lockerId} AND is_get!=1
+  	</select>
+
+    <!-- 根据id查询全部数据 -->
+    <select id="getBelongdetByWpUuid" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT
+        b.*,d.name, d.detail_count, d.unit, d.save_method, d.description, d.wp_uuid
+        FROM
+        ba_belongings b
+        LEFT JOIN ba_belongings_detail d ON d.belongings_id = b.id
+        where d.wp_uuid = #{wpUuid} limit 1
+    </select>
+    <!-- 根据id查询全部数据 -->
+    <select id="getBelongDetailById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT
+			d.*,
+			b.locker_id,
+			pn. NAME personname,
+			pn.id serial_id,
+			pn.case_id,
+           pn.certificate_no
+		FROM
+			ba_belongings b
+		LEFT JOIN ba_belongings_detail d ON d.belongings_id = b.id
+		LEFT JOIN ba_belongings_burcode bb ON bb.belongings_id = b.id
+			LEFT JOIN ba_person pn ON b.serial_id = pn.id
+         where b.id = #{id}
+    </select>
+    <!-- 导出随身储物柜的储物数据 -->
+    <select id="getBelongForExport" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT
+			d.id,
+			d.belongings_id,
+			d.is_get,
+			d.get_way,
+			d.get_person,
+			d.get_time,
+			s.serial_no,
+			b.locker_id,
+			d. NAME,
+			d.detail_count,
+			d.description,
+			d.unit,
+			d.save_method,
+			pn. NAME personname,
+			s.id serial_id,
+			cd.code_desc involved_reason,
+			b.register_time,
+			u.real_name policeName,
+			bb.burcode,
+			ba.NAME areaName
+		FROM
+			ba_belongings b
+		LEFT JOIN ba_belongings_detail d ON d.belongings_id = b.id
+		LEFT JOIN ba_belongings_burcode bb ON bb.belongings_id = b.id
+		LEFT JOIN ba_serial s ON s.id = b.serial_id
+		LEFT JOIN ba_person pn ON s.person_id = pn.id
+		LEFT JOIN xt_user u ON u.id = b.register_user_id
+		LEFT JOIN ba_case bc ON bc.id = b.case_id
+		LEFT JOIN xt_crime_define cd ON cd.id = bc.ab
+        LEFT JOIN ba_area ba ON s.area_id = ba.id
+	    where s.area_id=#{areaId}
+	    and b.register_time BETWEEN #{startTime} and #{endTime}
+	</select>
+    <!-- 增加存物信息-->
+    <insert id = "insertBelong" parameterType = "BelongEntity" useGeneratedKeys = "true" keyProperty = "id" >
+        INSERT INTO ba_belongings (
+        id,
+        serial_id,
+        register_user_id,
+        register_time,
+        case_id,
+        area_id,
+        locker_id,
+        is_get,
+        created_time,
+        updated_time
+        )
+        VALUES
+        (
+        #{id,jdbcType=INTEGER}, #{serialId,jdbcType=BIGINT},
+        #{registerUserId,jdbcType=INTEGER},
+        #{registerTime,jdbcType=TIMESTAMP}, #{caseId,jdbcType=INTEGER},
+        #{areaId,jdbcType=INTEGER},
+        #{lockerId,jdbcType=VARCHAR}, #{isGet,jdbcType=INTEGER},
+        #{createdTime,jdbcType=TIMESTAMP},
+        #{updatedTime,jdbcType=TIMESTAMP})
+    </insert>
+    <!-- 修改存物信息 -->
+    <update id="updateUpperInfo" parameterType="BelongEntity">
+        update ba_belongings
+        <set>
+            <if test="isGet != null">
+                is_get = #{isGet,jdbcType=INTEGER},
+            </if>
+            <if test="createdTime != null">
+                created_time = #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedTime != null">
+                updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <!-- 查询空的随身储物柜  -->
+    <select id="listunUsedbox" parameterType="java.util.Map" resultMap="comboboxResultMap">
+        SELECT
+        n.detail_id AS id,
+        concat(n.open_key, '号柜') AS `value`,
+        n. NAME group_name,
+        n.is_get STATUS
+        FROM
+        (
+        SELECT
+        s.id,
+        s.`name`,
+        s.open_key,
+        s.type,
+        a.is_get,
+        s.detail_id
+        FROM
+        (
+        SELECT
+        p.id,
+        p. NAME,
+        d.open_key,
+        d.type,
+        d.id detail_id
+        FROM
+        ba_cabinet_config p,
+        ba_cabinet_config_detail d
+        WHERE
+        p.id = d.config_id
+        <if test="areaid != null and areaid != '' and areaid != 'null'">
+            and p.area_id = #{areaid}
+        </if>
+        <if test="type != null and type != ''">
+            AND p.type = #{type}
+        </if>
+
+        ) s
+        LEFT JOIN (
+        (
+        SELECT
+        locker_id,
+        is_get
+        FROM
+        ba_belongings
+        GROUP BY
+        locker_id
+        HAVING
+        COUNT(locker_id) = 1
+        )
+        UNION
+        (
+        SELECT
+        locker_id,
+        is_get
+        FROM
+        ba_belongings
+        WHERE
+        is_get = 0
+        AND locker_id IN (
+        SELECT
+        locker_id
+        FROM
+        ba_belongings
+        GROUP BY
+        locker_id
+        HAVING
+        COUNT(locker_id) > 1
+        )
+        )
+        ) a ON a.locker_id = s.detail_id
+        ORDER BY
+        s.detail_id
+        ) n
+        ORDER BY
+        group_name,
+        id
+    </select>
+
+    <select id="selectcodinfoNew" resultMap="BaseResultMap" parameterType="java.util.Map" >
+        SELECT
+        b.id AS belongings_id,
+        a.`name` AS aname,
+        p.`name` AS pname,
+        p.certificate_no certificateNo,
+        bd.detail_count,
+		bd.name wname,
+		bd.wp_uuid
+        FROM
+        ba_belongings b,
+        ba_belongings_detail bd,
+        ba_area a,
+        ba_person p
+        WHERE
+        b.serial_id = p.id
+        AND b.area_id = a.id
+        AND b.is_get = 0
+        AND b.serial_id = #{serialId} and bd.belongings_id=#{belongingsId}
+    </select>
+
+    <select id="selectBelonginfo" resultType="com.zhixin.zhfz.bacs.entity.BelongEntity" parameterType="java.util.Map" >
+        SELECT
+            b.id AS belongings_id,
+            a.`name` AS aname,
+            p.`name` AS pname,
+            c.ajmc AS cname,
+            p.certificate_no certificateNo
+        FROM
+            ba_belongings b,
+            ba_area a,
+            ba_case c,
+            ba_person p
+        WHERE
+        b.serial_id = p.id
+        AND b.area_id = a.id
+        AND b.case_id = c.id
+        AND b.is_get = 0
+        AND b.serial_id =  #{serialId} and b.id=#{belongingsId}
+    </select>
+
+    <!--查询所有存物信息 -->
+    <select id="getListByBelongDetail" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT
+        bbd.*,
+        bb.area_id areaId,
+        bbd. NAME AS NAME,
+        count(bbd.detail_count) AS
+        belongCount
+        FROM
+        ba_belongings bb
+        LEFT JOIN ba_belongings_detail bbd ON bb.id = bbd.belongings_id
+        WHERE
+        1 = 1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="areaId !=null and areaId !=''">
+            and bb.area_id = #{areaId}
+        </if>
+        GROUP BY bbd.name
+        ORDER BY belongCount desc
+        limit 10
+    </select>
+
+    <select id="selectImage" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT * FROM belongings_image_server WHERE area_id= #{areaId}
+    </select>
+
+</mapper>

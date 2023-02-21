@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.order.IOrderPersonMapper" >
+  <resultMap id="BaseResultMap" type="com.zhixin.zhfz.bacs.entity.OrderPersonEntity" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="order_request_id" property="orderRequestId" jdbcType="INTEGER" />
+    <result column="person_id" property="personId" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="person_type" property="personType" jdbcType="VARCHAR" />
+    <result column="is_juvenile" property="isJuvenile" jdbcType="INTEGER" />
+    <result column="is_gravida" property="isGravida" jdbcType="INTEGER" />
+    <result column="is_gravida_prove" property="isGravidaProve" jdbcType="INTEGER" />
+    <result column="gravida_month" property="gravidaMonth" jdbcType="VARCHAR" />
+    <result column="is_disease" property="isDisease" jdbcType="INTEGER" />
+    <result column="is_disease_prove" property="isDiseaseProve" jdbcType="INTEGER" />
+    <result column="sfcrgfxdq" property="sfcrgfxdq" jdbcType="INTEGER" />
+    <result column="jzyms" property="jzyms" jdbcType="VARCHAR" />
+    <result column="jkb" property="jkb" jdbcType="INTEGER" />
+    <result column="other" property="other" jdbcType="VARCHAR" />
+    <result column="zjdz" property="zjdz"  />
+    <result column="zhdz" property="zhdz"  />
+    <result column="sfsjyqldaj" property="sfsjyqldaj"  />
+    <result column="xyrtw" property="xyrtw" />
+    <result column="zjfjrq" property="zjfjrq"  />
+    <result column="mgsf" property="mgsf"  />
+    <result column="sfymjjcs" property="sfymjjcs"  />
+    <result column="j3gysfyjjcgqk" property="j3gysfyjjcgqk"  />
+
+    <result column="ajbh" property="ajbh" />
+    <result column="rybh" property="rybh" />
+    <result column="ajmc" property="ajmc" />
+    <result column="shzt" property="shzt" />
+    <result column="shjg" property="shjg" />
+
+
+    <!--连表-->
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="certificateTypeId" property="certificateTypeId" jdbcType="INTEGER" />
+    <result column="certificateNo" property="certificateNo" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="createdTime" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updatedTime" property="updatedTime" jdbcType="TIMESTAMP" />
+    <result column="country" property="country" jdbcType="INTEGER" />
+    <result column="nation" property="nation" jdbcType="INTEGER" />
+    <result column="orderUserId" property="orderUserId" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+  </resultMap>
+  <!-- 入区根据姓名或身份证号码查询嫌疑人信息 -->
+  <select id="entranceQuerySuspect" resultMap="BaseResultMap" parameterType="OrderPersonEntity">
+    select bop.* ,bp.certificate_no certificate_no,bp.name `name` ,bp.certificateTypeId certificateTypeId,
+    ,bp.sex sex,bp.createdTime createdTime ,bp.updatedTime updatedTime,bp.country country,bp.nation nation
+    from ba_order_person bop
+     LEFT join ba_person bp on bp.id = bop.person_id
+     where 1=1
+    <if test="name!=null and name!=''">
+      and bp.`name` = '${name}'
+    </if>
+    <if test="certificateNo!=null and certificateNo!=''">
+      and bp.certificate_no = '${certificateNo}'
+    </if>
+    <if test="certificateTypeId!=null and certificateTypeId!=''">
+      and bp.certificate_type_id = ${certificateTypeId}
+    </if>
+    <if test="orderRequestId!=null and orderRequestId!=''">
+      and bp.order_request_id = ${orderRequestId}
+    </if>
+    order by id desc
+  </select>
+  <insert id="insertSelective" parameterType="OrderPersonEntity" >
+    insert into ba_order_person
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="orderRequestId != null" >
+        order_request_id,
+      </if>
+      <if test="personId != null" >
+        person_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="personType != null" >
+        person_type,
+      </if>
+      <if test="isGuardian != null" >
+        is_guardian,
+      </if>
+      <if test="isJuvenile != null" >
+        is_juvenile,
+      </if>
+      <if test="isGravida != null" >
+        is_gravida,
+      </if>
+      <if test="isGravidaProve != null" >
+        is_gravida_prove,
+      </if>
+      <if test="gravidaMonth != null" >
+        gravida_month,
+      </if>
+      <if test="isDisease != null" >
+        is_disease,
+      </if>
+      <if test="ajbh != null" >
+        ajbh,
+      </if>
+      <if test="rybh != null" >
+        rybh,
+      </if>
+      <if test="ajmc != null" >
+        ajmc,
+      </if>
+      <if test="isDiseaseProve != null" >
+        is_disease_prove,
+      </if>
+      <if test="other != null" >
+        other,
+      </if>
+      <if test="jzyms != null" >
+        jzyms,
+      </if>
+      <if test="jkb != null" >
+        jkb,
+      </if>
+      <if test="sfcrgfxdq != null" >
+        sfcrgfxdq,
+      </if>
+      <if test="zjdz != null and zjdz != ''">
+        zjdz,
+      </if>
+      <if test="zhdz != null  and zhdz != ''" >
+        zhdz,
+      </if>
+      <if test="sfsjyqldaj != null" >
+        sfsjyqldaj,
+      </if>
+      <if test="xyrtw != null and xyrtw != ''" >
+        xyrtw,
+      </if>
+      <if test="zjfjrq != null and zjfjrq != ''" >
+        zjfjrq,
+      </if>
+      <if test="j3gysfyjjcgqk != null " >
+        j3gysfyjjcgqk,
+      </if>
+      <if test="mgsf != null and mgsf != ''" >
+        mgsf,
+      </if>
+      <if test="sfymjjcs != null" >
+        sfymjjcs,
+      </if>
+      <if test="opPid != null" >
+        op_pid,
+      </if>
+      <if test="opUserId != null" >
+        op_user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderRequestId != null" >
+        #{orderRequestId,jdbcType=INTEGER},
+      </if>
+      <if test="personId != null" >
+        #{personId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="personType != null" >
+        #{personType,jdbcType=VARCHAR},
+      </if>
+      <if test="isGuardian != null" >
+        #{isGuardian,jdbcType=INTEGER},
+      </if>
+      <if test="isJuvenile != null" >
+        #{isJuvenile,jdbcType=INTEGER},
+      </if>
+      <if test="isGravida != null" >
+        #{isGravida,jdbcType=INTEGER},
+      </if>
+      <if test="isGravidaProve != null" >
+        #{isGravidaProve,jdbcType=INTEGER},
+      </if>
+      <if test="gravidaMonth != null" >
+        #{gravidaMonth,jdbcType=VARCHAR},
+      </if>
+      <if test="isDisease != null" >
+        #{isDisease,jdbcType=INTEGER},
+      </if>
+      <if test="ajbh != null and ajbh != ''" >
+        #{ajbh},
+      </if>
+      <if test="rybh != null and rybh != '' " >
+        #{rybh},
+      </if>
+      <if test="ajmc != null and ajmc != ''  " >
+        #{ajmc},
+      </if>
+      <if test="isDiseaseProve != null" >
+        #{isDiseaseProve,jdbcType=INTEGER},
+      </if>
+      <if test="other != null" >
+        #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="jzyms != null and ajmc != ''" >
+        #{jzyms,jdbcType=VARCHAR},
+      </if>
+      <if test="jkb != null" >
+        #{jkb,jdbcType=INTEGER},
+      </if>
+      <if test="sfcrgfxdq != null" >
+        #{sfcrgfxdq,jdbcType=INTEGER},
+      </if>
+      <if test="zjdz != null and zjdz != ''">
+        #{zjdz},
+      </if>
+      <if test="zhdz != null  and zhdz != ''" >
+        #{zhdz},
+      </if>
+      <if test="sfsjyqldaj != null " >
+        #{sfsjyqldaj},
+      </if>
+      <if test="xyrtw != null and xyrtw != ''" >
+        #{xyrtw},
+      </if>
+      <if test="zjfjrq != null and zjfjrq != ''" >
+        #{zjfjrq},
+      </if>
+      <if test="j3gysfyjjcgqk != null " >
+        #{j3gysfyjjcgqk},
+      </if>
+      <if test="mgsf != null and mgsf != ''" >
+        #{mgsf},
+      </if>
+      <if test="sfymjjcs != null " >
+        #{sfymjjcs},
+      </if>
+      <if test="opPid != null" >
+        #{opPid,jdbcType=VARCHAR},
+      </if>
+      <if test="opUserId != null" >
+        #{opUserId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="getNoArrivePersonByOrderId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+   select * from ba_order_person bop
+    left join ba_person p on bop.person_id = p.id
+    where p.isArrive = 0 and bop.order_request_id = #{orderId,jdbcType=INTEGER}
+  </select>
+  <select id="orderPersonList" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select bop.*,bor.order_user_id orderUserId,bor.type,bp.certificate_no certificateNo,bp.name `name` ,bp.certificate_type_id certificateTypeId
+    ,bp.sex sex,bp.created_time createdTime ,bp.updated_time updatedTime,bp.country country,bp.nation nation
+    from ba_order_person bop
+    LEFT JOIN ba_order_request bor on bor.id = bop.order_request_id
+    LEFT JOIN ba_person bp on bp.id = bop.person_id
+    LEFT JOIN ba_area ba ON ba.id=bor.area_id
+     where 1=1
+     <if test="orderRequestId!=null and orderRequestId!=''">
+       AND bop.order_request_id = #{orderRequestId}
+     </if>
+  </select>
+  <select id="orderPersonCount" parameterType="java.util.Map"  resultType="java.lang.Integer">
+    select count(1)
+    from ba_order_person bop
+    LEFT JOIN ba_order_request bor on bor.id = bop.order_request_id
+    LEFT JOIN ba_person bp on bp.id = bop.person_id
+    LEFT JOIN ba_area ba ON ba.id=bor.area_id
+    where 1=1
+    <if test="orderRequestId!=null and orderRequestId!=''">
+      AND bop.order_request_id = #{orderRequestId}
+    </if>
+  </select>
+  <delete id="deleteById" parameterType="java.lang.Integer" >
+    delete from ba_order_person where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByOrderRequestId"  parameterType="java.lang.Integer">
+    delete from ba_order_person WHERE order_request_id=#{orderRequestId}
+  </delete>
+  <update id="updateByPrimaryKeySelective" parameterType="OrderPersonEntity" >
+    update ba_order_person
+    <set >
+      <if test="orderRequestId != null" >
+        order_request_id = #{orderRequestId,jdbcType=INTEGER},
+      </if>
+      <if test="personId != null" >
+        person_id = #{personId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="personType != null" >
+        person_type = #{personType,jdbcType=VARCHAR},
+      </if>
+      <if test="isJuvenile != null" >
+        is_juvenile = #{isJuvenile,jdbcType=INTEGER},
+      </if>
+      <if test="isGravida != null" >
+        is_gravida = #{isGravida,jdbcType=INTEGER},
+      </if>
+      <if test="isGravidaProve != null" >
+        is_gravida_prove = #{isGravidaProve,jdbcType=INTEGER},
+      </if>
+      <if test="gravidaMonth != null" >
+        gravida_month = #{gravidaMonth,jdbcType=VARCHAR},
+      </if>
+      <if test="isDisease != null" >
+        is_disease = #{isDisease,jdbcType=INTEGER},
+      </if>
+      <if test="ajbh != null and ajbh != ''" >
+        ajbh = #{ajbh},
+      </if>
+      <if test="rybh != null and rybh != '' " >
+        rybh =  #{rybh},
+      </if>
+      <if test="ajmc != null and ajmc != ''  " >
+        ajmc = #{ajmc},
+      </if>
+      <if test="zjdz != null and zjdz != ''">
+        zjdz= #{zjdz},
+      </if>
+      <if test="zhdz != null  and zhdz != ''" >
+        zhdz= #{zhdz},
+      </if>
+      sfsjyqldaj=#{sfsjyqldaj},
+      <if test="xyrtw != null and xyrtw != ''" >
+        xyrtw= #{xyrtw},
+      </if>
+      <if test="zjfjrq != null and zjfjrq != ''" >
+        zjfjrq= #{zjfjrq},
+      </if>
+        j3gysfyjjcgqk= #{j3gysfyjjcgqk},
+      <if test="mgsf != null and mgsf != ''" >
+        mgsf=#{mgsf},
+      </if>
+        sfymjjcs=#{sfymjjcs},
+      <if test="isDiseaseProve != null" >
+        is_disease_prove = #{isDiseaseProve,jdbcType=INTEGER},
+      </if>
+      <if test="other != null" >
+        other = #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="sfcrgfxdq != null" >
+        sfcrgfxdq = #{sfcrgfxdq,jdbcType=INTEGER},
+      </if>
+      <if test="jkb != null" >
+        jkb = #{jkb,jdbcType=INTEGER},
+      </if>
+      <if test="jzyms != null and jzyms != ''  " >
+        jzyms = #{jzyms,jdbcType=INTEGER},
+      </if>
+      <if test="ajmc != null and ajmc != ''  " >
+      ajmc = #{ajmc},
+      </if>
+      <if test="shzt != null " >
+        shzt = #{shzt},
+      </if>
+      <if test="shjg != null and shjg != ''  " >
+        shjg = #{shjg},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <!-- 同时删除order_person、person、order_status -->
+  <delete id="deleteByOrderRequestIdList"  parameterType="java.util.List" >
+    delete bop.*,bos.*,bp.*  from ba_order_person bop,ba_order_status bos,ba_person bp
+    where
+    bop.person_id = bp.id
+    and bop.order_request_id in (
+      <foreach collection="orderRequestIdList" item="orderRequestId" separator=",">
+        #{id}
+      </foreach>
+    )
+    and bos.order_request_id in (
+      <foreach collection="orderRequestIdList" item="orderRequestId" separator=",">
+        #{id}
+      </foreach>
+    )
+
+  </delete>
+  <update id="updateByOrderIdAndPersonId" parameterType="OrderPersonEntity" >
+    update ba_order_person
+    <set >
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="personType != null" >
+        person_type = #{personType,jdbcType=VARCHAR},
+      </if>
+      <if test="isJuvenile != null" >
+        is_juvenile = #{isJuvenile,jdbcType=INTEGER},
+      </if>
+      <if test="isGravida != null" >
+        is_gravida = #{isGravida,jdbcType=INTEGER},
+      </if>
+      <if test="isGravidaProve != null" >
+        is_gravida_prove = #{isGravidaProve,jdbcType=INTEGER},
+      </if>
+      <if test="gravidaMonth != null" >
+        gravida_month = #{gravidaMonth,jdbcType=VARCHAR},
+      </if>
+      <if test="isDisease != null" >
+        is_disease = #{isDisease,jdbcType=INTEGER},
+      </if>
+      <if test="isDiseaseProve != null" >
+        is_disease_prove = #{isDiseaseProve,jdbcType=INTEGER},
+      </if>
+      <if test="other != null" >
+        other = #{other,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where order_request_id = #{orderRequestId,jdbcType=INTEGER}
+    and   person_id = #{personId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.zhag.dao.xsajgj.IXzajgjMapper">
+
+    <select id="list" resultType="com.zhixin.zhfz.zhag.entity.GjxxEntity" parameterType="java.util.Map">
+        SELECT gj.*,ca.id caseId,ca.ajzt,ca.abmc,jq.sldwmc,jq.cjrxm FROM ag_gjxx gj
+        left join ba_case ca on ca.ajbh=gj.ajbh
+        left join ag_jqxx jq on jq.jqbh=gj.jqbh
+        WHERE 1=1 and gj.gjly=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="wtlx!=null and wtlx !=''">
+            and gj.wtlx = #{wtlx}
+        </if>
+        <if test="ajbh !=null and ajbh !=''">
+            and gj.ajbh like '%${ajbh}%'
+        </if>
+        <if test="abmc!=null and abmc!=''">
+            and ca.abmc like '%${abmc}%'
+        </if>
+        <if test="sldwmc!=null and sldwmc!=''">
+            and jq.sldwmc = #{sldwmc}
+        </if>
+        <if test="cjrxm!=null and cjrxm!=''">
+            and jq.cjrxm like '%${cjrxm}%'
+        </if>
+        <if test="ajzt!=null and ajzt!=''">
+            and ca.ajzt = #{ajzt}
+        </if>
+        <if test="gjsj!=null and gjsj!=''">
+            and gj.gjsj= #{gjsj}
+        </if>
+        <if test="gjzt!=null and gjzt!=''">
+            and gj.gjzt= #{gjzt}
+        </if>
+        <if test="cjz!=null and cjz!=''">
+            and gj.cjz= #{cjz}
+        </if>
+        order by gj.cjsj desc limit ${pageStart},${rows}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT count(1) FROM ag_gjxx gj
+        left join ba_case ca on ca.ajbh=gj.ajbh
+        left join ag_jqxx jq on jq.jqbh=gj.jqbh
+        WHERE 1=1 and gj.gjly=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="wtlx!=null and wtlx !=''">
+            and gj.wtlx = #{wtlx}
+        </if>
+        <if test="ajbh !=null and ajbh !=''">
+            and gj.ajbh like '%${ajbh}%'
+        </if>
+        <if test="abmc!=null and abmc!=''">
+            and ca.abmc like '%${abmc}%'
+        </if>
+        <if test="sldwmc!=null and sldwmc!=''">
+            and jq.sldwmc = #{sldwmc}
+        </if>
+        <if test="cjrxm!=null and cjrxm!=''">
+            and jq.cjrxm like '%${cjrxm}%'
+        </if>
+        <if test="ajzt!=null and ajzt!=''">
+            and ca.ajzt = #{ajzt}
+        </if>
+        <if test="gjsj!=null and gjsj!=''">
+            and gj.gjsj= #{gjsj}
+        </if>
+        <if test="gjzt!=null and gjzt!=''">
+            and gj.gjzt= #{gjzt}
+        </if>
+        <if test="cjz!=null and cjz!=''">
+            and gj.cjz= #{cjz}
+        </if>
+    </select>
+
+
+
+
+</mapper>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacs.dao.blwmb.IRecordTemplateMapper">
+
+    <resultMap id="resultMap" type="com.zhixin.zhfz.bacs.entity.RecordTemplateEntity">
+        <id property="id" column="id"/>
+        <result column="name" property="name"/>
+        <result column="word" property="word"/>
+        <result column="content" property="content"/>
+        <result column="sort_no" property="sortNo"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="user_id" property="userId"/>
+        <result column="real_name" property="userName"/>
+        <result column="type" property="type"/>
+        <result column="op_pid" property="op_Pid" jdbcType="VARCHAR" />
+        <result column="op_user_id" property="op_User_Id" jdbcType="INTEGER" />
+        <result column="op_pid" property="opPid" jdbcType="VARCHAR" />
+        <result column="op_user_id" property="opUserId" jdbcType="INTEGER" />
+    </resultMap>
+
+    <select id="list" resultMap="resultMap" parameterType="java.util.Map">
+        SELECT
+            r.id,
+            r.`name`,
+            r.word,
+            r.content,
+            r.sort_no,
+            r.type,
+            r.user_id,
+            r.created_time,
+            u.real_name
+        FROM
+          ba_record_template AS r
+        LEFT JOIN xt_user AS u ON r.user_id = u.id
+        <include refid="query_where"/>
+		order by r.sort_no
+		limit ${pageStart},${rows}
+    </select>
+
+    <select id="getWordById" resultMap="resultMap" parameterType="long">
+        select r.word,r.name from ba_record_template r where r.id = #{id}
+    </select>
+
+     <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		 select count(1) from ba_record_template r
+         <include refid="query_where"/>
+    </select>
+    
+	<insert id="insert" parameterType="com.zhixin.zhfz.bacs.entity.RecordTemplateEntity">
+        insert into ba_record_template (`name`,word,content,sort_no,created_time,`type`,user_id,op_pid,op_user_id)
+        values(#{name},#{word},#{content},#{sortNo},CURRENT_TIMESTAMP,#{type},#{userId},#{op_Pid},#{op_User_Id})
+    </insert>
+    
+    <delete id="delete" parameterType="long">
+        delete from ba_record_template where id=#{id}
+    </delete>
+
+    <update id="update" parameterType="com.zhixin.zhfz.bacs.entity.RecordTemplateEntity">
+        update ba_record_template
+        <set>
+            <if test="word != null">word = #{word},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="type != null and type != ''">`type` = #{type},</if>
+            <if test="userId != null and userId != ''">user_id = #{userId},</if>
+            <if test="sortNo != null and sortNo != ''">sort_no = #{sortNo}, </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <sql id="query_where">
+        <where>
+            <if test="dataAuth!=null and dataAuth!=''">
+                and ${dataAuth}
+            </if>
+            <if test="name!=null and name !=''">
+                and r.name like '%${name}%'
+            </if>
+            <if test="type!=null and type !=''">
+                and r.type = #{type}
+            </if>
+        </where>
+    </sql>
+</mapper>

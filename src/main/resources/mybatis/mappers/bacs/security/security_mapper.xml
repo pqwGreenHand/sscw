@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.security.ISecurityMapper">
+    <resultMap id="SecurityResultMap" type="com.zhixin.zhfz.bacs.entity.SecurityEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="serial_id" property="serialId" jdbcType="BIGINT"/>
+        <result column="serial_no" property="serialNo" jdbcType="VARCHAR"/>
+        <result column="person_id" property="personId" jdbcType="BIGINT"/>
+        <result column="person_name" property="personName" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" jdbcType="INTEGER"/>
+        <result column="birth" property="birth" jdbcType="TIMESTAMP"/>
+        <result column="certificate_type_name" property="certificateTypeName" jdbcType="VARCHAR"/>
+        <result column="certificate_no" property="certificateNo" jdbcType="VARCHAR"/>
+        <result column="check_user_id" property="checkUserId" jdbcType="INTEGER"/>
+        <result column="check_user_name" property="checkUserName" jdbcType="VARCHAR"/>
+        <result column="check_user_no" property="checkUserNo" jdbcType="VARCHAR"/>
+        <result column="checked_start_time" property="checkedStartTime" jdbcType="TIMESTAMP"/>
+        <result column="checked_end_time" property="checkedEndTime" jdbcType="TIMESTAMP"/>
+        <result column="case_id" property="caseId" jdbcType="INTEGER"/>
+        <result column="checkType" property="checkType" jdbcType="INTEGER"/>
+        <result column="case_nature" property="caseNature" jdbcType="VARCHAR"/>
+        <result column="ajmc" property="caseName" jdbcType="VARCHAR"/>
+        <result column="area_id" property="areaId" jdbcType="INTEGER"/>
+        <result column="area_name" property="areaName" jdbcType="VARCHAR"/>
+        <result column="medical_history" property="medicalHistory" jdbcType="VARCHAR"/>
+        <result column="ajlx" property="ajlx" jdbcType="INTEGER"/>
+        <result column="afdd" property="afdd" jdbcType="VARCHAR"/>
+        <result column="physical" property="physical" jdbcType="INTEGER"/>
+        <result column="physical_description" property="physicalDescription" jdbcType="VARCHAR"/>
+        <result column="ab" property="ab" jdbcType="VARCHAR"/>
+        <result column="injury" property="injury" jdbcType="INTEGER"/>
+        <result column="injury_description" property="injuryDescription" jdbcType="VARCHAR"/>
+        <result column="dangerous" property="dangerous" jdbcType="VARCHAR"/>
+        <result column="other_description" property="otherDescription" jdbcType="VARCHAR"/>
+        <result column="has_wine" property="hasWine" jdbcType="INTEGER"/>
+        <result column="has_injury" property="hasInjury" jdbcType="INTEGER"/>
+        <result column="has_photo" property="hasPhoto" jdbcType="INTEGER"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+        <result column="uuid" property="uuid"  jdbcType="VARCHAR"/>
+        <result column="case_nature" property="caseNature"  jdbcType="VARCHAR"/>
+        <result column="count" property="count"  jdbcType="INTEGER"/>
+        <result column="serialUUID" property="serialUUID"  jdbcType="VARCHAR"/>
+        <result column="afsj" property="afsj"  />
+    </resultMap>
+
+    <resultMap id="SecurityPhotoMapper" type="com.zhixin.zhfz.bacs.entity.SecurityPhotoEntity">
+        <result column="id" property="id"  />
+        <result column="picName" property="picName"  />
+        <result column="type" property="type" />
+    </resultMap>
+
+
+    <select id="listHistory" resultMap="SecurityResultMap" parameterType="java.util.Map">
+        select s.id , s.serial_id,s.uuid as uuid ,s.count as count ,ins.serial_no serial_no,ins.uuid as serialUUID,p.id as person_id,p.`name` person_name,p.sex as sex ,p.birth as birth,ct.code_value
+        certificate_type_name,p.certificate_no ,
+        s.check_user_id,u.real_name check_user_name,u.certificate_no check_user_no,s.checked_start_time
+        ,s.case_id,ic.ajmc ajmc ,
+        ic.afsj,ic.afdd,ic.ab,s.area_id,ia.`name`
+        area_name, s.medical_history, s.type as checkType,
+        s.physical, s.physical_description, s.injury, s.has_wine,s.has_injury,s.has_photo,
+        s.injury_description,s.dangerous, s.other_description,s.checked_end_time , s.created_time,
+        s.updated_time,ic.ajlx ajlx,ctr.code_desc
+        case_nature
+        from ba_security s
+        left join ba_serial ins on s.serial_id=ins.id
+        left join ba_person p on ins.person_id=p.id
+        left join xt_code ct on p.certificate_type_id=ct.code_key
+        left join xt_user u on s.check_user_id=u.id
+        left join ba_case ic on s.case_id=ic.id
+        left join ba_area ia on s.area_id=ia.id
+        left join xt_crime_define ctr on ctr.id = ic.ab
+        where 1=1 and ct.type='ZJZLID' and  s.serial_id = #{serialId}
+        <if test="interrogatearea!=null and interrogatearea!=''">
+            and s.area_id = #{interrogatearea,jdbcType=INTEGER}
+        </if>
+        order by s.id desc
+    </select>
+    <select id="list" resultMap="SecurityResultMap" parameterType="java.util.Map">
+        SELECT
+        s.id ,
+        ins.id serial_id,
+        s.uuid AS uuid,
+        s.count AS count,
+        ins.serial_no serial_no,
+        ins.uuid AS serialUUID,
+        p.id AS person_id,
+        p.`name` person_name,
+        p.sex AS sex,
+        p.birth AS birth,
+        ct.code_value certificate_type_name,
+        p.certificate_no,
+        s.check_user_id,
+        u.real_name check_user_name,
+        u.certificate_no check_user_no,
+        s.checked_start_time,
+        s.case_id,
+        ic.ajmc ajmc,
+        ic.afsj,
+        ic.afdd,
+        ic.ab,
+        s.area_id,
+        ia.`name` area_name,
+        s.medical_history,
+        s.type AS checkType,
+        s.physical,
+        s.physical_description,
+        s.injury,
+        s.has_wine,
+        s.has_injury,
+        s.has_photo,
+        s.injury_description,
+        s.dangerous,
+        s.other_description,
+        s.checked_end_time,
+        s.created_time,
+        s.updated_time,
+        ic.ajlx ajlx,
+        ctr.code_desc case_nature
+        FROM
+        ba_serial ins
+        LEFT JOIN ba_security s ON s.serial_id = ins.id and s.id  in (
+            SELECT MAX(bs.id)FROM ba_security bs LEft join ba_serial inss on inss.id = bs.id GROUP BY bs.serial_id
+        )
+        LEFT JOIN ba_person p ON ins.person_id = p.id
+        LEFT JOIN xt_code ct ON p.certificate_type_id = ct.code_key
+        LEFT JOIN xt_user u ON s.check_user_id = u.id
+        LEFT JOIN ba_case ic ON ins.case_id = ic.id
+        LEFT JOIN ba_area ia ON ins.area_id = ia.id
+        LEFT JOIN xt_crime_define ctr ON ctr.id = ic.ab
+        WHERE 1 = 1 AND ct.type = 'ZJZLID' And (ins.`status` &lt; 11 or s.id is not null)
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="ryxm!=null and ryxm!=''">
+            and p.`name` like '%${ryxm}%'
+        </if>
+        <if test="zjhm!=null and zjhm!=''">
+            and p.certificate_no like '%${zjhm}%'
+        </if>
+        <if test="ajmc!=null and ajmc!=''">
+            and ctr.code_desc like '%${ajmc}%'
+        </if>
+        <if test="interrogatearea!=null and interrogatearea!=''">
+            and ins.area_id = #{interrogatearea,jdbcType=INTEGER}
+        </if>
+        GROUP BY ins.id
+        ORDER BY ins.id DESC
+        limit ${pageStart},${rows}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select
+        count(*)
+        FROM
+        ba_serial ins
+        LEFT JOIN ba_security s ON s.serial_id = ins.id and s.id  in (
+            SELECT MAX(bs.id)FROM ba_security bs LEft join ba_serial inss on inss.id = bs.id GROUP BY bs.serial_id
+        )
+        LEFT JOIN ba_person p ON ins.person_id = p.id
+        LEFT JOIN xt_code ct ON p.certificate_type_id = ct.code_key
+        LEFT JOIN xt_user u ON s.check_user_id = u.id
+        LEFT JOIN ba_case ic ON ins.case_id = ic.id
+        LEFT JOIN ba_area ia ON ins.area_id = ia.id
+        LEFT JOIN xt_crime_define ctr ON ctr.id = ic.ab
+        where 1=1 AND ct.type = 'ZJZLID' And (ins.`status` &lt; 11 or s.id is not null)
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="ryxm!=null and ryxm!=''">
+            and p.`name` like '%${ryxm}%'
+        </if>
+        <if test="zjhm!=null and zjhm!=''">
+            and p.certificate_no like '%${zjhm}%'
+        </if>
+        <if test="ajmc!=null and ajmc!=''">
+            and ic.ajmc like '%${ajmc}%'
+        </if>
+        <if test="interrogatearea!=null and interrogatearea!=''">
+            and s.area_id = #{interrogatearea,jdbcType=INTEGER}
+        </if>
+        ORDER BY ins.id DESC
+    </select>
+
+    <insert id="insert" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+        insert into ba_security
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="uuid != null">
+                uuid,
+            </if>
+            <if test="serialId != null">
+                serial_id,
+            </if>
+            <if test="checkUserId != null">
+                check_user_id,
+            </if>
+            <if test="checkedStartTime != null">
+                checked_start_time,
+            </if>
+            <if test="checkedEndTime != null">
+                checked_end_time,
+            </if>
+            <if test="caseId != null">
+                case_id,
+            </if>
+            <if test="areaId != null">
+                area_id,
+            </if>
+            <if test="medicalHistory != null">
+                medical_history,
+            </if>
+            <if test="count != null">
+                count,
+            </if>
+            <if test="checkType != null">
+                type,
+            </if>
+            <if test="physical != null">
+                physical,
+            </if>
+            <if test="physicalDescription != null">
+                physical_description,
+            </if>
+            <if test="injury != null">
+                injury,
+            </if>
+            <if test="injuryDescription != null">
+                injury_description,
+            </if>
+            <if test="dangerous != null">
+                dangerous,
+            </if>
+            <if test="otherDescription != null">
+                other_description,
+            </if>
+            created_time,
+            <if test="updatedTime != null">
+                updated_time,
+            </if>
+            <if test="opPid != null">
+                op_pid,
+            </if>
+            <if test="opUserId != null">
+                op_user_id,
+            </if>
+            has_wine,has_injury,has_photo
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="uuid != null">
+                #{uuid,jdbcType=VARCHAR},
+            </if>
+            <if test="serialId != null">
+                #{serialId,jdbcType=BIGINT},
+            </if>
+            <if test="checkUserId != null">
+                #{checkUserId,jdbcType=INTEGER},
+            </if>
+            <if test="checkedStartTime != null">
+                #{checkedStartTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="checkedEndTime != null">
+                #{checkedEndTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="caseId != null">
+                #{caseId,jdbcType=INTEGER},
+            </if>
+            <if test="areaId != null">
+                #{areaId,jdbcType=INTEGER},
+            </if>
+            <if test="medicalHistory != null">
+                #{medicalHistory,jdbcType=VARCHAR},
+            </if>
+            <if test="count != null">
+                #{count,jdbcType=INTEGER},
+            </if>
+            <if test="checkType != null">
+                #{checkType,jdbcType=INTEGER},
+            </if>
+            <if test="physical != null">
+                #{physical,jdbcType=INTEGER},
+            </if>
+            <if test="physicalDescription != null">
+                #{physicalDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="injury != null">
+                #{injury,jdbcType=INTEGER},
+            </if>
+            <if test="injuryDescription != null">
+                #{injuryDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="dangerous != null">
+                #{dangerous,jdbcType=VARCHAR},
+            </if>
+            <if test="otherDescription != null">
+                #{otherDescription,jdbcType=VARCHAR},
+            </if>
+            now(),
+            <if test="updatedTime != null">
+                #{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="opPid != null">
+                #{opPid},
+            </if>
+            <if test="opUserId != null">
+                #{opUserId},
+            </if>
+            #{hasWine,jdbcType=INTEGER},#{hasInjury,jdbcType=INTEGER},#{hasPhoto,jdbcType=INTEGER}
+        </trim>
+    </insert>
+<!-- 根据serialId查询出该嫌疑人做过了多少次安检 -->
+    <select  id="selectSecurityCount" parameterType="String" resultType="int">
+         select count(*) from ba_security where  serial_id =#{serialId}
+    </select>
+    <!-- 插入体表标记的记录 -->
+    <insert id="insertSecurityMarkes" parameterType="com.zhixin.zhfz.bacs.entity.SecurityPhotoEntity">
+         insert into ba_security_photo (uuid,pic_name,created_time,type,count,op_pid,op_user_id)  values (#{securityUUID},#{picName},now(),#{type},#{count},#{opPid},#{opUserId})
+    </insert>
+    <!--删除体表标记记录-->
+    <delete id="deleteSecurityPhotoMarkes" parameterType="java.util.Map">
+         delete from ba_security_photo where uuid = #{securityUUID} and type = #{type}
+    </delete>
+
+
+
+
+    <!-- 查询图片路径-->
+    <select id="getImages" resultMap="SecurityPhotoMapper" parameterType="java.util.Map">
+        SELECT id, pic_name as picName,type from ba_security_photo
+        where 1=1
+        <if test="uuid != null and uuid!=''">
+             and uuid = #{uuid}
+        </if>
+        <if test="type != null and type!=''">
+             and type = #{type}
+        </if>
+        <if test="count != null and count!=''">
+            and count = #{count}
+        </if>
+    </select>
+
+
+
+    <select id="getOneSecurity" resultMap="SecurityResultMap" parameterType="com.zhixin.zhfz.bacs.entity.SecurityEntity">
+        SELECT
+        s.id,
+        s.checked_start_time,
+        s.checked_end_time,
+        p.`name` person_name,
+        p.sex,
+        p.birth,
+        ic.ajlx,
+        ( SELECT  code_desc FROM xt_crime_define WHERE id = ic.ab) ab,
+        u.real_name check_user_name,
+        s.medical_history,
+        s.type,
+        s.physical,
+        s.physical_description,
+        s.injury,
+        s.injury_description,
+        s.dangerous,
+        s.other_description,
+        s.has_wine,
+        s.has_injury,
+        s.has_photo
+        FROM
+        ba_security s
+        LEFT JOIN ba_serial ins ON s.serial_id = ins.id
+        LEFT JOIN ba_person p ON ins.person_id = p.id
+        LEFT JOIN xt_code ct ON p.certificate_type_id=ct.code_key and ct.type = 'ZJZLID'
+        LEFT JOIN xt_user u ON s.check_user_id = u.id
+        LEFT JOIN ba_case ic ON s.case_id = ic.id
+        LEFT JOIN ba_area ia ON s.area_id = ia.id
+        where 1=1
+        <if test="serialId!=null and serialId!=''">
+            and s.serial_id=#{serialId,jdbcType=INTEGER}
+        </if>
+        <if test="id!=null and id!=''">
+            and s.id=#{id,jdbcType=INTEGER}
+        </if>
+        order by s.id desc
+    </select>
+
+
+    <select id="selectRepeatPerson" parameterType="String" resultMap="SecurityResultMap">
+        select s.id , s.serial_id,s.uuid as uuid ,s.count as count ,ins.serial_no serial_no,ins.uuid as serialUUID,p.id as person_id,p.`name` person_name,p.sex as sex ,p.birth as birth,ct.code_value
+        certificate_type_name,p.certificate_no ,
+        s.check_user_id,u.real_name check_user_name,u.certificate_no check_user_no,s.checked_start_time
+        ,s.case_id,ic.ajmc ajmc ,
+        ic.afsj,ic.afdd,ic.ab,s.area_id,ia.`name`
+        area_name, s.medical_history, s.type as checkType,
+        s.physical, s.physical_description, s.injury, s.has_wine,s.has_injury,s.has_photo,
+        s.injury_description,s.dangerous, s.other_description,s.checked_end_time , s.created_time,
+        s.updated_time,ic.ajlx ajlx,ctr.code_desc
+        case_nature
+        from ba_security s
+        left join ba_serial ins on s.serial_id=ins.id
+        left join ba_person p on ins.person_id=p.id
+        left join xt_code ct on p.certificate_type_id=ct.code_key
+        left join xt_user u on s.check_user_id=u.id
+        left join ba_case ic on s.case_id=ic.id
+        left join ba_area ia on s.area_id=ia.id
+        left join xt_crime_define ctr on ctr.id = ic.ab
+        where 1=1 and ct.type='ZJZLID' and serial_no = #{serialNo}  ORDER BY created_time desc limit 1
+    </select>
+
+
+    <update id="update"  parameterType="com.zhixin.zhfz.bacs.entity.SecurityPhotoEntity">
+        UPDATE ba_security SET
+        check_user_id = #{checkUserId},
+        medical_history = #{medicalHistory},
+        physical_description = #{physicalDescription},
+        dangerous = #{dangerous},
+        injury_description = #{injuryDescription},
+        other_description = #{otherDescription},
+        has_injury = #{hasInjury},
+        has_wine = #{hasWine},
+        has_photo = #{hasPhoto},
+        <!--<if test="checkUserId != null and checkUserId != ''">
+            check_user_id = #{checkUserId},
+        </if>
+        <if test="medicalHistory != null and medicalHistory != ''">
+            medical_history = #{medicalHistory},
+        </if>
+        <if test="physicalDescription != null and physicalDescription != ''">
+            physical_description = #{physicalDescription},
+        </if>
+        <if test="dangerous != null and dangerous != ''">
+            dangerous = #{dangerous},
+        </if>
+        <if test="injuryDescription != null and injuryDescription != ''">
+            injury_description = #{injuryDescription},
+        </if>
+        <if test="otherDescription != null and otherDescription != ''">
+            other_description = #{otherDescription},
+        </if>
+        <if test="hasInjury != null and hasInjury != ''">
+            has_injury = #{hasInjury},
+        </if>
+        <if test="hasWine != null and hasWine != ''">
+            has_wine = #{hasWine},
+        </if>
+        <if test="hasPhoto != null and hasPhoto != ''">
+            has_photo = #{hasPhoto},
+        </if>-->
+        updated_time = now()
+        where id=#{id}
+    </update>
+
+</mapper>

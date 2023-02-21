@@ -1,0 +1,1033 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.export.IExprotMapper">
+
+    <resultMap type="com.zhixin.zhfz.bacs.entity.WaitingRecordEntity" id="waitingRecord">
+        <result column="id" property="recordId"/>
+        <result column="serial_id" property="serialId"/>
+        <result column="person_id" property="personId"/>
+        <result column="in_user_id" property="inUserId"/>
+        <result column="out_user_id" property="outUserId"/>
+        <result column="room_id" property="roomId"/>
+        <result column="serial_no" property="serialNo"/>
+        <result column="in_photo_name" property="inPhotoName"/>
+        <result column="person_name" property="personName"/>
+        <result column="personcertNo" property="personcertNo"/>
+        <result column="roomname" property="roomName"/>
+        <result column="createdtime" property="createdTime"/>
+        <result column="status" property="status"/>
+        <result column="sendusername1" property="sendUserName1"/>
+        <result column="sendusername2" property="sendUserName2"/>
+        <result column="in_time" property="inTime" jdbcType="TIMESTAMP"/>
+        <result column="out_time" property="outTime" jdbcType="TIMESTAMP"/>
+        <result column="getusername1" property="getUserName1" jdbcType="VARCHAR"/>
+        <result column="getusername2" property="getUserName2" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex"/>
+        <result column="case_type" property="caseType" jdbcType="VARCHAR"/>
+        <result column="case_nature" property="caseNature" jdbcType="VARCHAR"/>
+        <result column="record_name" property="recordName" jdbcType="VARCHAR"/>
+        <result column="get_result" property="getResult" jdbcType="VARCHAR"/>
+        <result column="case_id" property="caseId"/>
+        <result column="areaId" property="areaId"/>
+        <result column="send_user_id" property="sendUserId1"/>
+        <result column="uuid" property="uuid"/>
+    </resultMap>
+
+    <resultMap type="com.zhixin.zhfz.bacs.entity.ExportEntity" id="export">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="personId" property="personId" jdbcType="BIGINT"/>
+        <result column="personType" property="personType" jdbcType="VARCHAR"/>
+        <result column="personName" property="personName" jdbcType="VARCHAR"/>
+        <result column="personSex" property="personSex" jdbcType="VARCHAR"/>
+        <result column="certificate_type_id" property="certificateTypeId" jdbcType="INTEGER"/>
+        <result column="personCertificateNo" property="personCertificateNo" jdbcType="VARCHAR"/>
+        <result column="crimeTypeId" property="crimeTypeId" jdbcType="VARCHAR"/>
+        <result column="caseType" property="caseType" jdbcType="VARCHAR"/>
+        <result column="crimeSection" property="crimeSection" jdbcType="VARCHAR"/>
+        <result column="caseProperties" property="caseProperties" jdbcType="VARCHAR"/>
+        <result column="inTime" property="inTime" jdbcType="TIMESTAMP"/>
+        <result column="outTime" property="outTime" jdbcType="TIMESTAMP"/>
+        <result column="outPlace" property="outPlace" jdbcType="VARCHAR"/>
+        <result column="policeman" property="policeman" jdbcType="VARCHAR"/>
+        <result column="policeNo" property="policeNo" jdbcType="VARCHAR"/>
+        <result column="workSpace" property="workSpace" jdbcType="VARCHAR"/>
+        <result column="serialId" property="serialId" jdbcType="VARCHAR"/>
+        <result column="personAge" property="personAge" jdbcType="VARCHAR"/>
+        <result column="pType" property="pType" jdbcType="VARCHAR"/>
+        <result column="confirm_time" property="confirmTime" jdbcType="TIMESTAMP"/>
+        <result column="confirm_result" property="confirmResult" jdbcType="VARCHAR"/>
+        <result column="jyCasetType" property="jyCasetType" jdbcType="VARCHAR"/>
+        <result column="call_time" property="calltime" jdbcType="TIMESTAMP"/>
+        <result column="detain_interval" property="detainInterval" jdbcType="VARCHAR"/>
+
+        <!-- 人身检查 -->
+        <result column="securityId" property="securityId" jdbcType="INTEGER"/>
+        <result column="medical_history" property="medicalHistory" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="physical" property="physical" jdbcType="INTEGER"/>
+        <result column="physical_description" property="physicalDescription" jdbcType="VARCHAR"/>
+        <result column="injury" property="injury" jdbcType="INTEGER"/>
+        <result column="injury_description" property="injuryDescription" jdbcType="VARCHAR"/>
+        <result column="dangerous" property="dangerous" jdbcType="VARCHAR"/>
+        <result column="other_description" property="otherDescription" jdbcType="VARCHAR"/>
+
+        <result column="entrance_procedure" property="entranceProcedure" jdbcType="VARCHAR"/>
+        <result column="written_time" property="writtenTime" jdbcType="TIMESTAMP"/>
+        <result column="sfxxcj" property="sfxxcj" jdbcType="INTEGER"/>
+        <result column="sfsyjd" property="sfsyjd" jdbcType="INTEGER"/>
+        <result column="recordTime" property="recordTime" jdbcType="VARCHAR"/>
+
+        <!-- 链表数据 -->
+        <result column="interrogateCaseId" property="interrogateCaseId" jdbcType="INTEGER"/>
+        <result column="userId" property="userId" jdbcType="INTEGER"/>
+        <result column="organizationId" property="organizationId" jdbcType="INTEGER"/>
+        <result column="personId" property="personId" jdbcType="BIGINT"/>
+        <result column="outType" property="outType" jdbcType="VARCHAR"/>
+        <result column="OutReason" property="OutReason" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap" type="OrderRequestEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <id column="policeId" property="policeId" jdbcType="INTEGER"/>
+        <result column="order_no" property="orderNo" jdbcType="VARCHAR"/>
+        <result column="order_user_id" property="orderUserId" jdbcType="INTEGER"/>
+        <result column="male_count" property="maleCount" jdbcType="INTEGER"/>
+        <result column="female_count" property="femaleCount" jdbcType="INTEGER"/>
+        <result column="juveniles_count" property="juvenilesCount" jdbcType="INTEGER"/>
+        <result column="special_count" property="specialCount" jdbcType="INTEGER"/>
+        <result column="other_count" property="otherCount" jdbcType="INTEGER"/>
+        <result column="plan_time" property="planTime" jdbcType="TIMESTAMP"/>
+        <result column="arrive_time" property="arriveTime" jdbcType="TIMESTAMP"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="shzt" property="shzt" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="noter_id" property="noterId" jdbcType="INTEGER"/>
+        <result column="area_id" property="areaId" jdbcType="INTEGER"/>
+        <result column="case_id" property="caseId" jdbcType="INTEGER"/>
+        <result column="interpreter" property="interpreter" jdbcType="VARCHAR"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+        <result column="ajlx" property="ajlx" jdbcType="INTEGER"/>
+        <result column="ab" property="ab" jdbcType="INTEGER"/>
+        <!--其他非数据库字段-->
+        <result column="sum_person" property="sumPerson" jdbcType="INTEGER"/>
+        <!-- 链表 -->
+
+        <result column="personName" property="personName" jdbcType="VARCHAR"/>
+        <result column="notePersonName" property="notePersonName" jdbcType="VARCHAR"/>
+        <result column="areaName" property="areaName" jdbcType="VARCHAR"/>
+        <result column="statusid" property="statusid" jdbcType="INTEGER"/>
+        <result column="organizationName" property="organizationName" jdbcType="VARCHAR"/>
+        <result column="userMobile" property="userMobile" jdbcType="VARCHAR"/>
+        <result column="caseType" property="caseType" jdbcType="VARCHAR"/>
+        <result column="caseNature" property="caseNature" jdbcType="VARCHAR"/>
+        <result column="jbaq" property="jbaq" jdbcType="VARCHAR"/>
+        <result column="certificate_no" property="certificateNo" jdbcType="VARCHAR"/>
+
+    </resultMap>
+
+    <select id="listOrderExport" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT
+        n.order_no,
+        n.created_time,n.ajlx,
+        m.mobile as userMobile,m.real_name AS personName,o.real_name AS notePersonName,a.name as areaName,
+        org.name as organizationName,
+        ct.code_desc caseNature,person.`name`,person.certificate_no,person.sex
+        FROM ba_order_request n
+        LEFT JOIN ba_order_person operson  ON operson.order_request_id= n.id
+        LEFT JOIN ba_person person ON operson.person_id=person.id
+        LEFT JOIN xt_user m ON n.order_user_id=m.id
+        LEFT JOIN xt_user o ON n.noter_id=o.id
+        LEFT JOIN ba_area a ON a.id=n.area_id
+        LEFT JOIN xt_organization org ON org.id = m.organization_id
+        LEFT JOIN xt_crime_define ct ON ct.id = n.ab
+        WHERE 1=1
+
+        <if test="userName!=null and userName!=''">
+            and m.real_name like '%${userName}%'
+        </if>
+        <if test="orderNo!=null and orderNo!=''">
+            and n.order_no like '%${orderNo}%'
+        </if>
+        <if test="id!=null and id!=''">
+            and n.id=#{id}
+        </if>
+        <if test="personName!=null and personName!=''">
+            and n.id IN ( SELECT bo.order_request_id FROM ba_person bp LEFT JOIN ba_order_person bo ON bo.person_id =
+            bp.id WHERE bp.name LIKE '%${personName}%' )
+        </if>
+        <if test="areaId!=null and areaId!=''">
+            and n.area_id = #{areaId}
+        </if>
+        order by n.id desc
+
+    </select>
+
+    <!-- 候问 -->
+    <select id="listWaitingRecord" parameterType="java.util.Map"
+            resultType="com.zhixin.zhfz.bacs.entity.AskManagementExportEntity">
+        select a.roomName,a.personName,a.sex,
+        a.certificateNo,a.inTime,a.case_id caseId,
+        (select b.real_name from xt_user b where b.id=a.send_user_id) as policeName,
+        (select orn.name from xt_organization orn ,xt_user u where u.id=a.send_user_id and
+        u.organization_id=orn.id) as orgName,
+        (select c.ajlx from ba_case c where c.id = (select s.case_id from ba_serial s
+        where s.id = a.serial_id)) ajlx,
+        ( select code_desc from xt_crime_define WHERE id= (select c.ab from ba_case c where c.id =
+        (select s.case_id from ba_serial s where s.id = a.serial_id))
+        ) caseNature
+        from(
+        select record.id,record.case_id,record.serial_id ,intse.serial_no,ps.name personName,
+        ps.certificate_no certificateNo,room.name roomName,record.created_time createdtime,
+        record.status status,record.send_user_id,record.get_user_id1,
+        record.get_user_id2,ps.sex,record.in_time inTime,record.out_time
+        from ba_waiting_record record,ba_person ps,ba_room room,ba_serial intse
+        where record.person_id=ps.id and record.room_id=room.id and record.serial_id=intse.id
+        and record.status=0
+        <if test="areaId != null and areaId != ''">
+            and record.area_id = #{areaId}
+        </if>
+        ) a
+        order by a.case_id asc,a.roomname asc
+    </select>
+
+
+    <!-- 审讯 -->
+    <select id="listInterrogateRecord" parameterType="java.util.Map"
+            resultType="com.zhixin.zhfz.bacs.entity.AskManagementExportEntity">
+        select ird.id recordId, isl.id serialId, isl.serial_no serialNo, ice.id caseId,
+        ice.ajmc, ice.afdd, (SELECT code_desc from xt_crime_define WHERE id=ice.ab) caseNature, ice.ajlx, pn.id
+        personId,
+        pn.`name` personName, pn.sex, pn.certificate_no certificateNo, irm.id roomId,
+        irm.`name` roomName,ur.real_name policeName, ird.start_time inTime,orn.name orgName
+        from ba_record ird
+        left join ba_serial isl on ird.serial_id = isl.id
+        left join ba_case ice on ird.case_id = ice.id
+        left join ba_person pn on ird.person_id = pn.id
+        left join ba_room irm on ird.room_id = irm.id
+        left join xt_user ur on ird.police_record_id = ur.id
+        left join xt_organization orn on orn.id = ur.organization_id
+        where ird.status in(1,2)
+        <if test="areaId!=null and areaId!=''">
+            and ird.area_id = #{areaId}
+        </if>
+        order by recordId desc
+    </select>
+
+
+    <!-- 入区 -->
+    <select id="listInterrogate0" parameterType="java.util.Map"
+            resultType="com.zhixin.zhfz.bacs.entity.AskManagementExportEntity">
+        select isl.id serialId, pn.`name` personName, pn.sex, isl.in_time inTime,
+        ur.real_name policeName, orn.`name` orgName
+        from ba_serial isl
+        left join ba_person pn on isl.person_id=pn.id
+        left join xt_user ur on isl.in_register_user_id = ur.id
+        left join xt_organization orn on orn.id=ur.organization_id
+        where isl.type=0
+        and isl.`status` = 0
+        <if test="areaId!=null and areaId!=''">
+            and isl.area_id = #{areaId}
+        </if>
+    </select>
+
+    <!-- 临时出区 -->
+    <select id="listTempOut" parameterType="java.util.Map"
+            resultType="com.zhixin.zhfz.bacs.entity.AskManagementExportEntity">
+        select pn.`name` personName, pn.sex ,
+        (SELECT code_desc from xt_crime_define WHERE id=ice.ab) caseNature,
+        ice.ajlx,ur.real_name policeName,orn.`name` orgName
+        from ba_serial isl
+        left join ba_person pn on pn.id = isl.person_id
+        left join ba_case ice on ice.id = isl.case_id
+        left join xt_user ur on ur.id = isl.in_register_user_id
+        left join xt_organization orn on orn.id = ur.organization_id
+        where isl.`status` = 10
+        <if test="areaId!=null and areaId!=''">
+            and isl.area_id = #{areaId}
+        </if>
+    </select>
+
+
+    <!-- 其他 -->
+    <select id="listInterrogateElse" parameterType="java.util.Map"
+            resultType="com.zhixin.zhfz.bacs.entity.AskManagementExportEntity">
+        select isl.id serialId, pn.`name` personName, pn.sex, isl.in_time inTime,
+        ur.real_name policeName,ce.ajlx,
+        (SELECT code_desc from xt_crime_define WHERE id=ce.ab) caseNature,
+        orn.name orgName
+        from ba_serial isl
+        left join ba_person pn on isl.person_id = pn.id
+        left join xt_user ur on isl.in_register_user_id = ur.id
+        left join ba_case ce on ce.id = isl.case_id
+        left join xt_organization orn on orn.id = ur.organization_id
+        where isl.type=0
+        and isl.`status` &gt; 0 and isl.`status` &lt; 11
+        and isl.`status` !=10
+        and isl.id not in(
+        select serial_id from ba_waiting_record where status = 0
+        <if test="areaId!=null and areaId!=''">
+            and area_id = #{areaId}
+        </if>
+        )
+        and isl.id not in (
+        select serial_id from ba_record where status in(1,2)
+        <if test="areaId!=null and areaId!=''">
+            and area_id = #{areaId}
+        </if>
+        )
+
+        <if test="areaId!=null and areaId!=''">
+            and isl.area_id = #{areaId}
+        </if>
+    </select>
+
+    <select id="listRecord" resultMap="waitingRecord" parameterType="java.util.Map">
+        select a.*,(select b.real_name from xt_user b where b.id=a.send_user_id) as sendusername1,
+        (select b.real_name from xt_user b where b.id=a.get_user_id1) as getusername1,
+        (select b.real_name from xt_user b where b.id=a.get_user_id2) as getusername2,
+        (select c.ajlx from ba_case c where c.id = (select s.case_id from ba_serial s where s.id = a.serial_id))
+        case_type,
+        (select ct.code_desc from xt_crime_define ct where ct.id = (select c.ab from ba_case c where c.id = (select
+        s.case_id from ba_serial s where s.id = a.serial_id))) case_nature,
+        (select r.`name` from ba_room r where r.id = a.room_id) record_name
+        from(
+        select record.id,record.area_id as areaId,intse.uuid as uuid,record.serial_id ,
+        intse.serial_no,intse.in_photo_name,ps.name personname,ps.certificate_no personcertNo,
+        room.name roomname,record.created_time createdtime,record.status status,
+        record.send_user_id,record.get_user_id1,record.get_user_id2,ps.sex,
+        record.in_time,record.out_time,record.room_id,record.get_result
+        from ba_waiting_record record,ba_person ps,ba_room room,ba_serial intse
+        where record.person_id=ps.id and record.room_id=room.id and record.serial_id=intse.id
+        <if test="roomId !=null and roomId != ''">
+            and room.id=#{roomId}
+        </if>
+        <if test="personName != null and personName != ''">
+            and ps.name like '%${personName}%'
+        </if>
+        <if test="sendUserName != null and sendUserName != ''">
+            and (record.send_user_id in(select id from xt_user where real_name like '%${sendUserName}%'))
+        </if>
+        <if test="beginTime != null and beginTime != ''">
+            and record.created_time &gt; #{beginTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and record.created_time &lt; #{endTime}
+        </if>
+        <if test="status == 0">
+            and record.status=0
+        </if>
+        <if test="show != null and show != ''">
+            and intse.status &gt;= 3 and intse.status &lt; 11 and record.show_person=1
+        </if>
+        <if test="timeInterval != null and timeInterval != ''">
+            and record.created_time &gt; DATE_SUB(now(),INTERVAL #{timeInterval} HOUR)
+        </if>
+        <if test="areaId != null and areaId != ''">
+            and record.area_id=#{areaId}
+        </if>
+        <if test="personcertNo != null and personcertNo != ''">
+            and ps.certificate_no = #{personcertNo}
+        </if>
+        ) a
+        order by a.createdtime desc
+    </select>
+
+
+    <select id="list" resultMap="export" parameterType="java.util.HashMap">
+
+        SELECT
+        (IF((YEAR(NOW())-SUBSTR(p.certificate_no FROM 7 FOR 4))>18 , 1, 0)) personAge,
+        ins.id AS serialId,
+        ins.type AS personType,
+        p.name AS personName ,
+        p.sex AS personSex,
+        p.certificate_no AS personCertificateNo,
+        inc.ajlx AS caseType,
+        crt.code_desc AS caseProperties,
+        ins.in_time AS inTime,
+        ins.out_time AS outTime,
+        ins.out_reason AS outPlace,
+        u.real_name AS policeman,
+        o.name AS workSpace,
+        p.certificate_type_id AS certificateType,1 AS pType,
+        ins.confirm_time AS confirmTime
+        ,
+        (case when ins.confirm_time is null then '羁押未裁决' else ins.confirm_result end) as confirmResult,
+        ins.written_time callTime,
+        CONCAT(TIMESTAMPDIFF(HOUR,ins.written_time,now()),'时',MOD(TIMESTAMPDIFF(MINUTE,ins.written_time,now()),60),'分')
+        detain_interval
+        ,ins.entrance_procedure,
+        ins.written_time,
+        ins.sfxxcj,
+        ins.sfsyjd
+        FROM ba_serial ins LEFT JOIN ba_person p ON ins.person_id = p.id
+
+        LEFT JOIN ba_case inc ON ins.case_id = inc.id
+        LEFT JOIN xt_user u ON ins.send_user_id = u.id
+        LEFT JOIN xt_organization o ON o.id = u.organization_id
+        LEFT JOIN xt_crime_define crt ON crt.id = inc.ab
+
+        WHERE
+        1=1
+        <if test="jyouttime!=null and jyouttime!=''">
+            and (call_time &lt;= DATE_ADD(NOW(),INTERVAL -23 hour)) and `status` &lt; 11 and ins.type=0
+        </if>
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="personType!=null and personType!=''">
+            and ins.type = ${personType}
+        </if>
+        <if test="personName!=null and personName!=''">
+            and p.name like '%${personName}%'
+        </if>
+        <if test="personSex!=null and personSex!=''">
+            and p.sex =${personSex}
+        </if>
+
+
+        <if test="caseType!=null and caseType!=''">
+            and inc.ajlx =${caseType}
+        </if>
+        <if test="caseProperties!=null and caseProperties!=''">
+            and crt.code_desc like '%${caseProperties}%'
+        </if>
+
+        <if test="workSpace!=null and workSpace!=''">
+            and o.name like '%${workSpace}%'
+        </if>
+
+        <if test="outPlace!=null and outPlace!=''">
+            and ins.out_reason like '%${outPlace}%'
+        </if>
+        <if test="betweenTime!=null and betweenTime!=''">
+            and ins.in_time &gt;=#{betweenTime}
+        </if>
+        <if test="betweenTimeMax!=null and betweenTimeMax!=''">
+            and ins.in_time &lt;=#{betweenTimeMax}
+        </if>
+
+        <if test="outBetweenTime!=null and outBetweenTime!=''">
+            and ins.out_time &gt;=#{outBetweenTime}
+        </if>
+        <if test="outBetweenTimeMax!=null and outBetweenTimeMax!=''">
+            and ins.out_time &lt;=#{outBetweenTimeMax}
+        </if>
+
+        <if test="workbetweenTimeb!=null and workbetweenTimeb!=''">
+            and ins.in_time &gt;=#{workbetweenTimeb}
+        </if>
+        <if test="workbetweenTimea!=null and workbetweenTimea!=''">
+            and ins.in_time &lt;=#{workbetweenTimea}
+        </if>
+
+        <if test="subjectTime!=null and subjectTime!=''">
+            and TIMESTAMPDIFF(HOUR,ins.`in_time`,ins.`written_time`)>${subjectTime}
+        </if>
+
+        <choose>
+            <when test="(outBetweenTime!=null and outBetweenTime!='') or (outBetweenTimeMax!=null and outBetweenTimeMax!='')">
+                ORDER BY ins.out_time desc
+            </when>
+            <otherwise>
+                ORDER BY ins.in_time desc
+            </otherwise>
+        </choose>
+        limit ${pageStart},${rows}
+    </select>
+    
+    <select id="listByExport" resultType="java.util.HashMap">
+        SELECT
+            p.id,
+            p.`name`,
+            p.sex,
+            p.certificate_no,
+            c.ajmc,
+            c.ajlx,
+            c.abmc
+        FROM
+            ba_person p
+        LEFT JOIN ba_case c ON p.case_id = c.id
+        <where>
+            <if test="name!=null and name!=''">
+                p.`name` like '%${name}%'
+            </if>
+            <if test="sex!=null and sex!=''">
+                and p.sex = #{sex}
+            </if>
+            <if test="ajlx!=null and ajlx!=''">
+                and c.ajlx = #{ajlx}
+            </if>
+            <if test="abmc!=null and abmc!=''">
+                and c.abmc like '%${abmc}%'
+            </if>
+        </where>
+        limit ${pageStart},${rows}
+    </select>
+
+    <select id="listByExportCount" resultType="java.lang.Integer">
+        SELECT
+            count(*)
+        FROM
+            ba_person p
+        LEFT JOIN ba_case c ON p.case_id = c.id
+        <where>
+            <if test="name!=null and name!=''">
+                p.`name` like '%${name}%'
+            </if>
+            <if test="sex!=null and sex!=''">
+                and p.sex = #{sex}
+            </if>
+            <if test="ajlx!=null and ajlx!=''">
+                and c.ajlx = #{ajlx}
+            </if>
+            <if test="abmc!=null and abmc!=''">
+                and c.abmc like '%${abmc}%'
+            </if>
+        </where>
+    </select>
+
+    <select id="listBelongDetailByPersonId" resultType="java.util.HashMap">
+        SELECT
+            p.name,
+            p.certificate_no,
+            d. NAME wpName,
+            d.detail_count,
+            d.unit,
+            d.is_get,
+            d.get_way,
+            d.get_person,
+            d.get_time
+        FROM
+            ba_belongings_detail d
+        LEFT JOIN ba_belongings b ON b.id = d.belongings_id
+        LEFT JOIN ba_person p ON p.id = b.serial_id
+        WHERE
+            b.serial_id = #{personId}
+    </select>
+
+    <select id="listquery" resultMap="export" parameterType="java.util.HashMap">
+
+        SELECT
+        (IF((YEAR(NOW())-SUBSTR(p.certificate_no FROM 7 FOR 4))>18 , 1, 0)) personAge,
+        ins.id AS serialId,
+        ins.type AS personType,
+        p.name AS personName ,
+        p.sex AS personSex,
+        p.certificate_no AS personCertificateNo,
+        inc.ajlx AS caseType,
+        crt.code_desc AS caseProperties,
+        ins.in_time AS inTime,
+        ins.out_time AS outTime,
+        ins.out_reason AS outPlace,
+        u.real_name AS policeman,
+        o.name AS workSpace,
+        p.certificate_type_id AS certificateType,1 AS pType,
+        ins.confirm_time AS confirmTime
+        ,
+        (case when ins.confirm_time is null then '羁押未裁决' else ins.confirm_result end) as confirmResult,
+        ins.written_time callTime,
+        CONCAT(TIMESTAMPDIFF(HOUR,ins.written_time,now()),'时',MOD(TIMESTAMPDIFF(MINUTE,ins.written_time,now()),60),'分')
+        detain_interval
+        ,ins.entrance_procedure,
+        ins.written_time,
+        ins.sfxxcj,
+        ins.sfsyjd
+        FROM ba_serial ins LEFT JOIN ba_person p ON ins.person_id = p.id
+
+        LEFT JOIN ba_case inc ON ins.case_id = inc.id
+        LEFT JOIN xt_user u ON ins.send_user_id = u.id
+        LEFT JOIN xt_organization o ON o.id = u.organization_id
+        LEFT JOIN xt_crime_define crt ON crt.id = inc.ab
+
+        WHERE
+        1=1
+        <if test="jyouttime!=null and jyouttime!=''">
+            and (call_time &lt;= DATE_ADD(NOW(),INTERVAL -23 hour)) and `status` &lt; 11 and ins.type=0
+        </if>
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="personType!=null and personType!=''">
+            and ins.type = ${personType}
+        </if>
+        <if test="personName!=null and personName!=''">
+            and p.name like '%${personName}%'
+        </if>
+        <if test="personSex!=null and personSex!=''">
+            and p.sex =${personSex}
+        </if>
+
+
+        <if test="caseType!=null and caseType!=''">
+            and inc.ajlx =${caseType}
+        </if>
+        <if test="caseProperties!=null and caseProperties!=''">
+            and crt.code_desc like '%${caseProperties}%'
+        </if>
+
+        <if test="workSpace!=null and workSpace!=''">
+            and o.name like '%${workSpace}%'
+        </if>
+
+        <if test="outPlace!=null and outPlace!=''">
+            and ins.out_reason like '%${outPlace}%'
+        </if>
+        <if test="betweenTime!=null and betweenTime!=''">
+            and ins.in_time &gt;=#{betweenTime}
+        </if>
+        <if test="betweenTimeMax!=null and betweenTimeMax!=''">
+            and ins.in_time &lt;=#{betweenTimeMax}
+        </if>
+
+        <if test="outBetweenTime!=null and outBetweenTime!=''">
+            and ins.out_time &gt;=#{outBetweenTime}
+        </if>
+        <if test="outBetweenTimeMax!=null and outBetweenTimeMax!=''">
+            and ins.out_time &lt;=#{outBetweenTimeMax}
+        </if>
+
+        <if test="workbetweenTimeb!=null and workbetweenTimeb!=''">
+            and ins.in_time &gt;=#{workbetweenTimeb}
+        </if>
+        <if test="workbetweenTimea!=null and workbetweenTimea!=''">
+            and ins.in_time &lt;=#{workbetweenTimea}
+        </if>
+
+        <if test="subjectTime!=null and subjectTime!=''">
+            and TIMESTAMPDIFF(HOUR,ins.`in_time`,ins.`written_time`)>${subjectTime}
+        </if>
+
+        <choose>
+            <when test="(outBetweenTime!=null and outBetweenTime!='') or (outBetweenTimeMax!=null and outBetweenTimeMax!='')">
+                ORDER BY ins.out_time desc
+            </when>
+            <otherwise>
+                ORDER BY ins.in_time desc
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+        SELECT count(1)
+        FROM ba_serial ins LEFT JOIN ba_person p ON ins.person_id = p.id
+
+        LEFT JOIN ba_case inc ON ins.case_id = inc.id
+        LEFT JOIN xt_user u ON ins.send_user_id = u.id
+        LEFT JOIN xt_organization o ON o.id = u.organization_id
+        LEFT JOIN xt_crime_define crt ON crt.id = inc.ab
+
+        WHERE
+        1=1
+        <if test="jyouttime!=null and jyouttime!=''">
+            and (call_time &lt;= DATE_ADD(NOW(),INTERVAL -23 hour)) and `status` &lt; 11 and ins.type=0
+        </if>
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="personType!=null and personType!=''">
+            and ins.type = ${personType}
+        </if>
+        <if test="personName!=null and personName!=''">
+            and p.name like '%${personName}%'
+        </if>
+        <if test="personSex!=null and personSex!=''">
+            and p.sex =${personSex}
+        </if>
+
+
+        <if test="caseType!=null and caseType!=''">
+            and inc.ajlx =${caseType}
+        </if>
+        <if test="caseProperties!=null and caseProperties!=''">
+            and crt.code_desc like '%${caseProperties}%'
+        </if>
+
+        <if test="workSpace!=null and workSpace!=''">
+            and o.name like '%${workSpace}%'
+        </if>
+
+        <if test="outPlace!=null and outPlace!=''">
+            and ins.out_reason like '%${outPlace}%'
+        </if>
+        <if test="betweenTime!=null and betweenTime!=''">
+            and ins.in_time &gt;=#{betweenTime}
+        </if>
+        <if test="betweenTimeMax!=null and betweenTimeMax!=''">
+            and ins.in_time &lt;=#{betweenTimeMax}
+        </if>
+
+        <if test="outBetweenTime!=null and outBetweenTime!=''">
+            and ins.out_time &gt;=#{outBetweenTime}
+        </if>
+        <if test="outBetweenTimeMax!=null and outBetweenTimeMax!=''">
+            and ins.out_time &lt;=#{outBetweenTimeMax}
+        </if>
+
+        <if test="workbetweenTimeb!=null and workbetweenTimeb!=''">
+            and ins.in_time &gt;=#{workbetweenTimeb}
+        </if>
+        <if test="workbetweenTimea!=null and workbetweenTimea!=''">
+            and ins.in_time &lt;=#{workbetweenTimea}
+        </if>
+        <if test="subjectTime!=null and subjectTime!=''">
+            and TIMESTAMPDIFF(HOUR,ins.`in_time`,ins.`written_time`)>${subjectTime}
+        </if>
+    </select>
+
+
+    <select id="listother" resultMap="export" parameterType="java.util.HashMap">
+
+        SELECT
+        (IF((YEAR(NOW())-SUBSTR(p.certificate_no FROM 7 FOR 4))>18 , 1, 0)) personAge,
+        ins.id AS serialId,
+        ins.type AS personType,
+        p.name AS personName ,
+        p.sex AS personSex,
+        p.certificate_no AS personCertificateNo,
+        inc.ajlx AS caseType,
+        crt.code_desc AS caseProperties,
+        ins.in_time AS inTime,
+        ins.out_time AS outTime,
+        ins.out_reason AS outPlace,
+        u.real_name AS policeman,
+        o.name AS workSpace,
+        p.certificate_type_id AS certificateType,1 AS pType,
+        ins.confirm_time AS confirmTime
+        ,
+        (case when ins.confirm_time is null then '羁押未裁决' else ins.confirm_result end) as confirmResult,
+        ins.written_time callTime,
+        CONCAT(TIMESTAMPDIFF(HOUR,ins.written_time,now()),'时',MOD(TIMESTAMPDIFF(MINUTE,ins.written_time,now()),60),'分')
+        detain_interval
+        ,
+        ins.entrance_procedure,
+        ins.written_time,
+        ins.sfxxcj,
+        ins.sfsyjd,
+        (SELECT TIMESTAMPDIFF(HOUR,ins.in_time,re.end_time) FROM ba_record re WHERE re.serial_id = ins.`id` ORDER BY
+        re.id LIMIT 0,1) AS recordTime
+        FROM ba_serial ins LEFT JOIN ba_person p ON ins.person_id = p.id
+
+        LEFT JOIN ba_case inc ON ins.case_id = inc.id
+        LEFT JOIN xt_user u ON ins.send_user_id = u.id
+        LEFT JOIN xt_organization o ON o.id = u.organization_id
+        LEFT JOIN xt_crime_define crt ON crt.id = inc.ab
+
+        WHERE
+        1=1
+        <if test="jyouttime!=null and jyouttime!=''">
+            and (call_time &lt;= DATE_ADD(NOW(),INTERVAL -23 hour)) and `status` &lt; 11 and ins.type=0
+        </if>
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="personType!=null and personType!=''">
+            and ins.type = ${personType}
+        </if>
+        <if test="personName!=null and personName!=''">
+            and p.name like '%${personName}%'
+        </if>
+        <if test="personSex!=null and personSex!=''">
+            and p.sex =${personSex}
+        </if>
+
+
+        <if test="caseType!=null and caseType!=''">
+            and inc.ajlx =${caseType}
+        </if>
+        <if test="caseProperties!=null and caseProperties!=''">
+            and crt.code_desc like '%${caseProperties}%'
+        </if>
+
+        <if test="workSpace!=null and workSpace!=''">
+            and o.name like '%${workSpace}%'
+        </if>
+
+        <if test="outPlace!=null and outPlace!=''">
+            and ins.out_reason like '%${outPlace}%'
+        </if>
+        <if test="betweenTime!=null and betweenTime!=''">
+            and ins.in_time &gt;=#{betweenTime}
+        </if>
+        <if test="betweenTimeMax!=null and betweenTimeMax!=''">
+            and ins.in_time &lt;=#{betweenTimeMax}
+        </if>
+
+        <if test="outBetweenTime!=null and outBetweenTime!=''">
+            and ins.out_time &gt;=#{outBetweenTime}
+        </if>
+        <if test="outBetweenTimeMax!=null and outBetweenTimeMax!=''">
+            and ins.out_time &lt;=#{outBetweenTimeMax}
+        </if>
+
+        <if test="workbetweenTimeb!=null and workbetweenTimeb!=''">
+            and ins.in_time &gt;=#{workbetweenTimeb}
+        </if>
+        <if test="workbetweenTimea!=null and workbetweenTimea!=''">
+            and ins.in_time &lt;=#{workbetweenTimea}
+        </if>
+
+        <if test="subjectTime!=null and subjectTime!=''">
+            and TIMESTAMPDIFF(HOUR,ins.`in_time`,ins.`written_time`)>${subjectTime}
+        </if>
+        <!--<if test="(outBetweenTime!=null and outBetweenTime!='') or (outBetweenTimeMax!=null and outBetweenTimeMax!='')">-->
+            <!--ORDER BY ins.out_time desc-->
+        <!--</if>-->
+        <!--<if test="(betweenTime!=null and betweenTime!='') or (betweenTimeMax!=null and betweenTimeMax!='')">-->
+            <!--ORDER BY ins.in_time desc-->
+        <!--</if>-->
+        <choose>
+            <when test="(outBetweenTime!=null and outBetweenTime!='') or (outBetweenTimeMax!=null and outBetweenTimeMax!='')">
+                ORDER BY ins.out_time desc
+            </when>
+            <otherwise>
+                ORDER BY ins.in_time desc
+            </otherwise>
+        </choose>
+
+
+    </select>
+
+
+    <select id="listother1" resultMap="export" parameterType="java.util.HashMap">
+        SELECT
+       -- 1 AS personAge,
+        -- (IF((YEAR(NOW())-SUBSTR(p.certificate_no FROM 7 FOR 4))>18 , 1, 0)) personAge,
+
+        p.`name` AS personName ,
+        p.sex AS personSex,
+        p.certificate_no AS personCertificateNo,
+        p.certificate_type_id,  -- ba_person  1
+
+        -- inc.crime_type_id as crimeTypeId,
+        inc.ajlx AS caseType,   -- ba_case
+
+       -- crt.crime_section as crimeSection,
+       -- crt.crime_type AS caseProperties,  -- crime_type  2
+
+		ins.id AS serialId,
+        ins.person_id as personId,
+        ins.type AS personType,
+        ins.in_time AS inTime,
+        ins.out_time AS outTime,
+        ins.out_reason AS outPlace,
+        ins.in_register_user_id as userId,
+				ins.confirm_time AS confirmTime,
+        ins.confirm_result,
+        ins.out_type As outType,
+        -- ins.out_reason As OutReason,     -- ba_serial 1
+
+        u.real_name AS policeman,
+        u.certificate_no AS policeNo,  -- xt_user 1
+
+        o.`name` AS workSpace,
+        o.id AS organizationId,   -- organization 1
+
+        p.certificate_type_id AS certificateType,  -- ba_person 1
+
+'传唤24小时未裁决' as jyCasetType,
+	CONCAT(TIMESTAMPDIFF(HOUR,ins.confirm_time,now()),'时',MOD(TIMESTAMPDIFF(MINUTE,ins.confirm_time,now()),60),'分') detain_interval,
+        se.id as securityId,
+		se.type,
+		se.medical_history,
+		se.physical_description,
+		se.injury_description,
+		se.dangerous,
+		se.other_description,   -- ba_security
+        ins.entrance_procedure,
+        ins.written_time,
+        ins.sfxxcj,
+        ins.sfsyjd
+        FROM ba_serial ins LEFT JOIN ba_person p ON ins.person_id = p.id
+        left join ba_security se on se.serial_id=ins.id
+        LEFT JOIN ba_case inc ON ins.case_id = inc.id
+        LEFT JOIN xt_user u ON ins.in_register_user_id = u.id
+        LEFT JOIN xt_organization o ON o.id = u.organization_id
+        -- left join crime_type crt on crt.id = inc.crime_type_id
+
+
+        ORDER BY ins.in_time desc
+
+    </select>
+
+    <select id="listother2" resultMap="export" parameterType="java.util.HashMap">
+        SELECT
+       -- 1 AS personAge,
+        -- (IF((YEAR(NOW())-SUBSTR(p.certificate_no FROM 7 FOR 4))>18 , 1, 0)) personAge,
+
+        p.`name` AS personName ,
+        p.sex AS personSex,
+        p.certificate_no AS personCertificateNo,
+        p.certificate_type_id,  -- ba_person  1
+
+        -- inc.crime_type_id as crimeTypeId,
+        inc.ajlx AS caseType,   -- ba_case
+
+       -- crt.crime_section as crimeSection,
+       -- crt.crime_type AS caseProperties,  -- crime_type  2
+
+		ins.id AS serialId,
+        ins.person_id as personId,
+        ins.type AS personType,
+        ins.in_time AS inTime,
+        ins.out_time AS outTime,
+        ins.out_reason AS outPlace,
+        ins.in_register_user_id as userId,
+				ins.confirm_time AS confirmTime,
+        ins.confirm_result,
+        ins.out_type As outType,
+        -- ins.out_reason As OutReason,     -- ba_serial 1
+
+        u.real_name AS policeman,
+        u.certificate_no AS policeNo,  -- xt_user 1
+
+        o.`name` AS workSpace,
+        o.id AS organizationId,   -- organization 1
+
+        p.certificate_type_id AS certificateType,  -- ba_person 1
+
+      '裁决24小时未出区' as jyCasetType,
+	CONCAT(TIMESTAMPDIFF(HOUR,ins.confirm_time,now()),'时',MOD(TIMESTAMPDIFF(MINUTE,ins.confirm_time,now()),60),'分') detain_interval,
+        se.id as securityId,
+		se.type,
+		se.medical_history,
+		se.physical_description,
+		se.injury_description,
+		se.dangerous,
+		se.other_description,   -- ba_security
+        ins.entrance_procedure,
+        ins.written_time,
+        ins.sfxxcj,
+        ins.sfsyjd
+        FROM ba_serial ins LEFT JOIN ba_person p ON ins.person_id = p.id
+        left join ba_security se on se.serial_id=ins.id
+        LEFT JOIN ba_case inc ON ins.case_id = inc.id
+        LEFT JOIN xt_user u ON ins.in_register_user_id = u.id
+        LEFT JOIN xt_organization o ON o.id = u.organization_id
+        -- left join crime_type crt on crt.id = inc.crime_type_id
+
+
+        ORDER BY ins.in_time desc
+
+    </select>
+
+
+    <select id="accountList" resultMap="export" parameterType="java.util.HashMap">
+
+        SELECT
+        ins.id AS serialId,
+        ins.type AS personType,
+        p.name AS personName ,
+        p.sex AS personSex,
+        p.certificate_no AS personCertificateNo,
+        inc.ajlx AS caseType,
+        crt.code_desc AS caseProperties,
+        ins.in_time AS inTime,
+        ins.out_time AS outTime,
+        ins.out_reason AS outPlace,
+        u.real_name AS policeman,
+        o.name AS workSpace,
+        p.certificate_type_id AS certificateType,1 AS pType,
+        ins.confirm_time AS confirmTime
+        ,
+        (case when ins.confirm_time is null then '羁押未裁决' else ins.confirm_result end) as confirmResult,
+        ins.written_time callTime,
+        CONCAT(TIMESTAMPDIFF(HOUR,ins.written_time,now()),'时',MOD(TIMESTAMPDIFF(MINUTE,ins.written_time,now()),60),'分')
+        detain_interval
+        ,ins.entrance_procedure,
+        ins.written_time,
+        ins.sfxxcj,
+        ins.sfsyjd
+        FROM ba_serial ins LEFT JOIN ba_person p ON ins.person_id = p.id
+
+        LEFT JOIN ba_case inc ON ins.case_id = inc.id
+        LEFT JOIN xt_user u ON ins.send_user_id = u.id
+        LEFT JOIN xt_organization o ON o.id = u.organization_id
+        LEFT JOIN xt_crime_define crt ON crt.id = inc.ab
+
+        WHERE
+        1=1
+
+        <if test="startTime!=null and startTime!=''">
+            and ins.in_time &gt;=#{startTime}
+        </if>
+        <if test="endTime!=null and endTime!=''">
+            and ins.in_time &lt;=#{endTime}
+        </if>
+
+        ORDER BY ins.in_time desc
+        limit ${pageStart},${rows}
+    </select>
+
+    <select id="accountCount" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+        SELECT count(1)
+        FROM ba_serial ins LEFT JOIN ba_person p ON ins.person_id = p.id
+
+        LEFT JOIN ba_case inc ON ins.case_id = inc.id
+        LEFT JOIN xt_user u ON ins.send_user_id = u.id
+        LEFT JOIN xt_organization o ON o.id = u.organization_id
+        LEFT JOIN xt_crime_define crt ON crt.id = inc.ab
+
+        WHERE
+        1=1
+
+        <if test="startTime!=null and startTime!=''">
+            and ins.in_time &gt;=#{startTime}
+        </if>
+        <if test="endTime!=null and endTime!=''">
+            and ins.in_time &lt;=#{endTime}
+        </if>
+    </select>
+
+    <select id="accountExport" resultMap="export" parameterType="java.util.HashMap">
+
+        SELECT
+        ins.id AS serialId,
+        ins.type AS personType,
+        p.name AS personName ,
+        p.sex AS personSex,
+        p.certificate_no AS personCertificateNo,
+        inc.ajlx AS caseType,
+        crt.code_desc AS caseProperties,
+        ins.in_time AS inTime,
+        ins.out_time AS outTime,
+        ins.out_reason AS outPlace,
+        u.real_name AS policeman,
+        o.name AS workSpace,
+        p.certificate_type_id AS certificateType,1 AS pType,
+        ins.confirm_time AS confirmTime
+        ,
+        (case when ins.confirm_time is null then '羁押未裁决' else ins.confirm_result end) as confirmResult,
+        ins.written_time callTime,
+        CONCAT(TIMESTAMPDIFF(HOUR,ins.written_time,now()),'时',MOD(TIMESTAMPDIFF(MINUTE,ins.written_time,now()),60),'分')
+        detain_interval
+        ,ins.entrance_procedure,
+        ins.written_time,
+        ins.sfxxcj,
+        ins.sfsyjd,
+        DATE_FORMAT(ins.in_time,'%Y-%m') yue,DATE_FORMAT(ins.in_time, '%Y-%m-%d') ri
+        FROM ba_serial ins LEFT JOIN ba_person p ON ins.person_id = p.id
+
+        LEFT JOIN ba_case inc ON ins.case_id = inc.id
+        LEFT JOIN xt_user u ON ins.send_user_id = u.id
+        LEFT JOIN xt_organization o ON o.id = u.organization_id
+        LEFT JOIN xt_crime_define crt ON crt.id = inc.ab
+
+        WHERE
+        1=1
+
+        <if test="startTime!=null and startTime!=''">
+            and ins.in_time &gt;=#{startTime}
+        </if>
+        <if test="endTime!=null and endTime!=''">
+            and ins.in_time &lt;=#{endTime}
+        </if>
+
+        ORDER BY ins.in_time
+
+    </select>
+
+
+</mapper>

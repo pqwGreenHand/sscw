@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacs.dao.downloadtask.IDownloadTaskMapper">
+    <resultMap id="AbstractTreeResultMap" type="com.zhixin.zhfz.common.entity.AbstractTreeEntity">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <id column="text" property="text" jdbcType="VARCHAR"/>
+        <id column="type" property="type" jdbcType="INTEGER"/>
+        <id column="reserve" property="reserve" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="SerialCaseTreeResultMap" type="com.zhixin.zhfz.common.entity.SerialCaseTreeEntity">
+        <id column="serialId" property="serialId" jdbcType="BIGINT"/>
+        <id column="personName" property="personName" jdbcType="VARCHAR"/>
+        <id column="caseId" property="caseId" jdbcType="INTEGER"/>
+        <id column="caseName" property="caseName" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="downLoadTaskResultMap" type="com.zhixin.zhfz.bacs.entity.DownloadTaskEntity" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="camera_no" property="cameraNo" jdbcType="VARCHAR" />
+        <result column="task_no" property="taskNo" jdbcType="INTEGER" />
+        <result column="task_id" property="taskId" jdbcType="BIGINT" />
+        <result column="task_type" property="taskType" jdbcType="INTEGER" />
+        <result column="record_id" property="recordId" jdbcType="BIGINT" />
+        <result column="serial_id" property="serialId" jdbcType="BIGINT" />
+        <result column="cuff_no" property="cuffNo" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="hash_value" property="hashValue" jdbcType="INTEGER" />
+        <result column="count" property="count" jdbcType="INTEGER" />
+        <result column="size" property="size" jdbcType="VARCHAR" />
+        <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+        <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+        <result column="path" property="path" jdbcType="VARCHAR" />
+        <result column="error_desc" property="errorDesc" jdbcType="VARCHAR" />
+        <result column="op_pid" property="opPid" jdbcType="VARCHAR" />
+        <result column="op_user_id" property="opUserId" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, camera_no, task_no, task_id, task_type, record_id, serial_id, cuff_no, status,
+        hash_value, count, size, start_time, end_time, created_time, updated_time, path,
+        error_desc, op_pid, op_user_id
+    </sql>
+    <select id="list" resultMap="downLoadTaskResultMap" parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List" />
+        from ba_download_task
+        where 1=1
+        <if test="id != null">
+           and id = ${id}
+        </if>
+        <if test="serialId != null">
+            and serial_id = ${serialId}
+        </if>
+        order by task_type DESC
+        limit ${pageStart},${rows}
+	</select>
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(1)
+        from ba_download_task
+        where 1=1
+        <if test="id != null">
+            and id = ${id}
+        </if>
+        <if test="serialId != null">
+            and serial_id = ${serialId}
+        </if>
+	</select>
+	<insert id="insert" parameterType="com.zhixin.zhfz.bacs.entity.DownloadTaskEntity">
+      INSERT INTO ba_download_task
+        (camera_no,task_no,task_type,record_id, serial_id, status,start_time, end_time, hash_value,  created_time)
+      VALUES
+	    (#{cameraNo},#{taskNo},#{taskType},#{recordId},#{serialId},#{status},#{startTime},#{endTime},#{hashValue},now())
+    </insert>
+
+    <select id="queryRecordTaskCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from ba_download_task where record_id=#{recordId} and start_time=#{startTime}
+	</select>
+    <select id="queryTaskCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) count from ba_download_task where task_type=2 and serial_id=#{serialId} and cuff_no=#{cuffNo} and start_time=#{starttime} and end_time=#{endtime} and camera_no=#{camerano}
+	</select>
+    <select id="getPersonTreeByCaseId" resultMap="AbstractTreeResultMap" parameterType="java.lang.Integer" >
+        select bs.id,bp.name text,0 type,bs.area_id reserve
+        from ba_serial bs
+        LEFT join  ba_person bp on bp.id = bs.person_id
+         where bs.case_id = #{caseId}
+    </select>
+    <select id="getSerialCaseTree" resultMap="SerialCaseTreeResultMap" parameterType="java.util.Map">
+        select bs.id serialId,bp.name personName,bs.case_id caseId,bc.ajmc caseName
+        from ba_serial bs
+        LEFT JOIN ba_person bp on bs.person_id = bp.id
+        LEFT JOIN ba_case bc on bc.id = bs.case_id
+        where 1=1
+        <if test="areaId != null and areaId != ''">
+            and bs.area_id = ${areaId}
+        </if>
+        <if test="sDate != null and sDate != ''">
+            and bs.in_time &gt;= '${sDate}'
+        </if>
+        <if test="eDate != null and eDate != ''">
+            and bs.in_time &lt;= '${eDate}'
+        </if>
+        <if test="personName != null and personName != ''">
+            and bp.name like '%${personName}%'
+        </if>
+        <if test="ajmc != null and ajmc != ''">
+            and bc.ajmc like '%${ajmc}%'
+        </if>
+        ORDER BY bs.case_id DESC
+    </select>
+    <update id="reDownLoad" parameterType="java.lang.Integer" >
+        update ba_download_task set status = 0 ,count=count+1
+        where id = #{downLoadId}
+    </update>
+</mapper>

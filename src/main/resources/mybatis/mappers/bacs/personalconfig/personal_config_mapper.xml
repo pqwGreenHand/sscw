@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacs.dao.personalconfig.IPersonalConfigMapper">
+
+	<resultMap id="personalConfigResultMap" type="PersonalConfig">
+		<id property="id" column="id" />
+		<result property="type" column="type" />
+		<result property="desc" column="desc" />
+		<result property="areaName" column="area_name" />
+		<result property="areaId" column="area_id"  jdbcType="INTEGER" />
+		<result property="isEnable" column="is_enable"  jdbcType="INTEGER" />
+	</resultMap>
+
+	<resultMap id="fusionResultMap" type="com.zhixin.zhfz.bacs.entity.PersonalConfigFusionEntity">
+		<!--<id property="id" column="id" />-->
+		<result property="areaId" column="area_id" />
+		<result property="configId" column="config_id" />
+		<result property="paramKey" column="param_key" />
+		<result property="paramValue" column="param_value" />
+		<result column="op_pid" property="op_Pid" jdbcType="VARCHAR" />
+		<result column="op_user_id" property="op_User_Id" jdbcType="INTEGER" />
+	</resultMap>
+
+    <!-- id is same to interface'methmod -->
+    <select id="list" resultMap="personalConfigResultMap" parameterType="java.util.Map">  
+        	SELECT pc.*,ic.name area_name FROM ba_personal_config  pc
+        	INNER JOIN ba_area ic ON pc.area_id=ic.id
+        	where 1=1 
+        		 <if test="dataAuth!=null and dataAuth!=''">
+					and ${dataAuth}
+				</if>
+        		<if test="type !=null and type !=''">
+        			and pc.type like '%${type}%'
+        		</if>
+		order by id desc
+		limit ${pageStart},${rows}
+
+    </select>
+     <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">  
+        	select count(1) from ba_personal_config  pc
+        	inner join ba_area ic on pc.area_id=ic.id
+        	where 1=1
+        		<if test="dataAuth!=null and dataAuth!=''">
+					and ${dataAuth}
+				</if>
+        		<if test="name !=null and name !=''">
+        			and	pc.name like '%${name}%'
+        		</if>
+    </select>
+    <select id="listFn" resultMap="personalConfigResultMap" parameterType="java.util.Map">  
+        	SELECT pc.* FROM ba_personal_config  pc
+        	where area_id=#{areaId} and code_key=#{codeKey}
+    </select>
+    
+	<insert id="insert" parameterType="PersonalConfig" useGeneratedKeys="true" keyProperty="id">  
+            insert into ba_personal_config (type,`desc`,area_id,is_enable,op_pid,op_user_id) values(#{type},#{desc},#{areaId},#{isEnable},#{op_Pid},#{op_User_Id})
+    </insert>
+    
+    <delete id="delete" parameterType="int">  
+            delete from ba_personal_config where id=#{id}
+    </delete>
+    
+    <update id="update" parameterType="PersonalConfig">  
+           update ba_personal_config set type = #{type},`desc`=#{desc},area_id = #{areaId},is_enable = #{isEnable}
+            where id=#{id} 
+    </update>
+
+	<select id="getDetailByType" resultMap="fusionResultMap" parameterType="java.util.Map">
+        	SELECT
+				p.area_id,
+				p.id AS config_id,
+				d.param_key,
+				d.param_value
+			FROM
+				ba_personal_config p,
+				ba_personal_config_detail d
+			WHERE
+				p.id = d.personal_config_id
+				AND p.is_enable = 1
+				AND p.type = #{type}
+				AND p.area_id = #{areaId}
+    </select>
+</mapper>

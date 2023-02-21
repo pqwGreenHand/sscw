@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.common.dao.schedule.IScheduleMapper" >
+  <resultMap id="scheduleResultMap" type="com.zhixin.zhfz.common.entity.ScheduleEntity" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="sender_id" property="senderId" jdbcType="INTEGER" />
+    <result column="receiver_id" property="receiverId" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="sender_name" property="senderName" jdbcType="VARCHAR" />
+    <result column="happen_time" property="happenTime" jdbcType="TIMESTAMP" />
+    <result column="handler_time" property="handlerTime" jdbcType="TIMESTAMP" />
+    <result column="handler_content" property="handlerContent" jdbcType="VARCHAR" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="receiverName" property="receiverName" jdbcType="VARCHAR" />
+      <result column="system_name" property="systemName" jdbcType="VARCHAR" />
+      <result column="ajmc" property="ajmc" jdbcType="VARCHAR" />
+      <result column="ajbh" property="ajbh" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="list" resultMap="scheduleResultMap" parameterType="java.util.Map">
+    select a.*,IFNULL(b.real_name,a.sender_id) sender_name,c.real_name as receiverName,system_name as systemName
+	from xt_schedule a left join xt_user b
+	on a.sender_id=b.id
+	left join xt_user c
+	on a.receiver_id = c.id
+	where a.`status`=0
+	<if test="receiverId!=null and receiverId!=''">
+	   and a.receiver_id = #{receiverId}
+	</if>
+
+    <if test="title!=null and title!=''">
+       and a.title like '%${title}%'
+    </if>
+
+    <if test="content!=null and content!=''">
+       and a.content like '%${content}%'
+    </if>
+
+    <if test="systemName!=null and systemName!=''">
+      and a.system_name = #{systemName}
+    </if>
+      limit ${pageStart},${rows}
+  </select>
+
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(1)
+        from xt_schedule a left join xt_user b
+        on a.sender_id=b.id
+        where a.`status`=0
+        <if test="receiverId!=null and receiverId!=''">
+            and a.receiver_id = #{receiverId}
+        </if>
+
+        <if test="title!=null and title!=''">
+            and a.title like '%${title}%'
+        </if>
+
+        <if test="content!=null and content!=''">
+            and a.content like '%${content}%'
+        </if>
+
+        <if test="systemName!=null and systemName!=''">
+            and a.system_name = #{systemName}
+        </if>
+    </select>
+  
+  <select id="listhistory" resultMap="scheduleResultMap" parameterType="java.util.Map">
+      select a.*,b.real_name sender_name from xt_schedule a left join user b on a.sender_id=b.id
+	  where a.`status`=1
+	  <if test="receiverId!=null and receiverId!=''">
+	      and a.receiver_id = #{receiverId}
+	  </if>
+	  <if test="senderName!=null and senderName!=''">
+          and b.real_name like '%${senderName}%'
+      </if>
+      <if test="title!=null and title!=''">
+          and a.title like '%${title}%'
+      </if>
+      <if test="status!=null and status!=''">
+          and a.status = #{status}
+      </if>
+      order by a.id desc 
+      limit ${pageStart},${rows}
+  </select>
+  
+  <select id="listhistorycount" resultType="java.lang.Integer" parameterType="java.util.Map">
+      select count(1) from xt_schedule a left join user b on a.sender_id=b.id
+	  where a.`status`=1
+	  <if test="receiverId!=null and receiverId!=''">
+	      and a.receiver_id = #{receiverId}
+	  </if>
+	  <if test="senderName!=null and senderName!=''">
+          and b.real_name like '%${senderName}%'
+      </if>
+      <if test="title!=null and title!=''">
+          and a.title like '%${title}%'
+      </if>
+      <if test="status!=null and status!=''">
+          and a.status = #{status}
+      </if>
+  </select>
+  
+  <insert id="insert" parameterType="com.zhixin.zhfz.common.entity.ScheduleEntity">
+       insert into xt_schedule
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="senderId != null" >
+        sender_id,
+      </if>
+      <if test="receiverId != null" >
+        receiver_id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+       
+       <if test="status != null" >
+        status,
+       </if>
+        <if test="systemName != null" >
+            system_name,
+        </if>
+        <if test="ajbh != null" >
+            ajbh,
+        </if>
+        <if test="ajmc != null" >
+            ajmc,
+        </if>
+        happen_time
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="senderId != null" >
+        #{senderId,jdbcType=INTEGER},
+      </if>
+      <if test="receiverId != null" >
+        #{receiverId,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+         #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+        <if test="systemName != null" >
+            #{systemName,jdbcType=VARCHAR},
+        </if>
+        <if test="ajbh != null" >
+            #{ajbh,jdbcType=VARCHAR},
+        </if>
+        <if test="ajmc != null" >
+            #{ajmc,jdbcType=VARCHAR},
+        </if>
+      now()
+    </trim>
+  </insert>
+
+    <select id="isSchedule" parameterType="com.zhixin.zhfz.common.entity.ScheduleEntity" resultType="java.lang.Integer">
+        select count(1) from xt_schedule
+        where sender_id = #{senderId} and receiver_id = #{receiverId} and title = #{title}
+        and content = #{content}  and status = 0;
+    </select>
+    
+    <update id="changeScheduleOvertime">
+    	update xt_schedule set status =1,end_time=now() where TIMEDIFF(now(),start_time) &gt;=240000
+    </update>
+    
+    <delete id="cleanSchedule">  
+            delete from xt_schedule where TIMEDIFF(now(),start_time) &gt;=2400000
+    </delete>
+
+
+    <update id="updateScheduleById" parameterType="com.zhixin.zhfz.common.form.ScheduleForm">
+    	update xt_schedule set status =1,handler_time=now(),handler_content=#{handlerContent} where id=#{id}
+    </update>
+
+
+</mapper>

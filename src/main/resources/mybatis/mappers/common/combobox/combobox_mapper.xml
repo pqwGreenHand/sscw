@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.common.dao.combobox.IComboboxMapper">  
+
+    <resultMap id="comboboxResultMap" type="ComboboxEntity">
+       <id property="id" column="id"/>
+       <result property="value" column="value"/>
+       <result property="groupName" column="group_name" />
+       <result property="status" column="status" />
+    </resultMap>
+
+    <!-- id is same to interface'methmod -->
+    <select id="listCode" parameterType="java.util.Map" resultMap="comboboxResultMap">
+        	select code_key as id,code_value as value from xt_code WHERE type=#{type} order by id asc
+    </select>
+    
+    <select id="listCertificateType" parameterType="java.util.Map" resultMap="comboboxResultMap">  
+        	select code_key as id,code_value as value from xt_code WHERE type='ZJZLID' order by id asc
+    </select>
+	<!-- 查询部门列表  -->
+    <select id="listAllOrganizationName" parameterType="java.util.Map"  resultMap="comboboxResultMap">
+        select o.id,o.name value,o.p_id as group_name  from xt_organization o LEFT JOIN xt_user u on u.organization_id = o.id
+        	<where>
+       			<if test="dataAuth !=null and dataAuth!='' ">
+       				 ${dataAuth}
+       			</if>
+       		</where>
+        group by o.id
+        order by o.org_code
+    </select>
+    <!-- 查询外单位部门列表  -->
+    <select id="listOutOrganizationName" parameterType="java.util.Map"  resultMap="comboboxResultMap">
+        select id,name value from xt_organization
+        <where>
+            parent_id = 99
+        </where>
+        order by org_code
+    </select>
+	<!-- 查询角色  -->
+    <select id="getRoles" parameterType="java.util.Map"  resultMap="comboboxResultMap">  
+        	select id,name value from xt_role
+        	order by id
+    </select>
+
+    <select id="listLawType" parameterType="java.util.Map" resultMap="comboboxResultMap">
+        select distinct 0 as id,type as value from ba_law
+    </select>
+
+    <select id="listLawName" parameterType="java.util.Map" resultMap="comboboxResultMap">
+        select distinct 0 as id,name as value from ba_law
+    </select>
+    <!-- 查询所有办案中心 -->
+    <select id="listArea" parameterType="java.util.Map" resultMap="comboboxResultMap">
+        select a.id,a.`name` as `value` from ba_area a
+        <where>
+            <if test="dataAuth !=null and dataAuth!='' ">
+                ${dataAuth}
+            </if>
+        </where>
+    </select>
+    <!-- 查询所有涉案中心 -->
+    <select id="listWare" parameterType="java.util.Map" resultMap="comboboxResultMap">
+        select a.id,a.`name` as `value` from sa_warehouse a
+        <where>
+            <if test="dataAuth !=null and dataAuth!='' ">
+                ${dataAuth}
+            </if>
+        </where>
+    </select>
+
+
+
+
+</mapper>

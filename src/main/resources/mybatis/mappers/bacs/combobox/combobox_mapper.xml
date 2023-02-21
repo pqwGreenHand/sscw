@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacs.dao.combobox.IBacsComboboxMapper">
+
+    <resultMap id="comboboxResultMap" type="com.zhixin.zhfz.bacs.entity.ComboboxEntity">
+       <id property="id" column="id"/>
+       <result property="value" column="value"/>
+       <result property="groupName" column="group_name" />
+       <result property="status" column="status" />
+		<result property="serialId" column="serialId" />
+		<result property="areaId" column="areaId" />
+		<result property="serialNo" column="serialNo" />
+		<result property="personName" column="personName" />
+		<result property="certificateNo" column="certificateNo" />
+		<result property="caseNo" column="caseNo" />
+    </resultMap>
+
+    <!-- 查询证件类型 -->
+    <select id="listCertificateType" parameterType="java.util.Map" resultMap="comboboxResultMap">  
+        	select code_key as id,code_value as value from xt_code WHERE type='ZJZLID' order by id asc
+    </select>
+    
+     <!-- 入区获取手环 -->
+    <select id="getAllCuff" parameterType="java.util.Map" resultMap="comboboxResultMap">  
+        	select id as id,cuff_no as value from ba_cuff where 1=1
+			<if test="dataAuth!=null and dataAuth!=''">
+				and ${dataAuth}
+			</if>
+			<if test="type!=null and type!=''">
+				and type=#{type}
+			</if>
+			<if test="status!=null and status!=''">
+				and status=#{status}
+			</if>
+			<if test="status==null or status==''">
+				and status=0
+			</if>
+			order by id desc
+    </select>
+
+    
+     <!-- 查询roomGroup  -->
+	 <select id="listAllRoomGroupName" parameterType="java.util.Map"  resultMap="comboboxResultMap">  
+        	select id,`name` value from room_group
+    </select>
+
+	<select id="listRoomBySerial" parameterType="java.util.Map"  resultMap="comboboxResultMap">
+<!-- 			select id,`name` value from interrogate_room r where r.interrogate_area_id = (select s.interrogate_area_id from interrogate_serial s where s.id= #{id}) -->
+		select
+	    r.id,
+	    r.`name` value,
+        g.`name` group_name
+		from
+		interrogate_room r
+		left join room_group g on r.room_group_id = g.id
+		left join room_type t on r.room_type_id = t.id 
+		left join interrogate_serial s on r.interrogate_area_id = s.interrogate_area_id
+		where 
+			t.`name` IN (
+				'询问室',
+				'讯问室',
+				'特讯室'
+			)
+		and r.is_active = 1
+		and	s.id = #{id}
+		and not exists (select * from interrogate_record rd where rd.room_id=r.id and rd.status>0)
+		order by group_name,id asc
+	</select>
+
+	<!-- 查询部门列表  -->
+    <select id="listAllOrganizationName" parameterType="java.util.Map"  resultMap="comboboxResultMap">  
+			select DISTINCT o.id,o.name value
+			from xt_organization o LEFT JOIN ba_area a ON o.id=a.organization_id
+        	<where>
+       			<if test="dataAuth !=null and dataAuth!='' ">
+       				 ${dataAuth}
+       			</if>
+       		</where>
+        	order by id desc
+    </select>
+	<!-- 查询部门列表  -->
+    <select id="listAllOrganization" parameterType="java.util.Map"  resultMap="comboboxResultMap">  
+        	select id,name value from xt_organization
+        	order by id desc
+    </select>
+	<!-- 查询部门列表  -->
+    <select id="listAllOrganizationCode" parameterType="java.util.Map"  resultMap="comboboxResultMap">
+        	select org_code id,name value from xt_organization where  !ISNULL(org_code)
+    </select>
+	<!-- 查询部门列表  -->
+    <select id="listAllOrganization1" parameterType="java.util.Map"  resultMap="comboboxResultMap">
+        	select id,name value from xt_organization
+		<where>
+			<if test="dataAuth!=null and dataAuth!=''">
+				and ${dataAuth}
+			</if>
+		</where>
+        	order by id desc
+    </select>
+
+	<!-- 查询room  -->
+	<select id="listAllRoomName" parameterType="java.util.Map"  resultMap="comboboxResultMap">
+		select id,`name` value from ba_room
+		<where>
+   			<if test="areaId !=null and areaId!='' ">
+   				 and area_id=#{areaId}
+   			</if>
+   			<if test="dataAuth !=null and dataAuth!='' ">
+       			and ${dataAuth}
+       		</if>
+   		</where>
+	</select>
+	<!-- 查询办案中心下拉  -->
+	<select id="getAllInterrogateAreaName" parameterType="java.util.Map" resultMap="comboboxResultMap">
+		select ia.id as id,ia.name as value from ba_area ia left join xt_organization o on ia.organization_id = o.id
+		<where>
+			<if test="type!=null and type!=''">
+				ia.type=#{type}
+			</if>
+			<if test="dataAuth!=null and dataAuth!=''">
+				and ${dataAuth}
+			</if>
+		</where>
+		order by id desc
+	</select>
+
+
+	<!--行政案由下拉-->
+	<select id="listCrimeDefine" parameterType="java.util.Map" resultMap="comboboxResultMap">
+		select id ,code_desc as value from xt_crime_define order by id desc
+	</select>
+	<select id="listKnowledgeCrime" parameterType="java.util.Map" resultMap="comboboxResultMap">
+		select id ,code_desc as value from ba_knowledge_crime order by sort_no desc
+	</select>
+
+	<!--法律法规由下拉-->
+	<select id="listLawType" parameterType="java.util.Map" resultMap="comboboxResultMap">
+		select distinct 0 as id,type as value from ba_law
+	</select>
+
+	<select id="listLawName" parameterType="java.util.Map" resultMap="comboboxResultMap">
+		select distinct 0 as id,name as value from ba_law
+	</select>
+
+	<!--醒酒下拉-->
+	<select id="listSerial" parameterType="java.util.Map" resultMap="comboboxResultMap">
+		SELECT
+			CONCAT('serialId:',s.id,',personId:',s.person_id,',areaId:',s.area_id,',caseId:',s.case_id) AS id,
+			p.`name` AS `value`,
+			c.ajbh AS group_name,
+			c.ajlx AS `status`
+		FROM
+			ba_serial AS s
+			INNER JOIN ba_person AS p ON s.person_id = p.id
+			INNER JOIN ba_case AS c ON s.case_id = c.id
+		left join ba_order_person  d on d.person_id = p.id
+		left join ba_order_request  e on e.id = d.order_request_id
+		left join ba_police_entrance f on f.order_request_id = e.id
+		<where>
+			s.`status` &lt; 11
+			AND s.`status` &gt; 1
+			AND s.`status` &lt;&gt; 3
+			<if test="dataAuth!=null and dataAuth!=''">
+				and ${dataAuth}
+			</if>
+		</where>
+	</select>
+	<select id="listSerialPolice" parameterType="java.util.Map" resultMap="comboboxResultMap">
+		SELECT
+			u.id,
+			u.`real_name` AS `value`
+		FROM
+			ba_police_entrance AS p
+			INNER JOIN xt_user AS u ON p.police_id = u.id
+		WHERE
+			p.`out_time` IS NULL
+			AND p.case_id = #{caseId}
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+	</select>
+
+	<select id="listRecordTemplate" parameterType="java.util.Map" resultMap="comboboxResultMap">
+		SELECT
+			id,
+			`name` AS `value`
+		FROM
+			ba_record_template
+
+
+	</select>
+	<select id="listCrimeTypeByNature" resultMap="comboboxResultMap" parameterType="java.util.Map">
+		select t.id as id, t.code_desc as value  from xt_crime_define t
+		where t.code_class_desc in ('行政案由','罪名')
+		<if test="nature!=null and nature!=''">
+			and t.code_class_desc=#{nature}
+		</if>
+		order by sort_no desc
+
+	</select>
+	<!-- 储物柜柜门下拉框 -->
+	<select id="listBelongLockerBox" parameterType="java.util.Map" resultMap="comboboxResultMap">
+		SELECT
+		pd.id,
+		CASE
+		WHEN p. NAME IS NULL THEN
+		CONCAT(pd.show_no, '[空]')
+		WHEN pl.is_get = 1 THEN
+		CONCAT(pd.show_no, '[空]')
+		ELSE
+		CONCAT(
+		pd.show_no,
+		'[',
+		p. NAME,
+		']'
+		)
+		END AS
+		VALUE
+
+		FROM
+		ba_cabinet_config_detail pd
+		LEFT JOIN ba_cabinet_config pc ON pd.config_id = pc.id
+		LEFT JOIN (
+		SELECT
+		locker_id,
+		serial_id,
+		0 AS is_get
+		FROM
+		ba_belongings
+		WHERE
+		is_get = 0
+		GROUP BY
+		locker_id,
+		serial_id
+		) pl ON pd.id = pl.locker_id
+		LEFT JOIN ba_person p ON p.id = pl.serial_id
+		WHERE
+		pc.type = 1 and pc.is_enable = 1
+		AND pc.area_id = #{areaId}
+		AND pd.config_id = #{configId}
+		<if test="lockerId !=null and lockerId !=''">
+			and pd.id=${lockerId}
+		</if>
+		order by pd.show_no
+	</select>
+	<!-- 涉案储物柜柜门下拉框 -->
+	<select id="listExhibitLockerBox" parameterType="java.util.Map" resultMap="comboboxResultMap">
+		SELECT
+		pd.id,
+		CASE
+		WHEN p. NAME IS NULL THEN
+		CONCAT(pd.show_no, '[空]')
+		WHEN pl.is_get = 1 THEN
+		CONCAT(pd.show_no, '[空]')
+		ELSE
+		CONCAT(
+		pd.show_no,
+		'[',
+		p. NAME,
+		']'
+		)
+		END AS
+		VALUE
+
+		FROM
+		ba_cabinet_config_detail pd
+		LEFT JOIN ba_cabinet_config pc ON pd.config_id = pc.id
+		LEFT JOIN (
+		SELECT
+		locker_id,
+		serial_id,
+		0 AS is_get
+		FROM
+		ba_exhibit
+		WHERE
+		is_get = 0
+		GROUP BY
+		locker_id,
+		serial_id
+		) pl ON pd.id = pl.locker_id
+		LEFT JOIN ba_serial i ON i.id = pl.serial_id
+		LEFT JOIN ba_person p ON p.id = i.person_id
+		WHERE
+		pc.type = 2 and pc.is_enable = 1
+		AND pc.area_id = #{areaId}
+		AND pd.config_id = #{configId}
+		<if test="lockerId !=null and lockerId !=''">
+			and pd.id=${lockerId}
+		</if>
+		order by pd.show_no
+	</select>
+	<!-- 民警储物柜柜门下拉框 -->
+	<select id="listPoliceBelongLockerBox" parameterType="java.util.Map" resultMap="comboboxResultMap">
+		SELECT
+		pd.id,
+		CASE
+		WHEN p.real_name IS NULL THEN
+		CONCAT(pd.open_key, '[空]')
+		WHEN pl.is_get = 1 THEN
+		CONCAT(pd.open_key, '[空]')
+		ELSE
+		CONCAT(
+		pd.open_key,
+		'[',
+		p.real_name,
+		']'
+		)
+		END AS
+		VALUE
+
+		FROM
+		ba_cabinet_config_detail pd
+		LEFT JOIN ba_cabinet_config pc ON pd.config_id = pc.id
+		LEFT JOIN (
+		SELECT
+		locker_id,
+		police_id,
+		0 AS is_get
+		FROM
+		ba_police_belongings
+		WHERE
+		is_get = 0
+		GROUP BY
+		locker_id,
+		police_id
+		) pl ON pd.id = pl.locker_id
+		LEFT JOIN ba_police_entrance i ON i.id = pl.police_id
+		LEFT JOIN xt_user p ON p.id = i.police_id
+		WHERE
+		pc.type = 3
+		AND pc.area_id = #{areaId}
+		AND pd.config_id = #{configId}
+		<if test="lockerId !=null and lockerId !=''">
+			and pd.id=${lockerId}
+		</if>
+		order by pd.show_no
+	</select>
+	<select id="listAlarmType" parameterType="java.util.Map" resultMap="comboboxResultMap">  
+        	select code_key as id,code_value as value from xt_code WHERE type='DWGJLX' order by id asc
+    </select>
+	<select id="listPersonByCaseId" parameterType="java.util.Map" resultMap="comboboxResultMap">
+        	SELECT id as id,name as value  FROM  ba_person   where case_id=#{caseId} order by id asc
+    </select>
+	<select id="listOfficer" parameterType="java.util.Map" resultMap="comboboxResultMap">
+        	select code_key as id,code_value as value from xt_code WHERE type='TSSFID' order by id desc
+    </select>
+
+	<!--嫌疑人下拉列表-->
+	<select id="getSerialList" parameterType="java.util.Map" resultMap="comboboxResultMap">
+		SELECT s.id serialId,s.area_id areaId,
+		s.serial_no serialNo,
+		p.`name` personName,
+		p.certificate_no certificateNo,
+		c.ajbh caseNo
+		FROM
+		ba_serial AS s
+		INNER JOIN ba_person AS p ON s.person_id = p.id
+		left join ba_case c on c.id = s.case_id
+		<where>
+			s.`status` &lt; 11 and s.status != 3
+			<if test="dataAuth!=null and dataAuth!=''">
+				and ${dataAuth}
+			</if>
+		</where>
+	</select>
+</mapper>

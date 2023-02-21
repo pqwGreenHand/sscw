@@ -1,0 +1,1752 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.serial.ISerialMapper">
+	<resultMap id="serialMap" type="com.zhixin.zhfz.bacs.entity.SerialEntity">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="p_id" property="pid" />
+		<result column="serial_no" property="serialNo" jdbcType="VARCHAR" />
+		<result column="uuid" property="uuid" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="orgId" property="orgId" jdbcType="INTEGER" />
+		<result column="status_change_time" property="statusChangeTime" jdbcType="TIMESTAMP" />
+		<result column="person_id" property="personId" jdbcType="BIGINT" />
+		<result column="send_user_id" property="sendUserId" jdbcType="BIGINT" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="birth" property="birth" jdbcType="TIMESTAMP" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="order_request_id" property="orderId" jdbcType="INTEGER" />
+		<result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+		<result column="area_id" property="areaId"
+			jdbcType="INTEGER" />
+		<result column="case_id" property="caseId"
+			jdbcType="INTEGER" />
+		<result column="interrogate_case_name" property="interrogateCaseName"
+			jdbcType="VARCHAR" />
+		<result column="involved_reason" property="involvedReason"
+			jdbcType="VARCHAR" />
+		<result column="case_type" property="caseType" jdbcType="INTEGER" />
+		<result column="case_nature" property="caseNature" jdbcType="VARCHAR" />
+		<result column="cuff_id" property="cuffId" jdbcType="INTEGER" />
+		<result column="police_cuff_id1" property="policeCuffId1"
+			jdbcType="INTEGER" />
+		<result column="police_cuff_id2" property="policeCuffId2"
+			jdbcType="INTEGER" />
+		<result column="cuff_no" property="cuffNo" jdbcType="VARCHAR" />
+		<result column="police_cuff_no1" property="policeCuffNo1"
+			jdbcType="VARCHAR" />
+		<result column="police_cuff_no2" property="policeCuffNo2"
+			jdbcType="VARCHAR" />
+		<result column="in_photo_name" property="inPhotoId" jdbcType="VARCHAR" />
+		<result column="in_user_id1" property="inUserId1" jdbcType="INTEGER" />
+		<result column="in_user_real_name1" property="inUserRealName1"
+			jdbcType="VARCHAR" />
+		<result column="organization" property="organization" jdbcType="VARCHAR" />
+		<result column="in_user_id2" property="inUserId2" jdbcType="INTEGER" />
+		<result column="in_user_real_name1" property="inUserRealName1"
+			jdbcType="VARCHAR" />
+		<result column="in_user_real_name2" property="inUserRealName2"
+			jdbcType="VARCHAR" />
+		<result column="in_register_user_id" property="inRegisterUserId"
+			jdbcType="INTEGER" />
+		<result column="in_register_user_real_name" property="inRegisterUserRealName"
+			jdbcType="VARCHAR" />
+		<result column="in_time" property="inTime" jdbcType="TIMESTAMP" />
+		<result column="out_reason" property="outReason" jdbcType="VARCHAR" />
+		<result column="out_photo_name" property="outPhotoId" jdbcType="VARCHAR" />
+		<result column="out_time" property="outTime" jdbcType="TIMESTAMP" />
+		<result column="out_type" property="outType" jdbcType="INTEGER" />
+		<result column="out_register_user_id" property="outRegisterUserId"
+			jdbcType="INTEGER" />
+		<result column="out_register_user_real_name" property="outRegisterUserRealName"
+			jdbcType="VARCHAR" />
+		<result column="out_user_id1" property="outUserId1" jdbcType="INTEGER" />
+		<result column="out_user_real_name1" property="outUserRealName1"
+			jdbcType="VARCHAR" />
+		<result column="out_user_id2" property="outUserId2" jdbcType="INTEGER" />
+		<result column="out_user_real_name2" property="outUserRealName2"
+			jdbcType="VARCHAR" />
+		<result column="certificate_type_id" property="certificateTypeId"
+			jdbcType="INTEGER" />
+		<result column="certificate_type_name" property="certificateTypeName"
+			jdbcType="VARCHAR" />
+		<result column="sex" property="sex" jdbcType="INTEGER" />
+		<result column="sexName" property="sexName" jdbcType="INTEGER" />
+		<result column="in_user_no1" property="inUserNo1" jdbcType="VARCHAR" />
+		<result column="in_user_no2" property="inUserNo2" jdbcType="VARCHAR" />
+		<result column="confirm_time" property="confirmTime" jdbcType="TIMESTAMP" />
+		<result column="confirm_result" property="confirmResult"
+			jdbcType="VARCHAR" />
+
+		<result column="person_info" property="personInfo" jdbcType="VARCHAR" />
+
+		<result column="entrance_procedure" property="entranceProcedure" jdbcType="VARCHAR" />
+		<result column="written_time" property="writtenTime" jdbcType="TIMESTAMP" />
+
+		<result column="un_relation_reason" property="unRelationReason" />
+
+
+		<!-- 文书需要的东西 -->
+		<result column="certificate_no" property="certificateNo"
+			jdbcType="VARCHAR" />
+		<result column="person_type" property="personType" jdbcType="VARCHAR" />
+		<result column="police_realname" property="policeRealName"
+			jdbcType="VARCHAR" />
+		<result column="flog" property="flog" jdbcType="INTEGER" />
+		<result column="person_name" property="personName" />
+
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="nation" property="nation" jdbcType="VARCHAR" />
+		<result column="height" property="height" jdbcType="VARCHAR" />
+		<result column="weight" property="weight" jdbcType="VARCHAR" />
+		<result column="bodysize" property="bodysize" jdbcType="VARCHAR" />
+		<result column="faceShape" property="faceShape" jdbcType="VARCHAR" />
+		<result column="footsize" property="footsize" jdbcType="VARCHAR" />
+		<result column="caseName" property="caseName" jdbcType="VARCHAR" />
+
+		<result column="informationContent" property="informationContent"
+			jdbcType="VARCHAR" />
+		<result column="fomate" property="fomate" jdbcType="VARCHAR" />
+		<result column="extractTime" property="extractTime" jdbcType="VARCHAR" />
+		<result column="extractSites" property="extractSites" jdbcType="VARCHAR" />
+		<result column="extractMethod" property="extractMethod"
+			jdbcType="VARCHAR" />
+		<result column="vedioResouce" property="vedioResouce" jdbcType="VARCHAR" />
+		<result column="isOriginal" property="isOriginal" jdbcType="VARCHAR" />
+		<result column="reason" property="reason" jdbcType="VARCHAR" />
+		<result column="witnesses" property="witnesses" jdbcType="VARCHAR" />
+		<result column="saveSpace" property="saveSpace" jdbcType="VARCHAR" />
+		<result column="maker" property="maker" jdbcType="VARCHAR" />
+		<result column="policemen" property="policemen" jdbcType="VARCHAR" />
+		<result column="workspce" property="workspce" jdbcType="VARCHAR" />
+
+		<result column="rybh" property="rybh" jdbcType="VARCHAR" />
+		<result column="jzajbh" property="jzajbh" jdbcType="VARCHAR" />
+
+		<result column="caseNo" property="caseNo" jdbcType="VARCHAR" />
+
+		<result column="docInjuryisOriginal" property="docInjuryisOriginal"
+			jdbcType="VARCHAR" />
+		<result column="docInjurymakeSites" property="docInjurymakeSites"
+			jdbcType="VARCHAR" />
+		<result column="docInjurymakeTime" property="docInjurymakeTime"
+			jdbcType="VARCHAR" />
+		<result column="docInjurymaker" property="docInjurymaker"
+			jdbcType="VARCHAR" />
+		<result column="docInjuryrecordPerson" property="docInjuryrecordPerson"
+			jdbcType="VARCHAR" />
+		<result column="docInjurysaveSpace" property="docInjurysaveSpace"
+			jdbcType="VARCHAR" />
+		<result column="docInjurytheLord" property="docInjurytheLord"
+			jdbcType="VARCHAR" />
+		<result column="docInjurywitnesses" property="docInjurywitnesses"
+			jdbcType="VARCHAR" />
+		<result column="docInjuryworkspce" property="docInjuryworkspce"
+			jdbcType="VARCHAR" />
+		<result column="docInjurycontent" property="docInjurycontent"
+			jdbcType="VARCHAR" />
+
+
+		<result column="docSpaceisOriginal" property="docSpaceisOriginal"
+			jdbcType="VARCHAR" />
+		<result column="docSpacemakeSites" property="docSpacemakeSites"
+			jdbcType="VARCHAR" />
+		<result column="docSpacemakeTime" property="docSpacemakeTime"
+			jdbcType="VARCHAR" />
+		<result column="docSpacemaker" property="docSpacemaker"
+			jdbcType="VARCHAR" />
+		<result column="docSpacerecordPerson" property="docSpacerecordPerson"
+			jdbcType="VARCHAR" />
+		<result column="docSpacesaveSpace" property="docSpacesaveSpace"
+			jdbcType="VARCHAR" />
+		<result column="docSpacetheLord" property="docSpacetheLord"
+			jdbcType="VARCHAR" />
+		<result column="docSpacewitnesses" property="docSpacewitnesses"
+			jdbcType="VARCHAR" />
+		<result column="docSpaceworkspce" property="docSpaceworkspce"
+			jdbcType="VARCHAR" />
+		<result column="docSpacecontent" property="docSpacecontent"
+			jdbcType="VARCHAR" />
+		<result column="nickName" property="nickName" jdbcType="VARCHAR" />
+		<result column="tel" property="tel" jdbcType="VARCHAR" />
+		<result column="qq" property="qq" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="censusRegister" property="censusRegister"
+			jdbcType="VARCHAR" />
+		<result column="job" property="job" jdbcType="VARCHAR" />
+
+		<result column="phmakeAddress" property="phmakeAddress"
+			jdbcType="VARCHAR" />
+		<result column="phevidenceExplain" property="phevidenceExplain"
+			jdbcType="VARCHAR" />
+		<result column="phmakeAddress" property="phmakeAddress"
+			jdbcType="VARCHAR" />
+		<result column="phstorageAddress" property="phstorageAddress"
+			jdbcType="VARCHAR" />
+		<result column="phmakeTime" property="phmakeTime" jdbcType="VARCHAR" />
+		<result column="phchecks" property="phchecks" jdbcType="VARCHAR" />
+		<result column="phparty" property="phparty" jdbcType="VARCHAR" />
+		<result column="phproducer" property="phproducer" jdbcType="VARCHAR" />
+		<result column="phshootingPerson" property="phshootingPerson"
+			jdbcType="VARCHAR" />
+		<result column="phunit" property="phunit" jdbcType="VARCHAR" />
+		<result column="phwitnessPerson" property="phwitnessPerson"
+			jdbcType="VARCHAR" />
+
+		<result column="efdataContent" property="efdataContent"
+			jdbcType="VARCHAR" />
+		<result column="efevidtime" property="efevidtime" jdbcType="VARCHAR" />
+		<result column="efextractionAddress" property="efextractionAddress"
+			jdbcType="VARCHAR" />
+		<result column="efextractionMethod" property="efextractionMethod"
+			jdbcType="VARCHAR" />
+		<result column="efformat" property="efformat" jdbcType="VARCHAR" />
+		<result column="eforiginal" property="eforiginal" jdbcType="VARCHAR" />
+		<result column="eforiginalplace" property="eforiginalplace"
+			jdbcType="VARCHAR" />
+		<result column="efpoliceName" property="efpoliceName" jdbcType="VARCHAR" />
+		<result column="efproducer" property="efproducer" jdbcType="VARCHAR" />
+		<result column="efreason" property="efreason" jdbcType="VARCHAR" />
+		<result column="efunit" property="efunit" jdbcType="VARCHAR" />
+		<result column="efvideosource" property="efvideosource"
+			jdbcType="VARCHAR" />
+		<result column="efwitnessPerson" property="efwitnessPerson"
+			jdbcType="VARCHAR" />
+		<result column="interrogate_area_name" property="interrogateAreaName"
+				jdbcType="VARCHAR" />
+		<!--20190603-->
+		<result column="sendUserNo" property="sendUserNo" jdbcType="VARCHAR" />
+		<result column="sendUserRealName" property="sendUserRealName" jdbcType="VARCHAR" />
+		<!-- 20190712 -->
+        <result column="sfxxcj" property="sfxxcj" jdbcType="INTEGER" />
+        <!-- 20190821 -->
+        <result column="sfsyjd" property="sfsyjd" jdbcType="INTEGER" />
+        <!-- 20191001 -->
+         <result column="sftjcl" property="sftjcl" jdbcType="INTEGER" />
+         <result column="sfzdgl" property="sfzdgl" jdbcType="INTEGER" />
+		<!-- 20200604 -->
+		<result column="sx_date" property="sxDate" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<select id="list" resultMap="serialMap" parameterType="java.util.Map">
+		select ints.rybh,
+		ints.ajbh caseNo,ints.sfzdgl,
+		ints.un_relation_reason,
+		ints.uuid,ints.id,ints.serial_no,ints.`status`,ints.status_change_time,ints.confirm_time,ints.confirm_result,
+		ints.person_id,ints.person_info,p.`name`,p.sex,p.certificate_type_id,p.certificate_no,o.id orderId,
+		(select xc.code_value from xt_code xc where xc.type = 'ZJZLID' and xc.code_key = p.certificate_type_id) certificate_type_name ,
+		ints.type,ints.order_request_id,o.order_no,ints.area_id,
+		ia.`name` interrogate_area_name,ints.case_id,ic.ajmc interrogate_case_name,
+		ints.cuff_id,c.cuff_no,ints.in_photo_name,ints.rybh,
+		inuser1.id in_user_id1, inuser1.real_name in_user_real_name1,inuser1.certificate_no in_user_no1,
+		(select `name` from xt_organization o where o.id = senduser.organization_id) as organization,
+		ints.in_register_user_id,inregister.real_name in_register_user_real_name,
+		ints.in_time,ints.out_reason,ints.out_photo_name,ints.out_time,ints.out_type,
+		ic.ajlx case_type, ct.code_desc case_nature,ints.out_register_user_id,outregister.real_name
+		out_register_user_real_name,ints.entrance_procedure,ints.written_time,ints.send_user_id,senduser.certificate_no sendUserNo
+		,senduser.real_name sendUserRealName,ints.sfxxcj,ints.sfsyjd,ints.sftjcl
+		from ba_serial ints
+		left join ba_person p on ints.person_id=p.id
+		left join ba_order_request o on ints.order_request_id=o.id
+		left join ba_area ia on ints.area_id=ia.id
+		left join ba_case ic on ints.case_id=ic.id
+		left join xt_crime_define ct on ct.id=ic.ab
+		left join ba_cuff c on ints.cuff_id=c.id
+		left join xt_user inuser1 on ic.zbmj_id=inuser1.id
+		left join xt_user inregister on ints.in_register_user_id=inregister.id
+		left join xt_user outregister on ints.out_register_user_id=outregister.id
+		left join xt_user senduser on ints.send_user_id=senduser.id
+		where 1=1 and ints.type=0
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+		<if test="name!=null and name!=''">
+			and p.name like '%${name}%'
+		</if>
+		<if test="certificateNo!=null and certificateNo!=''">
+			and p.certificate_no like '%${certificateNo}%'
+		</if>
+		<if test="status!=null and status!=''">
+			and ints.status &lt;#{status}
+		</if>
+		<if test="start_date!=null and start_date!=''">
+			and ints.in_time &gt;=#{start_date}
+		</if>
+		<if test="end_date!=null and end_date!=''">
+			and ints.in_time &lt;=#{end_date}
+		</if>
+		<if test="caseId !=null and caseId !=''">
+			and ints.case_id = #{caseId}
+		</if>
+		<if test="areaId !=null and areaId !=''">
+			and ints.area_id = #{areaId}
+		</if>
+		<if test="caseType !=null and caseType !=''">
+			and ic.ajlx = #{caseType}
+		</if>
+		<if test="q_status !=null and q_status !=''">
+			and ints.status = #{q_status}
+		</if>
+		<if test="outTimeHistory !=null and outTimeHistory !=''">
+			and ints.out_time is not null
+		</if>
+		<if test="sfsyjd !=null and sfsyjd !=''">
+			and ints.sfsyjd = #{sfsyjd}
+		</if>
+		<if test="glaj !=null and glaj !=''">
+			<choose>
+				<when test="glaj == 0">
+					and ints.ajbh is not null and ints.rybh is not null and ints.ajbh != '' and ints.rybh != '' and left(ints.ajbh, 1) = 'A' and left(ints.rybh, 1) = 'R'
+				</when >
+				<when test="glaj == 1">
+					and (ISNULL(ints.ajbh) || LENGTH(trim(ints.rybh))&lt;1 || ISNULL(ints.rybh) || LENGTH(trim(ints.rybh))&lt;1 || left(ints.ajbh, 1) != 'A' || left(ints.rybh, 1) != 'R')
+				</when >
+			</choose>
+		</if>
+
+		order by ints.id desc
+		<if test="pageStart !=null and rows !=''">
+			limit ${pageStart},${rows}
+		</if>
+	</select>
+
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(*) from ba_serial ints
+		left join ba_person p on ints.person_id=p.id
+		left join ba_order_request o on ints.order_request_id=o.id
+		left join ba_area ia on ints.area_id=ia.id
+		left join ba_case ic on ints.case_id=ic.id
+		left join xt_crime_define ct on ct.id=ic.ab
+		left join ba_cuff c on ints.cuff_id=c.id
+		left join xt_user inuser1 on ic.zbmj_id=inuser1.id
+		left join xt_user inregister on ints.in_register_user_id=inregister.id
+		left join xt_user outregister on ints.out_register_user_id=outregister.id
+		where ints.type=0
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+		<if test="name!=null and name!=''">
+			and p.name like '%${name}%'
+		</if>
+		<if test="certificateNo!=null and certificateNo!=''">
+			and p.certificate_no like '%${certificateNo}%'
+		</if>
+		<if test="status!=null and status!=''">
+			and ints.status &lt;#{status}
+		</if>
+		<if test="start_date!=null and start_date!=''">
+			and ints.in_time &gt;=#{start_date}
+		</if>
+		<if test="end_date!=null and end_date!=''">
+			and ints.in_time &lt;=#{end_date}
+		</if>
+		<if test="caseId !=null and caseId !=''">
+			and ints.case_id = #{caseId}
+		</if>
+		<if test="areaId !=null and areaId !=''">
+			and ints.area_id = #{areaId}
+		</if>
+		<if test="q_status !=null and q_status !=''">
+			and ints.status = #{q_status}
+		</if>
+		<if test="caseType !=null and caseType !=''">
+			and ic.ajlx = #{caseType}
+		</if>
+		<if test="outTimeHistory !=null and outTimeHistory !=''">
+			and ints.out_time is not null
+		</if>
+		<if test="glaj !=null and glaj !=''">
+			<choose>
+				<when test="glaj == 0">
+					and ints.ajbh is not null and ints.rybh is not null and ints.ajbh != '' and ints.rybh != '' and  left(ints.ajbh, 1) = 'A' and left(ints.rybh, 1) = 'R'
+				</when >
+				<when test="glaj == 1">
+					and (ISNULL(ints.ajbh) || LENGTH(trim(ints.rybh))&lt;1 || ISNULL(ints.rybh) || LENGTH(trim(ints.rybh))&lt;1 || left(ints.ajbh, 1) != 'A' || left(ints.rybh, 1) != 'R')
+				</when >
+			</choose>
+		</if>
+
+	</select>
+
+	<select id="listJyOutTime" resultMap="serialMap" parameterType="java.util.Map">
+		select
+		ints.uuid,ints.id,ints.serial_no,ints.`status`,ints.status_change_time,ints.written_time,ints.confirm_time,ints.confirm_result,
+		ints.person_id,ints.person_info,p.`name`,p.sex,p.certificate_type_id,p.certificate_no,o.id orderId,
+		(select xc.code_value from xt_code xc where xc.type = 'ZJZLID' and xc.code_key = p.certificate_type_id) certificate_type_name ,
+		ints.type,ints.order_request_id,o.order_no,ints.area_id,
+		ia.`name` interrogate_area_name,ints.case_id,ic.ajmc interrogate_case_name,
+		ints.cuff_id,c.cuff_no,ints.in_photo_name,ints.rybh,
+		inuser1.id in_user_id1, inuser1.real_name in_user_real_name1,inuser1.certificate_no in_user_no1,
+		(select `name` from xt_organization o where o.id = senduser.organization_id) as organization,
+		ints.in_register_user_id,inregister.real_name in_register_user_real_name,
+		ints.in_time,ints.out_reason,ints.out_photo_name,ints.out_time,ints.out_type,
+		ic.ajlx case_type, ct.code_desc case_nature,ints.out_register_user_id,outregister.real_name
+		out_register_user_real_name,ints.entrance_procedure,ints.written_time,ints.send_user_id,senduser.certificate_no sendUserNo,senduser.real_name
+		from ba_serial ints
+		left join ba_person p on ints.person_id=p.id
+		left join ba_order_request o on ints.order_request_id=o.id
+		left join ba_area ia on ints.area_id=ia.id
+		left join ba_case ic on ints.case_id=ic.id
+		left join xt_crime_define ct on ct.id=ic.ab
+		left join ba_cuff c on ints.cuff_id=c.id
+		left join xt_user inuser1 on ic.zbmj_id=inuser1.id
+		left join xt_user inregister on ints.in_register_user_id=inregister.id
+		left join xt_user outregister on ints.out_register_user_id=outregister.id
+		left join xt_user senduser on ints.send_user_id=senduser.id
+		where 1=1 and ints.type=0 and (ints.written_time &lt;= DATE_ADD(NOW(),INTERVAL -23 hour)) and ints.`status` &lt;11
+		and (ints.confirm_time is null or ints.confirm_result =  '其他')
+		and ints.area_id = 1
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+
+		<if test="name!=null and name!=''">
+			and p.name like '%${name}%'
+		</if>
+		<if test="serialNo !=null and serialNo !=''">
+			and ints.serial_no = #{serialNo}
+		</if>
+		order by ints.id desc
+		<if test="pageStart !=null and rows !=''">
+			limit ${pageStart},${rows}
+		</if>
+	</select>
+
+
+	<select id="countJyOutTime" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(*) from ba_serial ints
+		left join ba_person p on ints.person_id=p.id
+		left join ba_order_request o on ints.order_request_id=o.id
+		left join ba_area ia on ints.area_id=ia.id
+		left join ba_case ic on ints.case_id=ic.id
+		left join xt_crime_define ct on ct.id=ic.ab
+		left join ba_cuff c on ints.cuff_id=c.id
+		left join xt_user inuser1 on ic.zbmj_id=inuser1.id
+		left join xt_user inregister on ints.in_register_user_id=inregister.id
+		left join xt_user outregister on ints.out_register_user_id=outregister.id
+		where ints.type=0 and (ints.written_time &lt;= DATE_ADD(NOW(),INTERVAL -23 hour)) and ints.`status` &lt;11
+		and (ints.confirm_time is null or ints.confirm_result =  '其他')
+		and ints.area_id = 1
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+		<if test="name!=null and name!=''">
+			and p.name like '%${name}%'
+		</if>
+		<if test="serialNo !=null and serialNo !=''">
+			and ints.serial_no = #{serialNo}
+		</if>
+
+	</select>
+
+	<select id="timeoutRecodelist" resultMap="serialMap" parameterType="java.util.Map">
+		select * from (select
+		ints.id,p.name,p.certificate_no,p.sex,o.name organization,
+		ints.in_time,u.real_name inUserRealName1,
+		(select r.start_time from ba_record r where r.serial_id = ints.id order by r.id limit 1) sx_date
+		from ba_serial ints
+		left join ba_person p on ints.person_id = p.id
+		left join xt_user u on ints.send_user_id = u.id
+		left join xt_organization o on u.organization_id = o.id
+		where ints.area_id=1
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+		) a
+		where 1=1
+		<if test="hour!=null and hour!=''">
+			AND TIMESTAMPDIFF(MINUTE,a.in_time,IFNULL(a.sx_date,now()))>${hour}*60
+		</if>
+		<if test="name!=null and name!=''">
+			AND a.name like '%${name}%'
+		</if>
+		<if test="startTime!=null and startTime!=''">
+			AND a.in_time &gt;= #{startTime}
+		</if>
+		<if test="endTime!=null and endTime!=''">
+			AND a.in_time &lt;= #{endTime}
+		</if>
+		order by a.id desc
+		<if test="pageStart !=null and rows !=''">
+			limit ${pageStart},${rows}
+		</if>
+	</select>
+
+	<select id="countTimeoutRecode" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(a.id) from (select
+		ints.id,p.name,p.certificate_no,p.sex,o.name orgName,
+		ints.in_time,
+		(select r.start_time from ba_record r where r.serial_id = ints.id order by r.id limit 1) sx_date
+		from ba_serial ints
+		left join ba_person p on ints.person_id = p.id
+		left join xt_user u on ints.send_user_id = u.id
+		left join xt_organization o on u.organization_id = o.id
+		where ints.area_id=1
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+		) a
+		where 1=1
+		<if test="hour!=null and hour!=''">
+			AND  TIMESTAMPDIFF(MINUTE,a.in_time,IFNULL(a.sx_date,now()))>${hour}*60
+		</if>
+		<if test="name!=null and name!=''">
+		AND a.name like '%${name}%'
+		</if>
+		<if test="startTime!=null and startTime!=''">
+			AND a.in_time &gt;= #{startTime}
+		</if>
+		<if test="endTime!=null and endTime!=''">
+			AND a.in_time &lt;= #{endTime}
+		</if>
+	</select>
+
+	<update id="updateStatusById" parameterType="java.util.Map">
+		update ba_serial
+		set `status` = #{status},status_change_time = now()
+		where id=#{id}
+	</update>
+
+	<update id="updateAppSerialById" parameterType="java.util.Map">
+		update ba_serial
+		set entrance_procedure = #{entranceProcedure},in_time = #{inTime}
+		where id=#{id}
+	</update>
+
+    <select id="queryStatusById" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(*) from ba_serial where `status` = 4 and id =#{serialId}
+    </select>
+
+	<update id="updateSerialById" parameterType="com.zhixin.zhfz.bacs.entity.SerialEntity">
+		update ba_serial
+		set
+		<if test="outPhotoId != null and outPhotoId != ''">
+			out_photo_name = #{outPhotoId},
+		</if>
+		<if test="outType != null and outType != ''">
+			out_type = #{outType},
+		</if>
+		<if test="confirmResult != null and confirmResult != ''">
+			confirm_result = #{confirmResult},
+		</if>
+		<if test="outReason != null and outReason != ''">
+			out_reason = #{outReason},
+		</if>
+		<if test="confirmTime != null and confirmTime != ''">
+			confirm_time = #{confirmTime},
+		</if>
+		<if test="outRegisterUserId != null and outRegisterUserId != ''">
+			out_register_user_id = #{outRegisterUserId},
+		</if>
+		<if test="status != null and status != ''">
+			out_register_user_id = #{outRegisterUserId},
+		</if>
+		status = #{status},status_change_time = now(),out_time = now()
+		where id=#{id}
+	</update>
+	<!--更新入区信息 -->
+	<update id="updateSerialById2" parameterType="com.zhixin.zhfz.bacs.entity.SerialEntity">
+		update ba_serial
+		 <set >
+		<if test="entranceProcedure != null and entranceProcedure != ''">
+			entrance_procedure = #{entranceProcedure},
+		</if>
+		<if test="writtenTime != null">
+			written_time = #{writtenTime},
+		</if>
+		<if test="sendUserId != null">
+			send_user_id = #{sendUserId},
+		</if>
+		<if test="orderId != null">
+			order_request_id = #{orderId},
+		</if>
+		<if test="personInfo != null">
+			person_info = #{personInfo},
+		</if>
+		<if test="jzajbh != null and jzajbh != ''">
+			jzajbh = #{jzajbh},
+		</if>
+		<if test="rybh != null and rybh != ''">
+			rybh = #{rybh},
+		</if>
+		<if test="sfxxcj != null">
+			sfxxcj = #{sfxxcj},
+		</if>
+		<if test="sfsyjd != null">
+			sfsyjd = #{sfsyjd},
+		</if>
+		<if test="sfzdgl != null">
+			sfzdgl = #{sfzdgl},
+		</if>
+
+		<if test="outReason != null and outReason != ''">
+			out_reason = #{outReason},
+		</if>
+		<if test="confirmResult != null and confirmResult != ''">
+			confirm_result = #{confirmResult},
+		</if>
+			 <!--<if test="hczt != null ">
+				 hczt = #{hczt},
+			 </if>-->
+			 ajbh = #{ajbh,jdbcType=VARCHAR},
+			 rybh = #{rybh,jdbcType=VARCHAR}
+		 </set>
+		where id=#{id}
+	</update>
+	<select id="getSerialByNo" resultMap="serialMap" parameterType="com.zhixin.zhfz.bacs.entity.SerialEntity">
+		SELECT
+		ints.*, p.`name`,
+		p.certificate_type_id certificate_type_id,
+		p.certificate_no certificate_no,
+		count(1) flog,
+		(
+		SELECT
+		c1.cuff_no
+		FROM
+		ba_cuff c1
+		WHERE
+		c1.id = ints.cuff_id
+		) cuff_no,
+		(
+		SELECT
+		c1.ic_no
+		FROM
+		ba_cuff c1
+		WHERE
+		c1.id = ints.cuff_id
+		) ic_no
+		FROM
+		ba_serial ints
+		LEFT JOIN ba_person p ON ints.person_id = p.id
+		WHERE
+		ints.serial_no = #{serialNo,jdbcType=BIGINT}
+	</select>
+
+	<select id="getSerialByNo1" resultMap="serialMap" parameterType="com.zhixin.zhfz.bacs.entity.SerialEntity">
+		SELECT
+		ints.*, p.`name`,
+		p.certificate_type_id certificate_type_id,
+		p.certificate_no certificate_no,
+		count(1) flog,
+		(
+		SELECT
+		c1.cuff_no
+		FROM
+		ba_cuff c1
+		WHERE
+		c1.id = ints.cuff_id
+		) cuff_no,
+		(
+		SELECT
+		c1.ic_no
+		FROM
+		ba_cuff c1
+		WHERE
+		c1.id = ints.cuff_id
+		) ic_no
+		FROM
+		ba_serial ints
+		LEFT JOIN ba_person p ON ints.person_id = p.id
+		WHERE
+		ints.id = #{id,jdbcType=BIGINT}
+	</select>
+
+
+	<select id="queryJzList" resultType="java.util.Map" parameterType="java.util.Map">
+
+		 select * from person_temp t,ajxx_temp a where t.ajbh = a.ajbh and t.rybh = #{jzrybh}
+	</select>
+
+
+	<select id="getSerialById" resultMap="serialMap" parameterType="com.zhixin.zhfz.bacs.entity.SerialEntity">
+       SELECT
+        ints.id,
+        ints.serial_no,
+        ints.`status`,
+        ints.status_change_time,
+        ints.uuid,
+        ints.person_id,
+        p.`name`,
+        p.sex,
+        p.certificate_type_id certificate_type_id,
+        ct.code_value certificate_type_name,
+        p.certificate_no certificate_no,
+        ints.type,
+        ints.order_request_id,
+        ints.area_id,
+        ia.`name` interrogate_area_name,
+        ints.case_id,
+        ic.ajmc interrogate_case_name,
+        ints.cuff_id,
+        ints.in_photo_name,
+        xo.name AS organization,
+        ints.in_register_user_id,
+        ints.in_time,
+        ints.out_reason,
+        ints.out_photo_name,
+        ints.out_time,
+        ints.out_type,
+        ints.out_register_user_id,
+        outregister.real_name out_register_user_real_name,
+        cu.cuff_no cuff_no
+    FROM
+        ba_serial ints
+
+    LEFT JOIN ba_person p ON ints.person_id = p.id
+    LEFT JOIN xt_code ct ON p.certificate_type_id = ct.code_key and ct.type = 'ZJZLID'
+    LEFT JOIN ba_area ia ON ints.area_id = ia.id
+    LEFT JOIN ba_case ic ON ints.case_id = ic.id
+    LEFT JOIN ba_cuff cu ON ints.cuff_id = cu.id
+    LEFT JOIN xt_user inregister ON ints.in_register_user_id = inregister.id
+    LEFT JOIN xt_user outregister ON ints.out_register_user_id = outregister.id
+	LEFT JOIN xt_user zbu on ic.zbmj_id = zbu.id
+    LEFT join xt_organization xo on xo.id = zbu.organization_id
+    WHERE
+	ints.id = #{id,jdbcType=BIGINT}
+    </select>
+
+
+	<update id="changestatus" parameterType="com.zhixin.zhfz.bacs.entity.SerialEntity">
+
+		update ba_serial set
+		`status` =
+		#{status,jdbcType=INTEGER},status_change_time = now()
+		where id =
+		#{id,jdbcType=BIGINT}
+	</update>
+    <select id="getSerialByCuffNo" resultMap="serialMap" parameterType="java.util.Map">
+		select * from (
+		select ints.person_id ,ints.id,ints.serial_no,cf.cuff_no,ints.status,ints.case_id,
+		ints.area_id as iarea_id,ints.op_pid as insPid,cf.op_pid as cfPid,cf.area_id as careaId,cf.op_user_id as op_user_id,cf.user_id as user_id,
+		ints.send_user_id as send_user_id , ints.out_register_user_id as out_register_user_id, ints.in_register_user_id as in_register_user_id,bp.name as personName
+		from
+		ba_serial ints
+		left join ba_cuff cf on ints.cuff_id=cf.id
+		left join ba_person bp on bp.id = ints.person_id
+		where ints.type=0 and ints.status &lt;= 9
+		and cf.status=1 ) c
+		where  c.cuff_no=#{cuffNo}
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+		order by c.id desc
+	</select>
+	<select id="queryBySid" resultMap="serialMap" parameterType="java.lang.Long">
+		select
+		ins.*,ina.name as interrogate_area_name,bc.zbmj_id As inUserId1,bp.name personName,bp.certificate_no
+		from ba_serial ins
+		left join ba_area ina on ina.id = ins.area_id
+		left join ba_case bc on ins.case_id = bc.id
+		left join ba_person bp ON bp.id= ins.person_id
+		where ins.id=#{sid}
+	</select>
+	
+	<insert id="insert" parameterType="com.zhixin.zhfz.bacs.entity.SerialEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into ba_serial
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="serialNo != null">
+				serial_no,
+			</if>
+			<if test="uuid != null">
+				uuid,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			status_change_time,
+			<if test="personId != null">
+				person_id,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="personInfo != null">
+				person_info,
+			</if>
+			<if test="orderId != null">
+				order_request_id,
+			</if>
+			<if test="areaId != null">
+				area_id,
+			</if>
+			<if test="caseId != null">
+				case_id,
+			</if>
+			<if test="cuffId != null">
+				cuff_id,
+			</if>						
+			<if test="inPhotoId != null">
+				in_photo_name,
+			</if>			
+			<if test="inRegisterUserId != null">
+				in_register_user_id,
+			</if>
+			in_time,
+			<if test="outReason != null">
+				out_reason,
+			</if>
+			<if test="outPhotoId != null">
+				out_photo_name,
+			</if>
+			<if test="outTime != null">
+				out_time,
+			</if>
+			<if test="outType != null">
+				out_type,
+			</if>
+			<if test="outRegisterUserId != null">
+				out_register_user_id,
+			</if>			
+			<if test="entranceProcedure != null">
+				entrance_procedure,
+			</if>
+
+			<if test="writtenTime != null">
+				written_time,
+			</if>
+			<if test="sendUserId != null">
+				send_user_id,
+			</if>
+			<if test="opPid != null">
+				op_pid,
+			</if>
+			<if test="ajbh != null">
+				ajbh,
+			</if>
+			<if test="rybh != null">
+				rybh,
+			</if>
+			<if test="sfzdgl != null">
+				sfzdgl,
+			</if>
+			<if test="sfxxcj != null">
+				sfxxcj
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="serialNo != null">
+				#{serialNo,jdbcType=VARCHAR},
+			</if>
+			<if test="uuid != null">
+				#{uuid,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=VARCHAR},
+			</if>
+			<choose>
+				<when test="inTime != null and inTime != ''">
+					#{inTime,jdbcType=TIMESTAMP},
+				</when>
+				<otherwise>
+					now(),
+				</otherwise>
+			</choose>
+			<if test="personId != null">
+				#{personId,jdbcType=BIGINT},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=INTEGER},
+			</if>
+			<if test="personInfo != null">
+				#{personInfo,jdbcType=VARCHAR},
+			</if>
+			<if test="orderId != null">
+				#{orderId,jdbcType=INTEGER},
+			</if>
+			<if test="areaId != null">
+				#{areaId,jdbcType=INTEGER},
+			</if>
+			<if test="caseId != null">
+				#{caseId,jdbcType=INTEGER},
+			</if>
+			<if test="cuffId != null">
+				#{cuffId,jdbcType=INTEGER},
+			</if>			
+			<if test="inPhotoId != null">
+				#{inPhotoId,jdbcType=VARCHAR},
+			</if>			
+			<if test="inRegisterUserId != null">
+				#{inRegisterUserId,jdbcType=INTEGER},
+			</if>
+			now(),
+			<if test="outReason != null">
+				#{outReason,jdbcType=VARCHAR},
+			</if>
+			<if test="outPhotoId != null">
+				#{outPhotoId,jdbcType=VARCHAR},
+			</if>
+			<if test="outTime != null">
+				#{outTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="outType != null">
+				#{outType,jdbcType=INTEGER},
+			</if>
+			<if test="outRegisterUserId != null">
+				#{outRegisterUserId,jdbcType=INTEGER},
+			</if>			
+			<if test="entranceProcedure != null">
+				#{entranceProcedure,jdbcType=VARCHAR},
+			</if>
+			<if test="writtenTime != null">
+				#{writtenTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="sendUserId != null">
+				#{sendUserId,jdbcType=INTEGER},
+			</if>
+			<if test="opPid != null">
+				#{opPid,jdbcType=VARCHAR},
+			</if>
+			<if test="ajbh != null">
+				#{ajbh},
+			</if>
+			<if test="rybh != null">
+				#{rybh},
+			</if>
+			<if test="sfzdgl != null">
+				#{sfzdgl},
+			</if>
+			<if test="sfxxcj != null">
+				#{sfxxcj}
+			</if>
+		</trim>
+	</insert>
+	
+	<select id="findserialbyNo" parameterType="String" resultType="com.zhixin.zhfz.bacs.entity.SerialEntity">
+		  SELECT * FROM ba_serial where serial_no = #{no}
+	</select>
+	
+	<select id="getSerialById2" resultMap="serialMap" parameterType="com.zhixin.zhfz.bacs.entity.SerialEntity">
+		  SELECT * FROM ba_serial 
+		  where 1=1
+		  <if test="id != null">
+		  	and id = #{id}
+		  </if>		  
+	</select>	
+
+	<select id="getIdentifyPersonList" resultMap="serialMap" parameterType="java.util.Map">
+		SELECT
+		s.case_id,
+		s.id serialId,
+		s.person_id,
+		s.area_id,
+		p.`name` personName,
+		p.certificate_no
+		FROM
+		ba_serial s LEFT JOIN ba_person p on s.person_id = p.id
+		LEFT JOIN ba_case c ON s.case_id = c.id
+		WHERE
+		p.id = s.person_id
+		AND s.`status` &lt; 11
+		<if test="areaId!=null and areaId!=''">
+			AND s.area_id = #{areaId}
+		</if>
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+	</select>
+
+	<select id="getPersonnelList" resultMap="serialMap" parameterType="java.util.Map">
+		SELECT
+		c.ajmc caseName,
+		p.`name` personName,
+		p.certificate_no,
+		p.census_register
+		FROM
+		ba_serial s,
+		ba_case c,
+		ba_person p
+		WHERE
+		s.case_id = c.id
+		AND s.person_id = p.id
+		AND s.`status` &lt; 11
+		<if test="areaId!=null and areaId!=''">
+			AND s.area_id = #{areaId}
+		</if>
+		<if test = "personName !='' and personName != null">
+			AND p.`name` like '%${personName}%'
+		</if>
+		<if test= "certificateNo !='' and certificateNo != null">
+			AND p.certificate_no like '%certificateNo%'
+		</if>
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+		limit ${pageStart},${rows}
+	</select>
+
+	<select id="getPersonnelListCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+		SELECT
+		count(1)
+		FROM
+		ba_serial s,
+		ba_case c,
+		ba_person p
+		WHERE
+		s.case_id = c.id
+		AND s.person_id = p.id
+		AND s.`status` &lt; 11
+		AND s.area_id = #{areaId}
+		<if test = "personName !='' and personName != null">
+			AND p.`name` like '%${personName}%'
+		</if>
+		<if test= "certificateNo !='' and certificateNo != null">
+			AND p.certificate_no like '%certificateNo%'
+		</if>
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+	</select>
+
+	<select id="getCaseIdByOrderId" resultMap="serialMap"
+			parameterType="java.lang.Integer">
+		select * from ba_serial where
+		order_request_id=#{orderId} and
+		case_id is not null
+	</select>
+	
+	<select id="otherPersonList" resultMap="serialMap" parameterType="java.util.Map">
+		select ia.*,pe.`name` personName,pe.sex,pe.certificate_no,area.`name` areaName,
+       	ca.ajmc,ca.ajbh,ca.ajlx,cd.code_desc caseNature,cu.cuff_no,cu.`status` cuffStatus,cu.type cuffType
+		from ba_serial ia
+		left join ba_person pe on pe.id = ia.person_id
+		left join ba_area area on area.id = ia.area_id
+		left join ba_case ca on ca.id = ia.case_id
+		left join xt_crime_define cd on cd.id = ca.ab
+		left join ba_cuff cu on cu.id = ia.cuff_id 
+		where ia.type != 0
+		<if test="areaId !=null and areaId!=''">
+			and ia.area_id = #{areaId}
+		</if>
+         <if test="personName !=null and personName!=''">
+			and pe.name like "%${personName}%"
+		 </if>
+		 <if test="certificateNo!=null and certificateNo!=''">
+			and pe.certificate_no like "%${certificateNo}%"
+		 </if>
+		 <if test="startDate!=null and startDate!=''">
+			and ia.in_time &gt;=#{startDate}
+		</if>
+		<if test="endDate!=null and endDate!=''">
+			and ia.in_time &lt;=#{endDate}
+		</if>
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+      <if test="pageStart != null and rows != null">
+            limit ${pageStart},${rows}
+       </if>    
+	</select>
+	
+	<select id="otherPersonCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(*)
+		from ba_serial ia
+		left join ba_person pe on pe.id = ia.person_id
+		left join ba_area area on area.id = ia.area_id
+		left join ba_case ca on ca.id = ia.case_id
+		left join xt_crime_define cd on cd.id = ca.ab
+		left join ba_cuff cu on cu.id = ia.cuff_id  
+		where ia.type != 0
+		<if test="areaId !=null and areaId!=''">
+			and ia.area_id = #{areaId}
+		</if>
+        <if test="personName !=null and personName!=''">
+			and pe.name like "%${personName}%"
+		 </if>
+		 <if test="certificateNo!=null and certificateNo!=''">
+			and pe.certificate_no like "%${certificateNo}%"
+		 </if>
+		 <if test="startDate!=null and startDate!=''">
+			and ia.in_time &gt;=#{startDate}
+		</if>
+		<if test="endDate!=null and endDate!=''">
+			and ia.in_time &lt;=#{endDate}
+		</if>
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+	</select>
+	
+	<select id="otherPersonList2" resultMap="serialMap" parameterType="java.util.Map">
+		select ia.*,pe.`name` personName,pe.sex,pe.certificate_no,area.`name` areaName,
+       	ca.ajmc,ca.ajbh,ca.ajlx,cd.code_desc caseNature,cu.cuff_no,cu.`status` cuffStatus,cu.type cuffType
+		from ba_serial ia
+		left join ba_person pe on pe.id = ia.person_id
+		left join ba_area area on area.id = ia.area_id
+		left join ba_case ca on ca.id = ia.case_id
+		left join xt_crime_define cd on cd.id = ca.ab
+		left join ba_cuff cu on cu.id = ia.cuff_id 
+		where ia.out_time is null  and ia.type != 0
+		<if test="areaId !=null and areaId!=''">
+			and ia.area_id = #{areaId}
+		</if>
+         <if test="personName !=null and personName!=''">
+			and pe.name like "%${personName}%"
+		 </if>
+		 <if test="certificateNo!=null and certificateNo!=''">
+			and pe.certificate_no like "%${certificateNo}%"
+		 </if>
+		 <if test="startDate!=null and startDate!=''">
+			and ia.in_time &gt;=#{startDate}
+		</if>
+		<if test="endDate!=null and endDate!=''">
+			and ia.in_time &lt;=#{endDate}
+		</if>
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+      <if test="pageStart != null and rows != null">
+            limit ${pageStart},${rows}
+       </if>    
+	</select>
+	
+	<select id="otherPersonCount2" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(*)
+		from ba_serial ia
+		left join ba_person pe on pe.id = ia.person_id
+		left join ba_area area on area.id = ia.area_id
+		left join ba_case ca on ca.id = ia.case_id
+		left join xt_crime_define cd on cd.id = ca.ab
+		left join ba_cuff cu on cu.id = ia.cuff_id  
+		where ia.out_time is null  and ia.type != 0
+		<if test="areaId !=null and areaId!=''">
+			and ia.area_id = #{areaId}
+		</if>
+        <if test="personName !=null and personName!=''">
+			and pe.name like "%${personName}%"
+		 </if>
+		 <if test="certificateNo!=null and certificateNo!=''">
+			and pe.certificate_no like "%${certificateNo}%"
+		 </if>
+		 <if test="startDate!=null and startDate!=''">
+			and ia.in_time &gt;=#{startDate}
+		</if>
+		<if test="endDate!=null and endDate!=''">
+			and ia.in_time &lt;=#{endDate}
+		</if>
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+	</select>
+	<!--尿检照片上传获取serial -->
+	<select id="selectByUrinalysisPhotoId" resultMap="serialMap" parameterType="java.lang.Integer">
+		select bs.* from  ba_serial bs
+		left join ba_urinalysis bu on bu.serial_id = bs.id
+		where bu.id = #{urinalysisId}
+	</select>
+
+
+	<!--文书sql-->
+	<select id="listAllLawDoc" resultMap="serialMap"  parameterType="java.util.Map">
+		select bs.id,
+		bs.uuid,
+		bs.area_id,
+		bs.type,
+		p.certificate_no,
+		p.`name` person_name,
+		inregister.real_name in_register_user_real_name ,
+		bc.ajmc case_name ,
+		(select ct.code_desc  from xt_crime_define ct where ct.id = bc.ab) involved_reason,
+		bc.ajlx case_type,
+		p.id AS personId,
+		bs.serial_no AS serialNo
+		from ba_serial bs
+		left
+		join ba_person p on bs.person_id = p.id
+		left join xt_code tc on
+		p.certificate_type_id=tc.code_key and tc.type = 'ZJZLID'
+		left join ba_area ia on
+		bs.area_id=ia.id
+		left join ba_case bc on
+		bs.case_id=bc.id
+		left join ba_cuff c on bs.cuff_id=c.id
+		left join xt_user inregister on bs.in_register_user_id = inregister.id
+		left join xt_user outregister on bs.out_register_user_id = outregister.id
+		where bs.type=0
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+		<if test="personName != null and personName !=''">
+			and p.name like '%${personName}%'
+		</if>
+		<if test="certificateNo != null and certificateNo !=''">
+			and p.certificate_no like '%${certificateNo}%'
+		</if>
+		<if test="areaId != null and areaId != ''">
+			and bs.area_id = #{areaId}
+		</if>
+		ORDER BY bs.in_time desc
+		limit ${pageStart},${rows}
+	</select>
+
+	<select id="countAllLawDoc" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from ba_serial bs
+		left join ba_person p on bs.person_id = p.id
+		left join xt_code tc on
+		p.certificate_type_id=tc.code_key and tc.type = 'ZJZLID'
+		left join ba_area ia on
+		bs.area_id=ia.id
+		left join ba_case bc on
+		bs.case_id=bc.id
+		left join ba_cuff c on bs.cuff_id=c.id
+		left join xt_user inregister on bs.in_register_user_id = inregister.id
+		left join xt_user outregister on bs.out_register_user_id = outregister.id
+		where bs.type=0
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+		<if test="personName != null and personName !=''">
+			and p.name like '%${personName}%'
+		</if>
+		<if test="certificateNo != null and certificateNo !=''">
+			and p.certificate_no like '%${certificateNo}%'
+		</if>
+		<if test="areaId != null and areaId != ''">
+			and bs.area_id = #{areaId}
+		</if>
+	</select>
+
+	<select id="outGetSerialByNo" resultMap="serialMap"  parameterType="com.zhixin.zhfz.bacs.entity.SerialEntity">
+		select ints.id,ia.`name`
+		interrogate_area_name,p.`name`,
+		xc.code_value sexName,
+		p.sex,
+		p.birth,ic.ajlx
+		case_type,
+		(select code_desc from xt_crime_define WHERE id= ic.ab) involved_reason,
+		ints.in_time,ints.person_id,ints.entrance_procedure,
+		ic.ajmc AS caseName,
+		ints.out_time,ints.out_reason,p.certificate_type_id
+		certificate_type_id,p.certificate_no certificate_no
+		from
+		ba_serial ints
+		left join ba_person p on ints.person_id=p.id
+		left join xt_code ct on p.certificate_type_id = ct.code_key and ct.type = 'ZJZLID'
+		left join
+		ba_area ia on ints.area_id=ia.id
+		left join
+		ba_case ic on ints.case_id=ic.id
+		left join xt_code xc on xc.code_key = p.sex and xc.type = 'XBID'
+		where
+		ints.serial_no = #{serialNo,jdbcType=BIGINT}
+	</select>
+
+	<select id="GetSerialDetailInfoById" resultMap="serialMap" parameterType="java.lang.Long">
+		SELECT
+			p.job AS job,
+			p.census_register AS censusRegister,
+			p.nickname AS nickName,
+			p.telephone AS tel,
+			p.mobile AS mobile,
+			p.email AS email,
+			p.qq AS qq,
+			a.person_id AS personId,
+			p. NAME AS personName,
+			p.sex AS sex,
+			p.address AS address,
+			p.birth AS birth,
+			p.certificate_no AS certificateNo,
+			p.nation AS nation,
+			c.height AS height,
+			c.weight AS weight,
+			c.bodysize AS bodysize,
+			c.face_shape AS faceShape,
+			c.footsize AS footsize,
+			dp.ear AS ear,
+			dp.eye AS eye,
+			dp.eye_brow AS eyeBrow,
+			dp.form_time AS formTime,
+			dp.hair_type AS hairType,
+			dp.nose AS nose,
+			dp.other_features AS otherFeature,
+			dp.physiological_markers AS physiologicalMarkers,
+			dp.preparer AS preparer,
+			dp.remark AS remark,
+			dp.skin_color AS skinColor,
+			dp.tooth AS tooth,
+			inc.ajlx AS `caseType`,
+			dv.information_content AS informationContent,
+			dv.fomate AS fomate,
+			dv.extract_time AS extractTime,
+			dv.extract_sites AS extractSites,
+			dv.extract_method AS extractMethod,
+			dv.vedio_resouce AS vedioResouce,
+			dv.is_original AS isOriginal,
+			dv.reason AS reason,
+			dv.witnesses AS witnesses,
+			dv.save_space AS saveSpace,
+			dv.maker AS maker,
+			dv.policemen AS policemen,
+			dv.workspce AS workspce,
+			inc.ajmc AS caseName,
+			di.is_original AS docInjuryisOriginal,
+			di.make_sites AS docInjurymakeSites,
+			di.make_time AS `docInjurymakeTime`,
+			di.maker AS docInjurymaker,
+			di.record_person AS docInjuryrecordPerson,
+			di.save_space AS docInjurysaveSpace,
+			di.The_Lord AS docInjurytheLord,
+			di.witnesses AS docInjurywitnesses,
+			di.workspce AS docInjuryworkspce,
+			di.content AS docInjurycontent,
+			dc.is_original AS docSpaceisOriginal,
+			dc.make_sites AS docSpacemakeSites,
+			dc.make_time AS `docSpacemakeTime`,
+			dc.maker AS docSpacemaker,
+			dc.record_person AS docSpacerecordPerson,
+			dc.save_space AS docSpacesaveSpace,
+			dc.The_Lord AS docSpacetheLord,
+			dc.witnesses AS docSpacewitnesses,
+			dc.workspce AS docSpaceworkspce,
+			dc.content AS docSpacecontent,
+			ph.make_address AS phmakeAddress,
+			ph.storage_address AS phstorageAddress,
+			ph.evidence_explain AS phevidenceExplain,
+			ph.make_time AS phmakeTime,
+			ph.checks AS phchecks,
+			ph.party AS phparty,
+			ph.producer AS phproducer,
+			ph.shooting_person AS phshootingPerson,
+			ph.unit AS phunit,
+			ph.witness_person AS phwitnessPerson,
+			ef.data_content AS efdataContent,
+			ef.evidtime AS efevidtime,
+			ef.extraction_address AS efextractionAddress,
+			ef.extraction_method AS efextractionMethod,
+			ef.format AS efformat,
+			ef.original AS eforiginal,
+			ef.originalplace AS eforiginalplace,
+			ef.police_name AS efpoliceName,
+			ef.producer AS efproducer,
+			ef.reason AS efreason,
+			ef.unit AS efunit,
+			ef.videosource AS efvideosource,
+			ef.witness_person AS efwitnessPerson
+		FROM
+			ba_serial a
+		LEFT JOIN ba_case inc ON inc.id = a.case_id
+		LEFT JOIN ba_person p ON a.person_id = p.id
+		LEFT JOIN ba_check_body c ON c.interrogate_serial_id = a.id
+		LEFT JOIN ba_doc_physicaltraits dp ON dp.serial_id = a.id
+		LEFT JOIN ba_doc_video_instruction dv ON dv.serial_id = a.id
+		LEFT JOIN ba_doc_injurypicture_instruction di ON di.serial_id = a.id
+		LEFT JOIN ba_doc_casespace_instruction dc ON dc.serial_id = a.id
+		LEFT JOIN ba_doc_photo_evidence ph ON ph.serial_id = a.id
+		LEFT JOIN ba_doc_enforcement_video ef ON ef.serial_id = a.id
+		WHERE
+			a.id = #{id}
+	</select>
+
+	<select id="GetSerialInfoByNo" resultMap="serialMap" parameterType="com.zhixin.zhfz.bacs.entity.SerialEntity">
+        SELECT
+			a.id,
+			a.person_id,
+			ic.ajmc AS caseName
+		FROM
+			ba_serial a
+		LEFT JOIN ba_case ic ON a.case_id = ic.id
+		WHERE
+			a.serial_no = #{serialNo,jdbcType=VARCHAR}
+	</select>
+
+	<select id="inGetSerialByNo" resultMap="serialMap" parameterType="com.zhixin.zhfz.bacs.entity.SerialEntity">
+		SELECT
+			ints.id,
+			ints.uuid,
+			ints.area_id,
+			ia.`name` interrogate_area_name,
+			ints.serial_no,
+			ints.in_time,ints.written_time,
+			p.`name`,
+			ct.`code_value` certificate_type_name,
+			p.certificate_no,
+			ints.in_photo_name,
+			xu.certificate_no sendUserNo,
+			xu.real_name sendUserRealName,
+			xu.mobile,org.`name` organization
+		FROM
+			ba_serial ints
+		LEFT JOIN ba_person p ON ints.person_id = p.id
+		LEFT JOIN xt_code ct on p.certificate_type_id = ct.code_key and ct.type = 'ZJZLID'
+		LEFT JOIN ba_area ia ON ints.area_id = ia.id
+		LEFT JOIN ba_case ic ON ints.case_id = ic.id
+		LEFT JOIN ba_cuff c ON ints.cuff_id = c.id
+		LEFT JOIN xt_user xu ON ints.send_user_id = xu.id
+		left join xt_organization org on org.id = xu.organization_id
+		WHERE
+			ints.serial_no = #{serialNo,jdbcType=BIGINT}
+		AND ct.type = 'ZJZLID'
+	</select>
+
+
+	<update id="exit" parameterType="com.zhixin.zhfz.bacs.entity.SerialEntity">
+		update ba_serial
+		<set>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="outReason != null">
+				out_reason = #{outReason,jdbcType=VARCHAR},
+			</if>
+			<if test="outPhotoId != null">
+				out_photo_name = #{outPhotoId,jdbcType=VARCHAR},
+			</if>
+			out_time = now(),
+			<if test="outType != null">
+				out_type = #{outType,jdbcType=INTEGER},
+			</if>
+			<if test="outRegisterUserId != null">
+				out_register_user_id =
+				#{outRegisterUserId,jdbcType=INTEGER},
+			</if>
+			<if test="confirmResult != null and confirmResult !=''">
+				confirm_result = #{confirmResult,jdbcType=VARCHAR},
+				confirm_time = now(),
+			</if>
+			<if test="unRelationReason != null">
+				un_relation_reason = #{unRelationReason,jdbcType=VARCHAR},
+			</if>
+			<if test="ajbh != null and ajbh != ''">
+				ajbh = #{ajbh,jdbcType=VARCHAR},
+			</if>
+			<if test="jzrybh != null and jzrybh != ''">
+				rybh = #{jzrybh,jdbcType=VARCHAR},
+			</if>
+			<if test="sfzdgl != null and sfzdgl != ''">
+				sfzdgl = #{sfzdgl,jdbcType=INTEGER},
+			</if>
+			<if test="sfsyjd != null and sfsyjd !=''">
+				sfsyjd = #{sfsyjd,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="confirm" parameterType="com.zhixin.zhfz.bacs.entity.SerialEntity">
+		update ba_serial
+		set
+		confirm_time = now(), confirm_result = #{confirmResult,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="suspectlist" resultMap="serialMap" parameterType="java.util.Map">
+		select  ints.rybh,
+		ints.ajbh caseNo,
+		ints.uuid,ints.id,ints.serial_no,ints.`status`,ints.status_change_time,ints.confirm_time,ints.confirm_result,
+		ints.person_id,ints.person_info,p.`name`,p.sex,p.certificate_type_id,p.certificate_no,
+		(select xc.code_value from xt_code xc where xc.type = 'ZJZLID' and xc.code_key = p.certificate_type_id) certificate_type_name ,
+		ints.type,ints.order_request_id,o.order_no,ints.area_id,
+		ia.`name` interrogate_area_name,ints.case_id,ic.ajmc interrogate_case_name,
+		ints.cuff_id,c.cuff_no,ints.in_photo_name,
+		inuser1.id in_user_id1, inuser1.real_name in_user_real_name1,inuser1.certificate_no in_user_no1,
+		(select `name` from xt_organization o where o.id = inuser1.organization_id) as organization,
+		ints.in_register_user_id,inregister.real_name in_register_user_real_name,
+		ints.in_time,ints.out_reason,ints.out_photo_name,ints.out_time,ints.out_type,
+		ic.ajlx case_type, ct.code_desc case_nature,ints.out_register_user_id,outregister.real_name
+		out_register_user_real_name,ints.entrance_procedure,ints.written_time
+		from ba_serial ints
+		left join ba_person p on ints.person_id=p.id
+		left join ba_order_request o on ints.order_request_id=o.id
+		left join ba_area ia on ints.area_id=ia.id
+		left join ba_case ic on ints.case_id=ic.id
+		left join xt_crime_define ct on ct.id=ic.ab
+		left join ba_cuff c on ints.cuff_id=c.id
+		left join xt_user inuser1 on ic.zbmj_id=inuser1.id
+		left join xt_user inregister on ints.in_register_user_id=inregister.id
+		left join xt_user outregister on ints.out_register_user_id=outregister.id
+		where 1=1 and ints.type=0
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+		<if test="name!=null and name!=''">
+			and p.name like '%${name}%'
+		</if>
+		<if test="certificateNo!=null and certificateNo!=''">
+			and p.certificate_no like '%${certificateNo}%'
+		</if>
+		<if test="status!=null and status!=''">
+			and ints.status &lt;#{status}
+		</if>
+		<if test="start_date!=null and start_date!=''">
+			and ints.in_time &gt;=#{start_date}
+		</if>
+		<if test="end_date!=null and end_date!=''">
+			and ints.in_time &lt;=#{end_date}
+		</if>
+		<if test="caseId !=null and caseId !=''">
+			and ints.case_id = #{caseId}
+		</if>
+		<if test="serialNo!=null and serialNo!=''">
+			and ints.serial_no  = #{serialNo}
+		</if>
+		<if test="areaId !=null and areaId !=''">
+			and ints.area_id = #{areaId}
+		</if>
+		order by ints.id desc
+		<if test="pageStart != null and rows != null">
+			limit ${pageStart},${rows}
+		</if>
+	</select>
+	<select id="suspectcount" resultType="java.lang.Integer"
+			parameterType="java.util.Map">
+		select count(*) from ba_serial ints
+		left join ba_person p on ints.person_id=p.id
+		left join ba_order_request o on ints.order_request_id=o.id
+		left join ba_area ia on ints.area_id=ia.id
+		left join ba_case ic on ints.case_id=ic.id
+		left join xt_crime_define ct on ct.id=ic.ab
+		left join ba_cuff c on ints.cuff_id=c.id
+		left join xt_user inuser1 on ic.zbmj_id=inuser1.id
+		left join xt_user inregister on ints.in_register_user_id=inregister.id
+		left join xt_user outregister on ints.out_register_user_id=outregister.id
+		where ints.type=0
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+		<if test="name!=null and name!=''">
+			and p.name like '%${name}%'
+		</if>
+		<if test="certificateNo!=null and certificateNo!=''">
+			and p.certificate_no like '%${certificateNo}%'
+		</if>
+		<if test="status!=null and status!=''">
+			and ints.status &lt;#{status}
+		</if>
+		<if test="start_date!=null and start_date!=''">
+			and ints.in_time &gt;=#{start_date}
+		</if>
+		<if test="end_date!=null and end_date!=''">
+			and ints.in_time &lt;=#{end_date}
+		</if>
+		<if test="caseId !=null and caseId !=''">
+			and ints.case_id = #{caseId}
+		</if>
+		<if test="areaId !=null and areaId !=''">
+			and ints.area_id = #{areaId}
+		</if>
+	</select>
+    <select id="otherlist" resultMap="serialMap" parameterType="java.util.Map">
+        select
+        ints.uuid,ints.id,ints.serial_no,ints.`status`,ints.status_change_time,ints.confirm_time,ints.confirm_result,
+        ints.person_id,ints.person_info,p.`name`,p.sex,p.certificate_type_id,p.certificate_no,
+        (select xc.code_value from xt_code xc where xc.type = 'ZJZLID' and xc.code_key = p.certificate_type_id) certificate_type_name ,
+        ints.type,ints.order_request_id,o.order_no,ints.area_id,
+        ia.`name` interrogate_area_name,ints.case_id,ic.ajmc interrogate_case_name,
+        ints.cuff_id,c.cuff_no,ints.in_photo_name,
+        inuser1.id in_user_id1, inuser1.real_name in_user_real_name1,inuser1.certificate_no in_user_no1,
+        (select `name` from xt_organization o where o.id = inuser1.organization_id) as organization,
+        ints.in_register_user_id,inregister.real_name in_register_user_real_name,
+        ints.in_time,ints.out_reason,ints.out_photo_name,ints.out_time,ints.out_type,
+        ic.ajlx case_type, ct.code_desc case_nature,ints.out_register_user_id,outregister.real_name
+        out_register_user_real_name,ints.entrance_procedure,ints.written_time
+        from ba_serial ints
+        left join ba_person p on ints.person_id=p.id
+        left join ba_order_request o on ints.order_request_id=o.id
+        left join ba_area ia on ints.area_id=ia.id
+        left join ba_case ic on ints.case_id=ic.id
+        left join xt_crime_define ct on ct.id=ic.ab
+        left join ba_cuff c on ints.cuff_id=c.id
+        left join xt_user inuser1 on ic.zbmj_id=inuser1.id
+        left join xt_user inregister on ints.in_register_user_id=inregister.id
+        left join xt_user outregister on ints.out_register_user_id=outregister.id
+        where ints.type!=0
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="name!=null and name!=''">
+            and p.name like '%${name}%'
+        </if>
+        <if test="certificateNo!=null and certificateNo!=''">
+            and p.certificate_no like '%${certificateNo}%'
+        </if>
+        <if test="status!=null and status!=''">
+            and ints.status &lt;#{status}
+        </if>
+        <if test="start_date!=null and start_date!=''">
+            and ints.in_time &gt;=#{start_date}
+        </if>
+        <if test="end_date!=null and end_date!=''">
+            and ints.in_time &lt;=#{end_date}
+        </if>
+        <if test="caseId !=null and caseId !=''">
+            and ints.case_id = #{caseId}
+        </if>
+        <if test="serialNo!=null and serialNo!=''">
+            and ints.serial_no  = #{serialNo}
+        </if>
+        <if test="areaId !=null and areaId !=''">
+            and ints.area_id = #{areaId}
+        </if>
+        order by ints.id desc
+        <if test="pageStart != null and rows != null">
+            limit ${pageStart},${rows}
+        </if>
+    </select>
+    <select id="othercount" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(*) from ba_serial ints
+        left join ba_person p on ints.person_id=p.id
+        left join ba_order_request o on ints.order_request_id=o.id
+        left join ba_area ia on ints.area_id=ia.id
+        left join ba_case ic on ints.case_id=ic.id
+        left join xt_crime_define ct on ct.id=ic.ab
+        left join ba_cuff c on ints.cuff_id=c.id
+        left join xt_user inuser1 on ic.zbmj_id=inuser1.id
+        left join xt_user inregister on ints.in_register_user_id=inregister.id
+        left join xt_user outregister on ints.out_register_user_id=outregister.id
+        where ints.type!=0
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="name!=null and name!=''">
+            and p.name like '%${name}%'
+        </if>
+        <if test="certificateNo!=null and certificateNo!=''">
+            and p.certificate_no like '%${certificateNo}%'
+        </if>
+        <if test="status!=null and status!=''">
+            and ints.status &lt;${status}
+        </if>
+        <if test="start_date!=null and start_date!=''">
+            and ints.in_time &gt;=${start_date}
+        </if>
+        <if test="end_date!=null and end_date!=''">
+            and ints.in_time &lt;=${end_date}
+        </if>
+        <if test="caseId !=null and caseId !=''">
+            and ints.case_id = ${caseId}
+        </if>
+        <if test="areaId !=null and areaId !=''">
+            and ints.area_id = ${areaId}
+        </if>
+    </select>
+	<!-- 羁押超时告警查询 -->
+	<select id="listOver23Hours" resultMap="serialMap"
+			parameterType="java.util.Map">
+		SELECT
+			ints.*,
+			p.`name`,
+			ct.code_value certificate_type_name,
+			p.certificate_no certificate_no,
+			intc.ajmc AS caseName,
+			intc.ajbh AS caseNo,
+			u.real_name AS inUserRealName1,
+			u.id as inUserCertificateNo1,
+			o.id AS organizationid
+		FROM
+			ba_serial ints
+		LEFT JOIN ba_person p ON ints.person_id = p.id
+		LEFT JOIN xt_code ct ON p.certificate_type_id = ct.code_key
+		LEFT JOIN ba_case intc ON ints.case_id = intc.id
+		LEFT JOIN xt_user u ON intc.zbmj_id = u.id
+		LEFT JOIN xt_organization o ON organization_id = o.id
+		WHERE
+			ints.type = 0
+		AND ints. STATUS &lt; 11
+		AND TIMEDIFF(now(), ints.written_time) &gt;= 230000
+		GROUP BY ints.id
+		ORDER BY
+			ints.id DESC
+	</select>
+	<select id="selectByOrderIdAndPersonId" resultMap="serialMap" parameterType="java.util.Map">
+		SELECT	ints.*
+		FROM
+			ba_serial ints
+		WHERE
+			1 = 1
+			<if test="orderRequestId != null and orderRequestId != ''">
+				and ints.order_request_id = ${orderRequestId}
+			</if>
+			<if test="personId != null and personId != ''">
+				and ints.person_id = ${personId}
+			</if>
+	</select>
+
+	<select id="queryNatureByAb" resultMap="serialMap" parameterType="java.util.Map">
+		select a.code_desc caseNature from xt_crime_define a
+		where a.id = #{id}
+	</select>
+
+	<select id="queryOrgIdByPoliceNo" resultMap="serialMap" parameterType="java.util.Map">
+		select a.organization_id orgId,a.real_name policeRealName,b.`name` organization,b.p_id pId from xt_user a,xt_organization b
+		where a.organization_id = b.id
+		and a.certificate_no = #{policeNo}
+	</select>
+
+
+	<select id="querySerialBySendUserId" resultType="com.zhixin.zhfz.bacs.entity.SerialEntity" parameterType="java.util.Map">
+		select * from ba_serial where send_user_id = #{policeId} and `status` &lt; 11 and area_id = #{areaId}
+	</select>
+
+	<select id="selectByCaseAndPerson" resultMap="serialMap" parameterType="java.util.Map">
+		select * from ba_serial
+		where case_id = #{caseId}
+		and person_id = #{personId}
+	</select>
+	
+	
+	<!-- 查询时间间隔 间隔370-630分钟 -->
+	<select id="listWarnTime" resultMap="serialMap"
+			parameterType="java.util.Map">
+		SELECT
+			ints.*,
+			p.`name`,
+			ct.code_value certificate_type_name,
+			p.certificate_no certificate_no,
+			intc.ajmc AS caseName,
+			intc.ajbh AS caseNo,
+			u.real_name AS inUserRealName1,
+			u.id as inUserCertificateNo1,
+			o.id AS organizationid
+		FROM
+			ba_serial ints
+		LEFT JOIN ba_person p ON ints.person_id = p.id
+		LEFT JOIN xt_code ct ON p.certificate_type_id = ct.code_key
+		LEFT JOIN ba_case intc ON ints.case_id = intc.id
+		LEFT JOIN xt_user u ON intc.zbmj_id = u.id
+		LEFT JOIN xt_organization o ON organization_id = o.id
+		WHERE
+			ints.type = 0
+		AND ints. STATUS &lt; 11
+		AND TIMESTAMPDIFF(MINUTE,ints.in_time,NOW()) &gt;= 570
+		AND TIMESTAMPDIFF(MINUTE,ints.in_time,NOW()) &lt;= 630
+		GROUP BY ints.id
+		ORDER BY
+			ints.id DESC
+	</select>
+	
+	<update id="batchConfirmByIds" parameterType="java.util.Map">
+		update ba_serial set confirm_result = #{confirmResult},confirm_time = now()
+		where id in(${ids})
+	</update>
+	
+	<update id="updateSftjclByid" parameterType="java.util.Map">
+		update ba_serial set sftjcl = 1 where id = ${id}
+	</update>
+
+
+	<update id="update" parameterType="com.zhixin.zhfz.bacs.entity.SerialEntity">
+		update ba_serial
+		<set>
+			<if test="ajbh != null and ajbh !='' ">
+				ajbh = #{ajbh,jdbcType=VARCHAR},
+			</if>
+			<if test="rybh != null and rybh !='' ">
+				rybh = #{rybh,jdbcType=VARCHAR},
+			</if>
+			<if test="unRelationReason != null and unRelationReason !='' ">
+				un_relation_reason = #{unRelationReason,jdbcType=VARCHAR},
+			</if>
+			<if test="sfzdgl != null and sfzdgl != ''">
+				sfzdgl = #{sfzdgl,jdbcType=INTEGER},
+			</if>
+			<if test="hczt != null and hczt !='' ">
+				hczt = #{hczt},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+</mapper>

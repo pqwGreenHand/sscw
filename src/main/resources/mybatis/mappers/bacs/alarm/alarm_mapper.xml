@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.alarm.IAlarmMapper">
+	<resultMap id="alarmResultMap" type="com.zhixin.zhfz.bacs.entity.AlarmEntity">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="cuff_id" property="cuffId" jdbcType="INTEGER" />
+		<result column="device_id" property="deviceId" jdbcType="INTEGER" />
+		<result column="room_id" property="roomId" jdbcType="INTEGER" />
+		<result column="serial_id" property="serialId" jdbcType="INTEGER" />
+		<result column="area_id" property="areaId" jdbcType="INTEGER" />
+		<result column="police_id" property="policeId" jdbcType="INTEGER" />
+		<result column="alarm_type" property="alarmType" jdbcType="VARCHAR" />
+		<result column="alarm_name" property="alarmName" jdbcType="VARCHAR" />
+		<result column="cuff_no" property="cuffNo" jdbcType="VARCHAR" />
+		<result column="room_name" property="roomName" jdbcType="VARCHAR" />
+		<result column="device_no" property="deviceNo" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="camera_no" property="cameraNo" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="handler_content" property="handlerContent" jdbcType="VARCHAR" />
+		<result column="areaName" property="areaName" jdbcType="VARCHAR" />
+		<result column="policeName" property="policeName" jdbcType="VARCHAR" />
+		<result column="ic_no" property="icNo" jdbcType="VARCHAR" />
+		<result column="real_name" property="realName" jdbcType="VARCHAR" />
+		<result column="certificate_no" property="certificateNo" jdbcType="VARCHAR" />
+		<result column="alarm_time" property="alarmTime" jdbcType="TIMESTAMP" />
+		<result column="handler_time" property="handlerTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="alarmCountResultMap" type="com.zhixin.zhfz.bacs.entity.AlarmTypeCoutEntity">
+		<result column="alarm_type" property="alarmType" jdbcType="VARCHAR" />
+		<result column="alarm_name" property="alarmName" jdbcType="VARCHAR" />
+		<result column="alarmCount" property="alarmCount" jdbcType="VARCHAR" />
+
+	</resultMap>
+
+	<select id="listAlarmCountByType" resultMap="alarmCountResultMap" parameterType="java.util.Map">
+		SELECT
+		a.alarm_type,
+		count(1) alarmCount,
+		a.alarm_name
+		FROM
+		ba_position_alarm a
+		INNER JOIN ba_cuff b ON b.cuff_no = a.cuff_id
+		LEFT JOIN ba_position_device c ON c.id = a.device_id
+		LEFT JOIN ba_room d ON d.id = a.room_id
+		LEFT JOIN ba_camera e ON e.room_id = a.room_id
+		AND e.screen = '主画面'
+		LEFT JOIN ba_serial f ON f.cuff_id = b.id
+		AND a.alarm_time &gt; f.in_time
+		AND a.alarm_time &lt; f.out_time
+	    LEFT JOIN ba_case bc ON f.case_id = bc.id
+	    LEFT JOIN ba_police_entrance g ON g.cuff_id = b.id
+	    AND a.alarm_time &gt; g.in_time
+		AND a.alarm_time &lt; g.out_time
+		where 1=1
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+		GROUP BY a.alarm_type
+	</select>
+	<select id="list" resultMap="alarmResultMap" parameterType="java.util.Map">
+		select * from (select a.*,DATE_ADD(a.alarm_time,INTERVAL -10 second) startTime,DATE_ADD(a.alarm_time,INTERVAL 10 second) endTime,b.cuff_no cuffNo,b.area_id cuffAreaId,c.device_no deviceNo,d.`name` roomName,e.camera_no cameraNo,f.area_id,
+		case when b.type = 0 then (select `name` from ba_person where id = f.person_id)
+		when b.type = 1 then (select real_name from xt_user where id = g.police_id)
+		end as `name`,f.in_register_user_id,f.out_register_user_id,f.send_user_id,bc.cjr,bc.xbmj_ids
+		from ba_position_alarm a
+		inner join ba_cuff b on b.cuff_no = a.cuff_id
+		left join ba_position_device c on c.id = a.device_id
+		left join ba_room d on d.id = a.room_id
+		left join ba_camera e on e.room_id = a.room_id and e.screen = '主画面'
+		left join ba_serial f on f.cuff_id = b.id and a.alarm_time &gt; f.in_time and a.alarm_time &lt; f.out_time
+		left join ba_case bc on f.case_id = bc.id
+		left join ba_police_entrance g on g.cuff_id = b.id and a.alarm_time &gt; g.in_time and a.alarm_time &lt; g.out_time) t
+		<where>
+			<if test="dataAuth!=null and dataAuth!=''">
+				and ${dataAuth}
+			</if>
+			<if test="name != null and name != ''">
+				and t.name like "%${name}%"
+			</if>
+			<if test="alarmName != null and alarmName != ''">
+				and t.alarm_name like "%${alarmName}%"
+			</if>
+			<if test="alarmType != null and alarmType != ''">
+				and t.alarm_type = #{alarmType}
+			</if>
+			<if test="startDate!=null and startDate!=''">
+				and t.alarm_time &gt;=#{startDate}
+			</if>
+			<if test="endDate!=null and endDate!=''">
+				and t.alarm_time &lt;=#{endDate}
+			</if>
+			<if test="areaId !=null and areaId!=''">
+				and t.cuffAreaId = #{areaId}
+			</if>
+	    </where>
+        limit ${pageStart},${rows}
+	</select>
+
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from (select a.*,DATE_ADD(a.alarm_time,INTERVAL -10 second) startTime,DATE_ADD(a.alarm_time,INTERVAL 10 second) endTime,b.cuff_no cuffNo,b.area_id cuffAreaId,c.device_no deviceNo,d.`name` roomName,e.camera_no cameraNo,
+		case when b.type = 0 then (select `name` from ba_person where id = f.person_id)
+		when b.type = 1 then (select real_name from xt_user where id = g.police_id)
+		end as `name`
+		from ba_position_alarm a
+		inner join ba_cuff b on b.cuff_no = a.cuff_id
+		left join ba_position_device c on c.id = a.device_id
+		left join ba_room d on d.id = a.room_id
+		left join ba_camera e on e.room_id = a.room_id and e.screen = '主画面'
+		left join ba_serial f on f.cuff_id = b.id and a.alarm_time &gt; f.in_time and a.alarm_time &lt; f.out_time
+		left join ba_police_entrance g on g.cuff_id = b.id and a.alarm_time &gt; g.in_time and a.alarm_time &lt; g.out_time) t
+		<where>
+			<if test="name != null and name != ''">
+				and t.name like "%${name}%"
+			</if>
+			<if test="dataAuth!=null and dataAuth!=''">
+				and ${dataAuth}
+			</if>
+	       <if test="alarmName != null and alarmName != ''">
+	          and t.alarm_name like "%${alarmName}%"
+	       </if>
+			<if test="alarmType != null and alarmType != ''">
+				and t.alarm_type = #{alarmType}
+			</if>
+			<if test="startDate!=null and startDate!=''">
+				and t.alarm_time &gt;=#{startDate}
+			</if>
+			<if test="endDate!=null and endDate!=''">
+				and t.alarm_time &lt;=#{endDate}
+			</if>
+			<if test="areaId !=null and areaId!=''">
+				and t.cuffAreaId = #{areaId}
+			</if>
+       </where>
+	</select>
+
+</mapper>

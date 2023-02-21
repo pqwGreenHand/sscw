@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.common.dao.Icase.ICaseMapper">
+    <resultMap id="BaseResultMap" type="CaseEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="ajmc" property="ajmc" jdbcType="VARCHAR"/>
+        <result column="ajbh" property="ajbh" jdbcType="VARCHAR"/>
+        <result column="afsj" property="afsj" jdbcType="TIMESTAMP"/>
+        <result column="afdd" property="afdd" jdbcType="VARCHAR"/>
+        <result column="ajlx" property="ajlx" jdbcType="INTEGER"/>
+        <result column="ab" property="ab" jdbcType="INTEGER"/>
+        <result column="zbmj_id" property="zbmjId" jdbcType="INTEGER"/>
+        <result column="xbmj_id" property="xbmjId" jdbcType="INTEGER"/>
+        <result column="zbdw_id" property="zbdwId" jdbcType="INTEGER"/>
+        <result column="jqbh" property="jqbh" jdbcType="VARCHAR"/>
+        <result column="zyaq" property="zyaq" jdbcType="VARCHAR"/>
+        <result column="ajly" property="ajly" jdbcType="INTEGER"/>
+        <result column="cjr" property="cjr" jdbcType="INTEGER"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="uuid" property="uuid" jdbcType="VARCHAR"/>
+        <result column="afdd_code" property="afddCode" jdbcType="VARCHAR"/>
+        <result column="zbmj_pid" property="zbmjPid" jdbcType="VARCHAR"/>
+        <result column="xbmj_ids" property="xbmjIds" jdbcType="VARCHAR"/>
+        <result column="op_pid" property="opPid" jdbcType="VARCHAR"/>
+        <result column="xbmj_xm" property="xbmjXm" jdbcType="VARCHAR"/>
+        <result column="ajzt" property="ajzt" jdbcType="VARCHAR"/>
+        <result column="zbmjxm" property="zbmjxm" jdbcType="VARCHAR"/>
+        <result column="zbmjjh" property="zbmjjh" jdbcType="VARCHAR"/>
+        <result column="zbdwdm" property="zbdwdm" jdbcType="VARCHAR"/>
+        <result column="zbdwmc" property="zbdwmc" jdbcType="VARCHAR"/>
+        <result column="xbmjjh" property="xbmjjh" jdbcType="VARCHAR"/>
+        <result column="abmc" property="abmc" jdbcType="VARCHAR"/>
+        <result column="area_id" property="areaId" jdbcType="VARCHAR"/>
+        <!-- 关联-->
+        <result column="zbdwName" property="zbdwName" jdbcType="VARCHAR"/>
+        <result column="caseNature" property="caseNature" jdbcType="VARCHAR"/>
+        <result column="zbmjName" property="zbmjName" jdbcType="VARCHAR"/>
+        <result column="xbmjName" property="xbmjName" jdbcType="VARCHAR"/>
+        <result column="areaId" property="areaId" jdbcType="INTEGER"/>
+        <result column="zbmjCertificateNo" property="zbmjCertificateNo" jdbcType="VARCHAR"/>
+        <result column="xbmjCertificateNo" property="xbmjCertificateNo" jdbcType="VARCHAR"/>
+        <result column="warehouse_id" property="warehouseId" jdbcType="VARCHAR"/>
+        <result column="areaName" property="areaName" jdbcType="VARCHAR"/>
+        <result column="jz_ajzt" property="jzAjzt" jdbcType="INTEGER"/>
+        <result column="jz_rkzt" property="jzRkzt" jdbcType="INTEGER"/>
+        <result column="ajlxDesc" property="ajlxDesc" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, ajmc, ajbh, afsj, afdd, ajlx, ab, zbmj_id, xbmj_id, zbdw_id, jqbh, zyaq, ajly,
+        cjr, updated_time, created_time,uuid,jz_ajzt,jz_rkzt
+    </sql>
+    <select id="list" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT
+        c.*, org. NAME AS zbdwName,
+        ct.code_desc caseNature,
+        xu.real_name zbmjName,
+        xu.certificate_no zbmjCertificateNo,
+        xc.code_value ajlxDesc
+        FROM
+        ba_case c
+        LEFT JOIN xt_organization org ON c.zbdw_id = org.id
+        LEFT JOIN xt_crime_define ct ON ct.id = c.ab
+        LEFT JOIN xt_user xu ON xu.id = c.zbmj_id
+        LEFT JOIN xt_code xc ON xc.code_key = c.ajlx and xc.type = 'AJLX'
+        WHERE 1=1
+        <if test="zbdwId!=null and zbdwId !=''">
+            and c.zbdw_id =#{zbdwId}
+        </if>
+        <if test="ajmc!=null and ajmc !=''">
+            and c.ajmc like '%${ajmc}%'
+        </if>
+        <if test="ajbh!=null and ajbh !=''">
+            and c.ajbh like '%${ajbh}%'
+        </if>
+        <if test="zbmjId!=null and zbmjId !=''">
+            and c.zbmj_id like #{zbmjId}
+        </if>
+        <if test="policeId!=null and policeId !=''">
+            and (c.zbmj_id = ${policeId} or xbmln.xbmj_id = ${policeId} or xbmln.xbmj_id like '%,${policeId}' or
+            xbmln.xbmj_id like '%${policeId},')
+        </if>
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        order by c.id desc
+        <if test="pageStart != null and rows != null">
+            limit ${pageStart},${rows}
+        </if>
+
+    </select>
+
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+        count(1)
+        FROM
+        ba_case c
+        LEFT JOIN xt_organization org ON c.zbdw_id = org.id
+        LEFT JOIN xt_crime_define ct ON ct.id = c.ab
+        LEFT JOIN xt_user xu ON xu.id = c.zbmj_id
+        LEFT JOIN (
+        SELECT
+        GROUP_CONCAT(bcp.xbmj_id) xbmj_id,
+        GROUP_CONCAT(bxu.real_name) xbmjName,
+        GROUP_CONCAT(bxu.certificate_no) xbmjCertificateNo,
+        bcp.case_id,
+        bcp.op_user_id,
+        bcp.op_pid
+        FROM
+        ba_case_police bcp
+        LEFT JOIN xt_user bxu ON bxu.id = bcp.xbmj_id
+        WHERE
+        1 = 1
+        GROUP BY
+        bcp.case_id
+        ) xbmln ON xbmln.case_id = c.id
+        WHERE 1=1
+        <if test="zbdwId!=null and zbdwId !=''">
+            and c.zbdw_id =#{zbdwId}
+        </if>
+        <if test="ajmc!=null and ajmc !=''">
+            and c.ajmc like '%${ajmc}%'
+        </if>
+        <if test="ajbh!=null and ajbh !=''">
+            and c.ajbh like '%${ajbh}%'
+        </if>
+        <if test="zbmjId!=null and zbmjId !=''">
+            and c.zbmj_id like #{zbmjId}
+        </if>
+        <if test="policeId!=null and policeId !=''">
+            and (c.zbmj_id = ${policeId} or xbmln.xbmj_id = ${policeId} or xbmln.xbmj_id like '%,${policeId}' or
+            xbmln.xbmj_id like '%${policeId},')
+        </if>
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        order by c.id desc
+    </select>
+
+
+    <insert id="insertSelective" parameterType="CaseEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into ba_case
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="ajmc != null">
+                ajmc,
+            </if>
+            <if test="ajbh != null">
+                ajbh,
+            </if>
+            <if test="afsj != null">
+                afsj,
+            </if>
+            <if test="afdd != null">
+                afdd,
+            </if>
+            <if test="ajlx != null">
+                ajlx,
+            </if>
+            <if test="ab != null">
+                ab,
+            </if>
+            <if test="zbmjId != null">
+                zbmj_id,
+            </if>
+            <if test="zbdwId != null">
+                zbdw_id,
+            </if>
+            <if test="jqbh != null">
+                jqbh,
+            </if>
+            <if test="zyaq != null">
+                zyaq,
+            </if>
+            <if test="ajly != null">
+                ajly,
+            </if>
+            <if test="cjr != null">
+                cjr,
+            </if>
+            <if test="updatedTime != null">
+                updated_time,
+            </if>
+            <if test="createdTime != null">
+                created_time,
+            </if>
+            <if test="uuid != null">
+                uuid,
+            </if>
+            <if test="afddCode != null">
+                afdd_code,
+            </if>
+            <if test="zbmjxm != null">
+                zbmjxm,
+            </if>
+            <if test="zbdwmc != null">
+                zbdwmc,
+            </if>
+            <if test="abmc != null">
+                abmc,
+            </if>
+            <if test="areaId != null">
+                area_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="ajmc != null">
+                #{ajmc,jdbcType=VARCHAR},
+            </if>
+            <if test="ajbh != null">
+                #{ajbh,jdbcType=VARCHAR},
+            </if>
+            <if test="afsj != null">
+                #{afsj,jdbcType=TIMESTAMP},
+            </if>
+            <if test="afdd != null">
+                #{afdd,jdbcType=VARCHAR},
+            </if>
+            <if test="ajlx != null">
+                #{ajlx,jdbcType=INTEGER},
+            </if>
+            <if test="ab != null">
+                #{ab,jdbcType=INTEGER},
+            </if>
+            <if test="zbmjId != null">
+                #{zbmjId,jdbcType=INTEGER},
+            </if>
+            <if test="zbdwId != null">
+                #{zbdwId,jdbcType=INTEGER},
+            </if>
+            <if test="jqbh != null">
+                #{jqbh,jdbcType=VARCHAR},
+            </if>
+            <if test="zyaq != null">
+                #{zyaq,jdbcType=VARCHAR},
+            </if>
+            <if test="ajly != null">
+                #{ajly,jdbcType=INTEGER},
+            </if>
+            <if test="cjr != null">
+                #{cjr,jdbcType=INTEGER},
+            </if>
+            <if test="updatedTime != null">
+                #{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createdTime != null">
+                #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="uuid != null">
+                #{uuid,jdbcType=VARCHAR},
+            </if>
+            <if test="zbmjxm != null">
+                #{zbmjxm,jdbcType=VARCHAR},
+            </if>
+            <if test="zbdwmc != null">
+                #{zbdwmc,jdbcType=VARCHAR},
+            </if>
+            <if test="abmc != null">
+                #{abmc,jdbcType=VARCHAR},
+            </if>
+            <if test="areaId != null">
+                #{areaId},
+            </if>
+        </trim>
+    </insert>
+    <select id="getCaseId" resultType="java.lang.Integer" parameterType="String">
+        	select id from ba_case where ajbh=#{ajbh}
+
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from ba_case
+        where id = #{caseId,jdbcType=INTEGER}
+   </delete>
+    <update id="updateByPrimaryKeySelective" parameterType="CaseEntity">
+        update ba_case
+        <set>
+            <if test="ajmc != null">
+                ajmc = #{ajmc,jdbcType=VARCHAR},
+            </if>
+            <if test="ajbh != null">
+                ajbh = #{ajbh,jdbcType=VARCHAR},
+            </if>
+            <if test="afsj != null">
+                afsj = #{afsj,jdbcType=TIMESTAMP},
+            </if>
+            <if test="afdd != null">
+                afdd = #{afdd,jdbcType=VARCHAR},
+            </if>
+            <if test="ajlx != null">
+                ajlx = #{ajlx,jdbcType=INTEGER},
+            </if>
+            <if test="ab != null">
+                ab = #{ab,jdbcType=INTEGER},
+            </if>
+            <if test="zbmjId != null">
+                zbmj_id = #{zbmjId,jdbcType=INTEGER},
+            </if>
+            <if test="zbdwId != null">
+                zbdw_id = #{zbdwId,jdbcType=INTEGER},
+            </if>
+            <if test="zyaq != null">
+                zyaq = #{zyaq,jdbcType=VARCHAR},
+            </if>
+            <if test="cjr != null">
+                cjr = #{cjr,jdbcType=INTEGER},
+            </if>
+            <if test="updatedTime != null">
+                updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createdTime != null">
+                created_time = #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="uuid != null">
+                uuid = #{uuid,jdbcType=VARCHAR},
+            </if>
+            <if test="zbmjxm != null">
+                zbmjxm = #{zbmjxm,jdbcType=VARCHAR},
+            </if>
+            <if test="zbdwmc != null">
+                zbdwmc = #{zbdwmc,jdbcType=VARCHAR},
+            </if>
+            <if test="abmc != null">
+                abmc = #{abmc,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="getCaseById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select ic.*,ia.`name` as areaName from ba_case ic
+        left join ba_serial serial on ic.id = serial.case_id
+        left join ba_area ia on serial.area_id=ia.id
+        where   ic.id = #{id} limit 1
+    </select>
+
+    <select id="getCaseInfoById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select ic.* from ba_case ic
+        where   ic.id = #{id}
+    </select>
+
+    <select id="isCaseInfo" resultMap="BaseResultMap" parameterType="CaseEntity">
+        select ic.* from ba_case ic
+        where  ic.ajmc = #{ajmc} and area_id=#{areaId}
+    </select>
+    <select id="listCase" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT
+        bc.*,
+        ar.id AS areaId
+        FROM
+        ba_case bc
+        LEFT JOIN xt_organization org ON org.id = bc.zbdw_id
+        LEFT JOIN ba_area ar on ar.organization_id = bc.zbdw_id
+        where 1=1
+        <if test="areaId!=null and areaId !=''">
+            and ar.id =#{areaId}
+        </if>
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+
+    </select>
+
+</mapper>

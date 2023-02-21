@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.serial.TempOutMapper" >
+  <resultMap id="BaseResultMap" type="com.zhixin.zhfz.bacs.entity.TempOutEntity" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="serial_id" property="serialId" jdbcType="BIGINT" />
+    <result column="out_time" property="outTime" jdbcType="TIMESTAMP" />
+    <result column="out_reason" property="outReason" jdbcType="VARCHAR" />
+    <result column="back_time" property="backTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, serial_id, out_time, out_reason, back_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ba_temp_out
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ba_temp_out
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zhixin.zhfz.bacs.entity.TempOutEntity" >
+    insert into ba_temp_out (id, serial_id, out_time, 
+      out_reason, back_time)
+    values (#{id,jdbcType=INTEGER}, #{serialId,jdbcType=BIGINT}, #{outTime,jdbcType=TIMESTAMP}, 
+      #{outReason,jdbcType=VARCHAR}, #{backTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhixin.zhfz.bacs.entity.TempOutEntity" >
+    insert into ba_temp_out
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="serialId != null" >
+        serial_id,
+      </if>
+        out_time,out_reason
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="serialId != null" >
+        #{serialId,jdbcType=BIGINT},
+      </if>
+      now(), #{outReason}
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhixin.zhfz.bacs.entity.TempOutEntity" >
+    update ba_temp_out
+    <set >
+      <if test="serialId != null" >
+        serial_id = #{serialId,jdbcType=BIGINT},
+      </if>
+      <if test="outTime != null" >
+        out_time = #{outTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="outReason != null" >
+        out_reason = #{outReason,jdbcType=VARCHAR},
+      </if>
+      <if test="backTime != null" >
+        back_time = #{backTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhixin.zhfz.bacs.entity.TempOutEntity" >
+    update ba_temp_out
+    set serial_id = #{serialId,jdbcType=BIGINT},
+      out_time = #{outTime,jdbcType=TIMESTAMP},
+      out_reason = #{outReason,jdbcType=VARCHAR},
+      back_time = #{backTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="update" parameterType="com.zhixin.zhfz.bacs.entity.TempOutEntity">
+    update ba_temp_out
+    <set >
+      back_time = now(),
+    </set>
+    where serial_id = #{serialId,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryBySerialId" resultMap="BaseResultMap" parameterType="java.lang.Integer"> 
+	select * from  ba_temp_out  where  serial_id = #{serialId} 
+ </select>
+		
+</mapper>

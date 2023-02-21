@@ -1,0 +1,14 @@
+.report_button {
+	margin-left: 25px;
+	margin-right: 25px;
+	margin-top: 10px;
+	margin-bottom: 5px;
+}
+.datagrid-toolbar {
+  height: 30px;
+}
+
+#big_btn{text-align:center; }
+#big_btn input.card1{width:180px;height:50px;border:none;color:#fff;cursor:pointer;padding-left:60px; background:url(images/cuan.png) no-repeat 0 0px;font-size:16px;}
+#big_btn input.card2{width:180px;height:50px;border:none;color:#000;cursor:pointer;padding-left:60px; background:url(images/cuan.png) no-repeat 0 -50px;font-size:16px;}
+

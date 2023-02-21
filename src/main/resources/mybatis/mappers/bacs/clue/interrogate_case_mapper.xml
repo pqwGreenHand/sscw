@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacs.dao.clue.IInterrogateCaseMapper">
+
+    <resultMap id="interrogateCaseResultMap" type="InterrogateCase">
+       <id property="id" column="id"/>
+       <result property="involvedDate" column="involved_date"/>
+       <result property="involvedAddress" column="involved_address"/>
+       <result property="involvedPeople" column="involved_people"/>
+       <result property="involvedReason" column="involved_reason"/>
+       <result property="caseName" column="case_name"/>
+        <result property="caseNo" column="case_no"/>
+       <result property="interrogateAreaId" column="interrogate_area_id"/>
+       <result property="createdTime" column="created_time"/>
+       <result property="updatedTime" column="updated_time"/>
+       <result property="interrogateAreaName" column="interrogate_area_name"/>
+       <result column="type" property="type" jdbcType="INTEGER" />
+  	   <result column="crime_type_id" property="crimeTypeId" jdbcType="INTEGER" />	
+	   <result column="caseTypeName" property="caseTypeName" jdbcType="VARCHAR" /> 
+	   <result column="crime_type" property="crimeType" jdbcType="VARCHAR" /> 
+	   
+    </resultMap>
+    
+    
+    <resultMap id="ReArchivesTreeMap" type="ArchivesTreeEntity">
+        <result column="case_id" property="caseId" />
+        <result column="area_id" property="areaId" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="case_name" property="caseName" />
+        <result column="person_id" property="personId" />
+        <result column="person_name" property="personName" />
+        <result column="login_name" property="loginName" />
+    </resultMap>
+    
+    <!-- id is same to interface'methmod -->
+    <select id="list" resultMap="interrogateCaseResultMap" parameterType="java.util.Map">
+        	<!-- select ic.*,ia.`name` interrogate_area_name from interrogate_case ic
+        	,interrogate_area ia,
+						interrogate_serial iis
+where ic.id= iis.interrogate_case_id and  ic.interrogate_area_id=ia.id   -->
+select ic.*,ia.`name` interrogate_area_name,ct.crime_type as 	  caseTypeName  from ba_case ic
+ left join ba_area ia on ic.area_id=ia.id
+ left join 		interrogate_serial ins on ins .id= ins .interrogate_case_id  
+left join crime_type ct on ct.id = ic.crime_type_id   
+ 	where 1=1 
+        		<if test="dataAuth!=null and dataAuth!=''">
+					and ${dataAuth}
+				</if>
+        		<if test="caseName!=null and caseName!=''">
+        			and ic.case_name like "%${caseName}%"
+        		</if>
+        		<if test="caseNo!=null and caseNo!=''">
+        			and ic.case_no like "%${caseNo}%"
+        		</if>
+        		 order by ic.id desc 
+        		limit ${pageStart},${rows}
+    </select>
+     <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        	select count(1) from interrogate_case ic
+ left join interrogate_area ia on ic.interrogate_area_id=ia.id
+ left join 		interrogate_serial ins on ins .id= ins .interrogate_case_id     
+ 	where 1=1 
+        		<if test="dataAuth!=null and dataAuth!=''">
+					and ${dataAuth}
+				</if>
+        		<if test="caseName!=null and caseName!=''">
+        			and ic.case_name like "%${caseName}%"
+        		</if>
+        		<if test="caseNo!=null and caseNo!=''">
+        			and ic.case_no like "%${caseNo}%"
+        		</if>
+        		order by ic.id desc 
+    </select>
+
+    <select id="getCaseById" resultMap="interrogateCaseResultMap" parameterType="java.lang.Integer">
+        select ic.*,ia.`name` interrogate_area_name,cte.crime_type from interrogate_case ic
+		left join interrogate_area ia on ic.interrogate_area_id=ia.id
+		left join crime_type cte on cte.id=ic.crime_type_id
+        where   ic.id = #{id}
+    </select>
+    
+    <select id="getId" resultType="java.lang.Integer" parameterType="InterrogateCase">  
+        	select id from interrogate_case where involved_date=#{involvedDate} 
+        			and involved_address=#{involvedAddress} 
+        			and involved_people=#{involvedPeople} 
+        			and involved_reason=#{involvedReason} 
+        			and case_name=#{caseName} 
+        			and case_no=#{caseNo} 
+        			and interrogate_area_id=#{interrogateAreaId} 
+    </select>
+    
+    <insert id="insert" parameterType="InterrogateCase" useGeneratedKeys="true" keyProperty="id">
+    insert into interrogate_case
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="involvedDate != null" >
+        involved_date,
+      </if>
+      <if test="involvedAddress != null" >
+        involved_address,
+      </if>
+      <if test="involvedPeople != null" >
+        involved_people,
+      </if>
+      <if test="involvedReason != null" >
+        involved_reason,
+      </if>
+      <if test="caseName != null" >
+        case_name,
+      </if>
+      <if test="caseNo != null" >
+        case_no,
+      </if>
+      <if test="interrogateAreaId != null" >
+        interrogate_area_id,
+      </if>
+        created_time,
+      <if test="updatedTime != null" >
+        updated_time,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="crimeTypeId != null" >
+        crime_type_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="involvedDate != null" >
+        #{involvedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="involvedAddress != null" >
+        #{involvedAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="involvedPeople != null" >
+        #{involvedPeople,jdbcType=VARCHAR},
+      </if>
+      <if test="involvedReason != null" >
+        #{involvedReason,jdbcType=VARCHAR},
+      </if>
+      <if test="caseName != null" >
+        #{caseName,jdbcType=VARCHAR},
+      </if>
+      <if test="caseNo != null" >
+        #{caseNo,jdbcType=VARCHAR},
+      </if>
+      <if test="interrogateAreaId != null" >
+        #{interrogateAreaId,jdbcType=INTEGER},
+      </if>
+      now(),
+      <if test="updatedTime != null" >
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="crimeTypeId != null" >
+        #{crimeTypeId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+	<!-- <insert id="insert" parameterType="InterrogateCase">  
+            insert into interrogate_case (involved_date,
+            							 involved_address,
+            							 involved_people,
+            							 involved_reason,
+            							 case_name,
+            							 case_no,
+            							 interrogate_area_id,
+            							 created_time,
+            							 updated_time) 
+                                 values(#{involvedDate},
+					             		#{involvedAddress},
+					             		#{involvedPeople},
+					             		#{involvedReason},
+					             		#{caseName},
+					             		#{caseNo},
+					             		#{interrogateAreaId},
+					             		sysdate(),
+					             		sysdate())
+    </insert> -->
+    
+    <delete id="delete" parameterType="int">  
+            delete from interrogate_case where id=#{id}
+    </delete>
+    
+    <update id="update" parameterType="InterrogateCase">  
+           update interrogate_case 
+       <set >
+      <if test="involvedDate != null" >
+        involved_date = #{involvedDate},
+      </if>
+      <if test="involvedAddress != null" >
+        involved_address = #{involvedAddress},
+      </if>
+      <if test="involvedPeople != null" >
+        involved_people = #{involvedPeople},
+      </if>
+      <if test="involvedReason != null" >
+        involved_reason = #{involvedReason},
+      </if>
+      <if test="caseName != null" >
+        case_name = #{caseName},
+      </if>
+      <if test="crimeTypeId != null">
+        crime_type_id = #{crimeTypeId},
+      </if>
+      <if test="type != null" >
+        type = #{type},
+      </if>
+      <if test="crimeTypeId != null" >
+        crime_type_id = #{crimeTypeId},
+      </if>
+        updated_time = now()
+    </set>
+            where id=#{id} 
+    </update>
+    
+    
+    <update id="updateInvolvedPeople" parameterType="InterrogateCase">  
+           update interrogate_case 
+       <set >
+      <if test="involvedPeople != null" >
+        involved_people=#{involvedPeople},
+      </if>
+       <if test="caseName != null" >
+        case_name=#{caseName},
+      </if>
+        updated_time = now()
+    </set>
+            where id=#{id} 
+    </update>
+    
+    
+    
+    <select id="listCaseTreelimit" parameterType="java.util.Map" resultMap="ReArchivesTreeMap">
+        <if test="union != null">
+           select * from (
+            select c.id  case_id ,c.case_name
+			from interrogate_case c 
+			left join interrogate_serial s on c.id=s.interrogate_case_id
+			left join interrogate_record r on c.id=r.interrogate_case_id
+			where  1=1 
+			and 
+			s.in_user_id1   ${dataAuth}
+			union
+			select c.id  case_id ,c.case_name
+			from interrogate_case c 
+			left join interrogate_serial s on c.id=s.interrogate_case_id
+			left join interrogate_record r on c.id=r.interrogate_case_id
+			where  1=1
+			and
+			s.in_user_id2   ${dataAuth}
+			union
+			select c.id  case_id ,c.case_name
+			from interrogate_case c 
+			left join interrogate_serial s on c.id=s.interrogate_case_id
+			left join interrogate_record r on c.id=r.interrogate_case_id
+			where  1=1
+			and 
+			s.in_register_user_id   ${dataAuth}
+			union
+			select c.id  case_id ,c.case_name
+			from interrogate_case c 
+			left join interrogate_serial s on c.id=s.interrogate_case_id
+			left join interrogate_record r on c.id=r.interrogate_case_id
+			where  1=1
+			and  
+			s.out_user_id1   ${dataAuth}
+			union
+			select c.id  case_id ,c.case_name
+			from interrogate_case c 
+			left join interrogate_serial s on c.id=s.interrogate_case_id
+			left join interrogate_record r on c.id=r.interrogate_case_id
+			where  1=1
+			and  
+			s.out_user_id2   ${dataAuth}
+			union
+			select c.id  case_id ,c.case_name
+			from interrogate_case c 
+			left join interrogate_serial s on c.id=s.interrogate_case_id
+			left join interrogate_record r on c.id=r.interrogate_case_id
+			where  1=1
+			and 
+			s.out_register_user_id   ${dataAuth}
+			union
+			select c.id  case_id ,c.case_name
+			from interrogate_case c 
+			left join interrogate_serial s on c.id=s.interrogate_case_id
+			left join interrogate_record r on c.id=r.interrogate_case_id
+			where  1=1
+			and 
+			r.police_ask_id   ${dataAuth}
+			union
+			select c.id  case_id ,c.case_name
+			from interrogate_case c 
+			left join interrogate_serial s on c.id=s.interrogate_case_id
+			left join interrogate_record r on c.id=r.interrogate_case_id
+			where  1=1
+			and 
+			r.police_record_id   ${dataAuth}
+			) tt
+			where 1=1
+			<if test="caseName!=null and caseName != ''">
+	            and tt.case_name like '%${caseName}%'
+	        </if>
+			order by case_id desc
+	        limit ${pageStart},${rows}
+        </if>
+        
+        <if test="union == null">
+	        select DISTINCT c.id  case_id
+			from interrogate_case c 
+            left join interrogate_serial s on c.id=s.interrogate_case_id   
+            left join interrogate_record r on c.id=r.interrogate_case_id
+            where 1=1
+	        <if test="dataAuth != null and dataAuth != ''" >
+			    and ${dataAuth}
+	        </if>
+	        <if test="caseName!=null and caseName != ''">
+	            and c.case_name like '%${caseName}%'
+	        </if>
+	        order by case_id desc
+	        limit ${pageStart},${rows}
+        </if>
+        
+    </select>
+    
+    <select id="listCaseTree" resultMap="ReArchivesTreeMap" parameterType="java.util.Map">
+       select t.*,tt.login_name from (  
+        select distinct c.id case_id,c.interrogate_area_id area_id,c.case_name,CONCAT(c.id,'_',p.id) person_id,p.`name` person_name,s.in_user_id1
+		from interrogate_case c,interrogate_serial s,person p
+		where c.id=s.interrogate_case_id and s.person_id=p.id
+
+		<if test="date!=null and date!=''">
+		and	DATE_SUB(CURDATE(), INTERVAL 15 DAY) &lt;= date(s.in_time)
+		</if>
+		<if test="caseIdList!=null and caseIdList.size()!=0">
+		  and c.id in
+		  <foreach collection="caseIdList" item="caseId" index="index" open="(" close=")" separator=",">
+		      #{caseId}
+		  </foreach>
+		</if>
+
+		) t LEFT JOIN user tt on t.in_user_id1=tt.id
+		order by case_id desc
+    </select>
+    
+    <select id="listCaseTreeCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+       <if test="union == null">
+        select count(1) from
+	        ( select DISTINCT c.id  case_id
+			   from interrogate_case c
+			   left join interrogate_serial s on c.id=s.interrogate_case_id
+			   left join interrogate_record r on c.id=r.interrogate_case_id
+			   where 1=1
+		   <if test="date!=null and date!=''">
+			   and	DATE_SUB(CURDATE(), INTERVAL 15 DAY) &lt;= date(s.in_time)
+		   </if>
+	        <if test="dataAuth != null and dataAuth != ''" >
+			    and ${dataAuth}
+	        </if>
+	        <if test="caseName!=null and caseName != ''">
+                and c.case_name  like '%${caseName}%'
+            </if>
+	        group by c.id
+	        ) a
+	     </if>
+	     
+	     <if test="union != null">
+	       select count(1) from (
+	        select * from (
+            select c.id  case_id ,c.case_name
+			from interrogate_case c,interrogate_serial s,interrogate_record r
+			where c.id=s.interrogate_case_id and c.id=r.interrogate_case_id 
+			and 
+			s.in_user_id1  ${dataAuth}
+			union
+			select c.id  case_id ,c.case_name
+			from interrogate_case c,interrogate_serial s,interrogate_record r
+			where c.id=s.interrogate_case_id and c.id=r.interrogate_case_id 
+			and 
+			s.in_user_id2   ${dataAuth}
+			union
+			select c.id  case_id ,c.case_name
+			from interrogate_case c,interrogate_serial s,interrogate_record r
+			where c.id=s.interrogate_case_id and c.id=r.interrogate_case_id 
+			and 
+			s.in_register_user_id   ${dataAuth}
+			union
+			select c.id  case_id  ,c.case_name
+			from interrogate_case c,interrogate_serial s,interrogate_record r
+			where c.id=s.interrogate_case_id and c.id=r.interrogate_case_id 
+			and 
+			s.out_user_id1   ${dataAuth}
+			union
+			select c.id  case_id  ,c.case_name
+			from interrogate_case c,interrogate_serial s,interrogate_record r
+			where c.id=s.interrogate_case_id and c.id=r.interrogate_case_id 
+			and 
+			s.out_user_id2   ${dataAuth}
+			union
+			select c.id  case_id ,c.case_name
+			from interrogate_case c,interrogate_serial s,interrogate_record r
+			where c.id=s.interrogate_case_id and c.id=r.interrogate_case_id 
+			and 
+			s.out_register_user_id   ${dataAuth}
+			union
+			select c.id  case_id ,c.case_name
+			from interrogate_case c,interrogate_serial s,interrogate_record r
+			where c.id=s.interrogate_case_id and c.id=r.interrogate_case_id 
+			and 
+			r.police_ask_id   ${dataAuth}
+			union
+			select c.id  case_id ,c.case_name
+			from interrogate_case c,interrogate_serial s,interrogate_record r
+			where c.id=s.interrogate_case_id and c.id=r.interrogate_case_id 
+			and 
+			r.police_record_id   ${dataAuth}
+			) tt
+			where 1=1
+			<if test="caseName!=null and caseName != ''">
+	            and tt.case_name like '%${caseName}%'
+	        </if>
+	        ) aa
+	     </if>
+    </select>
+    
+        <select id="findFilePath" parameterType="java.util.Map" resultType="java.util.Map">
+        <if test="type=='recordtree'">
+         select interrogate_case_id,uuid FRom interrogate_record where interrogate_case_id=${interrogate_case_id}
+        </if>
+        <if test="type=='videotree'">
+         select interrogate_case_id,uuid FRom interrogate_serial where interrogate_case_id=${interrogate_case_id}
+        </if>
+    </select>
+    
+    
+     <select id="getPersionInfo" parameterType="java.util.Map" resultType="java.util.Map">
+        select t.id,date_format(t.start_time,'%Y-%m-%d %T') start_time ,date_format(t.end_time,'%Y-%m-%d') end_time,u0.real_name sxpername,ca.case_name,u1.real_name askname,u2.real_name recordname,p.name suspecter 
+	from interrogate_record t 
+	left join interrogate_case ca on ca.id=t.interrogate_case_id
+	left join person p on p.id=t.person_id 
+	left join user u0 on u0.id=p.id
+	left join user u1 on u1.id=t.police_ask_id
+	left join user u2 on u2.id=t.police_record_id
+	where ca.id=${caseId} and p.id=${personId}
+	<if test="recordId !=null and recordId != ''">
+		and t.id=${recordId}
+	</if>
+    </select>
+    
+    <select id="getRecordPersionCombobox" parameterType="java.util.Map" resultType="java.util.Map">
+    <!-- select t.id,concat('笔录：',date_format(t.start_time,'%Y-%m-%d %T'),'至',date_format(t.end_time,'%Y-%m-%d %T')) value  -->
+	select t.id,concat('笔录：',date_format(t.start_time,'%Y-%m-%d %T')) value 
+		FRom interrogate_record t 
+		left join interrogate_case ca on ca.id=t.interrogate_case_id
+		left join person p on p.id=t.person_id 
+		left join user u0 on u0.id=p.id
+		left join user u1 on u1.id=t.police_ask_id
+		left join user u2 on u2.id=t.police_record_id
+	where ca.id=${caseId} and p.id=${personId}
+    </select>
+    
+    
+</mapper>

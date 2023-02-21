@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.export.BaFileMappingMapper">
+    <resultMap type="com.zhixin.zhfz.bacs.entity.BaFileMappingEntity" id="BaFileMapping">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="sys_type" property="sysType" jdbcType="VARCHAR"/>
+        <result column="case_id" property="caseId" jdbcType="INTEGER"/>
+        <result column="sub_sys_id" property="subsysId" jdbcType="INTEGER"/>
+        <result column="uuid" property="uuid" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="file_path" property="filePath" jdbcType="VARCHAR"/>
+        <result column="file_suffix" property="fileSuffix" jdbcType="VARCHAR"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="op_pid" property="oppId" jdbcType="VARCHAR"/>
+        <result column="op_user_id" property="opuserId" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="queryList" parameterType="java.util.HashMap" resultMap="BaFileMapping">
+        select * from ba_file_mapping where sub_sys_id in ${subsysId} and name like '%.pdf%'
+    </select>
+</mapper>

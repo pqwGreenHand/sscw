@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.positiondevice.IPositionDeviceMapper">
+    <resultMap id="BaseResultMap" type="com.zhixin.zhfz.bacs.entity.PositionDeviceEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="device_no" property="deviceNo" jdbcType="INTEGER"/>
+        <result column="device_type" property="deviceType" jdbcType="INTEGER"/>
+        <result column="mode" property="mode" jdbcType="VARCHAR"/>
+        <result column="group_name" property="groupName" jdbcType="INTEGER"/>
+        <result column="group_no" property="groupNo" jdbcType="INTEGER"/>
+        <result column="ip" property="ip" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="area_id" property="areaId" jdbcType="INTEGER"/>
+        <result column="areaName" property="areaName" jdbcType="VARCHAR"/>
+        <result column="room_name" property="roomName" jdbcType="VARCHAR"/>
+        <result column="room_id" property="roomId" jdbcType="VARCHAR"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="op_pid" property="op_Pid" jdbcType="VARCHAR" />
+        <result column="op_user_id" property="op_User_Id" jdbcType="INTEGER" />
+    </resultMap>
+
+    <!--  查询所有定位设备  -->
+    <select id="listAll" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select d.*, a.name as areaName, r.name room_name from ba_position_device d,ba_area a,ba_room r where
+        a.id=d.area_id and r.id = d.room_id
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="deviceNo!=null and deviceNo!=''">
+            and d.device_no like '%${deviceNo}%'
+        </if>
+        <if test="areaId!=null and areaId!=''">
+            and d.area_id =${areaId}
+        </if>
+        <if test="room!=null and room!=''">
+            and d.room_id =${room}
+        </if>
+        limit ${pageStart},${rows}
+    </select>
+
+    <!--  计算所有定位设备的数量  -->
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(1) from ba_position_device d,ba_area a where a.id=d.area_id
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="deviceNo!=null and deviceNo!=''">
+            and d.device_no like '%${deviceNo}%'
+        </if>
+        <if test="areaId!=null and areaId!=''">
+            and d.area_id =${areaId}
+        </if>
+    </select>
+
+    <!-- 添加定位设备的信息 -->
+    <insert id="insert" parameterType="com.zhixin.zhfz.bacs.entity.PositionDeviceEntity">
+    insert into ba_position_device (device_no,device_type,mode,group_name,group_no,room_id, ip, description, area_id, created_time,op_pid,op_user_id)
+    values (#{deviceNo,jdbcType=INTEGER},#{deviceType,jdbcType=INTEGER}, #{mode,jdbcType=VARCHAR},
+     #{groupName,jdbcType=INTEGER},#{groupNo,jdbcType=INTEGER},#{roomId,jdbcType=INTEGER},#{ip,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
+    #{areaId,jdbcType=INTEGER}, now(),#{op_Pid,jdbcType=VARCHAR},#{op_User_Id,jdbcType=INTEGER})
+  </insert>
+
+    <!-- 修改定位设备的信息 -->
+    <update id="update" parameterType="com.zhixin.zhfz.bacs.entity.PositionDeviceEntity">
+    update ba_position_device
+    set device_no = #{deviceNo,jdbcType=INTEGER},
+    device_type = #{deviceType,jdbcType=INTEGER},
+    mode = #{mode,jdbcType=VARCHAR},
+    group_name = #{groupName,jdbcType=INTEGER},
+    group_no = #{groupNo,jdbcType=INTEGER},
+    ip = #{ip,jdbcType=VARCHAR},
+    description = #{description,jdbcType=VARCHAR},
+    area_id = #{areaId,jdbcType=INTEGER},
+    room_Id = #{roomId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <!-- 删除定位设备 -->
+    <delete id="delete" parameterType="int">
+    delete from ba_position_device where id=#{id}
+  </delete>
+</mapper>

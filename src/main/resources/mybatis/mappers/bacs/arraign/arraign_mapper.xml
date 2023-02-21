@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacs.dao.arraign.IArraignMapper">
+
+    <resultMap id="resultMap" type="com.zhixin.zhfz.bacs.entity.ArraignEntity">
+        <id property="id" column="id"/>
+        <result column="name" property="name"/>
+        <result column="room_type_id" property="roomType"/>
+        <result column="area_id" property="areaId"/>
+        <result column="ips" property="ips"/>
+        <result column="room_status" property="roomStatus"/>
+        <result column="serial_uuid" property="serialUUID"/>
+        <result column="send_name" property="sendName"/>
+        <result column="go_name" property="goName"/>
+        <result column="gt_name" property="gtName"/>
+        <result column="person_name" property="personName"/>
+        <result column="in_photo_name" property="inPhotoName"/>
+        <result column="start_time" property="startTime"/>
+        <result column="out_time" property="outTime"/>
+        <result column="show_person" property="showPerson"/>
+        <result column="case_no" property="caseNo"/>
+        <result column="case_type" property="caseType"/>
+        <result column="sex" property="sex"/>
+        <result column="certificate_no" property="certificateNo"/>
+        <result column="case_name" property="caseName"/>
+        <result column="organization" property="organization"/>
+        <result column="case_class" property="caseClass"/>
+        <result column="serialId" property="serialId"/>
+    </resultMap>
+
+    <select id="listAllRecordRoom" resultMap="resultMap" parameterType="java.util.Map">
+        select a.id,a.`name`,a.area_id,a.room_status from ba_room a
+        where a.room_status = 0
+        and (a.room_type_id = 2 or a.room_type_id = 3 or a.room_type_id = 27)
+        <if test="areaId != null and areaId != ''">
+            and a.area_id = #{areaId}
+        </if>
+    </select>
+    <select id="listAllRecordRoom1" resultMap="resultMap" parameterType="java.util.Map">
+        select a.id,a.`name`,a.area_id,a.room_status from ba_room a
+        WHERE
+        1=1
+        and (a.room_type_id = 2 or a.room_type_id = 3 or a.room_type_id = 27)
+        <if test="areaId != null and areaId != ''">
+            and a.area_id = #{areaId}
+        </if>
+        <if test="roomId != null and roomId != ''">
+            and a.id = #{roomId}
+        </if>
+
+    </select>
+
+    <select id="all" resultMap="resultMap" parameterType="java.util.Map">
+         SELECT
+            r.id,
+            r.`name`,
+            r.room_type_id AS room_type,
+            r.area_id,
+            r.ips,
+            r.room_status,
+            a.created_time AS out_time,
+            up.real_name AS send_name,
+            s.uuid AS serial_uuid,
+            s.in_photo_name,
+            s.id serialId,
+            p.`name` AS person_name,
+            p.sex,
+            p.certificate_no,
+            c.ajbh AS case_no,
+            c.ajlx AS case_type,
+            c.ajmc AS case_name,
+            o.`name` AS organization,
+            cd.code_class_desc AS case_class
+        FROM ba_room AS r
+            LEFT JOIN ba_room_type AS t ON r.room_type_id = t.id
+            LEFT JOIN ba_room_assign AS a ON r.id = a.room_id AND a.`status` = 0
+            LEFT JOIN xt_user AS up ON a.police_id = up.id
+            LEFT JOIN ba_serial AS s ON s.id = a.serial_id
+            LEFT JOIN ba_person AS p ON s.person_id = p.id
+            LEFT JOIN ba_case AS c ON s.case_id = c.id
+            LEFT JOIN xt_organization AS o ON o.id = c.zbdw_id
+            LEFT JOIN xt_crime_define AS cd ON cd.id = c.ab
+        WHERE
+            (t.`name` = '讯问室' or t.`name` = '询问室' or t.`name` = '特讯室')
+
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="areaId != null and areaId != ''">
+            and r.area_id = #{areaId}
+        </if>
+    </select>
+
+    <select id="roomAll" resultMap="resultMap" parameterType="java.util.Map">
+        SELECT
+            r.id,
+            r.`name`,
+            r.room_type_id,
+            r.area_id,
+            r.ips,
+            r.room_status
+        FROM
+            ba_room AS r
+            JOIN ba_room_type AS t ON r.room_type_id = t.id
+        WHERE
+            (t.`name` = '讯问室' or t.`name` = '询问室' or t.`name` = '特讯室')
+            AND r.area_id = #{areaId}
+    </select>
+
+    <select id="personAll" resultMap="resultMap" parameterType="java.util.Map">
+        SELECT
+            w.room_id AS id,
+            w.status AS record_status,
+            w.out_time,
+            w.show_person,
+            au.real_name AS send_name,
+            ru1.real_name AS go_name,
+            ru2.real_name AS gt_name,
+            p.`name` AS person_name,
+            p.sex,
+            p.certificate_no,
+            s.uuid AS serial_uuid,
+            c.ajbh AS case_no,
+            c.ajlx AS case_type,
+            c.ajmc AS case_name,
+            o.name AS organization,
+            cd.code_class_desc AS case_class
+        FROM
+            ba_waiting_record AS w
+            LEFT JOIN xt_user AS au ON w.send_user_id = au.id
+            LEFT JOIN xt_user AS ru1 ON w.get_user_id1 = ru1.id
+            LEFT JOIN xt_user AS ru2 ON w.get_user_id2 = ru2.id
+            LEFT JOIN ba_serial AS s ON w.serial_id = s.id
+            LEFT JOIN ba_person AS p ON w.person_id = p.id
+            LEFT JOIN ba_case AS c ON c.id = w.case_id
+            LEFT JOIN xt_organization AS o ON o.id = c.zbdw_id
+            LEFT JOIN xt_crime_define AS cd ON cd.id = c.ab
+        WHERE
+          w.room_id in ${roomIds}
+    </select>
+
+    <update id="arraign" parameterType="com.zhixin.zhfz.bacs.form.ArraignForm" >
+        update ba_waiting_record
+        set
+          updated_time = now(),
+          out_user_id = #{policeId},
+          get_user_id1 = #{policeId}
+        where id = #{waitingRoomId,jdbcType=INTEGER}
+    </update>
+
+    <insert id="insertAssign" parameterType="com.zhixin.zhfz.bacs.entity.RoomAssignEntity">
+        INSERT INTO
+            ba_room_assign (serial_id,room_id,`status`,police_id,created_time)
+        VALUES
+            (#{serialId},#{roomId},0,#{policeId},NOW())
+    </insert>
+
+    <select id="getMaxId" resultType="java.lang.Long">
+        SELECT LAST_INSERT_ID()
+    </select>
+
+
+    <update id="updateAssign" parameterType="com.zhixin.zhfz.bacs.form.ArraignForm" >
+        update ba_room_assign
+        set
+          `status` = 1
+        where room_id = #{roomId,jdbcType=INTEGER} AND `status` = 0
+    </update>
+
+    <update id="updateRoom" parameterType="com.zhixin.zhfz.bacs.entity.ArraignEntity" >
+        update ba_room
+        set
+          room_status = 1
+        where id = #{id,jdbcType=INTEGER} AND room_status = 0
+    </update>
+
+
+    <!-- 查询当前审讯室被哪个嫌疑人占用、预约-->
+    <select id="queryRoomByPerson" parameterType="java.util.Map" resultMap="resultMap">
+       select  ps.certificate_no,ps.name as personName,r.id as id from ba_waiting_record rd
+LEFT JOIN  ba_room r ON r.`name` =  rd.get_result
+         left join ba_person ps on rd.person_id=ps.id
+
+         where rd.id in(
+select max(w.id) as id from ba_serial s
+         left join ba_waiting_record w on s.id=w.serial_id
+         where s.`status`&lt;11 group by w.person_id) and  r.id is not null;
+     </select>
+
+
+    <select id="queryRoomInfo" parameterType="java.util.Map" resultMap="resultMap">
+       	select p.*,  case p.room_status when 0 then '空闲' when 1 then '已预约' when 2 then '占用' else '空闲' end discribe
+        from
+        (
+        select
+        rm.area_id,rm.id as id,rm.`name` as name,
+        rm.room_type_id,rt.`name` as type,
+        rm.room_status room_status
+        from ba_room rm
+        ,ba_room_type rt
+        where rm.room_type_id=rt.id and rt.`name` in('询问室','讯问室','特讯室','传染病人讯问室') and rm.is_active=1
+        and rm.area_id=#{areaId}
+        ) as p
+        order by id
+    </select>
+
+    <update id="updateRoomInfo" parameterType="java.util.Map">
+         UPDATE ba_room set room_status = 0 where area_id= #{areaId} and id = #{roomId}
+    </update>
+</mapper>

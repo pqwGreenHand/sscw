@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper  namespace="com.zhixin.zhfz.bacs.dao.iriscollection.IIrisCollectionMapper">
+    <resultMap id="BaseResultMap" type="com.zhixin.zhfz.bacs.entity.IrisEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="left_eye" property="leftEye" jdbcType="VARCHAR"></result>
+        <result column="right_eye" property="rightEye" jdbcType="VARCHAR"></result>
+        <result column="left_img" property="leftImg" jdbcType="VARCHAR"></result>
+        <result column="right_img" property="rightImg" jdbcType="VARCHAR"></result>
+        <result column="area_id" property="areaId" jdbcType="INTEGER"></result>
+        <result column="case_id" property="caseId" jdbcType="INTEGER"></result>
+        <result column="serial_id" property="serialId" jdbcType="BIGINT"></result>
+        <result column="person_id" property="personId" jdbcType="BIGINT"></result>
+        <result column="user_id" property="userId" jdbcType="INTEGER"></result>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" ></result>
+        <result column="name" property="areaName" jdbcType="VARCHAR"></result>
+        <result column="ajmc" property="caseName" jdbcType="VARCHAR"></result>
+        <result column="name" property="personName" jdbcType="VARCHAR"></result>
+        <result column="real_name" property="userName" jdbcType="VARCHAR"></result>
+        <result column="uuid" property="UUID" jdbcType="VARCHAR"></result>
+    </resultMap>
+
+    <select id="list" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT
+        bi.id,
+        bi.left_eye,
+        bi.right_eye,
+        bi.left_img,
+        bi.right_img,
+        ar. `name` areaName,
+        ar.id as areaId,
+        ca.ajmc caseName,
+        p. `name` personName,
+        u.real_name userName,
+        s.uuid
+        FROM
+        ba_iris bi
+        LEFT JOIN ba_area ar ON bi.area_id = ar.id
+        LEFT JOIN ba_case ca ON bi.case_id = ca.id
+        LEFT JOIN ba_person p on bi.person_id = p.id
+        LEFT JOIN xt_user u on bi.user_id = u.id
+        LEFT JOIN ba_serial s on bi.serial_id = s.id
+        where 1=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="personName !=null and personName !=''">
+            and p.name like '%${personName}%'
+        </if>
+        <if test="userName !=null and userName !=''">
+            and  u.real_name like '%${userName}%'
+        </if>
+        <if test="caseName !=null and caseName !=''">
+            and ca.ajmc like '%${caseName}%'
+        </if>
+        <if test="interrogatearea!=null and interrogatearea!=''">
+            and bi.area_id = #{interrogatearea,jdbcType=INTEGER}
+        </if>
+        order by bi.id desc
+       limit ${pageStart},${rows}
+    </select>
+
+    <select id="count" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+        count(1)
+        FROM
+        ba_iris bi
+        LEFT JOIN ba_area ar ON bi.area_id = ar.id
+        LEFT JOIN ba_case ca ON bi.case_id = ca.id
+        LEFT JOIN ba_person p on bi.person_id = p.id
+        LEFT JOIN xt_user u on bi.user_id = u.id
+        LEFT JOIN ba_serial s on bi.serial_id = s.id
+        where 1=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="personName !=null and personName !=''">
+            and p.name like '%${personName}%'
+        </if>
+        <if test="userName !=null and userName !=''">
+            and  u.real_name like '%${userName}%'
+        </if>
+        <if test="caseName !=null and caseName !=''">
+            and ca.ajmc like '%${caseName}%'
+        </if>
+        <if test="interrogatearea!=null and interrogatearea!=''">
+            and bi.area_id = #{interrogatearea,jdbcType=INTEGER}
+        </if>
+        order by bi.id desc
+    </select>
+
+</mapper>

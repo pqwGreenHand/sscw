@@ -1,0 +1,70 @@
+/* * {font-size:12px;} */
+body {
+    font-family:verdana,helvetica,arial,sans-serif;
+    padding:20px;
+    font-size:12px;
+    margin:0;
+    background: #082141;
+}
+h2 {
+    font-size:18px;
+    font-weight:bold;
+    margin:0;
+    margin-bottom:15px;
+    color: #fff;
+}
+p {
+    color: #fff;
+}
+.demo-info{
+	padding:0 0 12px 0;
+    color: #fff;
+}
+.demo-tip{
+	display:none;
+    color: #fff;
+}
+
+/* 记得整合进主要css里 */
+* {
+    font-family: 'arial'
+}
+
+::-webkit-input-placeholder { 
+  color:#084e80;
+}
+:-moz-placeholder { 
+  color:#084e80;
+}
+::-moz-placeholder { 
+  color:#084e80;
+}
+:-ms-input-placeholder {
+  color:#084e80;
+}
+
+::-webkit-scrollbar{ 
+  width: 15px; 
+  height: 15px; 
+  background-color: transparent; 
+} 
+::-webkit-scrollbar-track{ 
+  background-color: #091534; 
+} 
+::-webkit-scrollbar-thumb{ 
+  background-color: #0a3668;
+  border: 3px solid #091534; 
+}
+::-webkit-scrollbar-corner {
+  background-color: #091534; 
+}
+*{
+  scrollbar-arrow-color: #0a1c3f; /**//*三角箭头的颜色*/ 
+  scrollbar-face-color: #0d3e76; /**//*立体滚动条的颜色*/ 
+  scrollbar-3dlight-color: #0d3e76; /**//*立体滚动条亮边的颜色*/ 
+  scrollbar-highlight-color: #0d3e76; /**//*滚动条空白部分的颜色*/ 
+  scrollbar-shadow-color: #0a1c3f; /**//*立体滚动条阴影的颜色*/ 
+  scrollbar-darkshadow-color: #0a1c3f; /**//*立体滚动条强阴影的颜色*/ 
+  scrollbar-track-color: #0a1c3f; /**//*立体滚动条背景颜色*/ 
+  scrollbar-base-color:#0d3e76; /**//*滚动条的基本颜色*/
+}

@@ -1,0 +1,117 @@
+.menu {
+  position: absolute;
+  margin: 0;
+  border-width: 1px;
+  border-style: solid;
+  overflow: hidden;
+}
+.menu-inline {
+  position: relative;
+  border-width: 0px!important;
+}
+.menu-item {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  cursor: pointer;
+  border-width: 0px;
+  border-style: solid;
+  padding-left: 10px;
+}
+.menu-text {
+  height: 20px;
+  line-height: 20px;
+  float: left;
+  padding-left: 28px;
+}
+.menu-icon {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  left: 5px;
+  top: 50%;
+  margin-top: -8px;
+}
+.menu-rightarrow {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  right: 0;
+  top: 50%;
+  margin-top: -8px;
+}
+.menu-line {
+  position: absolute;
+  left: 26px;
+  top: 0;
+  height: 2000px;
+  font-size: 1px;
+}
+.menu-sep {
+  margin: 0px 0px 0px 25px;
+  font-size: 1px;
+}
+.menu-noline .menu-line {
+  display: none;
+}
+.menu-noline .menu-sep {
+  margin-left: 0;
+  margin-right: 0;
+}
+.menu-active {
+
+}
+.menu-item-disabled {
+  color: #1c4677;
+  cursor: default;
+}
+.menu-item-disabled:hover {
+  color: #1c4677;
+}
+.menu-text,
+.menu-text span {
+  font-size: 12px;
+}
+.menu-shadow {
+  position: absolute;
+  background: #777;
+  filter: progid:DXImageTransform.Microsoft.Blur(pixelRadius=2,MakeShadow=false,ShadowOpacity=0.2);
+}
+.menu-rightarrow {
+  background: url('images/menu_arrows.png') no-repeat -32px center;
+}
+.menu-line {
+  border-left: 1px solid #073a65;
+}
+.menu-sep {
+  border-bottom: 1px solid #073a65;
+}
+.menu {
+  background-color: #082141;
+  border-color: #046aa0;
+  border-width: 1px;
+  color: #fff;
+}
+.menu-content {
+  background: #666;
+}
+.menu-item {
+  border-color: transparent;
+  _border-color: #666;
+}
+.menu-active {
+  border-color: #555;
+  border-width: 0;
+  color: #fff;
+  background: #05578d;
+}
+.menu-active-disabled {
+  border-color: transparent;
+  background: transparent;
+  color: #fff;
+}
+.menu-item a {
+  color: #fff;
+}

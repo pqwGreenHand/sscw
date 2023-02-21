@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.belong.IBelongdetMapper">
+    <resultMap id="BaseResultMap" type="BelongEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="belongings_id" property="belongingsId" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="detail_count" property="detailCount" jdbcType="INTEGER"/>
+        <result column="unit" property="unit" jdbcType="VARCHAR"/>
+        <result column="save_method" property="saveMethod" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="serial_id" property="serialId" jdbcType="BIGINT"/>
+        <result column="locker_id" property="lockerId" jdbcType="VARCHAR"/>
+        <result column="is_get" property="isGet" jdbcType="INTEGER"/>
+        <result column="get_way" property="getWay" jdbcType="VARCHAR"/>
+        <result column="get_person" property="getPerson" jdbcType="VARCHAR"/>
+        <result column="get_time" property="getTime" jdbcType="TIMESTAMP"/>
+        <result column="serial_no" property="serialNo" jdbcType="VARCHAR"/>
+        <result column="person_name" property="personName" jdbcType="VARCHAR"/>
+        <result column="cabinet_group" property="cabinetGroup" jdbcType="VARCHAR"/>
+        <result column="cabinet_no" property="cabinetNo" jdbcType="VARCHAR"/>
+        <result column="wp_uuid" property="wpUuid" jdbcType="VARCHAR"/>
+        <!-- 链表 -->
+        <result column="logId" property="logId" jdbcType="INTEGER"/>
+        <result column="logBelongId" property="logBelongId" jdbcType="INTEGER"/>
+        <result column="logBelongLockerId" property="logBelongLockerId" jdbcType="VARCHAR"/>
+        <result column="logBelongOpener" property="logBelongOpener" jdbcType="VARCHAR"/>
+        <result column="logBelongReason" property="logBelongReason" jdbcType="VARCHAR"/>
+        <result column="logCreatedTime" property="logCreatedTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, belongings_id, name, detail_count, description, is_get, get_way, get_person, 
+    get_time
+  </sql>
+    <!-- 查询随身物品开柜记录 -->
+    <select id="queryBelongingsCabinetLlog" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT
+        bcl.id AS logId,
+        bcl.belongings_id AS logBelongId,
+        dl.open_key AS logBelongLockerId,
+        bcl.opener AS logBelongOpener,
+        bcl.reason AS logBelongReason,
+        bcl.created_time AS logCreatedTime
+        FROM
+        ba_belongings_cabinet_log bcl
+        LEFT JOIN ba_cabinet_config_detail dl ON dl.id = bcl.locker_id
+        WHERE
+        1 = 1
+        <if test="lockerId!=null and lockerId!=''">
+            and bcl.locker_id = #{lockerId}
+        </if>
+        <if test="enpId!=null and enpId!=''">
+            and bcl.belongings_id = #{enpId}
+        </if>
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        limit ${pageStart},${rows}
+    </select>
+    <!-- 随身物品开柜记录总数 -->
+    <select id="countBelongingsCabinetLog" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+        count(1)
+        FROM
+        ba_belongings_cabinet_log bcl
+        LEFT JOIN ba_cabinet_config_detail dl ON dl.id = bcl.locker_id
+        WHERE
+        1 = 1
+        <if test="lockerId!=null and lockerId!=''">
+            and bcl.locker_id = #{lockerId}
+        </if>
+        <if test="enpId!=null and enpId!=''">
+            and bcl.belongings_id = #{enpId}
+        </if>
+    </select>
+    <!-- 查询某条存物的所有物品信息 -->
+    <select id="listAllBelongdet" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select d.* from ba_belongings_detail d where 1=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="enpId!=null and enpId!=''">
+            and d.belongings_id = #{enpId}
+            limit ${pageStart},${rows}
+        </if>
+    </select>
+    <!-- 查询未领取的存物信息 -->
+    <select id="listAllBelongdet2" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT
+        d.id,
+        d.belongings_id,
+        d.is_get,
+        d.get_way,
+        d.get_person,
+        d.get_time,
+        b.locker_id,
+        d.`name`,
+        d.detail_count,
+        d.description,
+        d.unit,
+        d.save_method,
+        pn.`name` person_name,
+        pn.id serial_id,
+        dl.show_no cabinet_no,
+        cf.`name` cabinet_group
+        FROM
+        ba_belongings b
+        LEFT JOIN ba_belongings_detail d ON d.belongings_id = b.id
+        LEFT JOIN ba_person pn ON pn.id = b.serial_id
+        LEFT JOIN ba_cabinet_config_detail dl ON dl.id = b.locker_id
+        LEFT JOIN ba_cabinet_config cf ON cf.id = dl.config_id
+--         LEFT JOIN xt_organization xo ON xo.id = s.in_register_user_id
+--         LEFT JOIN xt_user xu ON xu.id = s.in_register_user_id
+--         LEFT JOIN xt_user xu2 ON xu2.id = s.out_register_user_id
+--         LEFT JOIN xt_organization xo2 ON xo2.id = xu.organization_id
+--         LEFT JOIN xt_organization xo3 ON xo3.id = xu2.organization_id
+        WHERE
+        d.is_get = 0
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="lockerId!=null and lockerId!='' and enpId==null">
+            and b.locker_id=#{lockerId}
+        </if>
+        <if test="enpId!=null and enpId!=''">
+            and b.serial_id = #{enpId}
+        </if>
+        <if test="areaId!=null and areaId!=''">
+            and b.area_id = #{areaId}
+        </if>
+        <if test="flag == 'Belong'">
+            and cf.type = 1
+        </if>
+    </select>
+    <!-- 查询未领取的存物信息 -->
+    <select id="listAllBelongdet3" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT
+        d.id,
+        d.belongings_id,
+        d.is_get,
+        d.get_way,
+        d.get_person,
+        d.get_time,
+        s.serial_no,
+        b.locker_id,
+        d.`name`,
+        d.detail_count,
+        d.description,
+        d.unit,
+        d.save_method,
+        pn. NAME person_name,
+        dl.param_key cabinet_no,
+        cf.`desc` cabinet_group,
+        s.id serial_id
+        FROM
+        ba_belongings b
+        LEFT JOIN ba_belongings_detail d ON d.belongings_id = b.id
+        LEFT JOIN ba_serial s ON s.id = b.serial_id
+        LEFT JOIN ba_person pn ON s.person_id = pn.id
+        LEFT JOIN ba_personal_config_detail dl ON dl.id = b.locker_id
+        LEFT JOIN ba_personal_config cf ON cf.id = dl.personal_config_id
+        WHERE
+        1 = 1
+        AND d.is_get = 0
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="lockerId!=null and lockerId!='' and enpId==null">
+            and b.locker_id=${lockerId}
+        </if>
+        <if test="enpId!=null and enpId!=''">
+            and b.serial_id = #{enpId}
+        </if>
+        <if test="flag == 'Belong'">
+            and cf.name = '随身储存柜'
+        </if>
+        <if test="flag == 'Detain'">
+            and cf.name = '扣留储存柜'
+        </if>
+    </select>
+    <!-- 根据存物详情id删除 -->
+    <delete id="deleteBelongdet" parameterType="Long">
+        DELETE
+        FROM
+            ba_belongings_detail
+        WHERE
+            id = #{id}
+    </delete>
+    <!-- 根据存物id删除所有的具体物品信息 -->
+    <delete id="deleteBelongdetsecond" parameterType="Long">
+        DELETE
+        FROM
+            ba_belongings_detail
+        WHERE
+            belongings_id = #{id}
+    </delete>
+    <!-- 增加具体的物品存放记录 -->
+    <insert id="insertBelongdet" parameterType="BelongEntity"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ba_belongings_detail (
+            id,
+            belongings_id,
+            NAME,
+            detail_count,
+            description,
+            is_get,
+            get_way,
+            get_person,
+            get_time,
+            unit,
+            save_method,
+            op_pid,
+            op_user_id,
+            wp_uuid
+        )
+        VALUES
+            (
+                #{id,jdbcType=INTEGER},
+                #{belongingsId,jdbcType=INTEGER},
+                #{name,jdbcType=VARCHAR},
+                #{detailCount,jdbcType=INTEGER},
+                #{description,jdbcType=VARCHAR},
+                #{isGet,jdbcType=INTEGER},
+                #{getWay,jdbcType=VARCHAR},
+                #{getPerson,jdbcType=VARCHAR},
+                #{getTime,jdbcType=TIMESTAMP},
+                #{unit,jdbcType=VARCHAR},
+                #{saveMethod,jdbcType=VARCHAR},
+                #{opPid},
+                #{opUserId},
+                #{wpUuid}
+            )
+  </insert>
+    <!-- 创建开柜记录 -->
+    <insert id="creatBoxopenouts" parameterType="BelongEntity"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ba_belongings_cabinet_log (
+            id,
+            belongings_id,
+            locker_id,
+            opener,
+            reason,
+            created_time,
+            op_pid,
+            op_user_id
+        )
+        VALUES
+            (
+                #{id,jdbcType=INTEGER},
+                #{belongingsId,jdbcType=INTEGER},
+                #{lockerId,jdbcType=VARCHAR},
+                #{getPerson,jdbcType=VARCHAR},
+                #{getWay,jdbcType=VARCHAR},
+                #{getTime,jdbcType=TIMESTAMP},
+                #{opPid},
+                #{opUserId}
+            )
+  </insert>
+    <!-- 修改存物具体物品信息 -->
+    <update id="updateBoxopenouts" parameterType="BelongEntity">
+        update ba_belongings_detail
+        <set>
+            <if test="belongingsId != null">
+                belongings_id = #{belongingsId,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="detailCount != null">
+                detail_count = #{detailCount,jdbcType=INTEGER},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="isGet != null">
+                is_get = #{isGet,jdbcType=INTEGER},
+            </if>
+            <if test="getWay != null">
+                get_way = #{getWay,jdbcType=VARCHAR},
+            </if>
+            <if test="getPerson != null">
+                get_person = #{getPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="getTime != null">
+                get_time = #{getTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="unit != null">
+                unit = #{unit,jdbcType=VARCHAR},
+            </if>
+            <if test="saveMethod != null">
+                save_method = #{saveMethod,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <!--更新该专属编号下每件物品的提取状态，信息-->
+    <update id="updateBoxopenoutdets" parameterType="BelongEntity">
+        update ba_belongings_detail
+        <set>
+            <if test="isGet != null">
+                is_get = #{isGet,jdbcType=INTEGER},
+            </if>
+            <if test="getWay != null">
+                get_way = #{getWay,jdbcType=VARCHAR},
+            </if>
+            <if test="getPerson != null">
+                get_person = #{getPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="getTime != null">
+                get_time = #{getTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="opPid != null">
+                op_pid = #{opPid,jdbcType=TIMESTAMP},
+            </if>
+            <if test="opUserId != null">
+                op_user_id = #{opUserId,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where is_get=0 and belongings_id = #{belongingsId,jdbcType=INTEGER}
+    </update>
+    <!-- 根据存物id查询全部详情数量 -->
+    <select id="count1" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+            count(t.id)
+        FROM
+            ba_belongings i,
+            ba_belongings_detail t
+        WHERE
+            1 = 1
+        AND i.id = t.belongings_id
+        AND i.id = #{enpId}
+    </select>
+    <!-- 根据储物柜门编号查询具体存物信息 -->
+    <select id="setSerialId" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT
+        d.id,
+        d.belongings_id,
+        d.is_get,
+        d.get_way,
+        d.get_person,
+        d.get_time,
+        b.serial_id,
+        b.locker_id,
+        d.`name`,
+        d.detail_count,
+        d.description,
+        d.unit,
+        d.save_method
+        FROM
+        ba_belongings b
+        LEFT JOIN ba_belongings_detail d ON d.belongings_id = b.id
+        WHERE
+        1 = 1
+        <if test="lockerId!=null and lockerId!=''">
+            and b.locker_id=#{lockerId}
+            limit 1
+        </if>
+
+    </select>
+    <!-- 根据存物id查询具体存物数量 -->
+    <select id="countByBelongId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT
+            count(1)
+        FROM
+            ba_belongings_detail
+        WHERE
+            is_get = 0
+        AND belongings_id = #{belongId}
+    </select>
+    <!-- 根据储物柜编号查询存物总数 -->
+    <select id="countByLockerId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT
+            COUNT(1)
+        FROM
+            ba_belongings_detail d
+        LEFT JOIN ba_belongings b ON d.belongings_id = b.id
+        LEFT JOIN ba_personal_config_detail pd ON pd.id = b.locker_id
+        WHERE
+            d.is_get = 0
+        AND pd.id = #{lockerId}
+  	</select>
+    <!-- 根据柜门id查询柜门存储信息 -->
+    <select id="listAllBelongdetByLockerId" resultMap="BaseResultMap" parameterType="java.util.Map" >
+        SELECT
+        d.id,
+        d.belongings_id,
+        d.is_get,
+        d.get_way,
+        d.get_person,
+        d.get_time,
+        b.locker_id,
+        d.`name`,
+        d.detail_count,
+        d.description,
+        d.unit,
+        d.save_method,
+        pn.name person_name,
+        pn.id personId,
+        dl.show_no cabinet_no,
+        cf.`name` cabinet_group,
+        pn.id interrogate_serial_id
+        FROM
+        ba_belongings b
+        LEFT JOIN ba_belongings_detail d ON d.belongings_id = b.id
+        LEFT JOIN ba_person pn ON b.serial_id = pn.id
+        LEFT JOIN ba_cabinet_config_detail dl ON dl.id = b.locker_id
+        LEFT JOIN ba_cabinet_config cf ON cf.id = dl.config_id
+        WHERE
+        1 = 1
+       <!--  AND d.is_get = 0 -->
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="lockerId!=null and lockerId!='' and enpId==null">
+            and b.locker_id=${lockerId}
+
+        </if>
+        <if test="enpId!=null and enpId!=''">
+            and b.serial_id = #{enpId}
+        </if>
+        <if test="belongsId!=null and belongsId!=''">
+            and b.id = #{belongsId}
+        </if>
+        <if test="flag == 'Belong'">
+            and cf.type = 1
+        </if>
+        <if test="flag == 'Detain'">
+            and cf.type = '扣留储存柜'
+        </if>
+    </select>
+
+    <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select name, detail_count, unit, save_method, description, wp_uuid from ba_belongings_detail where id = #{id}
+    </select>
+</mapper>

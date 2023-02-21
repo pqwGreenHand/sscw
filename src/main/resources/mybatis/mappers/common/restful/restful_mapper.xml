@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.common.restful.dao.IRestfulMapper">
+	 
+	  <resultMap id="GoodsMapper" type="com.zhixin.zhfz.common.restful.entity.GoodsEntity">
+		<id property="id" column="id"/>
+		<id property="ajbh" column="ajbh"/>
+		<id property="rybh" column="rybh"/>
+		<id property="jqbh" column="jqbh"/>
+		<id property="goodsName" column="goods_name"/>
+		<id property="goodsCount" column="goods_count"/>
+		<id property="description" column="description"/>
+		<id property="isGet" column="is_get"/>
+		<id property="getWay" column="get_way"/>
+		<id property="getPerson" column="get_person"/>
+        <id property="getTime" column="get_time"/>
+	</resultMap>
+	<select id="getBelongingsList" resultMap="GoodsMapper" parameterType="java.util.Map">  
+	       SELECT be.id,se.ajbh ajbh,se.jqbh,se.rybh,  
+			CASE WHEN bd.is_get=0 THEN '未领取' WHEN bd.is_get=1 THEN '已领取' ELSE '' END is_get ,
+			CASE WHEN bd.get_way THEN '未领取' WHEN bd.get_way=1 THEN '本人领取'  WHEN bd.get_way=2 THEN '委托他人代为领取'
+			WHEN bd.get_way=3 THEN '本人收到扣押物品清单' ELSE '' END get_way,
+			bd.name goods_name,bd.detail_count goods_count,bd.description,
+			bd.get_person,bd.get_time
+			 FROM ba_belongings be
+			 LEFT JOIN ba_belongings_detail bd ON be.id=bd.belongings_id
+			LEFT JOIN  ba_serial se ON be.serial_id=se.id
+			WHERE 1=1
+			<if test="rybh!=null and rybh!=''">
+		      and se.rybh =#{rybh}
+		    </if>
+	</select>
+	<select id="getExhibitList" resultMap="GoodsMapper" parameterType="java.util.Map">  
+	      SELECT be.id, se.ajbh,se.jqbh,se.rybh,
+			CASE WHEN bd.is_get=0 THEN '未领取' WHEN bd.is_get=1 THEN '已领取' ELSE '' END is_get ,
+			CASE WHEN bd.get_way THEN '未领取' WHEN bd.get_way=1 THEN '本人领取'  WHEN bd.get_way=2 THEN '委托他人代为领取'
+			WHEN bd.get_way=3 THEN '本人收到扣押物品清单' ELSE '' END get_way,
+			bd.name goods_name,bd.detail_count goods_count,bd.description,
+			bd.get_person,bd.get_time
+			 FROM ba_exhibit   be
+			 LEFT JOIN ba_exhibit_detail bd ON be.id=bd.exhibit_id
+			LEFT JOIN  ba_serial se ON be.serial_id=se.id
+			WHERE 1=1
+			<if test="rybh!=null and rybh!=''">
+		      and se.rybh =#{rybh}
+		    </if>
+	</select>
+	
+	<!-- 给标采 -->
+   <select id="getPersonInfoById" resultType="com.zhixin.zhfz.common.restful.entity.PersonInfoEntity" parameterType="java.lang.Long">
+   select p.id,p.certificate_type_id certificateType, ct.code_value certificateTypeHZ,
+    ct.code_value certificateTypeName,p.certificate_no certificateNo,
+    p.name name,p.sex sex,cs.code_value sexHZ,p.age age,p.birth birth,
+    p.country country,cg.code_value countryHZ,CASE WHEN p.nation='1' THEN '01' ELSE p.nation  END  nation,cf.code_value nationHZ
+    from ba_person p
+    left join ba_area m on p.area_id=m.id
+    left join xt_code ct on ct.type='ZJZLID' and p.certificate_type_id=ct.code_key
+    left join xt_code cz on cz.type='WHCDID' and p.education=cz.code_key
+    left join xt_code cm on cm.type='ZZMMID' and p.politic=cm.code_key
+    left join xt_code cg on cg.type='GJID' and p.country=cg.code_key
+    left join xt_code cf on cf.type='MZID' and p.nation=cf.code_key
+    left join xt_code cs on cs.type='XBID' and p.sex=cs.code_key
+    left join xt_code cr on cr.type='RDDBID' and p.officer=cr.code_key
+    LEFT JOIN ba_cuff cuff ON cuff.person_id = p.id
+    WHERE cuff.ic_no=#{icNo}
+  </select>
+</mapper>
+
+

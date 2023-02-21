@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhixin.zhfz.jzgl.dao.xx.IXxMapper">
+	<resultMap id="XxMapper" type="com.zhixin.zhfz.jzgl.entity.XxEntity">
+		<id property="id" column="id" />
+		<result property="xxbt" column="xxbt" />
+		<result property="xxnr" column="xxnr" />
+		<result property="xxlx" column="xxlx" />
+		<result property="yhId" column="yh_id" />
+		<result property="cjyhId" column="cjyh_id" />
+		<result property="ajxxId" column="ajxx_id" />
+		<result property="jzxxId" column="jzxx_id" />
+		<result property="xxdj" column="xxdj" />
+		<result property="xxly" column="xxly" />
+		<result property="zt" column="zt" />
+		<result property="fssj" column="fssj" />
+		<result property="zrr" column="zrr" />
+		<result property="fsr" column="fsr" />
+		<result property="clnr" column="clnr" />
+		<result property="clsj" column="clsj" />
+		<result property="gmxs" column="gmxs" />
+	</resultMap>
+	<!-- listYj -->
+	<select id="listYjTj" resultMap="XxMapper" parameterType="java.util.Map">
+		SELECT yj.* FROM jz_alarm yj
+	    LEFT JOIN jz_jzxx jz ON yj.jzxx_id = jz.id
+		LEFT JOIN ba_case aj ON jz.ajxx_id=aj.id
+		LEFT JOIN xt_organization o ON o.id = aj.zbdw_id
+		<where>
+			<if test="dataAuth!=null and dataAuth!=''">
+				and ${dataAuth}
+			</if>
+		</where>
+	</select>
+
+	<insert id="insertXX" parameterType="com.zhixin.zhfz.jzgl.entity.XxEntity" keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO jz_alarm (
+		xxbt,
+		xxnr,
+		xxlx,
+		yh_id,
+		cjyh_id,
+		jzxx_id,
+		clnr,
+		clsj,
+		fssj,
+		op_pid,
+		op_user_id
+		)
+		VALUES(
+		#{xxbt},
+		#{xxnr},
+		#{xxlx},
+		#{yhId},
+		#{cjyhId},
+		#{jzxxId},
+		#{clnr},
+		now(),
+		now(),
+		#{opPid},
+		#{opUserId}
+		)
+
+	</insert>
+	
+</mapper>

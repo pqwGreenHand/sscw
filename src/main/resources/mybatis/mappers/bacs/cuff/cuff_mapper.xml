@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.cuff.ICuffMapper" >
+  <resultMap id="BaseResultMap" type="com.zhixin.zhfz.bacs.entity.CuffEntity" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="cuff_no" property="cuffNo" jdbcType="VARCHAR" />
+    <result column="ic_no" property="icNo" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="area_id" property="interrogateAreaId" jdbcType="INTEGER" />
+    <result column="person_id" property="personId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="last_bind_id" property="lastBindId" jdbcType="INTEGER" />
+    <result column="last_bind_type" property="lastBindType" jdbcType="INTEGER" />
+    <!-- 链表 -->
+      <result column="interrogateAreaName" property="interrogateAreaName" jdbcType="VARCHAR" />
+ 		 <result column="areaid" property="areaid" jdbcType="INTEGER" />
+
+    <result column="op_pid" property="op_Pid" jdbcType="VARCHAR" />
+    <result column="op_user_id" property="op_User_Id" jdbcType="INTEGER" />
+
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, cuff_no, ic_no, status, type, area_id,person_id,user_id,last_bind_id,last_bind_type
+  </sql>
+  <select id="listAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from ba_cuff
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ba_cuff
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ba_cuff
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zhixin.zhfz.bacs.entity.CuffEntity" >
+    insert into ba_cuff (id, cuff_no, ic_no, status, type,
+      area_id,op_pid,op_user_id)
+    values (#{id,jdbcType=INTEGER}, #{cuffNo,jdbcType=VARCHAR}, #{icNo,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{type,jdbcType=INTEGER},
+      #{interrogateAreaId,jdbcType=INTEGER},#{op_Pid,jdbcType=VARCHAR},#{op_User_Id,jdbcType=INTEGER})
+  </insert>
+
+  <select id="getBindCuffByUserId" resultMap="BaseResultMap" parameterType="long">
+    select * from ba_cuff
+    where user_id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <update id="bindUserCuffById" parameterType="com.zhixin.zhfz.bacs.entity.CuffEntity" >
+    update ba_cuff
+    set
+    status = 1,
+    person_id = null,
+    user_id = #{userId,jdbcType=INTEGER},
+    last_bind_id = #{lastBindId,jdbcType=INTEGER},
+    last_bind_type = #{lastBindType,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <insert id="insertSelective" parameterType="com.zhixin.zhfz.bacs.entity.CuffEntity" useGeneratedKeys="true" keyProperty="id">
+    insert into ba_cuff
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="cuffNo != null" >
+        cuff_no,
+      </if>
+      <if test="icNo != null" >
+        ic_no,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="interrogateAreaId != null" >
+        area_id,
+      </if>
+      <if test="op_Pid != null" >
+        op_pid,
+      </if>
+      <if test="op_User_Id != null" >
+        op_user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="cuffNo != null" >
+        #{cuffNo,jdbcType=VARCHAR},
+      </if>
+      <if test="icNo != null" >
+        #{icNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="interrogateAreaId != null" >
+        #{interrogateAreaId,jdbcType=INTEGER},
+      </if>
+      <if test="op_Pid != null" >
+        #{op_Pid,jdbcType=VARCHAR},
+      </if>
+      <if test="op_User_Id != null" >
+        #{op_User_Id,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhixin.zhfz.bacs.entity.CuffEntity" >
+    update ba_cuff
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="cuffNo != null" >
+        cuff_no = #{cuffNo,jdbcType=VARCHAR},
+      </if>
+      <if test="icNo != null" >
+        ic_no = #{icNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="interrogateAreaId != null" >
+        area_id = #{interrogateAreaId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+    <update id="updateByPrimaryKey" parameterType="com.zhixin.zhfz.bacs.entity.CuffEntity" >
+    update ba_cuff
+    set 
+      status = #{status,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      area_id = #{interrogateAreaId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+<!--   <update id="updateByPrimaryKey" parameterType="CuffEntity" >
+    update cuff
+    set cuff_no = #{cuffNo,jdbcType=VARCHAR},
+      ic_no = #{icNo,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      interrogate_area_id = #{interrogateAreaId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update> -->
+  
+	<!-- id is same to interface'methmod -->
+<!-- 手环查询start -->
+	<select id="list" parameterType="java.util.Map" resultMap="BaseResultMap">
+		<!-- no ";" at the end -->
+	select c.*, a.name as interrogateAreaName from ba_cuff c,ba_area a where a.id=c.area_id
+			 <if test="dataAuth!=null and dataAuth!=''">
+					and ${dataAuth}
+             </if>
+			<if test="cuffNo!=null and cuffNo!=''">
+				and c.cuff_no like '%${cuffNo}%'
+			</if>
+            <if test="cuffNo!=null and cuffNo!=''">
+              and c.ic_no like '%${icNo}%'
+            </if>
+			<if test="status!=null and status!=''">
+				and c.status =${status}
+			</if>
+            <if test="type!=null and type!=''">
+              and c.type =${type}
+            </if>
+			<if test="interrogateAreaId!=null and interrogateAreaId!=''">
+				and c.area_id =${interrogateAreaId}
+			</if>	
+	limit ${pageStart},${rows}
+	</select>
+<!-- 手环查询end -->
+
+    <select id="getCuffByCuffNo" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select * from ba_cuff where  cuff_no=#{cuffNo}
+    </select>
+
+    <select id="getCuffByNo" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select * from ba_cuff where  ic_no=#{IcfNo}
+
+    </select>
+
+<!-- 手环总数start -->
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from ba_cuff c,ba_area a where a.id=c.area_id
+			 <if test="dataAuth!=null and dataAuth!=''">
+					and ${dataAuth}
+             </if>
+			<if test="cuffNo!=null and cuffNo!=''">
+				and c.cuff_no like '%${cuffNo}%'
+			</if>
+            <if test="icNo!=null and icNo!=''">
+              and c.ic_no like '%${icNo}%'
+            </if>
+			<if test="status!=null and status!=''">
+				and c.status =${status}
+			</if>
+            <if test="type!=null and type!=''">
+              and c.type =${type}
+            </if>
+			<if test="interrogateAreaId!=null and interrogateAreaId!=''">
+				and c.area_id =${interrogateAreaId}
+			</if>
+	</select>
+<!-- 手环总数end -->	
+<!-- 删除手环start -->
+	<delete id="delete" parameterType="int">
+		delete from ba_cuff where id=#{id}
+	</delete>
+<!-- 删除手环end -->
+    <!-- 根据标签编号和类型获取数据start -->
+    <select id="getCuffNoByIcNoAndType" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select c.* from ba_cuff c
+        where 1=1 and ic_no = #{icNo} and `type` = #{type}
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+    </select>
+    <!-- 根据标签编号和类型获取数据end -->
+
+    <select id="getBindCuffByPersonId" resultMap="BaseResultMap" parameterType="long">
+        select * from ba_cuff
+        where person_id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="getCuffById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+     select * from ba_cuff where id=#{id}
+    </select>
+    <update id="bindPersonCuffById" parameterType="com.zhixin.zhfz.bacs.entity.CuffEntity" >
+    update ba_cuff
+    set
+      status = 1,
+      person_id = null,
+      person_id = #{personId,jdbcType=INTEGER},
+      last_bind_id = #{lastBindId,jdbcType=INTEGER},
+      last_bind_type = #{lastBindType,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="unbindCuffById" parameterType="int" >
+    update ba_cuff
+    set
+      status =0,
+      person_id = null,
+      user_id = null,
+      last_bind_id = null,
+      last_bind_type = null
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

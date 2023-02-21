@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacsapp.dao.njdj.INjdjMapper">
+    <resultMap id="BaseResultMap" type="com.zhixin.zhfz.bacsapp.entity.NjdjAppEntity" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="serial_id" property="serialId" jdbcType="BIGINT" />
+        <result column="case_id" property="caseId" jdbcType="INTEGER" />
+        <result column="main_user_id" property="mainUserId" jdbcType="INTEGER" />
+        <result column="check_user_id" property="checkUserId" jdbcType="INTEGER" />
+        <result column="urinalysis_time" property="urinalysisTime" jdbcType="TIMESTAMP" />
+        <result column="area_id" property="areaId" jdbcType="INTEGER" />
+        <result column="test_method" property="testMethod" jdbcType="VARCHAR" />
+        <result column="result" property="result" jdbcType="VARCHAR" />
+        <result column="count" property="count" jdbcType="INTEGER" />
+        <result column="description" property="description" jdbcType="VARCHAR" />
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+        <!--链表-->
+        <result property="serialNo" column="serialNo"/>
+        <result property="personName" column="personName"/>
+        <result property="sex" column="sex"/>
+        <result property="age" column="age"/>
+        <result property="birth" column="birth"/>
+        <result property="certificateType" column="code_value"/>
+        <result property="certificateNo" column="certificate_no"/>
+        <result property="crimeType" column="crime_type"/>
+        <result property="caseType" column="case_type"/>
+        <result property="mainUserName" column="main_user_name"/>
+        <result property="checkUserName" column="check_user_name"/>
+        <result property="checkUserNo" column="checkUserNo"/>
+        <result property="sendOrgName" column="sendOrgName"/>
+        <result property="inTime" column="inTime"/>
+        <result property="status" column="status"/>
+
+        <result property="uuid" column="uuid"/>
+        <result property="inPhotoName" column="in_photo_name"/>
+    </resultMap>
+
+
+    <select id="list" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select a.id serialId,a.serial_no serialNo,a.`status`,a.in_time inTime,b.name personName,u.id,
+        a.uuid,a.in_photo_name,a.area_id,s.certificate_no certificateNo  from ba_serial a
+        inner join ba_person b on b.id = a.person_id
+        left join ba_urinalysis u on a.id=u.serial_id
+        left join xt_user s on u.check_user_id=s.id
+        <where>
+            a.out_time is null
+            <if test="dataAuth!=null and dataAuth!=''">
+                and ${dataAuth}
+            </if>
+            <if test="personName != null and personName != ''">
+                and b.name like "%${personName}%"
+            </if>
+        </where>
+        order by u.id
+        <if test="pageStart != null and rows != null">
+            limit ${pageStart},${rows}
+        </if>
+    </select>
+
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(1)
+        from ba_serial a
+        inner join ba_person b on b.id = a.person_id
+        left join ba_urinalysis u on a.id=u.serial_id
+        <where>
+            a.out_time is null
+            <if test="dataAuth!=null and dataAuth!=''">
+                and ${dataAuth}
+            </if>
+            <if test="personName != null and personName != ''">
+                and b.name like "%${personName}%"
+            </if>
+        </where>
+        order by a.id desc
+    </select>
+
+
+    <select id="personList" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select a.id serial_id,p.name personName,a.uuid,a.area_id,a.in_photo_name from ba_serial a
+        inner join ba_person p on a.person_id=p.id
+        left join ba_urinalysis u on a.id=u.serial_id
+        where
+        u.id is null and a.out_time is null and a.`status`>=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+    </select>
+
+    <select id="personListUpdate" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select a.id serial_id,p.name personName,a.uuid,a.area_id,a.in_photo_name,u.test_method,u.result,u.description from ba_serial a
+        inner join ba_person p on a.person_id=p.id
+        left join ba_urinalysis u on a.id=u.serial_id
+        where
+        u.id is not null and a.out_time is null and a.`status`>=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+    </select>
+
+</mapper>

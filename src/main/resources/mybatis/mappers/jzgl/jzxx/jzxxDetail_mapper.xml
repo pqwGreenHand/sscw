@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.jzgl.dao.jzxx.IJzxxDetailMapper">
+    <!-- 查询用户所选卷宗 -->
+    <select id="selectJzxxDetailByYhId" resultType="java.util.HashMap" parameterType="java.util.Map">  
+        	SELECT * FROM jz_jzxx_detail WHERE 1=1
+        	<if test="jzxx_id!=null and jzxx_id!=''">
+				and jzxx_id = ${jzxx_id}
+			</if>
+			<if test="jz_id!=null and jz_id!=''">
+				and jz_id = ${jz_id}
+			</if>
+			<if test="jzlb!=null and jzlb!=''">
+			    and jzlb = #{jzlb}
+			</if>
+    </select>
+    
+    <!-- 添加用户所选卷宗 -->
+    <insert id="insertJzxxDetailByYhId" parameterType="java.util.Map">  
+            INSERT INTO jz_jzxx_detail (jzxx_id, jz_id,jzlb) VALUES (${jzxx_id},${jz_id},#{jzlb})
+    </insert>
+    
+    <!-- 删除用户所选卷宗 -->
+    <delete id="deleteJzxxDetailByYhId" parameterType="java.util.Map">  
+            DELETE FROM jz_jzxx_detail WHERE 1=1
+            <if test="jzxx_id!=null and jzxx_id!=''">
+				and jzxx_id = ${jzxx_id}
+			</if>
+			<if test="jz_id!=null and jz_id!=''">
+				and jz_id = ${jz_id}
+			</if>
+			<if test="jzlb!=null and jzlb!=''">
+			    and jzlb = #{jzlb}
+			</if>
+    </delete> 
+    
+</mapper>
+
+

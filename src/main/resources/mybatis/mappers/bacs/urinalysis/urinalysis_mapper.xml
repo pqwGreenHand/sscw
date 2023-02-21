@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.urinalysis.UrinalysisMapper" >
+  <resultMap id="BaseResultMap" type="UrinalysisEntity" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="serial_id" property="serialId" jdbcType="BIGINT" />
+    <result column="case_id" property="caseId" jdbcType="INTEGER" />
+    <result column="main_user_id" property="mainUserId" jdbcType="INTEGER" />
+    <result column="check_user_id" property="checkUserId" jdbcType="INTEGER" />
+    <result column="urinalysis_time" property="urinalysisTime" jdbcType="TIMESTAMP" />
+    <result column="area_id" property="areaId" jdbcType="INTEGER" />
+    <result column="test_method" property="testMethod" jdbcType="VARCHAR" />
+    <result column="result" property="result" jdbcType="VARCHAR" />
+    <result column="count" property="count" jdbcType="INTEGER" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+    <result column="op_pid" property="opPid" jdbcType="VARCHAR" />
+    <result column="op_user_id" property="opUserId" jdbcType="INTEGER" />
+    <!--链表-->
+    <result property="serialNo" column="serial_no"/>
+    <result property="personName" column="person_name"/>
+    <result property="sex" column="sex"/>
+    <result property="age" column="age"/>
+    <result property="birth" column="birth"/>
+    <result property="certificateType" column="code_value"/>
+    <result property="certificateNo" column="certificate_no"/>
+    <result property="crimeType" column="crime_type"/>
+    <result property="caseType" column="case_type"/>
+    <result property="mainUserName" column="main_user_name"/>
+    <result property="checkUserName" column="check_user_name"/>
+    <result property="checkUserNo" column="checkUserNo"/>
+    <result property="sendOrgName" column="sendOrgName"/>
+    <result property="serialUUID" column="serialUUID"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, serial_id, case_id, main_user_id, check_user_id, urinalysis_time, area_id, test_method, 
+    result, count, description, created_time, updated_time
+  </sql>
+  <select id="listAllUrinalysis" resultMap="BaseResultMap" >
+    SELECT u.*,p.name AS person_name,p.sex,ct.code_desc AS crime_type,
+    u1.real_name AS check_user_name,u2.real_name AS main_user_name,
+    u1.certificate_no AS checkUserNo,c.ajlx AS case_type,s.uuid serialUUID
+    FROM ba_urinalysis u
+    LEFT JOIN ba_serial s ON s.id=u.serial_id
+    LEFT JOIN ba_person p ON p.id=s.person_id
+    LEFT JOIN ba_case c ON c.id=s.case_id
+    LEFT JOIN xt_crime_define ct ON ct.id=c.ab
+    LEFT JOIN xt_user u1 ON u1.id=u.check_user_id
+    LEFT JOIN xt_user u2 ON u2.id=u.main_user_id
+    limit ${pageStart},${rows}
+  </select>
+  <select id="countAllUrinalysis" resultType="int" >
+        	SELECT COUNT(1) FROM ba_urinalysis
+  </select>
+  <select id="listUrinalysis" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    <!-- no ";" at the end -->
+    SELECT s.id serial_id,u.*,p.name AS person_name,p.sex,ct.code_desc AS crime_type,p.age,o.name AS sendOrgName,
+    u1.real_name AS check_user_name,u2.real_name AS main_user_name,
+    p.certificate_no certificateNo,
+    u1.certificate_no AS checkUserNo,c.ajlx AS case_type,s.uuid serialUUID
+    FROM ba_serial s
+    LEFT JOIN ba_urinalysis u ON s.id=u.serial_id
+    LEFT JOIN ba_person p ON p.id=s.person_id
+    LEFT JOIN ba_case c ON c.id=s.case_id
+    LEFT JOIN xt_crime_define ct ON ct.id=c.ab
+    LEFT JOIN xt_user u1 ON u1.id=u.check_user_id
+    LEFT JOIN xt_user u2 ON u2.id=u.main_user_id
+    LEFT JOIN xt_organization o ON o.id=u2.organization_id
+    where ( s.status &lt;'11' or u.id is not null)
+    <if test="dataAuth!=null and dataAuth!=''">
+      and ${dataAuth}
+    </if>
+    <if test="name != null and name != ''">
+      and p.name like '%${name}%'
+    </if>
+    <if test="no != null and no != ''">
+      and p.certificate_no like '%${no}%'
+    </if>
+    <if test="areaid != null and areaid != ''">
+      and s.area_id = #{areaid}
+    </if>
+    <if test="start != null and start != ''">
+      and u.urinalysis_time &gt; #{start}
+    </if>
+    <if test="end != null and end != ''">
+      and u.urinalysis_time &lt; #{end}
+    </if>
+    ORDER BY  s.id DESC
+    limit ${pageStart},${rows}
+  </select>
+
+  <!-- countUrinalysis -->
+  <select id="countUrinalysis" resultType="int" parameterType="java.util.Map" >
+    SELECT COUNT(1) FROM ba_serial s
+    LEFT JOIN ba_urinalysis u ON s.id=u.serial_id
+    LEFT JOIN ba_person p ON p.id=s.person_id
+    LEFT JOIN ba_case c ON c.id=s.case_id
+    LEFT JOIN xt_crime_define ct ON ct.id=c.ab
+    LEFT JOIN xt_user u1 ON u1.id=u.check_user_id
+    LEFT JOIN xt_user u2 ON u2.id=u.main_user_id
+    LEFT JOIN xt_organization o ON o.id=u2.organization_id
+    where (s.status &lt;'11' or u.id is not null)
+    <if test="dataAuth!=null and dataAuth!=''">
+      and ${dataAuth}
+    </if>
+    <if test="name != null and name != ''">
+      and p.name like '%${name}%'
+    </if>
+    <if test="no != null and no != ''">
+      and p.certificate_no like '%${no}%'
+    </if>
+    <if test="areaid != null and areaid != ''">
+      and s.area_id = #{areaid}
+    </if>
+    <if test="start != null and start != ''">
+      and u.urinalysis_time &gt; #{start}
+    </if>
+    <if test="end != null and end != ''">
+      and u.urinalysis_time &lt; #{end}
+    </if>
+  </select>
+  <select id="count" resultType="int" parameterType="java.util.Map" >
+        	select count(1)+1 from ba_urinalysis where serial_id=#{serialId}
+    </select>
+
+  <insert id="insertSelective" parameterType="UrinalysisEntity" useGeneratedKeys="true" keyProperty="id">
+    insert into ba_urinalysis
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="serialId != null" >
+        serial_id,
+      </if>
+      <if test="caseId != null" >
+        case_id,
+      </if>
+      <if test="mainUserId != null" >
+        main_user_id,
+      </if>
+      <if test="checkUserId != null" >
+        check_user_id,
+      </if>
+      <if test="opPid != null" >
+        op_pid,
+      </if>
+      <if test="opUserId != null" >
+        op_user_id,
+      </if>
+      <if test="urinalysisTime != null" >
+        urinalysis_time,
+      </if>
+      <if test="areaId != null" >
+        area_id,
+      </if>
+      <if test="testMethod != null" >
+        test_method,
+      </if>
+      <if test="result != null" >
+        result,
+      </if>
+      <if test="count != null" >
+        count,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="updatedTime != null" >
+        updated_time
+      </if>
+
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="serialId != null" >
+        #{serialId,jdbcType=BIGINT},
+      </if>
+      <if test="caseId != null" >
+        #{caseId,jdbcType=INTEGER},
+      </if>
+      <if test="mainUserId != null" >
+        #{mainUserId,jdbcType=INTEGER},
+      </if>
+      <if test="checkUserId != null" >
+        #{checkUserId,jdbcType=INTEGER},
+      </if>
+      <if test="opPid != null" >
+        #{opPid,jdbcType=VARCHAR},
+      </if>
+      <if test="opUserId != null" >
+        #{opUserId,jdbcType=INTEGER},
+      </if>
+      <if test="urinalysisTime != null" >
+        #{urinalysisTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="areaId != null" >
+        #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="testMethod != null" >
+        #{testMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="result != null" >
+        #{result,jdbcType=VARCHAR},
+      </if>
+      <if test="count != null" >
+        #{count,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        #{updatedTime,jdbcType=TIMESTAMP}
+      </if>
+
+
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="UrinalysisEntity" >
+    update ba_urinalysis
+    <set >
+      <if test="serialId != null" >
+        serial_id = #{serialId,jdbcType=BIGINT},
+      </if>
+      <if test="caseId != null" >
+        case_id = #{caseId,jdbcType=INTEGER},
+      </if>
+      <if test="mainUserId != null" >
+        main_user_id = #{mainUserId,jdbcType=INTEGER},
+      </if>
+      <if test="checkUserId != null" >
+        check_user_id = #{checkUserId,jdbcType=INTEGER},
+      </if>
+      <if test="urinalysisTime != null" >
+        urinalysis_time = #{urinalysisTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="areaId != null" >
+        area_id = #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="testMethod != null" >
+        test_method = #{testMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="result != null" >
+        result = #{result,jdbcType=VARCHAR},
+      </if>
+      <if test="count != null" >
+        count = #{count,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <delete id="deleteUrinalysisById" parameterType="Long">
+            DELETE FROM ba_urinalysis WHERE id=#{id}
+    </delete>
+
+  <select id="getUrinalysisById" resultMap="BaseResultMap" parameterType="Long" >
+    SELECT u.*,p.name AS person_name,p.sex,ct.code_desc AS crime_type,p.age,p.birth,
+    cd.code_value,p.certificate_no,s.serial_no,
+    o.name AS sendOrgName,
+    u1.real_name AS check_user_name,u2.real_name AS main_user_name,u1.certificate_no AS cuffNumber
+    FROM ba_urinalysis u
+    LEFT JOIN ba_serial s ON s.id=u.serial_id
+    LEFT JOIN ba_person p ON p.id=s.person_id
+    LEFT JOIN xt_code cd on cd.code_key and p.certificate_type_id
+    LEFT JOIN ba_case c ON c.id=s.case_id
+    LEFT JOIN xt_crime_define ct ON ct.id=c.ab
+    LEFT JOIN xt_user u1 ON u1.id=u.check_user_id
+    LEFT JOIN xt_user u2 ON u2.id=u.main_user_id
+    LEFT JOIN xt_organization o ON o.id=u2.organization_id
+    where cd.type='ZJZLID' and u.id=#{id} limit 1
+  </select>
+</mapper>

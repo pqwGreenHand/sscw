@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhixin.zhfz.glpt.dao.bacase.IBaCaseMapper">
+    <!-- <typeAlias alias="actionLog" type="com.zhixin.rd.interrogate.web.entity.ActionLogEntity" /> -->
+    <resultMap id="bacaseMap" type="com.zhixin.zhfz.glpt.entity.BaCaseEntity">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="ajmc" property="ajmc" jdbcType="VARCHAR" />
+        <result column="ajbh" property="ajbh" jdbcType="VARCHAR" />
+        <result column="ajlx" property="ajlx" jdbcType="INTEGER" />
+        <result column="abmc" property="abmc" jdbcType="VARCHAR" />
+        <result column="created_time" property="createdTime"  />
+        <result column="certificate_no" property="certificateNo"  />
+        <result column="involved_reason" property="involvedReason"  />
+        <result column="personName" property="personName"  />
+        <result column="personId" property="personId"  />
+        <result column="belongId" property="belongId"  />
+        <result column="areaName" property="areaName"  />
+
+    </resultMap>
+
+    <resultMap id="BaSerialMap" type="com.zhixin.zhfz.glpt.entity.BaSerialEntity">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="area_name" property="areaName" jdbcType="VARCHAR" />
+        <result column="count" property="count" jdbcType="INTEGER" />
+        <result column="sex" property="sex" jdbcType="INTEGER" />
+        <result column="in_time" property="inTime"  />
+        <result column="out_time" property="outTime"  />
+        <result column="written_time" property="writtenTime"  />
+        <result column="status" property="status"  />
+        <result column="confirm_result" property="confirmResult" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <resultMap id="chartMap"
+               type="com.zhixin.zhfz.glpt.entity.ChartEntity">
+        <result column="k" property="key"  />
+        <result column="v" property="value" />
+        <result column="geo_coord" property="geoCoord" />
+    </resultMap>
+
+    <!-- 30天内刑事行政统计-->
+    <select id="query30DayByCategory"  resultMap="bacaseMap" parameterType="java.util.Map">
+        select ajlx,created_time from ba_case c
+        WHERE
+        c.created_time > DATE_ADD(NOW(), INTERVAL - 29 DAY)
+        <!--<if test="dataAuth!=null and dataAuth!=''">
+            and c.interrogate_area_id ${dataAuth}
+        </if>-->
+        <if test="dataAuth!=null and dataAuth!=''">
+            and #{dataAuth}
+        </if>
+    </select>
+
+    <!-- 获取各个办案中心总的裁决统计-->
+    <select id="queryAdjudicationByAll"  resultMap="BaSerialMap" parameterType="java.util.Map">
+        SELECT
+        ifnull(s.confirm_result, '无') as confirmResult,
+        a.`name` areaName
+        FROM
+        ba_area	a
+        LEFT JOIN ba_serial s ON s.area_id = a.id
+        where s.type = 0
+        <if test="dataAuth!=null and dataAuth!=''">
+            and #{dataAuth}
+        </if>
+    </select>
+
+    <!-- 获取各个办案中心一周内入区统计-->
+    <select id="queryIntoByWeek"  resultMap="BaSerialMap" parameterType="java.util.Map">
+        SELECT
+        p.sex,
+        s.in_time
+        FROM
+        ba_serial s
+        left join ba_case bc on bc.id = s.case_id
+        LEFT JOIN ba_area a ON a.id = s.area_id
+        LEFT JOIN ba_person p ON p.id= s.person_id
+        WHERE
+        s.in_time &gt; DATE_ADD(NOW(), INTERVAL - 6 DAY)
+        and s.type = 0
+        <!--<if test="dataAuth!=null and dataAuth!=''">
+            and s.interrogate_area_id ${dataAuth}
+        </if>-->
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+    </select>
+
+    <!-- 获取各个办案中心总的收押人数-->
+    <select id="queryDetainByAll"  resultMap="BaSerialMap" parameterType="java.util.Map">
+        <if test="dataAuth!=null and dataAuth!=''">
+            ${dataAuth}
+        </if>
+    </select>
+
+    <!-- 获取各个办案中心24小时内入区出区总人数-->
+    <select id="query24HourOut"  resultMap="BaSerialMap" parameterType="java.util.Map">
+        SELECT
+        in_time,
+        out_time,
+        a.`name` areaName
+        FROM
+        ba_area	 a
+        LEFT JOIN ba_serial s ON a.id = s.area_id
+        WHERE 1=1
+        and s.type = 0
+        <if test="dataAuth!=null and dataAuth!=''">
+            and  ${dataAuth}
+        </if>
+    </select>
+
+    <!-- 获取各个办案中心总的案件类别统计-->
+    <select id="queryCategoryByAll"  resultMap="bacaseMap" parameterType="java.util.Map">
+        SELECT
+        c.ajlx ajlx,
+        a.`name` AreaName
+        FROM
+        ba_area	 a
+        LEFT JOIN ba_case c ON c.zbdw_id = a.organization_id
+        where 1=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and  ${dataAuth}
+        </if>
+    </select>
+
+    <!-- 获取各个办案中心总的候问看押容积-->
+    <select id="queryDetainByCount"  resultType="java.util.HashMap"  parameterType="java.util.Map">
+        select SUM(volume) as volume,(select count(*) from ba_waiting_record where `status`=0) as num from ba_room r
+        where room_type_id=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and  ${dataAuth}
+        </if>
+    </select>
+
+    <!-- 获取各个办案中心入区嫌疑人状态-->
+    <select id="queryPersonType"  resultMap="BaSerialMap" parameterType="java.util.Map">
+        SELECT
+        a.`name` areaName ,
+        s.`status`
+        FROM
+        ba_area	 a LEFT JOIN ba_serial s ON  a.id = s.area_id
+        and s.type = 0
+        WHERE 1=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+    </select>
+
+    <!-- 查询当前在区人数，历史总人数，历史总案件-->
+    <select id="queryInAndTotal" resultType="int" parameterType="java.util.Map">
+        SELECT count(1) from ba_serial where out_time is null
+        <if test="dataAuth!='' and dataAuth!=null  ">
+            and	area_id ${dataAuth}
+        </if>
+        <if test="areaId!='' and areaId!=null  ">
+            and	area_id = #{areaId}
+        </if>
+        union all
+        SELECT count(1) from ba_serial
+        <if test="dataAuth!='' and dataAuth!=null  ">
+            where 	area_id ${dataAuth}
+        </if>
+        <if test="areaId!='' and areaId!=null  ">
+            where		area_id = #{areaId}
+        </if>
+        union all
+        select count(1) from ba_case c LEFT JOIN ba_serial s on c.id = s.case_id
+        <if test="dataAuth!='' and dataAuth!=null  ">
+            where	s.area_id ${dataAuth}
+        </if>
+        <if test="areaId!='' and areaId!=null  ">
+            where		s.area_id = #{areaId}
+        </if>
+    </select>
+
+    <!-- 侯问室容积率-->
+    <select id="queryUseRateCount" resultType="int" parameterType="java.util.Map">
+        <choose>
+            <when test="interrogateName!='' and interrogateName!=null  ">
+                SELECT count(1) from ba_waiting_record wr
+                LEFT JOIN ba_area ia on wr.area_id=ia.id
+                where out_time is null and in_time is not null and  ia.name like  '%${interrogateName}%'
+                UNION all
+                SELECT IFNULL(sum(volume),0)from ba_room ir
+                LEFT JOIN ba_area ia on ir.area_id=ia.id
+                where room_type_id=1 and volume is not null and  ia.name like '%${interrogateName}%'
+            </when>
+            <otherwise>
+                SELECT count(1) from ba_waiting_record where out_time is null and in_time is not null
+                UNION all
+                SELECT IFNULL(sum(volume),0) from ba_room where room_type_id=1 and volume is not null
+            </otherwise>
+        </choose>
+
+    </select>
+
+    <!--每个办案中心在区人数 -->
+    <select id="queryInInterrogateNum" resultMap="chartMap" parameterType="java.util.Map">
+        <choose>
+            <!--办案中心在区性别-->
+            <when test="interrogateName!='' and interrogateName!=null  ">
+                select count(1) v,
+                (case p.sex
+                when 1 then '男'
+                when 2 then '女'
+                end) k
+                from ba_serial ints
+                left join ba_person p on ints.person_id=p.id
+                left join ba_area ia on ia.id=ints.area_id
+                where ints.status  &lt;&gt; 11 and ia.name like '%${interrogateName}%'
+                group by p.sex
+            </when>
+            <otherwise>
+                <!--SELECT  count(1) v ,(SELECT ia.name from interrogate_area ia where id=interrogate_area_id) k-->
+                <!--from interrogate_serial where `status`  &lt;&gt; 11-->
+                <!--GROUP BY interrogate_area_id-->
+                <if test="dataAuth!='' and dataAuth!=null  ">
+                    ${dataAuth}
+                </if>
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="queryCaseTop10" resultMap="chartMap" parameterType="java.util.Map">
+        <choose>
+            <when test="interrogateName!='' and interrogateName!=null  ">
+                SELECT count(ab) v,cd.code_desc k FROM ba_case inca
+                LEFT JOIN xt_crime_define cd on inca.ab =cd.id
+                left join ba_area ia on ia.id=inca.zbdw_id
+                where ia.name like '%${interrogateName}%'
+                GROUP BY ab ORDER BY v desc
+            </when>
+            <otherwise>
+                SELECT count(ab) v,cd.code_desc k FROM ba_case inca
+                LEFT JOIN xt_crime_define cd on inca.ab =cd.id
+                GROUP BY ab ORDER BY v desc
+            </otherwise>
+        </choose>
+
+    </select>
+
+    <!-- 查询每个月进入办案中心嫌疑人人数-->
+    <select id="queryEntranceCountEveryMonth" resultType="int" parameterType="java.util.Map">
+
+        SELECT count(1) from ba_serial where DATE_FORMAT(in_time,'%m')=01
+        <if test="areaId!=null ">
+            and area_id=#{areaId}
+        </if>
+        union all
+        SELECT count(1) from ba_serial where DATE_FORMAT(in_time,'%m')=02
+        <if test="areaId!=null ">
+            and area_id=#{areaId}
+        </if>
+        union all
+        SELECT count(1) from ba_serial where DATE_FORMAT(in_time,'%m')=03
+        <if test="areaId!=null ">
+            and area_id=#{areaId}
+        </if>
+        union all
+        SELECT count(1) from ba_serial where DATE_FORMAT(in_time,'%m')=04
+        <if test="areaId!=null ">
+            and area_id=#{areaId}
+        </if>
+        union all
+        SELECT count(1) from ba_serial where DATE_FORMAT(in_time,'%m')=05
+        <if test="areaId!=null ">
+            and area_id=#{areaId}
+        </if>
+        union all
+        SELECT count(1) from ba_serial where DATE_FORMAT(in_time,'%m')=06
+        <if test="areaId!=null ">
+            and area_id=#{areaId}
+        </if>
+        union all
+        SELECT count(1) from ba_serial where DATE_FORMAT(in_time,'%m')=07
+        <if test="areaId!=null ">
+            and area_id=#{areaId}
+        </if>
+        union all
+        SELECT count(1) from ba_serial where DATE_FORMAT(in_time,'%m')=08
+        <if test="areaId!=null ">
+            and area_id=#{areaId}
+        </if>
+        union all
+        SELECT count(1) from ba_serial where DATE_FORMAT(in_time,'%m')=09
+        <if test="areaId!=null ">
+            and area_id=#{areaId}
+        </if>
+        union all
+        SELECT count(1) from ba_serial where DATE_FORMAT(in_time,'%m')=10
+        <if test="areaId!=null ">
+            and area_id=#{areaId}
+        </if>
+        union all
+        SELECT count(1) from ba_serial where DATE_FORMAT(in_time,'%m')=11
+        <if test="areaId!=null ">
+            and area_id=#{areaId}
+        </if>
+        union all
+        SELECT count(1) from ba_serial where DATE_FORMAT(in_time,'%m')=12
+        <if test="areaId!=null ">
+            and area_id=#{areaId}
+        </if>
+
+    </select>
+
+    <!-- 每个办案中心在区人数-->
+    <select id="queryEveryInterrogateIn" resultMap="chartMap" parameterType="java.util.Map">
+        <!-- SELECT count(1) v ,inar.name k FROM interrogate_area inar
+        LEFT JOIN interrogate_serial ints on inar.id=ints.interrogate_area_id
+        where ints.out_time is null  GROUP BY inar.id-->
+
+        <if test="dataAuth!='' and dataAuth!=null  ">
+            ${dataAuth}
+        </if>
+    </select>
+
+
+
+    <!--文书sql-->
+    <select id="listAllLawPerson" resultMap="bacaseMap"  parameterType="java.util.Map">
+        select
+        ia.name areaName,
+        bb.created_time,
+        bb.id belongId,
+        p.uuid,
+        ia.id,
+        p.certificate_no,
+        p.name personName,
+        bc.ajmc,
+        bc.ajbh,
+        (select ct.code_desc  from xt_crime_define ct where ct.id = bc.ab) involved_reason,
+        bc.ajlx,
+        p.id AS personId,
+        bc.abmc
+        from
+        ba_belongings bb
+        left join ba_person p on bb.serial_id = p.id
+        left join  ba_case bc on bb.case_id= bc.id
+        left join xt_code tc on p.certificate_type_id=tc.code_key and tc.type = 'ZJZLID'
+        left join ba_area ia on bb.area_id=ia.id
+        where 1=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="personName != null and personName !=''">
+            and p.name like '%${personName}%'
+        </if>
+        <if test="certificateNo != null and certificateNo !=''">
+            and p.certificate_no like '%${certificateNo}%'
+        </if>
+        <if test="areaId != null and areaId != ''">
+            and bb.area_id = #{areaId}
+        </if>
+        ORDER BY p.created_time desc
+        limit ${pageStart},${rows}
+    </select>
+
+    <select id="countAllLawPerson" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select
+        count(1)
+        from
+        ba_belongings bb
+        left join ba_person p on bb.serial_id = p.id
+        left join   ba_case bc on bb.case_id= bc.id
+        left join xt_code tc on p.certificate_type_id=tc.code_key and tc.type = 'ZJZLID'
+        left join ba_area ia on bb.area_id=ia.id
+        where 1=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="personName != null and personName !=''">
+            and p.name like '%${personName}%'
+        </if>
+        <if test="certificateNo != null and certificateNo !=''">
+            and p.certificate_no like '%${certificateNo}%'
+        </if>
+        <if test="areaId != null and areaId != ''">
+            and bb.area_id = #{areaId}
+        </if>
+    </select>
+
+</mapper>
+
+

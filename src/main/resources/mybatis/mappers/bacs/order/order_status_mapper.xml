@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.order.IOrderStatusMapper" >
+  <resultMap id="BaseResultMap" type="OrderStatusEntity" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="status_name" property="statusName" jdbcType="VARCHAR" />
+    <result column="status_time" property="statusTime" jdbcType="TIMESTAMP" />
+    <result column="order_request_id" property="orderRequestId" jdbcType="INTEGER" />
+    <result column="op_pid" property="opPid" jdbcType="VARCHAR" />
+    <result column="op_user_id" property="opUserId" jdbcType="INTEGER" />
+    <!-- 关联信息  start-->
+     <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="order_user_id1" property="orderUserId1" jdbcType="INTEGER" />
+    <result column="order_user_id2" property="orderUserId2" jdbcType="INTEGER" />
+    <result column="male_count" property="maleCount" jdbcType="INTEGER" />
+    <result column="female_count" property="femaleCount" jdbcType="INTEGER" />
+    <result column="juveniles_count" property="juvenilesCount" jdbcType="INTEGER" />
+    <result column="special_count" property="specialCount" jdbcType="INTEGER" />
+    <result column="other_count" property="otherCount" jdbcType="INTEGER" />
+    <result column="case_name" property="caseName" jdbcType="VARCHAR" />
+    <result column="plan_time" property="planTime" jdbcType="TIMESTAMP" />
+    <result column="arrive_time" property="arriveTime" jdbcType="TIMESTAMP" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="noter_id" property="noterId" jdbcType="INTEGER" />
+    <result column="interrogate_area_id" property="interrogateAreaId" jdbcType="INTEGER" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+    <!-- 链表 -->
+
+	<result column="person1Name" property="person1Name" jdbcType="VARCHAR" />
+	<result column="person2Name" property="person2Name" jdbcType="VARCHAR" />
+	<result column="notePersonName" property="notePersonName" jdbcType="VARCHAR" />
+	<result column="interrogateAreaName" property="interrogateAreaName" jdbcType="VARCHAR" />
+
+	<result column="contentId" property="contentId" jdbcType="INTEGER" />
+	<result column="name" property="name" jdbcType="VARCHAR" />
+	<result column="certificateNo" property="certificateNo"
+		jdbcType="VARCHAR" />
+	<result column="certificateTypeId" property="certificateTypeId"
+		jdbcType="INTEGER" />
+   <result column="sex" property="sex" jdbcType="INTEGER" />
+   <result column="oreId" property="oreId" jdbcType="INTEGER" />
+   <!-- 关联信息end -->
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, status_name, status_time, order_request_id
+  </sql>
+  <update id="updateByPrimaryKeySelective" parameterType="OrderStatusEntity" >
+    update ba_order_status
+    <set >
+      <if test="statusName != null" >
+        status_name = #{statusName,jdbcType=VARCHAR},
+      </if>
+      <if test="statusTime != null" >
+        status_time = #{statusTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderRequestId != null" >
+        order_request_id = #{orderRequestId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <delete id="deleteByOrderRequestId" parameterType="java.lang.Integer" >
+    delete from ba_order_status
+    where 	order_request_id = #{orderRequestId}
+  </delete>
+  <insert id="insert" parameterType="OrderStatusEntity" >
+    insert into ba_order_status (status_name, status_time,
+      order_request_id,op_pid,op_user_id)
+    values (#{statusName,jdbcType=VARCHAR},now(),#{orderRequestId,jdbcType=INTEGER},#{opPid,jdbcType=VARCHAR},#{opUserId,jdbcType=INTEGER})
+  </insert>
+</mapper>

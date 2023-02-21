@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhixin.zhfz.bacs.dao.cabinetConfig.ICabinetConfigDetailMapper">
+
+    <resultMap id="cabinetConfigResultMap" type="com.zhixin.zhfz.bacs.entity.CabinetConfigDetailEntity">
+        <id property="id" column="ID"/>
+        <result property="configId" column="config_id"/>
+        <result property="openKey" column="open_key"/>
+        <result property="showNo" column="show_no"/>
+        <result property="row" column="row"/>
+        <result property="column" column="column"/>
+        <result property="type" column="type"/>
+        <result property="group" column="group"/>
+        <result property="columnCount" column="column_count"/>
+        <result property="rowCount" column="row_count"/>
+        <result property="isGet" column="is_get"/>
+        <result property="serialId" column="serial_id"/>
+        <result property="personName" column="person_name"/>
+        <result property="count" column="count"/>
+    </resultMap>
+    <resultMap id="cabinetResultMap" type="com.zhixin.zhfz.bacs.entity.CabinetConfigEntity">
+        <id property="id" column="ID"/>
+        <result property="name" column="name"/>
+        <result property="type" column="type"/>
+        <result property="areaId" column="area_id"/>
+        <result property="isEnable" column="is_enable"/>
+        <result property="ip" column="ip"/>
+        <result property="port" column="port"/>
+        <result property="group" column="group"/>
+        <result property="openIp" column="open_ip"/>
+        <result property="columnCount" column="column_count"/>
+        <result property="rowCount" column="row_count"/>
+        <result property="orderType" column="order_type"/>
+    </resultMap>
+    <sql id="cabinet_config_detail_columns">
+        id, config_id, open_key, show_no, row,
+        column, type
+    </sql>
+
+    <insert id="insert" parameterType="com.zhixin.zhfz.bacs.entity.CabinetConfigDetailEntity"
+            useGeneratedKeys="true" keyProperty="id">
+		insert into ba_cabinet_config_detail (config_id, open_key, show_no, `row`,
+        `column`, type)
+		values (#{configId}, #{openKey},
+		#{showNo}, #{row}, #{column},
+		#{type})
+	</insert>
+
+    <select id="list" resultMap="cabinetConfigResultMap" parameterType="java.util.Map">
+        select
+        id, config_id, open_key, show_no, bc.row,
+        bc.column, type
+        from ba_cabinet_config_detail bc
+        <where>
+            <if test="configId!=null">
+                bc.config_id = #{configId}
+            </if>
+        </where>
+        limit ${pageStart},${rows}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select
+        count(1) count
+        from ba_cabinet_config_detail bc
+        <where>
+            <if test="configId!=null">
+                bc.config_id = #{configId}
+            </if>
+        </where>
+    </select>
+    <delete id="delete" parameterType="java.lang.Integer">
+		delete from ba_cabinet_config_detail
+		where config_id = #{id}
+	</delete>
+    <update id="update" parameterType="com.zhixin.zhfz.bacs.entity.CabinetConfigDetailEntity">
+		update ba_cabinet_config_detail
+		set 
+		type=#{type}
+		where id = #{id}
+	</update>
+    <!-- 嫌疑人随身物品根据行列排序 -->
+    <select id="selectRowColSort" resultMap="cabinetConfigResultMap" parameterType="java.lang.Integer">
+        SELECT
+        s.id config_id,
+        s.`group`,
+        s.open_key,
+        s.`column`,
+        s.`row`,
+        s.type,
+        s.column_count,
+        s.row_count,
+        (select COUNT(1) from ba_belongings_detail bdl LEFT JOIN ba_belongings bd ON bdl.belongings_id = bd.id where bd.locker_id=loc.locker_id and bdl.is_get = 0) count,
+        s.show_no,
+        CASE
+        WHEN loc.is_get IS NULL THEN
+        1
+        ELSE
+        loc.is_get
+        END AS is_get,
+        loc.serial_id,
+        s.detail_id id,
+        p. NAME AS person_name
+        FROM
+        (
+        SELECT
+        p.id,
+        p.`group`,
+        d.open_key,
+        d.type,
+        d.id detail_id,
+        d.`row`,
+        d.`column`,
+        p.column_count,
+        p.row_count,
+        d.show_no
+        FROM
+        ba_cabinet_config p,
+        ba_cabinet_config_detail d
+        WHERE
+        p.id = d.config_id
+        AND p.area_id = #{areaId}
+        AND p.type = 1
+        ) s
+        LEFT JOIN (
+        SELECT
+        locker_id,
+        serial_id,
+        0 AS is_get
+        FROM
+        ba_belongings
+        WHERE
+        is_get = 0
+        GROUP BY
+        locker_id,
+        serial_id
+        ) loc ON loc.locker_id = s.detail_id
+        LEFT JOIN ba_person p ON loc.serial_id = p.id
+        GROUP BY  s.open_key
+        ORDER BY
+        	s.`row`,
+	        s.`column`
+    </select>
+    <!-- 查询开柜配置 -->
+    <select id="listInParamDetailByOutParamId" resultMap="cabinetResultMap" parameterType="Long">
+        SELECT
+            *
+        FROM
+            ba_cabinet_config
+        WHERE
+         id = (
+            SELECT
+                config_id
+            FROM
+                ba_cabinet_config_detail
+            WHERE
+                id = #{id}
+        )
+    </select>
+    <!-- 根据储物柜id查询编号 -->
+    <select id="queryBoxNumberById" resultType="java.lang.String" parameterType="java.lang.Long">
+        SELECT
+            pcd.open_key AS boxNumber
+        FROM
+            ba_cabinet_config_detail pcd
+        WHERE
+            pcd.id = #{lockid}
+    </select>
+    <!-- 涉案物品柜根据行列排序 -->
+    <select id="selectRowColSortBySA" resultMap="cabinetConfigResultMap" parameterType="java.lang.Integer">
+        SELECT
+            s.id config_id,
+            s.`group`,
+            s.open_key,
+            s.`column`,
+            s.`row`,
+            s.type,
+            s.column_count,
+            s.row_count,
+            (
+                SELECT
+                    COUNT(1)
+                FROM
+                    ba_exhibit_detail bdl
+                LEFT JOIN ba_exhibit bd ON bdl.exhibit_id = bd.id
+                WHERE
+                    bd.locker_id = loc.locker_id
+                AND bdl.is_get = 0
+            ) count,
+            s.show_no,
+            CASE
+        WHEN loc.is_get IS NULL THEN
+            1
+        ELSE
+            loc.is_get
+        END AS is_get,
+         loc.serial_id,
+         s.detail_id id,
+         p. NAME AS person_name
+        FROM
+            (
+                SELECT
+                    p.id,
+                    p.`group`,
+                    d.open_key,
+                    d.type,
+                    d.id detail_id,
+                    d.`row`,
+                    d.`column`,
+                    p.column_count,
+                    p.row_count,
+                    d.show_no
+                FROM
+                    ba_cabinet_config p,
+                    ba_cabinet_config_detail d
+                WHERE
+                    p.id = d.config_id
+         		AND p.area_id = #{areaId}
+                AND p.type = 2
+            ) s
+        LEFT JOIN (
+            SELECT
+                locker_id,
+                serial_id,
+                0 AS is_get
+            FROM
+                ba_exhibit
+            WHERE
+                is_get = 0
+            GROUP BY
+                locker_id,
+                serial_id
+        ) loc ON loc.locker_id = s.detail_id
+        LEFT JOIN ba_serial ints ON ints.id = loc.serial_id
+        LEFT JOIN ba_person p ON ints.person_id = p.id
+        ORDER BY
+            s.`row`,
+            s.`column`
+    </select>
+    <!-- 查找指定的detail信息 -->
+    <select id="listDetailByCodeAndParam" resultMap="cabinetResultMap" parameterType="java.util.Map">
+        SELECT d.* FROM ba_cabinet_config_detail d
+        LEFT JOIN ba_cabinet_config c ON c.id=d.config_id
+        WHERE c.type=#{codeKey}
+        <if test="paramKey !=null and paramKey !=''">
+            AND c.param_key=#{paramKey}
+        </if>
+        AND c.area_id=#{areaId}
+
+    </select>
+    <!-- 嫌疑人随身物品根据行列排序 -->
+    <select id="selectRowColSortByPolice" resultMap="cabinetConfigResultMap" parameterType="java.lang.Integer">
+        SELECT
+        s.id config_id,
+        s.`group`,
+        s.open_key,
+        s.`column`,
+        s.`row`,
+        s.type,
+        s.column_count,
+        s.row_count,
+        (select COUNT(1) from ba_police_belongings_detail bdl LEFT JOIN ba_police_belongings bd ON bdl.belongings_id = bd.id where bd.locker_id=loc.locker_id and bdl.is_get = 0) count,
+        s.show_no,
+        CASE
+        WHEN loc.is_get IS NULL THEN
+        1
+        ELSE
+        loc.is_get
+        END AS is_get,
+        loc.police_id,
+        s.detail_id id,
+        p. real_name AS person_name
+        FROM
+        (
+        SELECT
+        p.id,
+        p.`group`,
+        d.open_key,
+        d.type,
+        d.id detail_id,
+        d.`row`,
+        d.`column`,
+        p.column_count,
+        p.row_count,
+        d.show_no
+        FROM
+        ba_cabinet_config p,
+        ba_cabinet_config_detail d
+        WHERE
+        p.id = d.config_id
+        AND p.area_id = #{areaId}
+        AND p.type = 3
+        ) s
+        LEFT JOIN (
+        SELECT
+        locker_id,
+        police_id,
+        0 AS is_get
+        FROM
+        ba_police_belongings
+        WHERE
+        is_get = 0
+        GROUP BY
+        locker_id,
+        police_id
+        ) loc ON loc.locker_id = s.detail_id
+        LEFT JOIN ba_police_entrance ints ON ints.id = loc.police_id
+        LEFT JOIN xt_user p ON ints.police_id = p.id
+        ORDER BY
+        	s.`row`,
+	        s.`column`
+    </select>
+    <!-- 嫌疑人涉案手机物品 -->
+    <select id="selectRowColSortBySAAPP" resultMap="cabinetConfigResultMap" parameterType="java.lang.Integer">
+        SELECT
+            s.id config_id,
+            s.`group`,
+            s.open_key,
+            s.`column`,
+            s.`row`,
+            s.type,
+            s.column_count,
+            s.row_count,
+            (
+                SELECT
+                    COUNT(1)
+                FROM
+                    ba_exhibit_detail bdl
+                LEFT JOIN ba_exhibit bd ON bdl.exhibit_id = bd.id
+                WHERE
+                    bd.locker_id = loc.locker_id
+                AND bdl.is_get = 0
+            ) count,
+            s.show_no,
+            CASE
+        WHEN loc.is_get IS NULL THEN
+            1
+        ELSE
+            loc.is_get
+        END AS is_get,
+         loc.serial_id,
+         s.detail_id id,
+         p. NAME AS person_name
+        FROM
+            (
+                SELECT
+                    p.id,
+                    p.`group`,
+                    d.open_key,
+                    d.type,
+                    d.id detail_id,
+                    d.`row`,
+                    d.`column`,
+                    p.column_count,
+                    p.row_count,
+                    d.show_no
+                FROM
+                    ba_cabinet_config p,
+                    ba_cabinet_config_detail d
+                WHERE
+                    p.id = d.config_id
+         		AND p.area_id = 1
+                AND p.type = 2
+            ) s
+        LEFT JOIN (
+            SELECT
+                locker_id,
+                serial_id,
+                0 AS is_get
+            FROM
+                ba_exhibit
+            WHERE
+                is_get = 0
+            GROUP BY
+                locker_id,
+                serial_id
+        ) loc ON loc.locker_id = s.detail_id
+        LEFT JOIN ba_serial ints ON ints.id = loc.serial_id
+        LEFT JOIN ba_person p ON ints.person_id = p.id
+        ORDER BY
+						s.show_no
+    </select>
+</mapper>

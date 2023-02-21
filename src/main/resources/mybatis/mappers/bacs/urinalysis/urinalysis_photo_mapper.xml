@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.urinalysis.UrinalysisPhotoMapper" >
+  <resultMap id="BaseResultMap" type="UrinalysisPhotoEntity" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="urinalysis_id" property="urinalysisId" jdbcType="INTEGER" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="areaId" property="areaId" jdbcType="INTEGER" />
+    <result column="uuid" property="uuid" jdbcType="VARCHAR" />
+
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, urinalysis_id, url, created_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from ba_urinalysis_photo
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from ba_urinalysis_photo
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="UrinalysisPhotoEntity" >
+    insert into ba_urinalysis_photo (id, urinalysis_id, url, 
+      created_time,op_pid,op_user_id)
+    values (#{id,jdbcType=BIGINT}, #{urinalysisId,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP},#{opPid,jdbcType=VARCHAR},#{opUserId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="UrinalysisPhotoEntity" >
+    insert into ba_urinalysis_photo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="urinalysisId != null" >
+        urinalysis_id,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="urinalysisId != null" >
+        #{urinalysisId,jdbcType=INTEGER},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="UrinalysisPhotoEntity" >
+    update ba_urinalysis_photo
+    <set >
+      <if test="urinalysisId != null" >
+        urinalysis_id = #{urinalysisId,jdbcType=INTEGER},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="UrinalysisPhotoEntity" >
+    update ba_urinalysis_photo
+    set urinalysis_id = #{urinalysisId,jdbcType=INTEGER},
+      url = #{url,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="getPhotoByUrinalysisId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+     select
+    bup.*,bs.uuid,bs.area_id areaId
+    from ba_urinalysis_photo bup
+    left JOIN ba_urinalysis bu on bu.id = bup.urinalysis_id
+    left JOIN ba_serial bs on bu.serial_id = bs.id
+    where bup.urinalysis_id = #{urinalysisId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByUrinalysisId">
+    delete from ba_urinalysis_photo where urinalysis_id = #{urinalysisId}
+  </delete>
+</mapper>

@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.order.IOrderRequestMapper">
+    <resultMap id="BaseResultMap" type="OrderRequestEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <id column="policeId" property="policeId" jdbcType="INTEGER"/>
+        <result column="order_no" property="orderNo" jdbcType="VARCHAR"/>
+        <result column="order_user_id" property="orderUserId" jdbcType="INTEGER"/>
+        <result column="male_count" property="maleCount" jdbcType="INTEGER"/>
+        <result column="female_count" property="femaleCount" jdbcType="INTEGER"/>
+        <result column="juveniles_count" property="juvenilesCount" jdbcType="INTEGER"/>
+        <result column="special_count" property="specialCount" jdbcType="INTEGER"/>
+        <result column="other_count" property="otherCount" jdbcType="INTEGER"/>
+        <result column="plan_time" property="planTime" jdbcType="TIMESTAMP"/>
+        <result column="arrive_time" property="arriveTime" jdbcType="TIMESTAMP"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="shzt" property="shzt" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="noter_id" property="noterId" jdbcType="INTEGER"/>
+        <result column="area_id" property="areaId" jdbcType="INTEGER"/>
+        <result column="case_id" property="caseId" jdbcType="INTEGER"/>
+        <result column="interpreter" property="interpreter" jdbcType="VARCHAR"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+        <result column="ajlx" property="ajlx" jdbcType="INTEGER"/>
+        <result column="ab" property="ab" jdbcType="INTEGER"/>
+        <!--其他非数据库字段-->
+        <result column="sum_person" property="sumPerson" jdbcType="INTEGER"/>
+        <!-- 链表 -->
+
+        <result column="personName" property="personName" jdbcType="VARCHAR"/>
+        <result column="notePersonName" property="notePersonName" jdbcType="VARCHAR"/>
+        <result column="areaName" property="areaName" jdbcType="VARCHAR"/>
+        <result column="statusid" property="statusid" jdbcType="INTEGER"/>
+        <result column="organizationName" property="organizationName" jdbcType="VARCHAR"/>
+        <result column="userMobile" property="userMobile" jdbcType="VARCHAR"/>
+        <result column="caseType" property="caseType" jdbcType="VARCHAR"/>
+        <result column="caseNature" property="caseNature" jdbcType="VARCHAR"/>
+        <result column="jbaq" property="jbaq" jdbcType="VARCHAR"/>
+
+    </resultMap>
+
+    <!-- @author lihf $20151001 用于返回查询结果集 -->
+    <resultMap id="RoomCheckResultMap" type="com.zhixin.zhfz.bacs.entity.OrderRequestCheckEntity">
+        <id column="room_id" property="roomId"/>
+        <result column="room_type_id" property="roomTypeId"/>
+        <result column="amount" property="amount"/>
+        <result column="sex" property="sex"/>
+        <result column="room_volume" property="roomVolume"/>
+
+    </resultMap>
+    <!-- @author lihf $20151001 用于返回查询结果集 -->
+    <sql id="Base_Column_List">
+    id, order_no, order_user_id, male_count, female_count, juveniles_count,
+    special_count, other_count, plan_time, arrive_time, type, status, description,
+    noter_id, area_id,interpreter, created_time, updated_time,case_id
+  </sql>
+    <!-- 预约查询start -->
+    <select id="list" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT n.shzt,n.id,n.order_no,n.order_user_id, n.juveniles_count,n.special_count,n.other_count,
+        n.plan_time,n.arrive_time,n.type,n.status,n.description,n.area_id,n.noter_id,n.interpreter,
+        n.case_id,n.updated_time,n.created_time,n.op_pid,n.ajlx,n.ab,
+        m.mobile as userMobile,m.real_name AS personName,o.real_name AS notePersonName,a.name as areaName,
+        org.name as organizationName,
+        ct.code_desc caseNature,
+        (SELECT COUNT(operson.id) FROM ba_order_person operson
+        LEFT JOIN ba_person person ON operson.person_id=person.id
+        WHERE operson.order_request_id=n.id ) sum_person,
+        (SELECT COUNT(operson.id) FROM ba_order_person operson
+        LEFT JOIN ba_person person ON operson.person_id=person.id
+        WHERE operson.order_request_id=n.id AND person.sex=1 ) male_count,
+        (SELECT COUNT(operson.id) FROM ba_order_person operson
+        LEFT JOIN ba_person person ON operson.person_id=person.id
+        WHERE operson.order_request_id=n.id AND person.sex=2 ) female_count
+
+        FROM ba_order_request n
+        LEFT JOIN xt_user m ON n.order_user_id=m.id
+        LEFT JOIN xt_user o ON n.noter_id=o.id
+        LEFT JOIN ba_area a ON a.id=n.area_id
+        LEFT JOIN xt_organization org ON org.id = m.organization_id
+        LEFT JOIN xt_crime_define ct ON ct.id = n.ab
+        WHERE 1=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="userName!=null and userName!=''">
+            and m.real_name like '%${userName}%'
+        </if>
+        <if test="orderNo!=null and orderNo!=''">
+            and n.order_no like '%${orderNo}%'
+        </if>
+        <if test="id!=null and id!=''">
+            and n.id=#{id}
+        </if>
+        <if test="personName!=null and personName!=''">
+            and n.id IN ( SELECT bo.order_request_id FROM ba_person bp LEFT JOIN ba_order_person bo ON bo.person_id =
+            bp.id WHERE bp.name LIKE '%${personName}%' )
+        </if>
+        <if test="areaId!=null and areaId!=''">
+            and n.area_id = #{areaId}
+        </if>
+        order by n.id desc
+        limit ${pageStart},${rows}
+    </select>
+    <!-- 预约查询end -->
+    <!-- 预约查询总数start -->
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(1) FROM ba_order_request n
+        LEFT JOIN xt_user m ON n.order_user_id=m.id
+        LEFT JOIN xt_user o ON n.noter_id=o.id
+        LEFT JOIN ba_area a ON a.id=n.area_id
+        LEFT JOIN xt_organization org ON org.id = m.organization_id
+        LEFT JOIN xt_crime_define ct ON ct.id = n.ab
+        where 1=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="userName!=null and userName!=''">
+            and m.real_name like '%${userName}%'
+        </if>
+        <if test="orderNo!=null and orderNo!=''">
+            and n.order_no like '%${orderNo}%'
+        </if>
+        <if test="areaId!=null and areaId!=''">
+            and n.area_id = #{areaId}
+        </if>
+        <if test="personName!=null and personName!=''">
+            and n.id IN ( SELECT bo.order_request_id FROM ba_person bp LEFT JOIN ba_order_person bo ON bo.person_id =
+            bp.id WHERE bp.name LIKE '%${personName}%' )
+        </if>
+    </select>
+    <!-- 预约查询总数end -->
+    <!-- 插入-->
+    <insert id="insertSelective" parameterType="OrderRequestEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into ba_order_request
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="orderNo != null">
+                order_no,
+            </if>
+            <if test="orderUserId != null">
+                order_user_id,
+            </if>
+            <if test="maleCount != null">
+                male_count,
+            </if>
+            <if test="femaleCount != null">
+                female_count,
+            </if>
+            <if test="juvenilesCount != null">
+                juveniles_count,
+            </if>
+            <if test="specialCount != null">
+                special_count,
+            </if>
+            <if test="otherCount != null">
+                other_count,
+            </if>
+            <if test="planTime != null">
+                plan_time,
+            </if>
+            <if test="arriveTime != null">
+                arrive_time,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="areaId != null">
+                area_id,
+            </if>
+            <if test="noterId != null">
+                noter_id,
+            </if>
+            <if test="opPid != null">
+                op_pid,
+            </if>
+            <if test="interpreter != null">
+                interpreter,
+            </if>
+            <if test="caseId != null">
+                case_id,
+            </if>
+            <if test="updatedTime != null">
+                updated_time,
+            </if>
+            <if test="createdTime != null">
+                created_time,
+            </if>
+            <if test="ajlx != null">
+                ajlx,
+            </if>
+            <if test="ab != null">
+                ab,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="orderNo != null">
+                #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="orderUserId != null">
+                #{orderUserId,jdbcType=INTEGER},
+            </if>
+            <if test="maleCount != null">
+                #{maleCount,jdbcType=INTEGER},
+            </if>
+            <if test="femaleCount != null">
+                #{femaleCount,jdbcType=INTEGER},
+            </if>
+            <if test="juvenilesCount != null">
+                #{juvenilesCount,jdbcType=INTEGER},
+            </if>
+            <if test="specialCount != null">
+                #{specialCount,jdbcType=INTEGER},
+            </if>
+            <if test="otherCount != null">
+                #{otherCount,jdbcType=INTEGER},
+            </if>
+            <if test="planTime != null">
+                #{planTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="arriveTime != null">
+                #{arriveTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="areaId != null">
+                #{areaId,jdbcType=INTEGER},
+            </if>
+            <if test="noterId != null">
+                #{noterId,jdbcType=INTEGER},
+            </if>
+            <if test="opPid != null">
+                #{opPid,jdbcType=VARCHAR},
+            </if>
+            <if test="interpreter != null">
+                #{interpreter,jdbcType=VARCHAR},
+            </if>
+            <if test="caseId != null">
+                #{caseId,jdbcType=INTEGER},
+            </if>
+            <if test="updatedTime != null">
+                #{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createdTime != null">
+                #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="ajlx != null">
+                #{ajlx,jdbcType=INTEGER},
+            </if>
+            <if test="ab != null">
+                #{ab,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 检查当前预约中该嫌疑人是否已经存在 -->
+    <select id="checkCertificateNoInOrder" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT count(*) from ba_order_person bop
+        LEFT join ba_person bp on bp.id = bop.person_id
+        <where>
+            <if test="orderRequestId!=null and orderRequestId!=''">
+                AND bop.order_request_id = #{orderRequestId}
+            </if>
+            <if test="certificateNo!=null and certificateNo!=''">
+                AND bp.certificate_no = #{certificateNo}
+            </if>
+        </where>
+    </select>
+
+    <!-- @author lihf $20151001 查询侯问室已占用数量-->
+    <select id="getOccupyRoomAmount" parameterType="java.util.Map" resultMap="RoomCheckResultMap">
+		SELECT
+			ir.id room_id,
+			ir.room_type_id room_type_id,
+			IFNULL(tmp.account, 0) amount,
+			IFNULL(tmp.sex, '') sex,
+			IFNULL(ir.volume,10) room_volume
+		FROM
+			ba_room ir
+		LEFT JOIN (
+			SELECT
+				ir.id,
+				count(1) account,
+				(
+					SELECT
+						(
+							SELECT
+								CASE
+							WHEN per.sex = 0 THEN
+								'm'
+							ELSE
+								'fm'
+							END
+							FROM
+								ba_person per
+							WHERE
+								per.id = max(person_id)
+						)
+					FROM
+						ba_waiting_record war
+					WHERE
+						war.room_id = ir.id
+				) sex
+			FROM
+				ba_waiting_record s
+			JOIN ba_room ir ON ir.id = s.room_id
+			WHERE
+				s.area_id = ${areaId}
+			AND ir.room_type_id IN (1, 7, 8)
+			AND ir.is_active= 1
+			AND STATUS = 0
+			GROUP BY
+				ir.id
+		) tmp ON tmp.id = ir.id
+		WHERE
+			ir.area_id = ${areaId}
+		AND ir.room_type_id IN (1, 7, 8)
+		order by account  desc ,sex
+	</select>
+
+    <!-- @author lihf $20151001 查询侯问室预约数量-->
+    <select id="getOrderRequestlistByAreaId" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT
+        os.id AS statusid,
+        a. NAME AS areaName,
+        n.id,
+        m.id policeId,
+        m.real_name AS personName,
+        o.id,
+        o.real_name AS notePersonName,
+        (
+        n.male_count + n.female_count + n.juveniles_count + n.special_count + n.other_count
+        ) sum_person,
+        n.*
+        FROM
+        ba_order_request n
+        LEFT JOIN xt_user m ON n.order_user_id = m.id
+        LEFT JOIN xt_user o ON n.noter_id = o.id
+        LEFT JOIN ba_area a ON a.id = n.area_id
+        LEFT JOIN ba_order_status os ON os.order_request_id = n.id
+        WHERE
+        n.area_id =${areaId}
+        and n.status=0
+        <if test="orderId!=null and orderId!=''">
+            and n.id &lt; ${orderId}
+        </if>
+        ORDER BY
+        os.id DESC
+    </select>
+    <select id="queryStatus" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from ba_order_request
+        WHERE id=#{orderRequestId}
+    </select>
+    <update id="updateByPrimaryKeySelective" parameterType="OrderRequestEntity">
+        update ba_order_request
+        <set>
+            <if test="orderNo != null">
+                order_no = #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="orderUserId != null">
+                order_user_id = #{orderUserId,jdbcType=INTEGER},
+            </if>
+            <if test="maleCount != null">
+                male_count = #{maleCount,jdbcType=INTEGER},
+            </if>
+            <if test="femaleCount != null">
+                female_count = #{femaleCount,jdbcType=INTEGER},
+            </if>
+            <if test="juvenilesCount != null">
+                juveniles_count = #{juvenilesCount,jdbcType=INTEGER},
+            </if>
+            <if test="specialCount != null">
+                special_count = #{specialCount,jdbcType=INTEGER},
+            </if>
+            <if test="otherCount != null">
+                other_count = #{otherCount,jdbcType=INTEGER},
+            </if>
+            <if test="planTime != null">
+                plan_time = #{planTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="arriveTime != null">
+                arrive_time = #{arriveTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="areaId != null">
+                area_id = #{areaId,jdbcType=INTEGER},
+            </if>
+            <if test="noterId != null">
+                noter_id = #{noterId,jdbcType=INTEGER},
+            </if>
+            <if test="interpreter != null">
+                interpreter = #{interpreter,jdbcType=VARCHAR},
+            </if>
+            <if test="caseId != null">
+                case_id = #{caseId,jdbcType=INTEGER},
+            </if>
+            <if test="updatedTime != null">
+                updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createdTime != null">
+                created_time = #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="ajlx != null">
+                ajlx = #{ajlx,jdbcType=INTEGER},
+            </if>
+            <if test="ab != null">
+                ab = #{ab,jdbcType=INTEGER},
+            </if>
+            <if test="shzt != null">
+                shzt = #{shzt,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="getOrderRequestByCaseId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from ba_order_request
+        WHERE case_id=#{caseId}
+    </select>
+    <delete id="deleteOrderRequestByCaseId" parameterType="java.lang.Integer">
+	delete from ba_order_request WHERE case_id=#{caseId}
+   </delete>
+    <delete id="deleteById"  parameterType="java.lang.Integer">
+        delete from ba_order_request WHERE id=#{orderRequestId}
+    </delete>
+</mapper>

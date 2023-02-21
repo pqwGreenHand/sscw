@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.positionManage.IPositionManageMapper" >
+  <resultMap id="BaseResultMap" type="com.zhixin.zhfz.bacs.entity.PositionDataEntity" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="cuff_id" property="cuffId" jdbcType="INTEGER" />
+    <result column="cuff_no" property="cuffNo" jdbcType="VARCHAR" />
+    <result column="device_id" property="deviceId" jdbcType="INTEGER" />
+    <result column="device_no" property="deviceNo" jdbcType="INTEGER" />
+    <result column="send_time" property="sendTime"  />
+  </resultMap>
+
+  
+   <!--获取定位数据的人员信息-->
+  <select id="selectPositionDataPoliceInfo" resultType="java.util.HashMap" parameterType="java.util.Map">
+    SELECT  poc.in_time,poc.out_time,user.certificate_no,poc.id,bc.ajmc case_name,user.real_name name,xc.code_value certificate_type,cuff.cuff_no  cuff_no ,poc.police_type type from   ba_police_entrance   poc  
+LEFT JOIN   ba_case bc  on  bc.id=  poc.case_id
+LEFT JOIN   ba_cuff  cuff  on  cuff.id=  poc.cuff_id
+LEFT JOIN  xt_user user  ON  user.id= poc.police_id  
+LEFT JOIN  xt_code  xc ON  xc.code_key =user.certificate_type_id
+
+where   xc.type='ZJZLID' 
+      <if test="dataAuth!=null and dataAuth!=''">
+        and ${dataAuth}
+      </if>
+      <if test="name!=null and name !=''">
+       and user.real_name like '%${name}%'
+      </if>
+       <if test="cuff_no!=null and cuff_no !=''">
+       and cuff.cuff_no like '%${cuff_no}%'
+      </if>
+       <if test="case_name!=null and case_name !=''">
+       and bc.ajmc like '%${case_name}%'
+      </if>
+       <if test="type!=null and type !=''">
+        and type=#{type}
+      </if>
+      order by poc.id
+      limit ${pageStart},${rows}
+  </select>
+
+  <!--统计定位数据的人员信息数量-->
+  <select id="selectPositionDataPoliceInfoCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+   SELECT  count(1) from   ba_police_entrance   poc  
+LEFT JOIN   ba_case bc  on  bc.id=  poc.case_id
+LEFT JOIN   ba_cuff  cuff  on  cuff.id=  poc.cuff_id
+LEFT JOIN  xt_user user  ON  user.id= poc.police_id  
+LEFT JOIN  xt_code  xc ON  xc.code_key =user.certificate_type_id
+
+where   xc.type='ZJZLID'
+    <if test="dataAuth!=null and dataAuth!=''">
+      and ${dataAuth}
+    </if>
+    <if test="name!=null and name !=''">
+    and user.real_name like '%${name}%'
+     </if>
+      <if test="cuff_no!=null and cuff_no !=''">
+      and cuff.cuff_no like '%${cuff_no}%'
+     </if>
+      <if test="case_name!=null and case_name !=''">
+      and bc.ajmc like '%${case_name}%'
+     </if>
+      <if test="type!=null and type !=''">
+       and type=#{type}
+     </if>
+  
+  </select>
+  
+  
+    <select id="list" resultMap="BaseResultMap" parameterType="java.util.Map">
+  	select *  from ba_position_data
+			where cuff_id=#{cuffId} and 
+			send_time  &gt;=#{startTime} and
+			send_time  &lt;=#{endTime}
+    order by send_time desc
+    limit ${pageStart},${rows} 
+  </select>
+
+  <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+    select count(1)  from ba_position_data
+	where cuff_id=#{cuffId}  and 
+			send_time  &gt;=#{startTime} and
+			send_time  &lt;=#{endTime}
+  </select>
+  
+  <!--获取定位数据的人员信息-->
+  <select id="selectPositionDataSearialInfo" resultType="java.util.HashMap" parameterType="java.util.Map">
+    SELECT  inc.in_time,inc.out_time,user.certificate_no,inc.id,bc.ajmc case_name,user.name name,xc.code_value certificate_type,cuff.cuff_no  cuff_no 
+from   ba_serial  inc   
+ LEFT JOIN   ba_case bc  on  bc.id= inc.case_id
+LEFT JOIN   ba_cuff  cuff  on  cuff.id=  inc.cuff_id
+LEFT JOIN  ba_person user  ON  user.id= inc.person_id 
+LEFT JOIN  xt_code  xc ON  xc.code_key = user.certificate_type_id
+
+where   xc.type='ZJZLID' 
+      <if test="dataAuth!=null and dataAuth!=''">
+        and ${dataAuth}
+      </if>
+      <if test="name!=null and name !=''">
+       and user.name like '%${name}%'
+      </if>
+       <if test="cuff_no!=null and cuff_no !=''">
+       and cuff.cuff_no like '%${cuff_no}%'
+      </if>
+       <if test="case_name!=null and case_name !=''">
+       and bc.ajmc like '%${case_name}%'
+      </if>
+       <if test="type!=null and type !=''">
+        and type=#{type}
+      </if>
+      order by inc.id
+      limit ${pageStart},${rows}
+  </select>
+
+  <!--统计定位数据的人员信息数量-->
+  <select id="selectPositionDataSearialInfoCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+    SELECT  count(1) from   ba_serial  inc   
+ LEFT JOIN   ba_case bc  on  bc.id= inc.case_id
+LEFT JOIN   ba_cuff  cuff  on  cuff.id=  inc.cuff_id
+LEFT JOIN  ba_person user  ON  user.id= inc.person_id 
+LEFT JOIN  xt_code  xc ON  xc.code_key = user.certificate_type_id
+where   xc.type='ZJZLID' 
+    <if test="dataAuth!=null and dataAuth!=''">
+      and ${dataAuth}
+    </if>
+    <if test="name!=null and name !=''">
+    and user.name like '%${name}%'
+     </if>
+      <if test="cuff_no!=null and cuff_no !=''">
+      and cuff.cuff_no like '%${cuff_no}%'
+     </if>
+      <if test="case_name!=null and case_name !=''">
+      and bc.ajmc like '%${case_name}%'
+     </if>
+      <if test="type!=null and type !=''">
+       and type=#{type}
+     </if>
+  
+  </select>
+  
+</mapper>

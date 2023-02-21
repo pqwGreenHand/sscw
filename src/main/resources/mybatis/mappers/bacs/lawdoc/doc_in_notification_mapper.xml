@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.lawdoc.IDocInNotificationMapper" >
+    <resultMap id="BaseResultMap" type="com.zhixin.zhfz.bacs.entity.DocInNotificationEntity" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="serial_id" property="serialId"  />
+        <result column="police_station" property="policeStation" jdbcType="VARCHAR" />
+        <result column="in_time" property="inTime" jdbcType="DATE" />
+        <result column="send_unit" property="sendUnit" jdbcType="VARCHAR" />
+        <result column="handling_unit" property="handlingUnit" jdbcType="VARCHAR" />
+        <result column="connection_situation" property="connectionSituation" jdbcType="VARCHAR" />
+        <result column="approver" property="approver" jdbcType="VARCHAR" />
+        <result column="agent" property="agent" jdbcType="VARCHAR" />
+
+        <result column="personName" property="personName" jdbcType="VARCHAR" />
+        <result column="address" property="address" jdbcType="VARCHAR" />
+        <result column="sex" property="sex" jdbcType="VARCHAR" />
+        <result column="brith" property="birth" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="VARCHAR" />
+
+    </resultMap>
+
+    <select id="queryInNotificationById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        SELECT 	inc.ajlx AS `type`,
+            dn.id AS id,
+            dn.serial_id AS serialId,
+            police_station AS policeStation,
+            dn.in_time AS inTime,
+            dn.send_unit AS sendUnit,
+            dn.handling_unit AS handlingUnit,
+            dn.connection_situation AS connectionSituation,
+            dn.approver AS approver,
+            dn.agent AS agent,
+            p.name AS personName,
+            p.address AS address,
+            p.sex AS sex,
+            p.birth AS birth
+        FROM
+         ba_doc_in_notification dn LEFT JOIN ba_serial ins ON ins.id=dn.serial_id
+        LEFT JOIN ba_case inc ON  ins.case_id = inc.id
+        LEFT JOIN ba_person p ON p.id = ins.person_id
+        WHERE 1= 1 AND dn.serial_id=#{serialId}
+        ORDER BY dn.id DESC
+    </select>
+</mapper>

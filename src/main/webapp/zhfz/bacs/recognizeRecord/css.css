@@ -1,0 +1,70 @@
+@charset "utf-8";/* CSS Document */
+/*********CSS reset ***********/
+*{margin:0;padding:0;}
+ul,li,ol{list-style:none; }
+img,a img{border:none;margin:0;padding:0;}
+a{ text-decoration:none;color:black; font-weight:bold;}
+.clear{ clear:both;}
+/*main 开始*/
+.main{width:50%; float:left;}
+.content_top{padding:10px 0; margin: auto 0; border-bottom: 1px solid #CCC;}
+.content_top a{display:inline-block;width:45%;height:70px;text-align:center;padding-top:15px;line-height:39px;background:url(image/next.png) no-repeat right center;}
+.content_top a.last_a{background:none;}
+
+.main_form1{margin:0 auto;padding-top:10px;padding-bottom:10px;overflow:hidden;border-spacing:10px;}
+.btn{width:70%;margin:0 auto;padding-bottom:50px;text-align:center;}
+.btn input{ cursor:pointer; font-size:14px; font-weight:500;}
+.btn_hover{color:#fff;}
+
+.btn input.bc_out{width:88px;height:32px;border:none;background:url(image/botton_b.png);}
+.btn input.bc_on{width:88px;height:32px;border:none;background:url(image/botton_a.png);}
+.btn input.xx_change{width:88px;height:32px;border:none;background:url(image/botton_b.png);}
+.hoverd{color:#628cd6}
+.clicked{color:#428e4d}
+/*--------------css start-------------------*/
+.content_top a img.icon-hover,.content_top a img.icon-active{ display:none}
+
+.content_top a.active img.icon-img,.content_top a.active img.icon-hover{ display:none}
+.content_top a.active img.icon-active{ display:inline}
+
+.content_top a.hover img.icon-img,.content_top a.hover img.icon-active{ display:none}
+.content_top a.hover img.icon-hover{ display:inline}
+/*--------------------waiting start------------------------*/
+
+.content_top a.moren img.icon-img,.content_top a.moren img.active{display:none}
+.content_top a.moren img.icon-hover{display:inline}
+
+/*--------------------22222222-----------------------*/
+.content_down{padding:30px 0; margin: auto 0; border-bottom: 1px solid #CCC;}
+.content_down a{display:inline-block;width:19%;height:106px;text-align:center;padding-top:15px;line-height:39px;background:url(image/next.png) no-repeat right center;}
+.content_down a.last_a{background:none;}
+
+.main_form1{margin:0 auto;padding-top:10px; padding-bottom:10px;overflow:hidden;border-spacing:10px;}
+
+
+
+.xx_change1.btn{width:70%;margin:0 auto;padding-bottom:50px;text-align:center;}
+.xx_change1.btn input{ cursor:pointer; font-size:14px; font-weight:500;}
+.xx_change1.btn_hover{color:#fff;}
+
+.xx_change1.btn input.bc_out{width:88px;height:32px;border:none;background:url(images/botton_b.png);}
+.xx_change1.btn input.bc_on{width:88px;height:32px;border:none;background:url(images/botton_a.png);}
+xx_change1.btn input.xx_change1{width:88px;height:32px;border:none;background:url(images/botton_b.png);}
+.hoverd{color:#628cd6}
+.clicked{color:#428e4d}
+
+/*--------------css start-------------------*/
+.content_down a img.icon-hover,.content_down a img.icon-active{ display:none}
+
+.content_down a.active img.icon-img,.content_down a.active img.icon-hover{ display:none}
+.content_down a.active img.icon-active{ display:inline}
+
+.content_down a.hover img.icon-img,.content_down a.hover img.icon-active{ display:none}
+.content_down a.hover img.icon-hover{ display:inline}
+/*--------------------waiting start------------------------*/
+
+.content_down a.moren img.icon-img,.content_down a.moren img.active{display:none}
+.content_down a.moren img.icon-hover{display:inline}
+
+#tj_btn{text-align:center; }
+#tj_btn input.bc_on9{width:180px;height:50px;border:none;color:#fff;cursor:pointer;padding-left:60px; background:url(image/kxy.png) no-repeat;font-size:16px;}

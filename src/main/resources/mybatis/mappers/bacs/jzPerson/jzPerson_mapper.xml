@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.jzPerson.IJzPersonMapper">
+	<resultMap id="jzPersonMapperMap" type="com.zhixin.zhfz.bacs.entity.JzPersonEntity">
+		<id property="id" column="id"/>
+		<result property="xm" column="xm"/>
+		<result property="xb" column="xb"/>
+		<result property="ajbh" column="ajbh"/>
+		<result property="zjhm" column="zjhm"/>
+		<result property="rybh" column="rybh"/>
+		<result property="lrrq" column="lrrq"/>
+		<result property="zbdw" column="zbdw"/>
+		<result property="ajlb" column="ajlb"/>
+		<result property="hjd" column="hjd"/>
+		<result property="zbmj" column="zbmj"/>
+		<result property="zbmjName" column="zbmj_name"/>
+		<result property="zbmjId" column="zbmj_id"/>
+		<result property="slsj" column="slsj"/>
+	</resultMap>
+
+	<select id="list" resultMap="jzPersonMapperMap" parameterType="java.util.Map">
+		select a.id,a.xm,a.xb,a.ajbh,a.zjhm,a.rybh from person_temp a
+		<where>
+			<if test="ajbh != null and ajbh != ''">
+				a.ajbh = #{ajbh}
+			</if>
+		</where>
+/*        limit ${pageStart},${rows}*/
+	</select>
+
+	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from person_temp a
+		<where>
+			<if test="ajbh != null and ajbh != ''">
+				a.ajbh = #{ajbh}
+			</if>
+		</where>
+	</select>
+
+</mapper>

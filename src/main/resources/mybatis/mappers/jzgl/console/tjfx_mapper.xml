@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhixin.zhfz.jzgl.dao.console.ITjfxMapper">
+	<!-- 柜门使用率 -->
+	<resultMap id="jzlxRateMapper" type="com.zhixin.zhfz.jzgl.entity.JzlxRateEntity">
+		<result property="jzlx" column="jzlx" />
+		<result property="jzlxCount" column="jzlxCount" />
+		<result property="count" column="count" />
+		<result property="mc" column="mc" />
+		<result property="organization" column="organization" />
+		<result property="userCount" column="userCount" />
+		<result property="jzgId" column="jzgId" />
+		<result property="zxsj" column="zxsj"/>
+	</resultMap>
+	<!-- 查询各单位柜门数部门， -->
+	<select id="selectAllGmxx" resultMap="jzlxRateMapper"
+		parameterType="java.util.Map">
+		SELECT jzg.id jzgId,jzg.mc,jzg.zxsj,org.name organization,COUNT(*) COUNT FROM jz_jzg_gmxx AS gmxx
+			 LEFT JOIN jz_jzg AS jzg ON jzg.id = gmxx.jzg_id
+			 LEFT JOIN xt_organization org ON org.id=jzg.org_id
+			WHERE 1=1
+			<if test="dataAuth != null and dataAuth != ''">
+			and ${dataAuth}
+		</if>
+			GROUP BY jzg.org_id
+	</select>
+	<!-- 查询柜门使用的数量 -->
+	<select id="selectUsedGmxx" resultMap="jzlxRateMapper"
+		parameterType="java.util.Map">
+		SELECT COUNT(DISTINCT gmxx_id) userCount,jzg.id jzgId,jzg.mc mc FROM jz_jzg jzg
+		LEFT JOIN jz_jzg_gmxx jg ON jzg.id=jg.jzg_id
+		LEFT JOIN jz_jzxx j ON j.gmxx_id = jg.id
+		WHERE 1=1 
+	<if test="dataAuth != null and dataAuth != ''">
+			and ${dataAuth}
+		</if>
+		GROUP BY jzg.id
+	</select>
+	
+	<!-- 民警告警总数 -->
+	<select id="queryAllMjGj" parameterType="java.util.Map"
+		resultType="java.util.HashMap">
+		SELECT 	user.real_name realName,
+		user.login_name loginName,COUNT(DISTINCT xx.id)  `count`,xxlx xxlx FROM xt_user USER
+		LEFT JOIN jz_alarm xx ON xx.yh_id = user.id
+		LEFT JOIN jz_jzxx jzxx ON jzxx.user_id=user.id
+		LEFT JOIN ba_case aj ON aj.id=jzxx.ajxx_id
+		WHERE xx.xxly=0
+		<if test="dataAuth != null and dataAuth != ''">
+			and ${dataAuth}
+		</if>
+			GROUP BY user.id ORDER BY count DESC LIMIT 10
+	</select>
+	<!-- 办案单位告警总数 -->
+	<select id="queryAllDwGj" parameterType="java.util.Map"
+		resultType="java.util.HashMap">
+		SELECT org.name organization,COUNT(DISTINCT xx.id)  `count`,xxlx xxlx FROM xt_organization org
+		LEFT JOIN ba_case aj ON org.id= aj.zbdw_id
+		LEFT JOIN jz_jzxx jz ON aj.id=jz.ajxx_id
+		LEFT JOIN jz_alarm xx ON xx.jzxx_id=jz.id
+		WHERE xx.xxly=0
+		<if test="dataAuth != null and dataAuth != ''">
+			and ${dataAuth}
+		</if>
+			GROUP BY org.name ORDER BY count DESC LIMIT 10
+	</select>
+</mapper>
+
+

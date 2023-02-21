@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.zhag.dao.cscf.ICscfMapper">
+ 
+ 
+<select id="selectCscf" resultType="com.zhixin.zhfz.zhag.entity.CscfEntity">
+   SELECT ac.*,cd1.code_value csztdmmc,cd2.code_value lxmc,bc.id caseId
+    FROM ag_cscf ac
+   LEFT JOIN   xt_code cd1 ON cd1.type='qzcs' AND cd1.code_key=ac.csztdm
+   LEFT JOIN   xt_code cd2 ON cd2.type='cscflx' AND cd2.code_key=ac.lx
+   LEFT JOIN ba_case bc ON bc.ajbh=ac.ajbh
+   where 1=1
+   <if test="lx != '' and lx != null">
+			and ac.lx=#{lx}
+   </if>
+    <if test="ajbh != '' and ajbh != null">
+			and ac.ajbh=#{ajbh}
+   </if>
+    <if test="jqbh != '' and jqbh != null">
+			and ac.jqbh=#{jqbh}
+   </if>
+    <if test="rybh != '' and rybh != null">
+			and ac.rybh=#{rybh}
+   </if>
+    <if test="csztdm != '' and csztdm != null">
+			and ac.csztdm=#{csztdm}
+   </if>
+    order by xgsj desc
+</select>
+<select id="countCscf" resultType="int" parameterType="java.util.Map">
+   SELECT count(id) FROM ag_cscf ac
+   where 1=1 
+   <if test="lx != '' and lx != null">
+			and ac.lx=#{lx}
+   </if>
+    <if test="ajbh != '' and ajbh != null">
+			and ac.ajbh=#{ajbh}
+   </if>
+    <if test="jqbh != '' and jqbh != null">
+			and ac.jqbh=#{jqbh}
+   </if>
+    <if test="rybh != '' and rybh != null">
+			and ac.rybh=#{rybh}
+   </if>
+    <if test="csztdm != '' and csztdm != null">
+			and ac.csztdm=#{csztdm}
+   </if>
+</select>
+
+<insert id="addCscf" parameterType="com.zhixin.zhfz.zhag.entity.CscfEntity"  keyProperty="id" useGeneratedKeys="true" >  
+	INSERT INTO ag_cscf (
+			  ajbh,
+			  jqbh,
+			  rybh,
+			  cszt,
+			  csztdm,
+			  lx,
+			  zxsj,
+			  xgsj,
+			  cjsj
+			)
+			VALUES
+			  (
+			    #{ajbh},
+			    #{jqbh},
+			    #{rybh},
+			    #{cszt},
+			    #{csztdm},
+			    #{lx},
+			    #{zxsj},
+			    now(),
+			    now()
+			  );
+</insert>
+<update id="editCscf" parameterType="com.zhixin.zhfz.zhag.entity.CscfEntity">
+  update ag_cscf set 
+   <if test="ajbh != '' and ajbh != null">
+			 ajbh=#{ajbh},
+   </if>
+   <if test="jqbh != '' and jqbh != null">
+			 jqbh=#{jqbh},
+   </if>
+   <if test="rybh != '' and rybh != null">
+			 rybh=#{rybh},
+   </if>
+   <if test="cszt != '' and cszt != null">
+			 cszt=#{cszt},
+   </if>
+   <if test="csztdm != '' and csztdm != null">
+			 csztdm=#{csztdm},
+   </if>
+   <if test="lx != '' and lx != null">
+			 lx=#{lx},
+   </if>
+   <if test="zxsj != '' and zxsj != null">
+			 zxsj=#{zxsj},
+   </if>
+	xgsj=now()
+  where id=#{id}
+</update>
+</mapper>

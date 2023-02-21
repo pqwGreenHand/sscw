@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacsapp.dao.SecurityCheck.ISecurityCheckAppMapper" >
+
+    <resultMap id="SecurityAppResultMap" type="com.zhixin.zhfz.bacsapp.entity.SecurityAppEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="serial_no" property="serialNo" jdbcType="VARCHAR"/>
+        <result column="uuid" property="uuid" jdbcType="VARCHAR"/>
+        <result column="person_id" property="personId" jdbcType="BIGINT"/>
+        <result column="person_name" property="personName" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" jdbcType="INTEGER"/>
+        <result column="birth" property="birth" jdbcType="TIMESTAMP"/>
+        <result column="certificate_type_name" property="certificateTypeName" jdbcType="VARCHAR"/>
+        <result column="certificate_no" property="certificateNo" jdbcType="VARCHAR"/>
+        <result column="check_user_name" property="checkUserName" jdbcType="VARCHAR"/>
+        <result column="check_user_no" property="checkUserNo" jdbcType="VARCHAR"/>
+        <result column="checked_start_time" property="checkedStartTime" jdbcType="TIMESTAMP"/>
+        <result column="checked_end_time" property="checkedEndTime" jdbcType="TIMESTAMP"/>
+        <result column="case_id" property="caseId" jdbcType="INTEGER"/>
+        <result column="checkType" property="checkType" jdbcType="INTEGER"/>
+        <result column="case_nature" property="caseNature" jdbcType="VARCHAR"/>
+        <result column="ajmc" property="caseName" jdbcType="VARCHAR"/>
+        <result column="area_id" property="areaId" jdbcType="INTEGER"/>
+        <result column="area_name" property="areaName" jdbcType="VARCHAR"/>
+        <result column="medical_history" property="medicalHistory" jdbcType="VARCHAR"/>
+        <result column="ajlx" property="ajlx" jdbcType="INTEGER"/>
+        <result column="afdd" property="afdd" jdbcType="VARCHAR"/>
+        <result column="ab" property="ab" jdbcType="VARCHAR"/>
+        <result column="case_nature" property="caseNature"  jdbcType="VARCHAR"/>
+        <result column="count" property="count"  jdbcType="INTEGER"/>
+        <result column="status" property="status"  jdbcType="INTEGER"/>
+        <result column="inTime" property="inTime" jdbcType="TIMESTAMP"/>
+        <result column="afsj" property="afsj"  />
+        <result column="inPhotoName" property="inPhotoName"  />
+    </resultMap>
+
+    <select id="list" resultMap="SecurityAppResultMap" parameterType="java.util.Map">
+        select  ins.id ,ins.uuid ,ins.serial_no serial_no,ins.status as status,ins.in_time as inTime,ins.in_photo_name as inPhotoName,ins.area_id ,
+        ins.case_id,p.id as person_id,p.`name` person_name,ia.`name`area_name
+        from ba_serial ins
+        left join ba_person p on ins.person_id=p.id
+        left join ba_area ia on ins.area_id=ia.id
+        where 1=1 and ins.status &lt; 11
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="ryxm!=null and ryxm!=''">
+            and p.`name` like '%${ryxm}%'
+        </if>
+        <if test="zjhm!=null and zjhm!=''">
+            and p.certificate_no like '%${zjhm}%'
+        </if>
+        <if test="ajmc!=null and ajmc!=''">
+            and ic.ajmc like '%${ajmc}%'
+        </if>
+        order by ins.id desc
+        limit ${pageStart},${rows}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(*)
+        from ba_serial ins
+        left join ba_person p on ins.person_id=p.id
+        left join ba_area ia on ins.area_id=ia.id
+        where 1=1  and ins.status &lt; 11
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="ryxm!=null and ryxm!=''">
+            and p.`name` like '%${ryxm}%'
+        </if>
+        <if test="zjhm!=null and zjhm!=''">
+            and p.certificate_no like '%${zjhm}%'
+        </if>
+        <if test="ajmc!=null and ajmc!=''">
+            and ic.ajmc like '%${ajmc}%'
+        </if>
+        order by ins.id desc
+    </select>
+
+    <update id="updateSecurityUpdateTime" parameterType="com.zhixin.zhfz.bacsapp.entity.SecurityAppEntity">
+        update ba_security
+        set updated_time = now()
+        where 1=1
+        <if test="serialId != null and serialId != ''">
+            and serial_id = #{serialId}
+        </if>
+    </update>
+
+    <insert id="insert" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+        insert into ba_security
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="uuid != null">
+                uuid,
+            </if>
+            <if test="serialId != null">
+                serial_id,
+            </if>
+            <if test="checkUserId != null">
+                check_user_id,
+            </if>
+            <if test="checkedStartTime != null">
+                checked_start_time,
+            </if>
+            <if test="checkedEndTime != null">
+                checked_end_time,
+            </if>
+            <if test="caseId != null">
+                case_id,
+            </if>
+            <if test="areaId != null">
+                area_id,
+            </if>
+            <if test="medicalHistory != null">
+                medical_history,
+            </if>
+            <if test="count != null">
+                count,
+            </if>
+            <if test="checkType != null">
+                type,
+            </if>
+            <if test="physical != null">
+                physical,
+            </if>
+            <if test="physicalDescription != null">
+                physical_description,
+            </if>
+            <if test="injury != null">
+                injury,
+            </if>
+            <if test="injuryDescription != null">
+                injury_description,
+            </if>
+            <if test="dangerous != null">
+                dangerous,
+            </if>
+            <if test="otherDescription != null">
+                other_description,
+            </if>
+            created_time,
+            <if test="updatedTime != null">
+                updated_time,
+            </if>
+            <if test="opPid != null">
+                op_pid,
+            </if>
+            <if test="opUserId != null">
+                op_user_id,
+            </if>
+            has_wine,has_injury,has_photo
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="uuid != null">
+                #{uuid,jdbcType=VARCHAR},
+            </if>
+            <if test="serialId != null">
+                #{serialId,jdbcType=BIGINT},
+            </if>
+            <if test="checkUserId != null">
+                #{checkUserId,jdbcType=INTEGER},
+            </if>
+            <if test="checkedStartTime != null">
+                #{checkedStartTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="checkedEndTime != null">
+                #{checkedEndTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="caseId != null">
+                #{caseId,jdbcType=INTEGER},
+            </if>
+            <if test="areaId != null">
+                #{areaId,jdbcType=INTEGER},
+            </if>
+            <if test="medicalHistory != null">
+                #{medicalHistory,jdbcType=VARCHAR},
+            </if>
+            <if test="count != null">
+                #{count,jdbcType=INTEGER},
+            </if>
+            <if test="checkType != null">
+                #{checkType,jdbcType=INTEGER},
+            </if>
+            <if test="physical != null">
+                #{physical,jdbcType=INTEGER},
+            </if>
+            <if test="physicalDescription != null">
+                #{physicalDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="injury != null">
+                #{injury,jdbcType=INTEGER},
+            </if>
+            <if test="injuryDescription != null">
+                #{injuryDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="dangerous != null">
+                #{dangerous,jdbcType=VARCHAR},
+            </if>
+            <if test="otherDescription != null">
+                #{otherDescription,jdbcType=VARCHAR},
+            </if>
+            now(),
+            <if test="updatedTime != null">
+                #{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="opPid != null">
+                #{opPid,jdbcType=VARCHAR},
+            </if>
+            <if test="opUserId != null">
+                #{opUserId,jdbcType=INTEGER},
+            </if>
+            #{hasWine,jdbcType=INTEGER},#{hasInjury,jdbcType=INTEGER},#{hasPhoto,jdbcType=INTEGER}
+        </trim>
+    </insert>
+
+
+    <select id="getSecurityPersonList" resultMap="SecurityAppResultMap" parameterType="java.lang.Integer">
+		SELECT
+		s.case_id,
+		s.id serialId,
+		s.serial_no,
+		s.uuid,
+		s.in_photo_name as inPhotoName,
+		s.person_id,
+		s.area_id,
+		p.`name` personName,
+		p.certificate_no
+		FROM ba_serial s
+		inner join ba_person p on p.id = s.person_id
+		WHERE
+		s.status &lt; 11 and s.`status`>=0
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+
+	</select>
+
+
+    <select id="selectPersonBySerialId" resultMap="SecurityAppResultMap" parameterType="java.util.Map">
+		SELECT
+		s.case_id,
+		s.id serialId,
+		s.serial_no,
+		s.uuid,
+		s.in_photo_name as inPhotoName,
+		s.person_id,
+		s.area_id,
+		p.`name` personName,
+		p.certificate_no
+		FROM ba_serial s
+		inner join ba_person p on p.id = s.person_id
+		WHERE
+        s.status &lt; 11 and s.`status`>=0
+		AND s.id = #{serialId}
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+
+	</select>
+
+
+    <delete id="deleteTrack" parameterType="java.util.Map">  
+            delete from track_info where serial_id=#{serialId}
+    </delete>
+
+
+
+
+</mapper>

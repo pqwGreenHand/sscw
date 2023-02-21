@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhixin.zhfz.bacs.bazxDao.IBazxMapper">
+    
+    <resultMap id="caseMap" type="com.zhixin.zhfz.bacs.entity.InterrogateCaseEntity">
+        <result column="id" property="id"/>
+        <result column="case_name" property="caseName"/>
+        <result column="case_no" property="caseNo"/>
+        <result column="involved_date" property="involvedDate"/>
+        <result column="involved_address" property="involvedAddress"/>
+        <result column="type" property="type"/>
+    </resultMap>
+
+    <resultMap id="serialMap" type="com.zhixin.zhfz.bacs.entity.SerialEntity">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="p_id" property="pid" />
+        <result column="serial_no" property="serialNo" jdbcType="VARCHAR" />
+        <result column="uuid" property="uuid" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="orgId" property="orgId" jdbcType="INTEGER" />
+        <result column="status_change_time" property="statusChangeTime" jdbcType="TIMESTAMP" />
+        <result column="person_id" property="personId" jdbcType="BIGINT" />
+        <result column="send_user_id" property="sendUserId" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="birth" property="birth" jdbcType="TIMESTAMP" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="order_request_id" property="orderId" jdbcType="INTEGER" />
+        <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+        <result column="area_id" property="areaId"
+                jdbcType="INTEGER" />
+        <result column="case_id" property="caseId"
+                jdbcType="INTEGER" />
+        <result column="interrogate_case_name" property="interrogateCaseName"
+                jdbcType="VARCHAR" />
+        <result column="involved_reason" property="involvedReason"
+                jdbcType="VARCHAR" />
+        <result column="case_type" property="caseType" jdbcType="INTEGER" />
+        <result column="case_nature" property="caseNature" jdbcType="VARCHAR" />
+        <result column="cuff_id" property="cuffId" jdbcType="INTEGER" />
+        <result column="police_cuff_id1" property="policeCuffId1"
+                jdbcType="INTEGER" />
+        <result column="police_cuff_id2" property="policeCuffId2"
+                jdbcType="INTEGER" />
+        <result column="cuff_no" property="cuffNo" jdbcType="VARCHAR" />
+        <result column="police_cuff_no1" property="policeCuffNo1"
+                jdbcType="VARCHAR" />
+        <result column="police_cuff_no2" property="policeCuffNo2"
+                jdbcType="VARCHAR" />
+        <result column="in_photo_name" property="inPhotoId" jdbcType="VARCHAR" />
+        <result column="in_user_id1" property="inUserId1" jdbcType="INTEGER" />
+        <result column="in_user_real_name1" property="inUserRealName1"
+                jdbcType="VARCHAR" />
+        <result column="organization" property="organization" jdbcType="VARCHAR" />
+        <result column="in_user_id2" property="inUserId2" jdbcType="INTEGER" />
+        <result column="in_user_real_name1" property="inUserRealName1"
+                jdbcType="VARCHAR" />
+        <result column="in_user_real_name2" property="inUserRealName2"
+                jdbcType="VARCHAR" />
+        <result column="in_register_user_id" property="inRegisterUserId"
+                jdbcType="INTEGER" />
+        <result column="in_register_user_real_name" property="inRegisterUserRealName"
+                jdbcType="VARCHAR" />
+        <result column="in_time" property="inTime" jdbcType="TIMESTAMP" />
+        <result column="out_reason" property="outReason" jdbcType="VARCHAR" />
+        <result column="out_photo_name" property="outPhotoId" jdbcType="VARCHAR" />
+        <result column="out_time" property="outTime" jdbcType="TIMESTAMP" />
+        <result column="out_type" property="outType" jdbcType="INTEGER" />
+        <result column="out_register_user_id" property="outRegisterUserId"
+                jdbcType="INTEGER" />
+        <result column="out_register_user_real_name" property="outRegisterUserRealName"
+                jdbcType="VARCHAR" />
+        <result column="out_user_id1" property="outUserId1" jdbcType="INTEGER" />
+        <result column="out_user_real_name1" property="outUserRealName1"
+                jdbcType="VARCHAR" />
+        <result column="out_user_id2" property="outUserId2" jdbcType="INTEGER" />
+        <result column="out_user_real_name2" property="outUserRealName2"
+                jdbcType="VARCHAR" />
+        <result column="certificate_type_id" property="certificateTypeId"
+                jdbcType="INTEGER" />
+        <result column="certificate_type_name" property="certificateTypeName"
+                jdbcType="VARCHAR" />
+        <result column="sex" property="sex" jdbcType="INTEGER" />
+        <result column="sexName" property="sexName" jdbcType="INTEGER" />
+        <result column="in_user_no1" property="inUserNo1" jdbcType="VARCHAR" />
+        <result column="in_user_no2" property="inUserNo2" jdbcType="VARCHAR" />
+        <result column="confirm_time" property="confirmTime" jdbcType="TIMESTAMP" />
+        <result column="confirm_result" property="confirmResult"
+                jdbcType="VARCHAR" />
+
+        <result column="person_info" property="personInfo" jdbcType="VARCHAR" />
+
+        <result column="entrance_procedure" property="entranceProcedure" jdbcType="VARCHAR" />
+        <result column="written_time" property="writtenTime" jdbcType="TIMESTAMP" />
+
+        <result column="un_relation_reason" property="unRelationReason" />
+
+
+        <!-- 文书需要的东西 -->
+        <result column="certificate_no" property="certificateNo"
+                jdbcType="VARCHAR" />
+        <result column="person_type" property="personType" jdbcType="VARCHAR" />
+        <result column="police_realname" property="policeRealName"
+                jdbcType="VARCHAR" />
+        <result column="flog" property="flog" jdbcType="INTEGER" />
+        <result column="person_name" property="personName" />
+
+        <result column="address" property="address" jdbcType="VARCHAR" />
+        <result column="nation" property="nation" jdbcType="VARCHAR" />
+        <result column="height" property="height" jdbcType="VARCHAR" />
+        <result column="weight" property="weight" jdbcType="VARCHAR" />
+        <result column="bodysize" property="bodysize" jdbcType="VARCHAR" />
+        <result column="faceShape" property="faceShape" jdbcType="VARCHAR" />
+        <result column="footsize" property="footsize" jdbcType="VARCHAR" />
+        <result column="caseName" property="caseName" jdbcType="VARCHAR" />
+
+        <result column="informationContent" property="informationContent"
+                jdbcType="VARCHAR" />
+        <result column="fomate" property="fomate" jdbcType="VARCHAR" />
+        <result column="extractTime" property="extractTime" jdbcType="VARCHAR" />
+        <result column="extractSites" property="extractSites" jdbcType="VARCHAR" />
+        <result column="extractMethod" property="extractMethod"
+                jdbcType="VARCHAR" />
+        <result column="vedioResouce" property="vedioResouce" jdbcType="VARCHAR" />
+        <result column="isOriginal" property="isOriginal" jdbcType="VARCHAR" />
+        <result column="reason" property="reason" jdbcType="VARCHAR" />
+        <result column="witnesses" property="witnesses" jdbcType="VARCHAR" />
+        <result column="saveSpace" property="saveSpace" jdbcType="VARCHAR" />
+        <result column="maker" property="maker" jdbcType="VARCHAR" />
+        <result column="policemen" property="policemen" jdbcType="VARCHAR" />
+        <result column="workspce" property="workspce" jdbcType="VARCHAR" />
+
+        <result column="rybh" property="rybh" jdbcType="VARCHAR" />
+        <result column="jzajbh" property="jzajbh" jdbcType="VARCHAR" />
+
+        <result column="caseNo" property="caseNo" jdbcType="VARCHAR" />
+
+        <result column="docInjuryisOriginal" property="docInjuryisOriginal"
+                jdbcType="VARCHAR" />
+        <result column="docInjurymakeSites" property="docInjurymakeSites"
+                jdbcType="VARCHAR" />
+        <result column="docInjurymakeTime" property="docInjurymakeTime"
+                jdbcType="VARCHAR" />
+        <result column="docInjurymaker" property="docInjurymaker"
+                jdbcType="VARCHAR" />
+        <result column="docInjuryrecordPerson" property="docInjuryrecordPerson"
+                jdbcType="VARCHAR" />
+        <result column="docInjurysaveSpace" property="docInjurysaveSpace"
+                jdbcType="VARCHAR" />
+        <result column="docInjurytheLord" property="docInjurytheLord"
+                jdbcType="VARCHAR" />
+        <result column="docInjurywitnesses" property="docInjurywitnesses"
+                jdbcType="VARCHAR" />
+        <result column="docInjuryworkspce" property="docInjuryworkspce"
+                jdbcType="VARCHAR" />
+        <result column="docInjurycontent" property="docInjurycontent"
+                jdbcType="VARCHAR" />
+
+
+        <result column="docSpaceisOriginal" property="docSpaceisOriginal"
+                jdbcType="VARCHAR" />
+        <result column="docSpacemakeSites" property="docSpacemakeSites"
+                jdbcType="VARCHAR" />
+        <result column="docSpacemakeTime" property="docSpacemakeTime"
+                jdbcType="VARCHAR" />
+        <result column="docSpacemaker" property="docSpacemaker"
+                jdbcType="VARCHAR" />
+        <result column="docSpacerecordPerson" property="docSpacerecordPerson"
+                jdbcType="VARCHAR" />
+        <result column="docSpacesaveSpace" property="docSpacesaveSpace"
+                jdbcType="VARCHAR" />
+        <result column="docSpacetheLord" property="docSpacetheLord"
+                jdbcType="VARCHAR" />
+        <result column="docSpacewitnesses" property="docSpacewitnesses"
+                jdbcType="VARCHAR" />
+        <result column="docSpaceworkspce" property="docSpaceworkspce"
+                jdbcType="VARCHAR" />
+        <result column="docSpacecontent" property="docSpacecontent"
+                jdbcType="VARCHAR" />
+        <result column="nickName" property="nickName" jdbcType="VARCHAR" />
+        <result column="tel" property="tel" jdbcType="VARCHAR" />
+        <result column="qq" property="qq" jdbcType="VARCHAR" />
+        <result column="email" property="email" jdbcType="VARCHAR" />
+        <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+        <result column="censusRegister" property="censusRegister"
+                jdbcType="VARCHAR" />
+        <result column="job" property="job" jdbcType="VARCHAR" />
+
+        <result column="phmakeAddress" property="phmakeAddress"
+                jdbcType="VARCHAR" />
+        <result column="phevidenceExplain" property="phevidenceExplain"
+                jdbcType="VARCHAR" />
+        <result column="phmakeAddress" property="phmakeAddress"
+                jdbcType="VARCHAR" />
+        <result column="phstorageAddress" property="phstorageAddress"
+                jdbcType="VARCHAR" />
+        <result column="phmakeTime" property="phmakeTime" jdbcType="VARCHAR" />
+        <result column="phchecks" property="phchecks" jdbcType="VARCHAR" />
+        <result column="phparty" property="phparty" jdbcType="VARCHAR" />
+        <result column="phproducer" property="phproducer" jdbcType="VARCHAR" />
+        <result column="phshootingPerson" property="phshootingPerson"
+                jdbcType="VARCHAR" />
+        <result column="phunit" property="phunit" jdbcType="VARCHAR" />
+        <result column="phwitnessPerson" property="phwitnessPerson"
+                jdbcType="VARCHAR" />
+
+        <result column="efdataContent" property="efdataContent"
+                jdbcType="VARCHAR" />
+        <result column="efevidtime" property="efevidtime" jdbcType="VARCHAR" />
+        <result column="efextractionAddress" property="efextractionAddress"
+                jdbcType="VARCHAR" />
+        <result column="efextractionMethod" property="efextractionMethod"
+                jdbcType="VARCHAR" />
+        <result column="efformat" property="efformat" jdbcType="VARCHAR" />
+        <result column="eforiginal" property="eforiginal" jdbcType="VARCHAR" />
+        <result column="eforiginalplace" property="eforiginalplace"
+                jdbcType="VARCHAR" />
+        <result column="efpoliceName" property="efpoliceName" jdbcType="VARCHAR" />
+        <result column="efproducer" property="efproducer" jdbcType="VARCHAR" />
+        <result column="efreason" property="efreason" jdbcType="VARCHAR" />
+        <result column="efunit" property="efunit" jdbcType="VARCHAR" />
+        <result column="efvideosource" property="efvideosource"
+                jdbcType="VARCHAR" />
+        <result column="efwitnessPerson" property="efwitnessPerson"
+                jdbcType="VARCHAR" />
+        <result column="interrogate_area_name" property="interrogateAreaName"
+                jdbcType="VARCHAR" />
+        <!--20190603-->
+        <result column="sendUserNo" property="sendUserNo" jdbcType="VARCHAR" />
+        <result column="sendUserRealName" property="sendUserRealName" jdbcType="VARCHAR" />
+        <!-- 20190712 -->
+        <result column="sfxxcj" property="sfxxcj" jdbcType="INTEGER" />
+        <!-- 20190821 -->
+        <result column="sfsyjd" property="sfsyjd" jdbcType="INTEGER" />
+        <!-- 20191001 -->
+        <result column="sftjcl" property="sftjcl" jdbcType="INTEGER" />
+        <result column="sfzdgl" property="sfzdgl" jdbcType="INTEGER" />
+        <!-- 20200604 -->
+        <result column="sx_date" property="sxDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <resultMap id="personMap" type="com.zhixin.zhfz.bacs.entity.PersonEntity">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="certificate_type_id" property="certificateTypeId" jdbcType="INTEGER"/>
+        <result column="certificate_name" property="certificateTypeName" jdbcType="VARCHAR"/>
+        <result column="certificate_no" property="certificateNo" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="old_name" property="oldName" jdbcType="VARCHAR"/>
+        <result column="nickname" property="nickname" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" jdbcType="INTEGER"/>
+        <result column="birth" property="birth" jdbcType="DATE"/>
+        <result column="education" property="education" jdbcType="INTEGER"/>
+        <result column="politic" property="politic" jdbcType="INTEGER"/>
+        <result column="officer" property="officer" jdbcType="INTEGER"/>
+        <result column="country" property="country" jdbcType="INTEGER"/>
+        <result column="nation" property="nation" jdbcType="INTEGER"/>
+        <result column="census_register" property="censusRegister" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="job" property="job" jdbcType="VARCHAR"/>
+        <result column="job_title" property="jobTitle" jdbcType="VARCHAR"/>
+        <result column="mobile" property="mobile" jdbcType="VARCHAR"/>
+        <result column="telephone" property="telephone" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="qq" property="qq" jdbcType="VARCHAR"/>
+        <result column="weixin" property="weixin" jdbcType="VARCHAR"/>
+        <result column="weibo" property="weibo" jdbcType="VARCHAR"/>
+        <result column="internet_info" property="internetInfo" jdbcType="VARCHAR"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+        <result column="personAge" property="personAge" jdbcType="INTEGER"/>
+        <result column="age" property="age" jdbcType="INTEGER"/>
+        <result column="person_no" property="personNo" jdbcType="VARCHAR"/>
+        <result column="area_id" property="areaId" jdbcType="VARCHAR"/>
+        <result column="areaName" property="areaName" jdbcType="VARCHAR"/>
+        <result column="uuid" property="uuid" jdbcType="VARCHAR"/>
+        <result column="case_id" property="caseId" jdbcType="VARCHAR"/>
+        <result column="op_pid" property="opPid" jdbcType="VARCHAR"/>
+        <result column="ajbh" property="ajbh" jdbcType="VARCHAR"/>
+        <result column="ajmc" property="ajmc" jdbcType="VARCHAR"/>
+        <result column="op_user_id" property="opUserId" jdbcType="INTEGER"/>
+        <result column="isArrive" property="isArrive" jdbcType="INTEGER"/>
+        <result column="caseId" property="caseId" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="queryAjxx" resultType="java.util.HashMap" parameterType="java.util.Map">
+        SELECT
+        c.id,
+        c.case_name ajmc,
+        c.case_no ajbh,
+        ct.`name` abmc,
+        c.type ajlx,
+        c.involved_date afsj,
+        c.involved_address afdd
+        FROM
+        interrogate_case c
+        LEFT JOIN crime_type ct ON ct.id = c.crime_type_id
+        where  1=1
+        <if test="ajbh!=null and ajbh!=''">
+            and c.case_no = #{ajbh}
+        </if>
+        <if test="ajmc!=null and ajmc!=''">
+            and c.case_name like  '%${ajmc}%'
+        </if>
+        <if test="caseLb!=null and caseLb!=''">
+            and c.type = #{caseLb}
+        </if>
+        ORDER BY c.created_time DESC
+        limit ${pageStart},${rows*page}
+    </select>
+
+    <select id="queryAjxxCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+        count(1)
+        FROM
+        interrogate_case c
+        where  1=1
+        <if test="ajbh!=null and ajbh!=''">
+            and c.case_no = #{ajbh}
+        </if>
+        <if test="ajmc!=null and ajmc!=''">
+            and c.case_name like  '%${ajmc}%'
+        </if>
+        <if test="caseLb!=null and caseLb!=''">
+            and c.type = #{caseLb}
+        </if>
+    </select>
+
+    <select id="queryPerson" resultType="java.util.HashMap" parameterType="java.util.Map">
+        SELECT
+        s.id,
+        p.name,
+        p.sex,
+        c.`name` certificateTypeName,
+        p.certificate_no certificateNo
+        FROM
+        interrogate_serial s
+        LEFT JOIN person p ON p.id = s.person_id
+        LEFT JOIN certificate_type c ON c.id = p.certificate_type_id
+        left join interrogate_case ic on ic.id = s.interrogate_case_id
+        where  1=1
+        <if test="ajbh!=null and ajbh!=''">
+            and ic.case_no = #{ajbh}
+        </if>
+        <if test="zjhm!=null and zjhm!=''">
+            and p.zjhm = #{zjhm}
+        </if>
+    </select>
+
+    <select id="queryBelong" resultType="java.util.HashMap" parameterType="java.util.Map">
+        SELECT
+            d.name,
+            d.detail_count,
+            d.unit,
+            d.description
+        FROM
+            belongings_detail d
+        WHERE
+            d.belongings_id IN (
+                SELECT
+                    b.id
+                FROM
+                    belongings b
+                WHERE
+                    b.interrogate_serial_id = #{serialId}
+            )
+    </select>
+    
+    <select id="queryAjxxById" parameterType="java.lang.Integer" resultMap="caseMap">
+        select * from interrogate_case where id = #{id}
+    </select>
+
+    <select id="querySerialById" parameterType="java.lang.Long" resultMap="serialMap">
+        select * from interrogate_serial where id= #{id}
+    </select>
+    
+    <select id="getPersonById" parameterType="java.lang.Long" resultMap="personMap">
+        select * from person where id = #{id}
+    </select>
+</mapper>
+
+

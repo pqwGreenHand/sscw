@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.zhixin.zhfz.zhag.dao.rule.IAgRuleConfigMapper">
+	<resultMap id="ruleConfigResultMap" type="com.zhixin.zhfz.zhag.entity.RuleConfigEntity">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="rule_id" property="ruleId" jdbcType="INTEGER" />
+		<result column="send_role_ids" property="sendRoleids" />
+		<result column="send_role_names" property="sendRoleNames" jdbcType="VARCHAR" />
+		<result column="send_day" property="sendDay" jdbcType="INTEGER" />
+		<result column="send_type" property="sendType" jdbcType="INTEGER" />
+		<result column="send_begin_time" property="sendBeginTime" />
+		<result column="send_end_time" property="sendEndTime"  />
+		<result column="rule_config_type" property="ruleConfigType"  />
+		<result column="send_content_template" property="sendContentTemplate"  />
+		<result column="send_mode" property="sendMode"  />
+		<result column="class_name" property="className" />
+	</resultMap>
+
+  <select id="listAllRuleConfig" resultMap="ruleConfigResultMap" parameterType="java.util.Map">
+  	select * from ag_rule_config a where 1=1  and rule_config_type=1
+  	<if test="ruleId!=null and ruleId!=''">
+			and rule_id = #{ruleId}
+		</if>
+</select>
+  <select id="countConfig" resultType="java.lang.Integer" parameterType="java.util.Map" >
+  	select count(*) from ag_rule_config where 1=1 	and rule_config_type=1
+  	<if test="ruleId!=null and ruleId!=''">
+			and rule_id = #{ruleId}
+		</if>
+</select>
+  <select id="listAllRuleConfigGj" resultMap="ruleConfigResultMap" parameterType="java.util.Map">
+  	select * from ag_rule_config a where 1=1  and rule_config_type=2
+  	<if test="ruleId!=null and ruleId!=''">
+			and rule_id = #{ruleId}
+		</if>
+</select>
+  <select id="countConfigGj" resultType="java.lang.Integer" parameterType="java.util.Map" >
+  	select count(*) from ag_rule_config where 1=1 	and rule_config_type=2
+  	<if test="ruleId!=null and ruleId!=''">
+			and rule_id = #{ruleId}
+		</if>
+</select>
+
+<insert id="insertRuleConfig" parameterType="com.zhixin.zhfz.zhag.entity.RuleConfigEntity"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into ag_rule_config (rule_id, send_role_ids,
+		send_role_names, send_day, send_begin_time,
+		send_end_time, send_content_template,rule_config_type,send_mode)
+		values (#{ruleId}, #{sendRoleids},
+		#{sendRoleNames}, #{sendDay}, #{sendBeginTime},
+	#{sendEndTime}, #{sendContentTemplate}, #{ruleConfigType}, #{sendMode})
+	</insert>
+	
+		<delete id="deleteRuleConfig" parameterType="java.lang.Integer">
+		delete from ag_rule_config
+		where id = #{id}
+	</delete>
+
+	<update id="updateRuleConfig" parameterType="com.zhixin.zhfz.zhag.entity.RuleConfigEntity">
+		update ag_rule_config
+		set rule_id = #{ruleId},
+		send_role_ids = #{sendRoleids},
+		send_role_names = #{sendRoleNames},
+		send_day = #{sendDay},
+		send_begin_time = #{sendBeginTime},
+		send_end_time = #{sendEndTime},
+		send_content_template = #{sendContentTemplate},
+		rule_config_type = #{ruleConfigType},
+		send_mode = #{sendMode}
+		where id = #{id}
+	</update>
+
+	<select id="listAllRuleConfigInfo" resultMap="ruleConfigResultMap">
+		select rc.*,ri.class_name from ag_rule_config rc
+		LEFT JOIN ag_rule_info ri on rc.rule_id = ri.id
+	</select>
+
+</mapper>

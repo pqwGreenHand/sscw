@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhixin.zhfz.bacs.dao.receptionentrance.IReceptionEntranceMapper">
+    <resultMap id="resultMap" type="com.zhixin.zhfz.bacs.entity.ReceptionEntranceEntity">
+        <id property="id" column="id"/>
+        <result column="department" property="department"></result>
+        <result column="name" property="name"></result>
+        <result column="certificate_no" property="certificateNo"></result>
+        <result column="phone" property="phone"></result>
+        <result column="reason" property="reason"></result>
+        <result column="receiver" property="receiver"></result>
+        <result column="card" property="card"></result>
+        <result column="in_time" property="inTime"></result>
+        <result column="out_time" property="outTime"></result>
+        <result column="area_id" property="areaId"></result>
+        <result column="areaName" property="areaName"></result>
+        <result column="op_pid" property="opPid" jdbcType="VARCHAR" />
+        <result column="op_user_id" property="opUserId" jdbcType="INTEGER" />
+    </resultMap>
+
+    <select id="list2" resultMap="resultMap" parameterType="java.util.Map">
+        select * from (SELECT
+        re.*, ar.`name` AS areaName
+        FROM
+        ba_reception re
+        LEFT JOIN ba_area ar ON  ar.id = re.area_id ) s where s.out_time is null
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="status!=null and status==1">
+            and s.out_time is null
+        </if>
+        <if test="status!=null and status==2">
+            and s.out_time is not null
+        </if>
+        <if test="status!=null and status==3">
+
+        </if>
+        <if test="name!=null and name!=''">
+            and s.name like '%${name}%'
+        </if>
+        <if test="certificateNo!=null and certificateNo!=''">
+            and s.certificate_no like '%${certificateNo}%'
+        </if>
+        <if test="start_date!=null and start_date!=''">
+            and s.in_time &gt;=#{start_date}
+        </if>
+        <if test="areaId!=null and areaId!=''">
+            and s.area_id = #{areaId}
+        </if>
+        <if test="end_date!=null and end_date!=''">
+            and s.in_time &lt;=#{end_date}
+        </if>
+
+        order by s.id desc
+        limit ${pageStart},${rows}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(1) from (SELECT
+        re.*, ar.`name` AS areaName
+        FROM
+        ba_reception re
+        LEFT JOIN ba_area ar ON  ar.id = re.area_id ) s where s.out_time is null
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="name!=null and name!=''">
+            and s.name like '%${name}%'
+        </if>
+        <if test="certificateNo!=null and certificateNo!=''">
+            and s.certificate_no like '%${certificateNo}%'
+        </if>
+        <if test="start_date!=null and start_date!=''">
+            and s.in_time &gt;=#{start_date}
+        </if>
+        <if test="areaId!=null and areaId!=''">
+            and s.area_id = #{areaId}
+        </if>
+        <if test="end_date!=null and end_date!=''">
+            and s.in_time &lt;=#{end_date}
+        </if>
+        order by s.id desc
+    </select>
+
+    <insert id="receptionInsert" parameterType="com.zhixin.zhfz.bacs.entity.ReceptionEntranceEntity">
+    insert into ba_reception
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="id != null">
+            id,
+        </if>
+        <if test="department != null">
+            department,
+        </if>
+        <if test="name != null">
+            name,
+        </if>
+        <if test="certificateNo != null">
+            certificate_no,
+        </if>
+        <if test="phone != null">
+            phone,
+        </if>
+        <if test="reason != null">
+            reason,
+        </if>
+        <if test="receiver != null">
+            receiver,
+        </if>
+        <if test="card != null">
+            card,
+        </if>
+        <if test="inTime != null">
+            in_time,
+        </if>
+        <if test="outTime != null">
+            out_time,
+        </if>
+        <if test="areaId != null">
+            area_id,
+        </if>
+        <!-- <if test="areaName != null">
+             areaName,
+         </if>-->
+        <if test="opPid != null">
+            op_pid,
+        </if>
+        <if test="opUserId != null">
+            op_user_id,
+        </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="id != null">
+            #{id,jdbcType=BIGINT},
+        </if>
+        <if test="department != null">
+            #{department,jdbcType=VARCHAR},
+        </if>
+        <if test="name != null">
+            #{name,jdbcType=VARCHAR},
+        </if>
+        <if test="certificateNo != null">
+            #{certificateNo,jdbcType=VARCHAR},
+        </if>
+        <if test="phone != null">
+            #{phone,jdbcType=VARCHAR},
+        </if>
+        <if test="reason != null">
+            #{reason,jdbcType=VARCHAR},
+        </if>
+        <if test="receiver != null">
+            #{receiver,jdbcType=VARCHAR},
+        </if>
+        <if test="card != null">
+            #{card,jdbcType=VARCHAR},
+        </if>
+        <if test="inTime != null">
+            #{inTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="outTime != null">
+            #{outTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="areaId != null">
+            #{areaId,jdbcType=INTEGER},
+        </if>
+        <!-- <if test="areaName != null">
+             #{areaName,jdbcType=INTEGER},
+         </if>-->
+
+        <if test="opPid != null">
+            #{opPid,jdbcType=VARCHAR},
+        </if>
+        <if test="areaId != null">
+            #{opUserId,jdbcType=INTEGER},
+        </if>
+    </trim>
+</insert>
+
+    <select id="list" resultMap="resultMap">
+         select * from (SELECT
+         re.*, ar.`name` AS areaName
+         FROM
+         ba_reception re
+         LEFT JOIN ba_area ar ON  ar.id = re.area_id
+        where 1=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        ) s where s.out_time is null
+
+
+     </select>
+
+    <update id="updateOutTime" parameterType="java.lang.Integer">
+          UPDATE ba_reception SET out_time = now()  WHERE id = #{id};
+    </update>
+
+    <select id="receptionHistoryList" resultMap="resultMap" parameterType="java.util.Map">
+        SELECT
+            re.*, ar.`name` AS areaName
+        FROM
+            ba_reception re
+        LEFT JOIN ba_area ar ON  ar.id = re.area_id
+        WHERE 1=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="name!=null and name!=''">
+            and re.name like '%${name}%'
+        </if>
+        <if test="certificateNo!=null and certificateNo!=''">
+            and re.certificate_no like '%${certificateNo}%'
+        </if>
+        <if test="startTime!=null and startTime!=''">
+            and re.in_time &gt;=  #{startTime}
+        </if>
+        <if test="endTime!=null and endTime!=''">
+            and re.in_time &lt;=  #{endTime}
+        </if>
+
+        <if test="pageStart != null and rows != null">
+            limit ${pageStart},${rows}
+        </if>
+    </select>
+
+    <select id="count2" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+       count(1)
+        FROM
+        ba_reception re
+        LEFT JOIN ba_area ar ON  ar.id = re.area_id
+        WHERE 1=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="name!=null and name!=''">
+            and re.name like '%${name}%'
+        </if>
+        <if test="certificateNo!=null and certificateNo!=''">
+            and re.certificate_no like '%${certificateNo}%'
+        </if>
+        <if test="startTime!=null and startTime!=''">
+            and re.in_time &gt;=  #{startTime}
+        </if>
+        <if test="endTime!=null and endTime!=''">
+            and re.in_time &lt;=  #{endTime}
+        </if>
+    </select>
+
+    <select id="findById" parameterType="java.lang.Integer" resultMap="resultMap">
+        select * from (SELECT
+         re.*, ar.`name` AS areaName
+         FROM
+         ba_reception re
+         LEFT JOIN ba_area ar ON  ar.id = re.area_id ) s where s.id = #{id}
+    </select>
+
+
+    <update id="updateById" parameterType="com.zhixin.zhfz.bacs.entity.ReceptionEntranceEntity">
+         update ba_reception set department = #{department}, name = #{name},certificate_no = #{certificateNo},phone = #{phone},
+        reason = #{reason},receiver = #{receiver},card = #{card}, area_id = #{areaId}  where id = #{id}
+
+    </update>
+</mapper>

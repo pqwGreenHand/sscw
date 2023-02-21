@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.track.TrackMapper" >
+  
+  <resultMap id="PostionDataMap" type="com.zhixin.zhfz.bacs.entity.PositionDataEntity" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="cuff_id" property="cuffId" jdbcType="INTEGER" />
+    <result column="cuff_no" property="cuffNo" jdbcType="VARCHAR" />
+    <result column="device_id" property="deviceId" jdbcType="INTEGER" />
+    <result column="device_no" property="deviceNo" jdbcType="INTEGER" />
+	<result column="room_id" property="roomId" jdbcType="INTEGER" />
+	<result column="room_group" property="roomGroup" jdbcType="VARCHAR" />
+	<result column="room_type_id" property="roomTypeId" jdbcType="INTEGER" />
+    <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+	<resultMap id="TrackInfoResultMap" type="com.zhixin.zhfz.bacs.entity.TrackInfoEntity" >
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="serial_id" property="serialId" jdbcType="BIGINT" />
+		<result column="cuff_no" property="cuffNo" jdbcType="VARCHAR" />
+		<result column="room_group" property="roomGroup" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="camera_no" property="cameraNo" jdbcType="VARCHAR" />
+		<result column="path" property="path" jdbcType="VARCHAR" />
+		<result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+		<result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+		<result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<select id="listDeviceData" resultMap="PostionDataMap"
+			parameterType="java.util.Map">
+
+		select p.*,r.location_group room_group,r.room_type_id from ba_room r, ba_position_data p
+		where r.id=p.room_id  and p.cuff_id=#{cuffNo}
+		and (
+		p.send_time between ( select s1.in_time from ba_serial s1 where s1.id = #{serialId} )
+		and (select if(s2.out_time is not null,s2.out_time,now()) from ba_serial s2 where s2.id =  #{serialId})
+		)
+		order by send_time
+	</select>
+
+	<select id="listTrack" resultMap="TrackInfoResultMap" parameterType="java.util.Map">
+		select t.*,c.camera_no from ba_camera c, ba_room r, ba_track_info t
+		where c.screen='主画面' and c.room_id=r.id and r.location_group=t.room_group and  t.serial_id=#{serialId} and cuff_no=#{cuffNo}
+		<if test="roomName!=null and roomName!=''">
+			and	t.room_group like '%${roomName}%'
+		</if>
+	</select>
+
+	<insert id="insertTrackBatch" parameterType="java.util.List">
+		insert into ba_track_info (serial_id, cuff_no, room_group,start_time,end_time,created_time)
+		values
+		<foreach collection="list" item="item" index="index" separator="," >
+			(#{item.serialId},#{item.cuffNo},#{item.roomGroup},#{item.startTime},#{item.endTime},now())
+		</foreach>
+	</insert>
+
+	<delete id="deleteTrack" parameterType="java.util.Map">
+		delete from ba_track_info where serial_id=#{serialId} and cuff_no=#{cuffNo}
+	</delete>
+</mapper>

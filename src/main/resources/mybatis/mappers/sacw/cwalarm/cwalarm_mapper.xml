@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.sacw.dao.cwalarm.ICwAlarmDao">
+
+    <resultMap id="CwAlarmMap" type="CwAlarmEntity">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="involved_id" column="involved_id" jdbcType="INTEGER"/>
+        <result property="label_id" column="label_id" jdbcType="INTEGER"/>
+        <result property="device_id" column="device_id" jdbcType="INTEGER"/>
+        <result property="alarm_type" column="alarm_type" jdbcType="INTEGER"/>
+        <result property="alarm_name" column="alarm_name" jdbcType="VARCHAR"/>
+        <result property="alarm_time" column="alarm_time" jdbcType="TIMESTAMP"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="handler_time" column="handler_time" jdbcType="TIMESTAMP"/>
+        <result property="handler_content" column="handler_content" jdbcType="VARCHAR"/>
+        <result property="location_id" column="location_id" jdbcType="INTEGER"/>
+        <result property="warehouse_id" column="warehouse_id" jdbcType="INTEGER"/>
+
+        <result property="startTime" column="startTime" jdbcType="TIMESTAMP"/>
+        <result property="endTime" column="endTime" jdbcType="TIMESTAMP"/>
+        <result property="label_no" column="label_no" jdbcType="VARCHAR"/>
+        <result property="caseNo" column="caseNo" jdbcType="VARCHAR"/>
+        <result property="caseName" column="caseName" jdbcType="VARCHAR"/>
+        <result property="involvedName" column="involvedName" jdbcType="VARCHAR"/>
+        <result property="involvedTypeName" column="involvedTypeName" jdbcType="VARCHAR"/>
+        <result property="involvedOwner" column="involvedOwner" jdbcType="VARCHAR"/>
+        <result property="warehouseName" column="warehouseName" jdbcType="VARCHAR"/>
+        <result property="locationName" column="locationName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="list" resultMap="CwAlarmMap" parameterType="java.util.Map">
+        SELECT a.id as id ,ic.name AS involvedName,ic.code_value AS involvedTypeName,ic.involved_owner AS involvedOwner,
+        cc.ajbh AS caseNo,cc.ajmc AS caseName,w.name AS warehouseName,l.name AS locationName,la.label_no AS label_no,
+        a.alarm_type,a.alarm_name,a.alarm_time,a.status,a.handler_time,a.handler_content
+        FROM sa_alarm a LEFT JOIN
+        (SELECT i.id,i.name,i.register_user_id,c.code_value,i.case_id,i.involved_owner FROM sa_involved i
+        LEFT JOIN xt_code c ON i.involved_type_id = c.code_key WHERE c.type='INVOLVED_TYPE') ic
+        ON a.involved_id = ic.id
+        LEFT JOIN ba_case cc ON ic.case_id=cc.id
+        LEFT JOIN sa_warehouse w ON a.warehouse_id = w.id
+        LEFT JOIN sa_location l ON a.location_id = l.id
+        LEFT JOIN sa_label la ON a.label_id = la.id
+        WHERE 1=1
+        <if test="caseNo!=null and caseNo !=''">
+            and cc.ajbh like '%${caseNo}%'
+        </if>
+        <if test="caseName !=null and caseName !=''">
+            and cc.ajmc like '%${caseName}%'
+        </if>
+        <if test=" involvedName!=null and involvedName !=''">
+            and ic.name= #{involvedName}
+        </if>
+        <if test="status!=99 and status!=null">
+            and a.status= #{status}
+        </if>
+        <if test=" startTime!=null and endTime !=null">
+            and a.handler_time between #{startTime} and #{endTime}
+        </if>
+        <if test="dataAuth!='' and dataAuth!=null">
+            and ${dataAuth}
+        </if>
+        order by a.alarm_time desc limit ${pageStart},${rows}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT COUNT(1)
+        FROM sa_alarm a LEFT JOIN
+        (SELECT i.id,i.name,i.register_user_id,c.code_value,i.case_id,i.involved_owner FROM sa_involved i
+        LEFT JOIN xt_code c ON i.involved_type_id = c.code_key WHERE c.type='INVOLVED_TYPE') ic
+        ON a.involved_id = ic.id
+        LEFT JOIN ba_case cc ON ic.case_id=cc.id
+        LEFT JOIN sa_warehouse w ON a.warehouse_id = w.id
+        LEFT JOIN sa_location l ON a.location_id = l.id
+        LEFT JOIN sa_label la ON a.label_id = la.id
+        WHERE 1=1
+        <if test="caseNo!=null and caseNo !=''">
+            and cc.ajbh like '%${caseNo}%'
+        </if>
+        <if test="caseName !=null and caseName !=''">
+            and cc.ajmc like '%${caseName}%'
+        </if>
+        <if test=" involvedName!=null and involvedName !=''">
+            and ic.name= #{involvedName}
+        </if>
+        <if test="status!=99 and status!=null">
+            and a.status= #{status}
+        </if>
+        <if test=" startTime!=null and endTime !=null">
+            and a.handler_time between #{startTime} and #{endTime}
+        </if>
+        <if test="dataAuth!='' and dataAuth!=null">
+            and ${dataAuth}
+        </if>
+    </select>
+
+    <!-- 根据id修改处理回复内容 -->
+    <update id="updateAlarmById" parameterType="CwAlarmEntity">
+        UPDATE `sa_alarm`
+        SET
+        handler_time = now(),
+        status = 1,
+        `handler_content` = #{handler_content}
+        WHERE
+        (`id` = #{id});
+    </update>
+
+    <!-- 根据限制日期（day1）参数 查询超期未入库-->
+    <select id="quyTimeOutListByParam" resultMap="CwAlarmMap" parameterType="int">
+        SELECT i.id as involved_id,i.name,i.warehouse_id,i.location_id
+        FROM sa_involved i WHERE i.type = 1 and i.`status` = 1
+        and NOW() >= DATE_ADD(i.created_time, INTERVAL #{day1} DAY)
+    </select>
+
+    <!-- 根据限制日期（day2）参数 查询借出超时 -->
+    <select id="quyLendListByParam" resultMap="CwAlarmMap" parameterType="int">
+        SELECT i.involved_id,i.name,i.warehouse_id,i.label_id,i.location_id,i.output_time FROM
+        (SELECT ii.id as involved_id,ii.name,ii.warehouse_id,ii.label_id,ii.location_id,MAX(o.output_time)AS output_time
+        from sa_involved ii
+        LEFT JOIN sa_output_record o ON ii.id = o.involved_id
+        LEFT JOIN xt_code c ON o.output_type_id = c.code_key
+        WHERE ii.type = 1 and ii.`status` = 6 and c.type='INV_OUTPUT_TYPE' AND c.code_key = 6
+        GROUP BY ii.id) i WHERE NOW() >= DATE_ADD(i.output_time, INTERVAL #{day2} DAY)
+    </select>
+
+    <insert id="addAlarm" parameterType="com.zhixin.zhfz.sacw.entity.CwAlarmEntity" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into sa_alarm
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="involved_id != null and involved_id!='' ">
+                involved_id,
+            </if>
+            <if test="label_id != null and label_id !='' ">
+                label_id,
+            </if>
+            <if test="device_id != null and device_id!='' ">
+                device_id,
+            </if>
+            <if test="alarm_type != null and alarm_type!='' ">
+                alarm_type,
+            </if>
+            <if test="alarm_name != null and alarm_name!='' ">
+                alarm_name,
+            </if>
+            <if test="location_id != null and location_id!='' ">
+                location_id,
+            </if>
+            <if test="warehouse_id != null and warehouse_id!='' ">
+                warehouse_id,
+            </if>
+            alarm_time,
+            status
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="involved_id != null and involved_id!='' ">
+                #{involved_id},
+            </if>
+            <if test="label_id != null and label_id !='' ">
+                #{label_id},
+            </if>
+            <if test="device_id != null and device_id!='' ">
+                #{device_id},
+            </if>
+            <if test="alarm_type != null and alarm_type!='' ">
+                #{alarm_type},
+            </if>
+            <if test="alarm_name != null and alarm_name!='' ">
+                #{alarm_name},
+            </if>
+            <if test="location_id != null and location_id!='' ">
+                #{location_id},
+            </if>
+            <if test="warehouse_id != null and warehouse_id!='' ">
+                #{warehouse_id},
+            </if>
+            now(),
+            0
+        </trim>
+    </insert>
+</mapper>

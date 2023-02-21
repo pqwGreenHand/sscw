@@ -1,0 +1,634 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.exhibit.IExhibitMapper">
+    <resultMap id="BaseResultMap" type="ExhibitEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="serial_id" property="serialId" jdbcType="BIGINT"/>
+        <result column="register_user_id" property="registerUserId" jdbcType="INTEGER"/>
+        <result column="register_time" property="registerTime" jdbcType="TIMESTAMP"/>
+        <result column="case_id" property="caseId" jdbcType="INTEGER"/>
+        <result column="area_id" property="areaId" jdbcType="INTEGER"/>
+        <result column="locker_id" property="lockerId" jdbcType="VARCHAR"/>
+        <result column="is_get" property="isGet" jdbcType="INTEGER"/>
+        <result column="get_way" property="getWay" jdbcType="VARCHAR"/>
+        <result column="get_person" property="getPerson" jdbcType="VARCHAR"/>
+        <result column="get_time" property="getTime" jdbcType="TIMESTAMP"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+        <result column="exhibit_id" property="exhibitId" jdbcType="INTEGER"/>
+        <result column="serial_no" property="serialNo" jdbcType="VARCHAR"/>
+        <result column="cabinet_group" property="cabinetGroup" jdbcType="VARCHAR"/>
+        <result column="cabinet_no" property="cabinetNo" jdbcType="VARCHAR"/>
+        <result column="personname" property="personName" jdbcType="VARCHAR"/>
+        <result column="boxip" property="boxip" jdbcType="VARCHAR"/>
+        <result column="boxgroup" property="boxgroup" jdbcType="VARCHAR"/>
+        <result column="boxport" property="boxport" jdbcType="VARCHAR"/>
+        <result column="area_name" property="areaName" jdbcType="VARCHAR"/>
+        <result column="involved_reason" property="involvedReason" jdbcType="VARCHAR"/>
+        <result column="detail_count" property="detailCount" jdbcType="VARCHAR"/>
+        <result column="caseNo" property="caseNo"/>
+        <result column="caseName" property="caseName"/>
+        <result column="plName" property="plName"/>
+        <result column="name" property="name"/>
+        <result column="pName" property="pName"/>
+        <result column="organization1" property="organization1"/>
+        <result column="organization2" property="organization2"/>
+        <result column="sendUserId" property="sendUserId"/>
+        <result column="pNname" property="pNname"/>
+    </resultMap>
+    <resultMap id="ExhibitPhotoResultMap"
+               type="ExhibitPhotoEntity">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="exhibit_id" property="exhibitId" jdbcType="BIGINT" />
+        <result column="uuid" property="uuid" jdbcType="VARCHAR"/>
+        <result column="url" property="url" jdbcType="VARCHAR" />
+        <result column="area_id" property="areaId" jdbcType="INTEGER"/>
+        <result column="interrogate_area_id" property="areaId" jdbcType="INTEGER" />
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List">
+		id, serial_id, register_user_id, register_time, case_id,
+		area_id,
+		locker_id, is_get,  created_time, updated_time
+	</sql>
+    <!-- 查询所有柜子的存储信息 -->
+    <select id="listAllExhibit" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT
+        b.id,
+        s.serial_no,
+        b.locker_id,
+        b.is_get,
+        pn.`name` personname,
+        cf.`name` cabinet_group,
+        dl.open_key cabinet_no,
+        ia.`name` area_name
+        FROM
+        ba_exhibit b
+        LEFT JOIN ba_serial s ON s.id = b.serial_id
+        LEFT JOIN ba_person pn ON pn.id = s.person_id
+        LEFT JOIN ba_cabinet_config_detail dl ON dl.id = b.locker_id
+        LEFT JOIN ba_cabinet_config cf ON cf.id = dl.config_id
+        LEFT JOIN ba_area ia ON b.area_id = ia.id
+        WHERE
+        1 = 1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="lockerId!=null and lockerId!=''">
+            and b.locker_id like '%${lockerId}%'
+        </if>
+        <if test="name!=null and name!=''">
+            and pn.`name` like '%${name}%'
+        </if>
+        <if test="start_date!=null and start_date!=''">
+            and b.created_time &gt;=#{start_date}
+        </if>
+        <if test="end_date!=null and end_date!=''">
+            and b.created_time &lt;=#{end_date}
+        </if>
+        <if test="areaId !=null and areaId !=''">
+            and s.area_id = #{areaId}
+        </if>
+        order by b.id desc
+        limit ${pageStart},${rows}
+    </select>
+    <!-- 根据id查询涉案物品信息 -->
+    <select id="getExhibitById" resultMap="BaseResultMap" parameterType="Long">
+        select *
+        from
+        ba_exhibit b
+        where id=#{id}
+    </select>
+    <!-- 根据id删除涉案存物信息 -->
+    <delete id="deleteExhibit" parameterType="Long">
+		delete from ba_exhibit where id = #{id}
+	</delete>
+    <!-- 增加涉案存物信息 -->
+    <insert id="insertExhibit" parameterType="ExhibitEntity"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ba_exhibit (
+            id,
+            serial_id,
+            register_user_id,
+            register_time,
+            case_id,
+            area_id,
+            locker_id,
+            is_get,
+            created_time,
+            updated_time
+        )
+        VALUES
+            (
+		#{id,jdbcType=INTEGER},
+		#{serialId,jdbcType=BIGINT},
+		#{registerUserId,jdbcType=INTEGER},
+		#{registerTime,jdbcType=TIMESTAMP},
+		#{caseId,jdbcType=INTEGER},
+		#{areaId,jdbcType=INTEGER},
+		#{lockerId,jdbcType=VARCHAR},
+		#{isGet,jdbcType=INTEGER},
+		#{createdTime,jdbcType=TIMESTAMP},
+		#{updatedTime,jdbcType=TIMESTAMP})
+	</insert>
+    <!-- 根据searilid查询涉案id -->
+    <select id="selectphotoinfo" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT
+            b.id AS exhibit_id,
+            s.area_id
+        FROM
+            ba_exhibit b,
+            ba_serial s
+        WHERE
+            s.id = b.serial_id
+        AND b.is_get = 0
+        AND s.id = #{serialID}
+            LIMIT 1
+	</select>
+    <!-- 根据searilid查询涉案物品总数 -->
+    <select id="selectpinfo" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+            count(4)
+        FROM
+            ba_exhibit b,
+            ba_exhibit_photo p
+        WHERE
+            b.id = p.exhibit_id
+        AND b.serial_id = #{serialID}
+	</select>
+    <!-- 根据涉案存物id修改涉案照片 -->
+    <update id="updatebelongphoto" parameterType="ExhibitEntity">
+        update ba_exhibit_photo
+        <set>
+            <if test="exhibitId != null and exhibitId != ''">
+                exhibit_id = #{exhibitId,jdbcType=INTEGER},
+            </if>
+            <if test="url != null and url != ''">
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="areaId != null and areaId != ''">
+                area_id = #{areaId,jdbcType=INTEGER},
+            </if>
+            <if test="updatedTime != null and updatedTime != ''">
+                updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where exhibit_id = #{exhibitId}
+    </update>
+    <!-- 增加涉案物品照片 -->
+    <insert id="creatbelongphoto" parameterType="ExhibitEntity"
+            useGeneratedKeys="true" keyProperty="id">
+		insert into ba_exhibit_photo (id,
+		exhibit_id, url,
+		area_id, created_time,
+		updated_time)
+		values (#{id,jdbcType=INTEGER}, #{exhibitId,jdbcType=INTEGER},
+		#{url,jdbcType=VARCHAR},#{areaId,jdbcType=INTEGER},
+		#{createdTime,jdbcType=TIMESTAMP},
+		#{updatedTime,jdbcType=TIMESTAMP})
+	</insert>
+    <!-- 修改涉案存物信息 -->
+    <update id="updateExhibit" parameterType="ExhibitEntity">
+        update exhibit
+        <set>
+            <if test="SerialId != null">
+                serial_id = #{SerialId,jdbcType=BIGINT},
+            </if>
+            <if test="registerUserId != null">
+                register_user_id = #{registerUserId,jdbcType=INTEGER},
+            </if>
+            <if test="registerTime != null">
+                register_time = #{registerTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="caseId != null">
+                case_id = #{caseId,jdbcType=INTEGER},
+            </if>
+            <if test="areaId != null">
+                area_id = #{areaId,jdbcType=INTEGER},
+            </if>
+            <if test="lockerId != null">
+                locker_id = #{lockerId,jdbcType=VARCHAR},
+            </if>
+            <if test="isGet != null">
+                is_get = #{isGet,jdbcType=INTEGER},
+            </if>
+            <if test="createdTime != null">
+                created_time = #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedTime != null">
+                updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <!-- 查询涉案财物总数 -->
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select
+       count(1)
+        from
+        ba_exhibit b
+        left join
+        ba_serial s
+        on s.id =
+        b.serial_id
+        left join ba_person pn on pn.id=s.person_id
+        left join ba_cabinet_config_detail dl on dl.id=b.locker_id
+        left join ba_cabinet_config cf on cf.id=dl.config_id
+        left join ba_area ia on  b.area_id=ia.id
+        left join ba_case ba on ba.id = b.case_id
+        where 1=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="lockerId!=null and lockerId!=''">
+            and b.locker_id like '%${lockerId}%'
+        </if>
+        <if test="name!=null and name!=''">
+            and pn.`name` like '%${name}%'
+        </if>
+        <if test="start_date!=null and start_date!=''">
+            and b.created_time &gt;=#{start_date}
+        </if>
+        <if test="end_date!=null and end_date!=''">
+            and b.created_time &lt;=#{end_date}
+        </if>
+        <if test="areaId !=null and areaId !=''">
+            and s.area_id = #{areaId}
+        </if>
+        <if test="flag == 'Exhibit'">
+            and cf.type = 2
+        </if>
+        order by b.id desc
+    </select>
+    <!-- 根据柜门id查询未领取的涉案信息 -->
+    <select id="selectinfo" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from ba_exhibit
+        where
+        locker_id = #{lockerId}
+        and is_get =0
+    </select>
+    <!-- 根据searilId查询未领取的涉案物品信息 -->
+    <select id="selectSidnfo" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from ba_exhibit
+        where
+        is_get =0 and
+        serial_id=#{serialId}
+        LIMIT 1
+    </select>
+    <!-- 修改涉案物品信息 -->
+    <update id="updateBoxopen" parameterType="ExhibitEntity">
+        update ba_exhibit
+        <set>
+            <if test="SerialId != null">
+                serial_id = #{serialId,jdbcType=BIGINT},
+            </if>
+            <if test="registerUserId != null">
+                register_user_id = #{registerUserId,jdbcType=INTEGER},
+            </if>
+            <if test="registerTime != null">
+                register_time = #{registerTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="caseId != null">
+                case_id = #{caseId,jdbcType=INTEGER},
+            </if>
+            <if test="areaId != null">
+                area_id = #{areaId,jdbcType=INTEGER},
+            </if>
+            <if test="lockerId != null">
+                locker_id = #{lockerId,jdbcType=VARCHAR},
+            </if>
+            <if test="isGet != null">
+                is_get = #{isGet,jdbcType=INTEGER},
+            </if>
+            <if test="createdTime != null">
+                created_time = #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedTime != null">
+                updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <!-- 全部取物时根据唯一编号查询log所需信息 -->
+    <select id="selectloginfo" resultMap="BaseResultMap"
+            parameterType="java.util.Map">
+        select d.exhibit_id,b.locker_id
+        from ba_exhibit b,ba_exhibit_detail d
+        where
+        b.id =d.exhibit_id and
+        b.is_get = 0 and
+        b.serial_id =#{s}
+    </select>
+    <!-- 根据searilid修改未领取的涉案存物信息 -->
+    <update id="updateBoxopenout" parameterType="ExhibitEntity">
+        update ba_exhibit
+        <set>
+            <if test="registerUserId != null">
+                register_user_id = #{registerUserId,jdbcType=INTEGER},
+            </if>
+            <if test="registerTime != null">
+                register_time = #{registerTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="caseId != null">
+                case_id = #{caseId,jdbcType=INTEGER},
+            </if>
+            <if test="areaId != null">
+                area_id = #{areaId,jdbcType=INTEGER},
+            </if>
+            <if test="lockerId != null">
+                locker_id = #{lockerId,jdbcType=VARCHAR},
+            </if>
+            <if test="isGet != null">
+                is_get = #{isGet,jdbcType=INTEGER},
+            </if>
+            <if test="createdTime != null">
+                created_time = #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedTime != null">
+                updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where is_get=0 and serial_id = #{serialId}
+    </update>
+    <!-- 根据存物id查询具体存物总数 -->
+    <select id="selectExhibitInfo" resultType="java.lang.Integer"
+            parameterType="java.util.Map">
+		select count(2) from ba_exhibit_detail d where d.is_get =0 and
+		d.exhibit_id=(select exhibit_id from ba_exhibit_detail where
+		id=#{s})
+	</select>
+    <!-- 根据存物id查询serialid -->
+    <select id="selectExhibitInfoById" resultType="java.lang.Long" parameterType="java.lang.Integer">
+		select ex.serial_id as serialId from ba_exhibit ex where ex.id =#{s}
+	</select>
+    <!-- 根据id修改涉案物品信息 -->
+    <update id="updateUpperInfo" parameterType="ExhibitEntity">
+        update ba_exhibit
+        <set>
+            <if test="isGet != null">
+                is_get = #{isGet,jdbcType=INTEGER},
+            </if>
+            <if test="createdTime != null">
+                created_time = #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedTime != null">
+                updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <!-- 根据柜门id查询searilid -->
+    <select id="getSerialIdByLockId" resultType="java.lang.Long" parameterType="java.util.Map">
+	     select serial_id from ba_exhibit where is_get = 0 and locker_id = #{lockId}
+	</select>
+    <!-- 根据id选柜号,ip.groupw.xb -->
+    <select id="selectlockNo" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		SELECT
+			ccd.open_key AS locker_id,
+			bcc.ip AS boxip,
+			bcc.`group` as boxgroup,
+			bcc.`port` as boxport
+		FROM
+			ba_cabinet_config bcc
+		LEFT JOIN ba_cabinet_config_detail ccd ON bcc.id = ccd.config_id
+		WHERE
+			ccd.id = #{lockid}
+	</select>
+
+    <!-- 根据唯一编号选柜号,ip.groupw.xb -->
+    <select id="selectlockNobysid" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        SELECT
+			ccd.open_key AS locker_id,
+			bcc.ip AS boxip,
+			bcc.`group` as boxgroup,
+			bcc.`port` as boxport
+		FROM
+			ba_cabinet_config bcc
+		LEFT JOIN ba_cabinet_config_detail ccd ON bcc.id = ccd.config_id
+		LEFT JOIN ba_exhibit be ON be.locker_id = ccd.id
+		LEFT JOIN ba_serial bs ON bs.id = be.serial_id
+		WHERE
+			bs.id = #{sid}
+	</select>
+    <!-- 根据存物id查询涉案物品照片 -->
+    <select id="selectPhotoByExhibitId" parameterType="java.lang.Long" resultMap="ExhibitPhotoResultMap">
+		select p.*,bs.uuid from ba_exhibit_photo p
+		LEFT JOIN ba_exhibit bb ON p.exhibit_id = bb.id
+        LEFT JOIN ba_serial bs ON bs.id = bb.serial_id
+		where p.exhibit_id = #{exhibitId}
+	</select>
+    <!-- 查询嫌疑人所使用柜子信息  -->
+    <select id="listAllExhibitByLocker" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        b.id,
+        s.serial_no,
+        b.locker_id,
+        b.is_get,
+        pn.`name` personname,
+        cf.`name` cabinet_group,
+        dl.open_key cabinet_no,
+        ia.`name` area_name
+        from
+        ba_exhibit b
+        left join
+        ba_serial s
+        on s.id =
+        b.serial_id
+        left join ba_person pn on pn.id=s.person_id
+        left join ba_cabinet_config_detail dl on dl.id=b.locker_id
+        left join ba_cabinet_config cf on cf.id=dl.config_id
+        left join ba_area ia on  b.area_id=ia.id
+        left join ba_case ba on ba.id = b.case_id
+        where 1=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="lockerId!=null and lockerId!=''">
+            and b.locker_id like '%${lockerId}%'
+        </if>
+        <if test="name!=null and name!=''">
+            and pn.`name` like '%${name}%'
+        </if>
+        <if test="start_date!=null and start_date!=''">
+            and b.created_time &gt;=#{start_date}
+        </if>
+        <if test="end_date!=null and end_date!=''">
+            and b.created_time &lt;=#{end_date}
+        </if>
+        <if test="areaId !=null and areaId !=''">
+            and s.area_id = #{areaId}
+        </if>
+        <if test="flag == 'Exhibit'">
+            and cf.type = 2
+        </if>
+        order by b.id desc
+        limit ${pageStart},${rows}
+    </select>
+    <!-- 查询随身物品开柜记录 -->
+    <select id="queryExhibitCabinetLlog" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT
+        bcl.id AS logId,
+        bcl.exhibit_id AS logBelongId,
+        dl.open_key AS logBelongLockerId,
+        bcl.opener AS logBelongOpener,
+        bcl.reason AS logBelongReason,
+        bcl.created_time AS logCreatedTime
+        FROM
+        ba_exhibit_cabinet_log bcl
+        LEFT JOIN ba_cabinet_config_detail dl ON dl.id = bcl.locker_id
+        WHERE
+        1 = 1
+        <if test="lockerId!=null and lockerId!=''">
+            and bcl.locker_id = #{lockerId}
+        </if>
+        <if test="enpId!=null and enpId!=''">
+            and bcl.exhibit_id = #{enpId}
+        </if>
+        limit ${pageStart},${rows}
+    </select>
+    <!-- 随身物品开柜记录总数 -->
+    <select id="countyExhibitCabinetLog" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+        count(1)
+        FROM
+        ba_exhibit_cabinet_log bcl
+        LEFT JOIN ba_cabinet_config_detail dl ON dl.id = bcl.locker_id
+        WHERE
+        1 = 1
+        <if test="lockerId!=null and lockerId!=''">
+            and bcl.locker_id = #{lockerId}
+        </if>
+        <if test="enpId!=null and enpId!=''">
+            and bcl.exhibit_id = #{enpId}
+        </if>
+    </select>
+    <!-- 导出随身储物柜的储物数据 -->
+    <select id="getExhibitForExport" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT
+            d.id,
+            d.exhibit_id,
+            d.is_get,
+            d.get_way,
+            d.get_person,
+            d.get_time,
+            s.serial_no,
+            b.locker_id,
+            d. NAME,
+            d.detail_count,
+            d.description,
+            d.unit,
+            pn. NAME personname,
+            s.id serial_id,
+            cd.code_desc involved_reason,
+            b.register_time,
+            u.real_name policeName,
+            bb.burcode,
+            ba. NAME areaName
+        FROM
+            ba_exhibit b
+        LEFT JOIN ba_exhibit_detail d ON d.exhibit_id = b.id
+        LEFT JOIN ba_exhibit_burcode bb ON bb.exhibit_id = b.id
+        LEFT JOIN ba_serial s ON s.id = b.serial_id
+        LEFT JOIN ba_person pn ON s.person_id = pn.id
+        LEFT JOIN xt_user u ON u.id = b.register_user_id
+        LEFT JOIN ba_case bc ON bc.id = b.case_id
+        LEFT JOIN xt_crime_define cd ON cd.id = bc.ab
+        LEFT JOIN ba_area ba ON s.area_id = ba.id
+	    where s.area_id=#{areaId}
+	    and b.register_time BETWEEN #{startTime} and #{endTime}
+	</select>
+    <!-- 查询嫌疑人存取物信息 -->
+    <select id="getDocInfo" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT
+        CONCAT(a.`name`) areaName,
+        c.ajbh caseNO,
+        c.ajmc caseName,
+        p.`name` pNname,
+        p.certificate_no,
+        (
+        SELECT
+        code_desc
+        FROM
+        xt_crime_define
+        WHERE
+        id = c.ab
+        ) involved_reason,
+        d.`name` name,
+        d.detail_count,
+        d.description,
+        d.unit,
+        CONCAT(
+        pc.`name`,
+        '柜_',
+        pd.open_key,
+        '号'
+        ) boxname,
+        d.get_way,
+        d.get_time,
+        d.get_person
+        FROM
+        ba_serial i
+        LEFT JOIN ba_area a ON i.area_id = a.id
+        LEFT JOIN xt_organization o ON a.organization_id = o.id
+        LEFT JOIN ba_person p ON i.person_id = p.id
+        LEFT JOIN ba_case c ON c.id = i.case_id
+        LEFT JOIN ba_exhibit b ON b.serial_id = i.id
+        LEFT JOIN ba_exhibit_detail d ON b.id = d.exhibit_id
+        LEFT JOIN ba_cabinet_config_detail pd ON pd.id = b.locker_id
+        LEFT JOIN ba_cabinet_config pc ON pd.config_id = pc.id
+        WHERE
+        pc.type = 2
+        <if test="serialId!=null and serialId!=''">
+            and i.id =#{serialId}
+        </if>
+    </select>
+    <!-- 查询嫌疑人具体存物信息 -->
+    <select id="getDocInfoNoLockers" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT
+        CONCAT(a.`name`) casename,
+        p.`name` personname,
+        p.certificate_no,
+        (
+        SELECT
+        code_desc
+        FROM
+        xt_crime_define
+        WHERE
+        id = c.ab
+        ) involved_reason,
+        d.`name` bename,
+        d.detail_count,
+        d.description,
+        d.unit,
+        CONCAT(
+        SUBSTRING(pc.`desc`, 1, 2),
+        '柜1_',
+        pd.param_key,
+        '号'
+        ) boxname,
+        d.get_way,
+        d.get_time,
+        d.get_person,
+        b.register_time
+        FROM
+        ba_serial i
+        LEFT JOIN ba_area a ON i.area_id = a.id
+        LEFT JOIN xt_organization o ON a.organization_id = o.id
+        LEFT JOIN ba_person p ON i.person_id = p.id
+        LEFT JOIN ba_case c ON c.id = i.case_id
+        LEFT JOIN ba_exhibit b ON b.serial_id = i.id
+        LEFT JOIN ba_exhibit_detail d ON b.id = d.exhibit_id
+        LEFT JOIN ba_personal_config_detail pd ON pd.id = b.locker_id
+        LEFT JOIN ba_personal_config pc ON pd.personal_config_id = pc.id
+        WHERE
+        1 = 1
+        <if test="serialId!=null and serialId!=''">
+            and i.id =#{serialId}
+        </if>
+    </select>
+</mapper>

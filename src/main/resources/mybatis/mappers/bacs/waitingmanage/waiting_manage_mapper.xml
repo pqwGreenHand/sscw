@@ -1,0 +1,791 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.waitingmanage.IWaitingManageMapper" >
+
+    <resultMap type="com.zhixin.zhfz.bacs.entity.WaitingRecordEntity" id="waitingRecord">
+        <result column="id" property="recordId"/>
+        <result column="serial_id" property="serialId"/>
+        <result column="person_id" property="personId"/>
+        <result column="in_user_id" property="inUserId"/>
+        <result column="out_user_id" property="outUserId"/>
+        <result column="room_id" property="roomId"/>
+        <result column="serial_no" property="serialNo"/>
+        <result column="in_photo_name" property="inPhotoName"  />
+        <result column="person_name" property="personName"/>
+        <result column="certificateno" property="personcertNo"/>
+        <result column="roomname" property="roomName"/>
+        <result column="createdtime" property="createdTime"/>
+        <result column="status" property="status"/>
+        <result column="sendusername1" property="sendUserName1"/>
+        <result column="sendusername2" property="sendUserName2"/>
+        <result column="in_time" property="inTime" jdbcType="TIMESTAMP" />
+        <result column="out_time" property="outTime" jdbcType="TIMESTAMP" />
+        <result column="getusername1" property="getUserName1" jdbcType="VARCHAR"/>
+        <result column="getusername2" property="getUserName2" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex"/>
+        <result column="case_type" property="caseType" jdbcType="VARCHAR" />
+        <result column="case_nature" property="caseNature" jdbcType="VARCHAR" />
+        <result column="record_name" property="recordName" jdbcType="VARCHAR" />
+
+        <result column="get_result" property="getResult" jdbcType="VARCHAR" />
+        <result column="case_id" property="caseId"/>
+        <result column="areaId" property="areaId"/>
+        <result column="send_user_id" property="sendUserId1"/>
+        <result column="uuid" property="uuid"/>
+        <result column="is_juvenile" property="isJuvenile"/>
+        <result column="is_gravida" property="isGravida"/>
+        <result column="is_gravida_prove" property="isGravidaProve"/>
+        <result column="gravida_month" property="gravidaMonth"/>
+        <result column="is_disease" property="isDisease"/>
+        <result column="is_disease_prove" property="isDiseaseProve"/>
+        <result column="officer" property="officer"/>
+        <result column="inquestId" property="inquestId"/>
+        <result column="record_uuid" property="recordUuid"/>
+
+        <result column="room_status" property="roomStatus"/>
+        <result column="room_type_id" property="roomTypeId"/>
+
+    </resultMap>
+
+    <resultMap type="com.zhixin.zhfz.bacs.entity.WaitingPersonCountEntity" id="personCountMap">
+        <result column="areaid" property="areaId"/>
+        <result column="areaname" property="areaName"/>
+        <result column="roomid" property="roomId"/>
+        <result column="roomname" property="roomName"/>
+        <result column="male" property="male" />
+        <result column="female" property="female" />
+        <result column="sum" property="sum" />
+        <result column="other" property="other"/>
+        <result column="volume" property="volume"/>
+    </resultMap>
+
+    <resultMap  type="com.zhixin.zhfz.bacs.entity.RecordEntity" id="recordMap">
+        <id property="id" column="id"/>
+        <result column="serial_id" property="serialId"/>
+        <result column="uuid" property="uuid"/>
+        <result column="temp_file_path" property="tempFilePath"/>
+        <result column="word" property="word"/>
+        <result column="person_id" property="personId"/>
+        <result column="record_type_id" property="recordTypeId"/>
+        <result column="record_template_id" property="recordTemplateId"/>
+        <result column="status" property="status"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="case_id" property="caseId"/>
+        <result column="area_id" property="areaId"/>
+        <result column="room_id" property="roomId"/>
+        <result column="room_name" property="roomName"/>
+        <result column="updated_time" property="updatedTime"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="police_ask_id" property="policeAskId"/>
+        <result column="police_record_id" property="policeRecordId"/>
+        <result column="police_ask_name" property="policeAskName"/>
+        <result column="police_record_name" property="policeRecordName"/>
+        <result column="person_name" property="personName"/>
+        <result column="case_no" property="caseNo"/>
+        <result column="area_name" property="areaName"/>
+        <result column="organization_name" property="organizationName"/>
+        <result column="case_type" property="caseType"/>
+        <result column="code_desc" property="caseDesc"/>
+        <result column="serial_uuid" property="serialUuid"/>
+    </resultMap>
+
+ <select id="queryLastRoom" parameterType="java.util.Map" resultType="java.lang.Integer">
+       select room_id from ba_waiting_record 
+		where serial_id =  #{serialId}
+		order by id desc
+		limit 1
+  </select>
+
+
+
+    <select id="queryRecord" parameterType="java.lang.Integer" resultType="java.util.Map">
+        select * from ba_record WHERE serial_id = #{sId} and `status` = 1
+    </select>
+
+
+    <select id="getWaitingRecordBySerialId" parameterType="com.zhixin.zhfz.bacs.entity.WaitingRecordEntity" resultMap="waitingRecord">
+       SELECT wr.*,ir.`name` roomname FROM  ba_waiting_record  wr
+        LEFT JOIN ba_room ir ON wr.room_id = ir.id
+        where serial_id=#{serialId} ORDER BY wr.id DESC
+    </select>
+    <select id="getWaitingRecordById" parameterType="java.lang.String" resultMap="waitingRecord">
+        select *,r.area_id as areaId from ba_waiting_record r where id=#{id}
+    </select>
+    <!--根据入区ID获取最新看押记录-->
+    <select id="getWaitingRecordBySerialId2" parameterType="com.zhixin.zhfz.bacs.entity.WaitingRecordEntity" resultMap="waitingRecord">
+      select * from ba_waiting_record
+        where serial_id=#{serialId}
+        and out_time is not null
+        ORDER BY id desc limit 0,1
+    </select>
+
+    <select id="queryWaitRecord" parameterType="java.lang.Long" resultMap="waitingRecord">
+        SELECT wr.serial_id AS serialId, wr.created_time AS createdTime, wr.in_time AS inTime,wr.out_time AS outTime, p. NAME AS personName FROM  ba_waiting_record wr
+        LEFT JOIN ba_serial ins ON wr.serial_id = ins.id
+        LEFT JOIN ba_person p ON p.id = ins.person_id
+        WHERE
+        wr.serial_id = #{serialId}
+    </select>
+
+   <!-- 查询候问室数量及人数量统计-->
+    <select id="personRoomCountList" resultMap="personCountMap" parameterType="java.util.Map">
+        select * from (select max(areaid) areaid,max(areaname) areaname,roomid,max(roomname) roomname,
+        max(case sex when 1 then count else 0 end) male,
+        max(case sex when 2 then count else 0 end) female,
+        MAX(case sex when 0 then count when 9 then count else 0 end) other,
+        IFNULL(sum(case sex when 1 then count when 2 then count when 0 then count when 9 then count end),0) sum,c.volume
+        from
+        (select max(a.areaid) areaid, max(a.areaname) areaname,a.roomid,max(a.roomname) roomname,sex,count(b.roomid) count,a.volume
+        from
+        (select rm.id roomid,rm.name roomname,area.name areaname,area.id areaid,rm.volume
+        from ba_area area,ba_room rm,ba_room_type rt
+        where area.id=rm.area_id and rm.room_type_id=rt.id and rt.`name` in ('候问室','特殊候问室','未成年候问室') and rm.is_active=1
+        <if test="dataAuth != null and dataAuth != ''">
+            and ${dataAuth}
+        </if>
+        <if test="areaId != null and areaId != ''">
+            and rm.area_id = #{areaId,jdbcType=INTEGER}
+        </if>
+        ) a
+        left join
+        (select rd.room_id roomid,ps.sex
+        from ba_waiting_record rd,ba_person ps
+        where rd.person_id=ps.id and rd.status=0
+        ) b
+        on a.roomid=b.roomid
+        group by a.roomid,b.sex
+        )c
+        group by c.areaid, c.roomid
+        )d
+        ORDER BY  d.roomid asc
+    </select>
+
+    <!--在区人员办理进度人数查询(右侧统计模块) 看押中的人查询-->
+    <select id="selectPeopleCountTypeKy" parameterType="java.util.Map" resultType="java.lang.Integer">
+         select count(1) from ba_waiting_record r where status = 0 and created_time >= DATE_ADD(NOW(),INTERVAL -3 day) and  get_result is null OR get_result = ''
+        <if test="areaId != null and areaId != ''">
+             and r.area_id = #{areaId}
+        </if>
+        <if test="dataAuth != null and dataAuth != ''">
+            and ${dataAuth}
+        </if>
+    </select>
+
+    <!--在区人员办理进度人数查询(右侧统计模块) 审讯中的人查询-->
+    <select id="selectPeopleCountTypeSx" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(1) from ba_record r where start_time is not null and end_time is null
+        <if test="areaId != null and areaId != ''">
+            and r.area_id = #{areaId}
+        </if>
+        <if test="dataAuth != null and dataAuth != ''">
+            and ${dataAuth}
+        </if>
+    </select>
+
+    <!--在区人员办理进度人数查询(右侧统计模块) 在区总人数查询（9和9以下表示在区人员）-->
+    <select id="selectPeopleCountTypeZq" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(1) from `ba_serial` r where `status` &lt;= 9
+        <if test="areaId != null and areaId != ''">
+            and r.area_id = #{areaId}
+        </if>
+        <if test="dataAuth != null and dataAuth != ''">
+            and ${dataAuth}
+        </if>
+    </select>
+
+    <!--在区人员办理进度人数查询(右侧统计模块) 该办案场所的所有侯问室总容积-->
+    <select id="selectPeopleCountTypeRj" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select sum(r.volume) from ba_room r LEFT JOIN  ba_room_type rt on r.room_type_id=rt.id
+         where 1=1
+        <if test="areaId != null and areaId != ''">
+            and r.area_id = #{areaId}
+        </if>
+        <if test="dataAuth != null and dataAuth != ''">
+            and ${dataAuth}
+        </if>
+         and rt.name in ('候问室','特殊候问室','未成年候问室')
+    </select>
+
+    <!--在区人员办理进度人数查询(右侧统计模块) 临时出区的人数-->
+    <select id="selectPeopleCountTypeLs" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(1) from `ba_serial` r where `status` = 10
+        <if test="areaId != null and areaId != ''">
+            and r.area_id = #{areaId}
+        </if>
+        <if test="dataAuth != null and dataAuth != ''">
+            and ${dataAuth}
+        </if>
+    </select>
+
+    <!--在区人员办理进度人数查询(右侧统计模块) 安检/信采/存物三种状态的人数-->
+    <select id="selectPeopleCountTypeOther" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(1) from `ba_serial` r where `status` in(1,2,5)
+        <if test="areaId != null and areaId != ''">
+            and r.area_id = #{areaId}
+        </if>
+        <if test="dataAuth != null and dataAuth != ''">
+            and ${dataAuth}
+        </if>
+    </select>
+
+    <select id="queryBySerialId" parameterType="java.lang.String" resultMap="waitingRecord">
+        select * from ba_waiting_record a WHERE a.status=0 and  a.serial_id =#{serialId} order by a.id desc limit 1;
+    </select>
+
+    <update id="updateWaitingRecord" parameterType="com.zhixin.zhfz.bacs.entity.WaitingRecordEntity" >
+        update ba_waiting_record
+        <set >
+            <if test="serialId != null and serialId != ''" >
+                serial_id = #{serialId,jdbcType=BIGINT},
+            </if>
+            <if test="personId != null and personId != ''" >
+                person_id = #{personId,jdbcType=BIGINT},
+            </if>
+            <if test="inUserId != null and inUserId != ''" >
+                in_user_id = #{inUserId,jdbcType=INTEGER},
+            </if>
+            <if test="inTime != null and inTime != ''" >
+                in_time = #{inTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="outUserId != null and outUserId != ''" >
+                out_user_id = #{outUserId,jdbcType=INTEGER},
+            </if>
+            <if test="roomId != null and roomId != ''" >
+                room_id = #{roomId,jdbcType=INTEGER},
+            </if>
+            out_time = now(),
+            status = 1,
+            <if test="caseId != null and caseId != ''" >
+                case_id = #{caseId,jdbcType=INTEGER},
+            </if>
+            <if test="areaId != null and areaId != ''" >
+                area_id = #{areaId,jdbcType=INTEGER},
+            </if>
+            <if test="sendUserId1 != null and sendUserId1 != ''" >
+                send_user_id = #{sendUserId1,jdbcType=INTEGER},
+            </if>
+            <if test="getUserId1 != null and getUserId1 != ''" >
+                get_user_id1 = #{getUserId1,jdbcType=INTEGER},
+            </if>
+            <if test="getUserId2 != null and getUserId2 != ''" >
+                get_user_id2 = #{getUserId2,jdbcType=INTEGER},
+            </if>
+            <if test="burcode != null and burcode != ''">
+                burcode = #{burcode,jdbcType=VARCHAR},
+            </if>
+            <if test="getResult != null and getResult != ''">
+                get_result = #{getResult,jdbcType=VARCHAR},
+            </if>
+            <if test="inquestId != null and inquestId != ''">
+                inquestId = #{inquestId,jdbcType=VARCHAR},
+            </if>
+            <if test="recordUuid != null and recordUuid != ''">
+                record_uuid = #{recordUuid,jdbcType=VARCHAR},
+            </if>
+            updated_time = now()
+        </set>
+        where id = #{recordId,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateShowBySerialId"  parameterType="java.lang.String">
+        update ba_waiting_record set show_person=0 where serial_id = #{serialId}
+    </update>
+
+    <insert id="insertWaitingRecord" parameterType="com.zhixin.zhfz.bacs.entity.WaitingRecordEntity" keyProperty="id" useGeneratedKeys="true">
+        insert into ba_waiting_record
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="serialId != null" >
+                serial_id,
+            </if>
+            <if test="personId != null" >
+                person_id,
+            </if>
+            <if test="inUserId != null" >
+                in_user_id,
+            </if>
+            in_time,
+            <if test="outUserId != null" >
+                out_user_id,
+            </if>
+            <if test="outTime != null" >
+                out_time,
+            </if>
+            status,
+            <if test="roomId != null" >
+                room_id,
+            </if>
+            <if test="caseId != null" >
+                case_id,
+            </if>
+            <if test="areaId != null" >
+                area_id,
+            </if>
+            <if test="sendUserId1 != null" >
+                send_user_id,
+            </if>
+            <if test="getUserId1 != null" >
+                get_user_id1,
+            </if>
+            <if test="getUserId2 != null" >
+                get_user_id2,
+            </if>
+            <if test="opPid != null" >
+                op_pid,
+            </if>
+            <if test="opUserId != null" >
+                op_user_id,
+            </if>
+            created_time,updated_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="serialId != null" >
+                #{serialId,jdbcType=BIGINT},
+            </if>
+            <if test="personId != null" >
+                #{personId,jdbcType=BIGINT},
+            </if>
+            <if test="inUserId != null" >
+                #{inUserId,jdbcType=INTEGER},
+            </if>
+            now(),
+            <if test="outUserId != null" >
+                #{outUserId,jdbcType=INTEGER},
+            </if>
+            <if test="outTime != null" >
+                #{outTime,jdbcType=TIMESTAMP},
+            </if>
+            0,
+            <if test="roomId != null" >
+                #{roomId,jdbcType=INTEGER},
+            </if>
+            <if test="caseId != null" >
+                #{caseId,jdbcType=INTEGER},
+            </if>
+            <if test="areaId != null" >
+                #{areaId,jdbcType=INTEGER},
+            </if>
+            <if test="sendUserId1 != null" >
+                #{sendUserId1,jdbcType=INTEGER},
+            </if>
+            <if test="getUserId1 != null" >
+                #{getUserId1,jdbcType=INTEGER},
+            </if>
+            <if test="getUserId2 != null" >
+                #{getUserId2,jdbcType=INTEGER},
+            </if>
+            <if test="opPid != null" >
+              #{opPid,jdbcType=VARCHAR},
+            </if>
+            <if test="opUserId != null" >
+               #{opUserId,jdbcType=INTEGER},
+            </if>
+            now(),now()
+        </trim>
+    </insert>
+
+    <select id="getInquestRecord" resultMap="recordMap" parameterType="java.util.Map">
+        select * from ba_record
+        <where>
+            <if test="serialId !=null and serialId !=''">
+                and serial_id=#{serialId}
+            </if>
+            <if test="personId!=null and personId!=''">
+                and person_id=#{personId}
+            </if>
+            order by id desc
+        </where>
+    </select>
+<!-- 查询一个房间的所有嫌疑人-->
+    <select id="selectAllSuspectOfRoom" resultMap="waitingRecord" parameterType="java.util.Map">
+        select a.*,(select b.real_name from xt_user b where b.id=a.send_user_id) as sendusername1,
+        (select b.real_name from xt_user b where b.id=a.get_user_id1) as getusername1,
+        (select b.real_name from xt_user b where b.id=a.get_user_id2) as getusername2,
+        (select c.ajlx from ba_case c where c.id = (select s.case_id from ba_serial s where s.id = a.serial_id)) case_type,
+        (select ct.code_desc from xt_crime_define ct where ct.id = (select c.ab from ba_case c where c.id = (select s.case_id from ba_serial s where s.id = a.serial_id))) case_nature,
+        (select r.`name` from ba_room r where r.id = a.room_id) record_name
+        from(
+         select record.id,record.area_id as areaId,intse.uuid as uuid,record.serial_id ,intse.serial_no,intse.in_photo_name,ps.name personname,ps.certificate_no certificateno,room.name roomname,record.created_time createdtime,record.status status,record.send_user_id,record.get_user_id1,record.get_user_id2,ps.sex,record.in_time,record.out_time,record.room_id,record.get_result,
+        bop.is_juvenile,bop.is_gravida,bop.is_gravida_prove,bop.gravida_month,bop.is_disease,bop.is_disease_prove,ps.officer
+        from ba_waiting_record record LEFT JOIN ba_person ps  on record.person_id=ps.id
+				LEFT JOIN ba_room room ON record.room_id=room.id
+				LEFT JOIN ba_serial intse ON record.serial_id=intse.id
+				LEFT JOIN ba_order_person bop ON bop.person_id = ps.id
+        where 
+         room.id=#{roomId}
+        and  intse.status &gt;= 3 and intse.status &lt; 11 and record.show_person=1
+        and record.area_id=#{areaId}
+        ) a
+        order by a.createdtime desc
+    </select>
+<!--更换审讯室-->
+    <update id="changeRoom" parameterType="java.util.Map">
+         update ba_waiting_record set room_id  = #{roomId} where id = #{recordId}
+    </update>
+
+    <select id="queryById" parameterType="java.util.Map" resultMap="waitingRecord">
+        select a.*,b.`name` person_name from ba_waiting_record a left join ba_person b ON a.person_id = b.id  WHERE a.id =#{id}
+    </select>
+
+    <!-- 其他去向 -->
+    <update id="saveDirection" parameterType="java.util.Map">
+        update  ba_waiting_record set get_result = #{direction},out_time =now(),status=1,get_user_id1=#{user1}  where id=#{id}
+    </update>
+
+     <!-- 保证最后一个是出区状态 -->     
+    <select id="queryStatusBySid" parameterType="java.util.Map" resultType="java.lang.Integer">
+        <!-- select count(*) from ba_waiting_record where get_result = '出区' and serial_id = #{serialId} -->
+        SELECT COUNT(*) FROM 
+          ( SELECT * FROM ba_waiting_record WHERE  serial_id = #{serialId}  ORDER BY id DESC LIMIT 0,1) a
+        WHERE a.get_result= '出区'
+    </select>
+
+    <update id="updateStatusByIdForGoBack"  parameterType="java.lang.String">
+        update ba_waiting_record set status=#{status},show_person=0 where id=#{id}
+    </update>
+
+   <!-- 历史纪录-->
+    <select id="listRecord" parameterType="java.util.Map" resultMap="waitingRecord">
+        select a.*,(select b.real_name from xt_user b where b.id=a.get_user_id1) as getusername1,
+        (select b.real_name from xt_user b where b.id=a.get_user_id2) as getusername2,
+        (select b.real_name from xt_user b where b.id=a.send_user_id) as sendusername1,
+        (select c.ajlx from ba_case c where c.id = (select s.case_id from ba_serial s where s.id = a.serial_id)) case_type,
+        (select ct.code_desc from xt_crime_define ct where ct.id = (select c.ab from ba_case c where c.id = (select s.case_id from ba_serial s where s.id = a.serial_id))) case_nature,
+        (select r.`name` from ba_room r where r.id = a.room_id) record_name
+        from(
+        select record.id,record.serial_id ,intse.serial_no,ps.name personname,ps.certificate_no certificateno,room.name roomname,record.created_time createdtime,record.status status,record.send_user_id,record.get_user_id1,record.get_user_id2,ps.sex,record.in_time,record.out_time,record.room_id,record.get_result
+        from ba_waiting_record record,ba_person ps,ba_room room,ba_serial intse
+        where record.person_id=ps.id and record.room_id=room.id and record.serial_id=intse.id
+        <if test="areaId != null and areaId != ''">
+            and record.area_id=#{areaId}
+        </if>
+        <if test="dataAuth != null and dataAuth != ''">
+            and ${dataAuth}
+        </if>
+        <if test="personName != null and personName != ''">
+            and ps.name like '%${personName}%'
+        </if>
+        <if test="cardId != null and cardId != ''">
+            and ps.certificate_no like '%${cardId}%'
+        </if>
+        <if test="beginTime != null and beginTime != ''">
+            and record.created_time &gt; #{beginTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and record.created_time &lt; #{endTime}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and room.id=#{roomId}
+        </if>
+        ) a
+        order by a.createdtime desc
+        limit ${pageStart},${rows}
+    </select>
+
+    <select id="listRecordCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(1) from(
+             select record.id,record.serial_id ,intse.serial_no,ps.name personname,ps.certificate_no certificateno,room.name roomname,record.created_time createdtime,record.status status,record.send_user_id,record.get_user_id1,record.get_user_id2,ps.sex,record.in_time,record.out_time,record.room_id,record.get_result
+                from ba_waiting_record record,ba_person ps,ba_room room,ba_serial intse
+                where record.person_id=ps.id and record.room_id=room.id and record.serial_id=intse.id
+                <if test="areaId != null and areaId != ''">
+                    and record.area_id=#{areaId}
+                </if>
+                <if test="dataAuth != null and dataAuth != ''">
+                    and ${dataAuth}
+                 </if>
+                <if test="personName != null and personName != ''">
+                    and ps.name like '%${personName}%'
+                </if>
+                <if test="cardId != null and cardId != ''">
+                    and ps.certificate_no like '%${cardId}%'
+                </if>
+                <if test="beginTime != null and beginTime != ''">
+                    and record.created_time &gt; #{beginTime}
+                </if>
+                <if test="endTime != null and endTime != ''">
+                    and record.created_time &lt; #{endTime}
+                </if>
+                <if test="roomId !=null and roomId != ''">
+                    and room.id=#{roomId}
+                </if>
+              ) a
+         order by a.createdtime desc
+    </select>
+
+    <!-- 查询同案已经看押的侯问室 -->
+    <select id="queryRoomSameCase" parameterType="java.util.Map" resultType="com.zhixin.zhfz.bacs.entity.WaitingPersonCountEntity">
+        select c.roomid,c.roomname,c.areaname from (select b.* , (SELECT ints.case_id from ba_serial ints WHERE ints.id=b.serial_id) from(select * from (select rm.id roomid,rm.name roomname,area.name areaname,area.id groupid
+        from ba_area area,ba_room rm,ba_room_type rt
+        where area.id=rm.area_id and rm.room_type_id=rt.id and rt.`name` in ('候问室','特殊候问室','未成年候问室') and rm.is_active=1
+        and area.id = #{areaId} )
+        a LEFT JOIN ba_waiting_record wr on wr.room_id = a.roomid WHERE wr.`status`=0  ) b )c
+        WHERE c.case_id=(SELECT ints.case_id from ba_serial ints WHERE ints.id= #{serialId})
+        and c.roomid=#{roomId}
+    </select>
+
+    <!-- 未成年人总人数-->
+    <select id="selectCountIsJuvenile" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(1) from ba_waiting_record a,ba_order_person b
+        where a.out_time is null
+        and b.is_juvenile = 1
+        and b.person_id = a.person_id
+        <if test="areaId != null and areaId != ''">
+            and a.area_id = #{areaId}
+        </if>
+        <if test="dataAuth != null and dataAuth != ''">
+            and ${dataAuth}
+        </if>
+    </select>
+
+    <!-- 未成年人-->
+    <select id="selectIsJuvenileAll" resultMap="waitingRecord" parameterType="java.util.Map">
+        select a.*,(select b.real_name from xt_user b where b.id=a.send_user_id) as sendusername1,
+        (select b.real_name from xt_user b where b.id=a.get_user_id1) as getusername1,
+        (select b.real_name from xt_user b where b.id=a.get_user_id2) as getusername2,
+        (select c.ajlx from ba_case c where c.id = (select s.case_id from ba_serial s where s.id = a.serial_id)) case_type,
+        (select ct.code_desc from xt_crime_define ct where ct.id = (select c.ab from ba_case c where c.id = (select s.case_id from ba_serial s where s.id = a.serial_id))) case_nature,
+        (select r.`name` from ba_room r where r.id = a.room_id) record_name
+        from (select record.id,record.area_id as areaId,intse.uuid as uuid,record.serial_id ,
+        intse.serial_no,intse.in_photo_name,ps.name personname,ps.certificate_no certificateno,
+        record.created_time createdtime,record.status status,
+        record.send_user_id,record.get_user_id1,record.get_user_id2,ps.sex,record.in_time,
+        record.out_time,record.room_id,record.get_result,
+        bop.is_juvenile,bop.is_gravida,bop.is_gravida_prove,bop.gravida_month,
+        bop.is_disease,bop.is_disease_prove,ps.officer
+        from ba_waiting_record record  LEFT JOIN ba_order_person bop ON  bop.person_id = record.person_id
+		LEFT JOIN ba_serial intse ON  record.serial_id = intse.id 
+		LEFT JOIN ba_person ps ON record.person_id = ps.id
+        where record.out_time is null
+          and bop.is_juvenile = 1
+        <if test="areaId != null and areaId != ''">
+            and record.area_id = #{areaId}
+        </if> ) a
+        order by a.createdtime desc
+    </select>
+
+    <!-- 传染病总人数-->
+    <select id="selectCountIsDisease" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(1) from ba_waiting_record a,ba_order_person b
+        where a.out_time is null
+        and b.is_disease = 1
+        and b.person_id = a.person_id
+        <if test="areaId != null and areaId != ''">
+            and a.area_id = #{areaId}
+        </if>
+        <if test="dataAuth != null and dataAuth != ''">
+            and ${dataAuth}
+        </if>
+    </select>
+
+    <!-- 传染病-->
+    <select id="selectIsDiseaseAll" resultMap="waitingRecord" parameterType="java.util.Map">
+        select a.*,(select b.real_name from xt_user b where b.id=a.send_user_id) as sendusername1,
+        (select b.real_name from xt_user b where b.id=a.get_user_id1) as getusername1,
+        (select b.real_name from xt_user b where b.id=a.get_user_id2) as getusername2,
+        (select c.ajlx from ba_case c where c.id = (select s.case_id from ba_serial s where s.id = a.serial_id)) case_type,
+        (select ct.code_desc from xt_crime_define ct where ct.id = (select c.ab from ba_case c where c.id = (select s.case_id from ba_serial s where s.id = a.serial_id))) case_nature,
+        (select r.`name` from ba_room r where r.id = a.room_id) record_name
+        from (select record.id,record.area_id as areaId,intse.uuid as uuid,record.serial_id ,
+        intse.serial_no,intse.in_photo_name,ps.name personname,ps.certificate_no certificateno,
+        record.created_time createdtime,record.status status,
+        record.send_user_id,record.get_user_id1,record.get_user_id2,ps.sex,record.in_time,
+        record.out_time,record.room_id,record.get_result,
+        bop.is_juvenile,bop.is_gravida,bop.is_gravida_prove,bop.gravida_month,
+        bop.is_disease,bop.is_disease_prove,ps.officer
+        from ba_waiting_record record  LEFT JOIN ba_order_person bop ON  bop.person_id = record.person_id
+		LEFT JOIN ba_serial intse ON  record.serial_id = intse.id 
+		LEFT JOIN ba_person ps ON record.person_id = ps.id
+        where record.out_time is null
+        and bop.is_disease = 1
+        <if test="areaId != null and areaId != ''">
+            and record.area_id = #{areaId}
+        </if> ) a
+        order by a.createdtime desc
+    </select>
+
+    <!-- 孕妇总人数-->
+    <select id="selectCountIsGravida" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(1) from ba_waiting_record a,ba_order_person b
+        where a.out_time is null
+        and b.is_gravida = 1
+        and b.person_id = a.person_id
+        <if test="areaId != null and areaId != ''">
+            and a.area_id = #{areaId}
+        </if>
+        <if test="dataAuth != null and dataAuth != ''">
+            and ${dataAuth}
+        </if>
+    </select>
+
+    <!-- 孕妇-->
+    <select id="selectIsGravidaAll" resultMap="waitingRecord" parameterType="java.util.Map">
+        select a.*,(select b.real_name from xt_user b where b.id=a.send_user_id) as sendusername1,
+        (select b.real_name from xt_user b where b.id=a.get_user_id1) as getusername1,
+        (select b.real_name from xt_user b where b.id=a.get_user_id2) as getusername2,
+        (select c.ajlx from ba_case c where c.id = (select s.case_id from ba_serial s where s.id = a.serial_id)) case_type,
+        (select ct.code_desc from xt_crime_define ct where ct.id = (select c.ab from ba_case c where c.id = (select s.case_id from ba_serial s where s.id = a.serial_id))) case_nature,
+        (select r.`name` from ba_room r where r.id = a.room_id) record_name
+        from (select record.id,record.area_id as areaId,intse.uuid as uuid,record.serial_id ,
+        intse.serial_no,intse.in_photo_name,ps.name personname,ps.certificate_no certificateno,
+        record.created_time createdtime,record.status status,
+        record.send_user_id,record.get_user_id1,record.get_user_id2,ps.sex,record.in_time,
+        record.out_time,record.room_id,record.get_result,
+        bop.is_juvenile,bop.is_gravida,bop.is_gravida_prove,bop.gravida_month,
+        bop.is_disease,bop.is_disease_prove,ps.officer
+		from ba_waiting_record record  LEFT JOIN ba_order_person bop ON  bop.person_id = record.person_id
+		LEFT JOIN ba_serial intse ON  record.serial_id = intse.id 
+		LEFT JOIN ba_person ps ON record.person_id = ps.id
+        where record.out_time is null
+        and bop.is_gravida = 1
+        <if test="areaId != null and areaId != ''">
+            and record.area_id = #{areaId}
+        </if> ) a
+        order by a.createdtime desc
+    </select>
+
+    <!-- 侯问室总人数-->
+    <select id="selectCountWaitingRoom" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(1) from ba_waiting_record a
+        where a.out_time is null
+        <if test="areaId != null and areaId != ''">
+            and a.area_id = #{areaId}
+        </if>
+        <if test="dataAuth != null and dataAuth != ''">
+            and ${dataAuth}
+        </if>
+    </select>
+
+    <!-- 侯问室-->
+    <select id="selectWaitingRoomAll" resultMap="waitingRecord" parameterType="java.util.Map">
+        select a.*,(select b.real_name from xt_user b where b.id=a.send_user_id) as sendusername1,
+        (select b.real_name from xt_user b where b.id=a.get_user_id1) as getusername1,
+        (select b.real_name from xt_user b where b.id=a.get_user_id2) as getusername2,
+        (select c.ajlx from ba_case c where c.id = (select s.case_id from ba_serial s where s.id = a.serial_id)) case_type,
+        (select ct.code_desc from xt_crime_define ct where ct.id = (select c.ab from ba_case c where c.id = (select s.case_id from ba_serial s where s.id = a.serial_id))) case_nature,
+        (select r.`name` from ba_room r where r.id = a.room_id) record_name
+        from (select record.id,record.area_id as areaId,intse.uuid as uuid,record.serial_id ,
+        intse.serial_no,intse.in_photo_name,ps.name personname,ps.certificate_no certificateno,
+        record.created_time createdtime,record.status status,
+        record.send_user_id,record.get_user_id1,record.get_user_id2,ps.sex,record.in_time,
+        record.out_time,record.room_id,record.get_result,
+        bop.is_juvenile,bop.is_gravida,bop.is_gravida_prove,bop.gravida_month,
+        bop.is_disease,bop.is_disease_prove,ps.officer
+        from ba_waiting_record record  LEFT JOIN ba_order_person bop ON  bop.person_id = record.person_id
+			LEFT JOIN ba_serial intse ON  record.serial_id = intse.id 
+			LEFT JOIN ba_person ps ON record.person_id = ps.id
+        where record.out_time is null
+       
+        <if test="areaId != null and areaId != ''">
+            and record.area_id = #{areaId}
+        </if> ) a
+        order by a.createdtime desc
+    </select>
+
+    <!-- 涉毒总人数-->
+    <select id="selectCountshedu" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(1) from ba_waiting_record a
+        inner join ba_case b on a.case_id = b.id
+        inner join xt_crime_define c on b.ab = c.`code`
+        where a.out_time is NULL
+        and c.code_desc like '%毒%'
+        <if test="areaId != null and areaId != ''">
+            and a.area_id = #{areaId}
+        </if>
+        <if test="dataAuth != null and dataAuth != ''">
+            and ${dataAuth}
+        </if>
+    </select>
+
+    <!-- 涉毒-->
+    <select id="selectsheduAll" resultMap="waitingRecord" parameterType="java.util.Map">
+        select a.*,(select b.real_name from xt_user b where b.id=a.send_user_id) as sendusername1,
+        (select b.real_name from xt_user b where b.id=a.get_user_id1) as getusername1,
+        (select b.real_name from xt_user b where b.id=a.get_user_id2) as getusername2,
+        (select c.ajlx from ba_case c where c.id = (select s.case_id from ba_serial s where s.id = a.serial_id)) case_type,
+        (select ct.code_desc from xt_crime_define ct where ct.id = (select c.ab from ba_case c where c.id = (select s.case_id from ba_serial s where s.id = a.serial_id))) case_nature,
+        (select r.`name` from ba_room r where r.id = a.room_id) record_name
+        from (select record.id,record.area_id as areaId,intse.uuid as uuid,record.serial_id ,
+        intse.serial_no,intse.in_photo_name,ps.name personname,ps.certificate_no certificateno,
+        record.created_time createdtime,record.status status,
+        record.send_user_id,record.get_user_id1,record.get_user_id2,ps.sex,record.in_time,
+        record.out_time,record.room_id,record.get_result,
+        bop.is_juvenile,bop.is_gravida,bop.is_gravida_prove,bop.gravida_month,
+        bop.is_disease,bop.is_disease_prove,ps.officer
+        from ba_waiting_record record  LEFT JOIN ba_order_person bop ON  bop.person_id = record.person_id
+		LEFT JOIN ba_serial intse ON  record.serial_id = intse.id 
+		LEFT JOIN ba_person ps ON record.person_id = ps.id
+		LEFT JOIN ba_case a ON record.case_id = a.id
+		LEFT JOIN xt_crime_define b ON a.ab = b.`code`
+        where record.out_time is null
+        and b.code_desc like '%毒%'
+        <if test="areaId != null and areaId != ''">
+            and record.area_id = #{areaId}
+        </if> ) a
+        order by a.createdtime desc
+    </select>
+
+    <!-- 重点嫌疑人总人数-->
+    <select id="selectCountZhongdian" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(1) from ba_waiting_record a
+        inner join ba_case b on a.case_id = b.id
+        where a.out_time is NULL
+        and (b.ab = '49900100' or b.ab = '49900200' or b.ab = '49900500'
+        or b.ab = '49900600' or b.ab = '29903000' or b.ab = '59900100'
+        or b.ab = '60700102' or b.ab = '29900100' or b.ab = '29900300'
+        or b.ab = '29900800' or b.ab = '29902600' or b.ab = '29902601'
+        or b.ab = '29902602' or b.ab = '29902603' or b.ab = '29902604'
+        or b.ab = '29902605' or b.ab = '29902900' or b.ab = '29902901'
+        or b.ab = '29903000' or b.ab = '60103000')
+        <if test="areaId != null and areaId != ''">
+            and a.area_id = #{areaId}
+        </if>
+        <if test="dataAuth != null and dataAuth != ''">
+            and ${dataAuth}
+        </if>
+    </select>
+
+    <!-- 重点嫌疑人-->
+    <select id="selectZhongdianAll" resultMap="waitingRecord" parameterType="java.util.Map">
+        select a.*,(select b.real_name from xt_user b where b.id=a.send_user_id) as sendusername1,
+        (select b.real_name from xt_user b where b.id=a.get_user_id1) as getusername1,
+        (select b.real_name from xt_user b where b.id=a.get_user_id2) as getusername2,
+        (select c.ajlx from ba_case c where c.id = (select s.case_id from ba_serial s where s.id = a.serial_id)) case_type,
+        (select ct.code_desc from xt_crime_define ct where ct.id = (select c.ab from ba_case c where c.id = (select s.case_id from ba_serial s where s.id = a.serial_id))) case_nature,
+        (select r.`name` from ba_room r where r.id = a.room_id) record_name
+        from (select record.id,record.area_id as areaId,intse.uuid as uuid,record.serial_id ,
+        intse.serial_no,intse.in_photo_name,ps.name personname,ps.certificate_no certificateno,
+        record.created_time createdtime,record.status status,
+        record.send_user_id,record.get_user_id1,record.get_user_id2,ps.sex,record.in_time,
+        record.out_time,record.room_id,record.get_result,
+        bop.is_juvenile,bop.is_gravida,bop.is_gravida_prove,bop.gravida_month,
+        bop.is_disease,bop.is_disease_prove,ps.officer
+        from ba_waiting_record record  LEFT JOIN ba_order_person bop ON  bop.person_id = record.person_id
+		LEFT JOIN ba_serial intse ON  record.serial_id = intse.id 
+		LEFT JOIN ba_person ps ON record.person_id = ps.id
+		LEFT JOIN ba_case b ON record.case_id = b.id
+        where record.out_time is null
+        and (b.ab = '1742' or b.ab = '1743' or b.ab = '1746'
+        or b.ab = '1747' or b.ab = '1501' or b.ab = '1803'
+        or b.ab = '2032' or b.ab = '1450' or b.ab = '1452'
+        or b.ab = '1457' or b.ab = '1484' or b.ab = '1485'
+        or b.ab = '1486' or b.ab = '1487' or b.ab = '1488'
+        or b.ab = '1489' or b.ab = '1498' or b.ab = '1499'
+        or b.ab = '1499' or b.ab = '1872')
+        <if test="areaId != null and areaId != ''">
+            and record.area_id = #{areaId}
+        </if> ) a
+        order by a.createdtime desc
+    </select>
+
+    <select id="queryRoomStatusBySerialId" resultMap="waitingRecord" parameterType="java.util.Map">
+        SELECT b.id room_id,a.get_result,b.room_type_id,a.inquestId
+        FROM ba_waiting_record a
+        left join ba_room b on a.get_result = b.name
+        where 1=1 and b.area_id=1
+        <if test="serialId != null and serialId != ''">
+            and a.serial_id =#{serialId}
+        </if>
+        ORDER BY a.created_time desc
+        LIMIT 0,1
+    </select>
+</mapper>

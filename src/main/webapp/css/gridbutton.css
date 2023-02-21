@@ -1,0 +1,399 @@
+.griddel {
+    width: 100%;
+    display: block;
+    background: url(images/newicons/delete.png) no-repeat;
+    text-indent: 18px;
+    line-height: 13px;
+    height: 20px;
+    text-decoration:none;
+    color: aquamarine;
+} 
+
+.gridedit { 
+    width: 100%;
+    display: block;
+    background: url(images/newicons/edit.png) no-repeat;
+    text-indent: 18px;
+    line-height: 13px;
+    height: 20px;
+    text-decoration:none;
+    color: aquamarine;
+}
+
+
+.gridchange {
+    width: 100%;
+    display: block;
+    background: url(images/newicons/arrow.ico) no-repeat;
+    text-indent: 24px;
+    line-height: 13px;
+    height: 20px;
+    text-decoration:none;
+    color: aquamarine;
+}
+
+.gridbarcode {
+    width: 100%;
+    display: block;
+    background: url(icons/barcode.png) no-repeat;
+    text-indent: 18px;
+    line-height: 13px;
+    height: 20px;
+    text-decoration:none;
+    color: aquamarine;
+}
+.gridqrcode {
+    width: 100%;
+    display: block;
+    background: url(images/newicons/qr_code.png) no-repeat;
+    text-indent: 18px;
+    line-height: 13px;
+    height: 20px;
+    text-decoration:none;
+    color: aquamarine;
+}
+
+.gridprint { 
+    width: 100%;
+    display: block;
+    background: url(images/newicons/print.png) no-repeat;
+    text-indent: 18px;
+    line-height: 13px;
+    height: 20px;
+    text-decoration:none;
+    color: aquamarine;
+}
+
+.gridpreview { 
+    width: 100%;
+    display: block;
+    background: url(images/newicons/preview.png) no-repeat;
+    text-indent: 18px;
+    line-height: 13px;
+    height: 20px;
+    text-decoration:none;
+    color: aquamarine;
+}
+
+
+.gridanswer { 
+    width: 100%;
+    display: block;
+    background: url(images/newicons/answer.png) no-repeat;
+    text-indent: 18px;
+    line-height: 13px;
+    height: 20px;
+    text-decoration:none;
+    color: aquamarine;
+}
+
+.gridseeinfo { 
+    width: 100%;
+    display: block;
+    background: url(images/newicons/seeinfo.png) no-repeat;
+    text-indent: 18px;
+    line-height: 13px;
+    height: 20px;
+    text-decoration:none;
+    color: aquamarine;
+}
+
+.griddownload { 
+    width: 100%;
+    display: block;
+    background: url(images/newicons/download.png) no-repeat;
+    text-indent: 18px;
+    line-height: 13px;
+    height: 20px;
+    text-decoration:none;
+    color: aquamarine;
+}
+
+.gridupload { 
+    width: 100%;
+    display: block;
+    background: url(images/newicons/upload.png) no-repeat;
+    text-indent: 18px;
+    line-height: 13px;
+    height: 20px;
+    text-decoration:none;
+    color: aquamarine;
+}
+
+.griddetail { 
+    width: 100%;
+    display: block;
+    background: url(images/newicons/detail.png) no-repeat;
+    text-indent: 18px;
+    line-height: 13px;
+    height: 20px;
+    text-decoration:none;
+    color: aquamarine;
+}
+
+.gridupper { 
+    width: 100%;
+    display: block;
+    background: url(images/newicons/upper.png) no-repeat;
+    text-indent: 18px;
+    line-height: 13px;
+    height: 20px;
+    text-decoration:none;
+    color: aquamarine;
+}
+
+.griddown { 
+    width: 100%;
+    display: block;
+    background: url(images/newicons/down.png) no-repeat;
+    text-indent: 18px;
+    line-height: 13px;
+    height: 20px;
+    text-decoration:none;
+    color: aquamarine;
+}
+
+
+.icon_disk { 
+    width: 100%;
+    display: block;
+    background: url(images/newicons/disk.png) no-repeat;
+    text-indent: 18px;
+    line-height: 13px;
+    height: 20px;
+    text-decoration:none;
+    color: aquamarine;
+}
+
+/* .spanRow{ 
+width:50px; 
+float: left; 
+}  */
+
+ .spanRow{ 
+    float: left;
+    padding-top: 5px;
+    margin-left: 6px;
+}
+
+.spanRow2{ 
+width:80px;
+float: left; 
+} 
+
+.gridin { 
+width: 100%; 
+display: block; 
+background: url(images/newicons/in.png) no-repeat; 
+text-indent: 18px; 
+line-height: 13px;
+height: 20px; 
+text-decoration:none;
+    color: aquamarine;
+}
+
+.gridout { 
+width: 100%; 
+display: block; 
+background: url(images/newicons/out.png) no-repeat; 
+text-indent: 18px; 
+line-height: 13px; 
+height: 20px; 
+text-decoration:none;
+    color: aquamarine;
+}
+
+.gridopenbox { 
+width: 100%; 
+display: block; 
+background: url(images/newicons/openbox.png) no-repeat; 
+text-indent: 18px; 
+line-height: 13px; 
+height: 20px; 
+text-decoration:none;
+    color: aquamarine;
+}
+
+.gridcancel { 
+width: 100%; 
+display: block; 
+background: url(images/newicons/cancel.png) no-repeat; 
+text-indent: 18px; 
+line-height: 13px; 
+height: 20px; 
+text-decoration:none;
+    color: aquamarine;
+}
+
+.gridarraign { 
+width: 100%; 
+display: block; 
+background: url(images/newicons/arraign.png) no-repeat; 
+text-indent: 18px; 
+line-height: 13px; 
+height: 20px; 
+text-decoration:none;
+    color: aquamarine;
+} 
+
+.gridarrive { 
+width: 100%; 
+display: block; 
+background: url(images/newicons/arrive.png) no-repeat; 
+text-indent: 18px; 
+line-height: 13px; 
+height: 20px; 
+text-decoration:none;
+    color: aquamarine;
+} 
+
+
+.griddelay { 
+width: 100%; 
+display: block; 
+background: url(images/newicons/delay.png) no-repeat; 
+text-indent: 18px; 
+line-height: 13px; 
+height: 20px; 
+text-decoration:none;
+    color: aquamarine;
+} 
+
+
+.gridmsprint { 
+width: 100%; 
+display: block; 
+background: url(images/newicons/ms-print.png) no-repeat; 
+text-indent: 18px; 
+line-height: 13px; 
+height: 20px; 
+text-decoration:none;
+    color: aquamarine;
+}
+
+
+.gridcontrast {
+width: 100%; 
+display: block; 
+background: url(images/newicons/contrast.png) no-repeat; 
+text-indent: 18px; 
+line-height: 13px; 
+height: 20px; 
+text-decoration:none;
+    color: aquamarine;
+}
+
+
+.gridpicture { 
+width: 100%; 
+display: block; 
+background: url(images/newicons/camera.png) no-repeat; 
+text-indent: 18px; 
+line-height: 13px; 
+height: 20px; 
+text-decoration:none;
+    color: aquamarine;
+}
+
+
+.gridundo { 
+width: 100%; 
+display: block; 
+background: url(images/newicons/undo.png) no-repeat; 
+text-indent: 18px; 
+line-height: 13px; 
+height: 20px; 
+text-decoration:none;
+    color: aquamarine;
+}
+
+
+.gridhammer { 
+width: 100%; 
+display: block; 
+background: url(images/newicons/hammer.png) no-repeat; 
+text-indent: 18px; 
+line-height: 13px; 
+height: 20px; 
+text-decoration:none;
+    color: aquamarine;
+}
+
+
+.gridcog { 
+width: 100%; 
+display: block; 
+background: url(images/newicons/cog.png) no-repeat;
+text-indent: 18px; 
+line-height: 13px; 
+height: 20px; 
+text-decoration:none;
+    color: aquamarine;
+}
+
+
+.gridadd { 
+width: 100%; 
+display: block; 
+background: url(images/newicons/edit_add.png) no-repeat; 
+text-indent: 18px; 
+line-height: 13px; 
+height: 20px; 
+text-decoration:none;
+    color: aquamarine;
+}
+
+.gridconnect {
+    width: 100%;
+    display: block;
+    background: url(images/newicons/connect.png) no-repeat;
+    text-indent: 18px;
+    line-height: 13px;
+    height: 20px;
+    text-decoration:none;
+    color: aquamarine;
+}
+
+.gridlook { 
+width: 100%; 
+display: block; 
+background: url(images/newicons/eye.png) no-repeat; 
+text-indent: 18px; 
+line-height: 13px; 
+height: 20px; 
+text-decoration:none;
+    color: aquamarine;
+}
+
+.gridcheck {
+    width: 100%;
+    display: block;
+    background: url(images/newicons/check.ico) no-repeat;
+    text-indent: 18px;
+    line-height: 13px;
+    height: 20px;
+    text-decoration:none;
+    color: aquamarine;
+}
+
+.gridnocheck {
+    width: 100%;
+    display: block;
+    background: url(images/newicons/nocheck.ico) no-repeat;
+    text-indent: 18px;
+    line-height: 13px;
+    height: 20px;
+    text-decoration:none;
+    color: aquamarine;
+}
+
+.gridbalance {
+    width: 100%;
+    display: block;
+    background: url(images/newicons/balance.png) no-repeat;
+    text-indent: 18px;
+    line-height: 13px;
+    height: 20px;
+    text-decoration:none;
+    color: aquamarine;
+}

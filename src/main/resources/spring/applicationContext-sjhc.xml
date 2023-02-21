@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+
+
+http://www.springframework.org/schema/tx
+http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
+
+    <!-- DataSource zhfz Oracle -->
+    <bean id="dataSourceOracleSjhc" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+          destroy-method="close">
+        <property name="driverClass" value="${sjhc_oracle.jdbc.connection.driver}" />
+        <property name="jdbcUrl" value="${sjhc_oracle.jdbc.connection.url}" />
+        <property name="user" value="${sjhc_oracle.jdbc.connection.username}" />
+        <property name="password" value="${sjhc_oracle.jdbc.connection.password}" />
+        <property name="initialPoolSize" value="${sjhc_oracle.c3p0.initialPoolSize}" />
+        <property name="minPoolSize" value="${sjhc_oracle.c3p0.minPoolSize}" />
+        <property name="maxPoolSize" value="${sjhc_oracle.c3p0.maxPoolSize}" />
+        <property name="acquireIncrement" value="${sjhc_oracle.c3p0.acquireIncrement}" />
+        <property name="maxIdleTime" value="${sjhc_oracle.c3p0.maxIdleTime}" />
+        <property name="idleConnectionTestPeriod" value="${sjhc_oracle.c3p0.idleConnectionTestPeriod}" />
+        <property name="maxStatements" value="${sjhc_oracle.c3p0.maxStatements}" />
+        <property name="checkoutTimeout" value="${sjhc_oracle.c3p0.checkoutTimeout}" />
+        <property name="acquireRetryAttempts" value="${sjhc_oracle.c3p0.acquireRetryAttempts}" />
+        <property name="breakAfterAcquireFailure" value="${sjhc_oracle.c3p0.breakAfterAcquireFailure}" />
+        <property name="autoCommitOnClose" value="${sjhc_oracle.c3p0.autoCommitOnClose}" />
+        <property name="testConnectionOnCheckout" value="${sjhc_oracle.c3p0.testConnectionOnCheckout}" />
+        <property name="numHelperThreads" value="${sjhc_oracle.c3p0.numHelperThreads}" />
+        <property name="preferredTestQuery" value="${sjhc_oracle.c3p0.preferredTestQuery}" />
+    </bean>
+
+    <bean id="oracleInterceptor"
+          class="com.zhixin.zhfz.common.filter.MySqlleInterceptor">
+        <property name="showInfo" value="true" />
+    </bean>
+
+    <!-- SqlSessionFactory -->
+    <bean id="sqlSessionFactoryOracle" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSourceOracleSjhc" />
+        <property name="configLocation" value="classpath:mybatis/mybatis_jz_oracle.xml" />
+        <property name="mapperLocations">
+            <list>
+                <value>classpath:mybatis/oracle_mappers/oracle.mapper.xml</value>
+            </list>
+        </property>
+
+        <property name="plugins">
+            <array>
+                <ref bean="oracleInterceptor" />
+            </array>
+        </property>
+    </bean>
+
+    <!-- TransactionManager -->
+    <bean id="transactionManagerOracle" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSourceOracleSjhc" />
+    </bean>
+
+    <!--启动spring事务注解功能-->
+    <tx:annotation-driven transaction-manager="transactionManagerOracle" />
+
+    <!-- spring与mybatis整合配置，扫描所有dao -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"
+          p:sqlSessionFactoryBeanName="sqlSessionFactoryOracle"
+          p:basePackage="com.zhixin.zhfz.bacs.daoOracle.IOracleMapper">
+    </bean>
+
+</beans>

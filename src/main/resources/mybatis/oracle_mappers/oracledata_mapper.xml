@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacs.daoOracle.IOracleDataMapper">
+	
+	<select id="queryAjztMap" resultType="java.util.HashMap" >
+		select *  from  T_SYS_CODE where  CODECLASS ='AJZT'
+	</select>
+    <select id="queryUserMap" resultType="java.util.HashMap" >
+		select  u.*,i.*  from  T_SYS_USER u
+		left join T_SYS_USERINFO i on u.USERINFOID=i.ID
+	</select>
+    <select id="queryOrgMap" resultType="java.util.HashMap">
+		select *  from  T_SYS_ORGANIZATION
+	</select>
+</mapper>
+
+

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacs.dao.njxzwd.ICaseNatureQuestionMapper">
+
+    <resultMap id="resultMap" type="com.zhixin.zhfz.bacs.entity.CaseNatureQuestionEntity">
+        <id property="id" column="id"/>
+        <result column="crime_type_id" property="typeId"/>
+        <result column="code_desc" property="typeName"/>
+        <result column="content" property="content"/>
+        <result column="sort_no" property="sortNo"/>
+        <result column="is_major" property="isMajor"/>
+        <result column="crime_name" property="crimeName"/>
+        <result column="op_pid" property="op_Pid" jdbcType="VARCHAR" />
+        <result column="op_user_id" property="op_User_Id" jdbcType="INTEGER" />
+    </resultMap>
+
+    <select id="list" resultMap="resultMap" parameterType="java.util.Map">
+        SELECT
+            q.id,
+            q.crime_type_id,
+            q.content,
+            q.sort_no,
+            q.is_major,
+            q.crime_name,
+            c.code_desc
+        FROM
+            ba_knowledge_q_crime AS q
+        INNER JOIN ba_knowledge_crime AS c ON q.crime_type_id = c.id
+        <include refid="query_where"/>
+		order by q.sort_no
+		limit ${pageStart},${rows}
+    </select>
+
+     <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+         SELECT
+         count(1)
+         FROM
+         ba_knowledge_q_crime AS q
+         INNER JOIN ba_knowledge_crime AS c ON q.crime_type_id = c.id
+         <include refid="query_where"/>
+         order by q.sort_no
+    </select>
+    
+	<insert id="insert" parameterType="com.zhixin.zhfz.bacs.entity.CaseNatureQuestionEntity">
+        INSERT INTO `ba_knowledge_q_crime`(`crime_type_id`, `content`, `sort_no`, `is_major`, `crime_name`,op_pid,op_user_id) VALUES (#{typeId}, #{content}, #{sortNo}, #{isMajor}, #{crimeName},#{op_Pid},#{op_User_Id})
+    </insert>
+    
+    <delete id="delete" parameterType="long">
+        delete from ba_knowledge_q_crime where id=#{id}
+    </delete>
+    
+    <update id="update" parameterType="com.zhixin.zhfz.bacs.entity.CaseNatureQuestionEntity">
+        UPDATE `ba_knowledge_q_crime` SET `crime_type_id` = #{typeId}, `content` = #{content}, `sort_no` = #{sortNo}, `is_major` = #{isMajor}, `crime_name` = #{crimeName} WHERE `id` = #{id}
+    </update>
+
+    <sql id="query_where">
+        <where>
+            <if test="dataAuth!=null and dataAuth!=''">
+                and ${dataAuth}
+            </if>
+            <if test="typeId!=null and typeId !=''">
+                and q.crime_type_id = #{typeId}
+            </if>
+            <if test="content!=null and content !=''">
+                and q.content like '%${content}%'
+            </if>
+        </where>
+    </sql>
+</mapper>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.sacw.dao.visualization.IVisualizationMapper">
+    <resultMap id="ConsoleDeskMap" type="com.zhixin.zhfz.sacw.entity.ConsoleEntity">
+        <id column="id" property="id"/>
+        <result column="total" property="total"/>
+        <result column="caseNatureId" property="caseNatureId"/>
+        <result column="caseNature" property="caseNature"/>
+        <result column="organizationId" property="organizationId"/>
+        <result column="organization" property="organization"/>
+        <result column="outputTypeId" property="outputTypeId"/>
+        <result column="outputType" property="outputType"/>
+        <result column="status" property="status"/>
+        <result column="statusName" property="statusName"/>
+        <result column="involvedTypeId" property="involvedTypeId"/>
+        <result column="involvedType" property="involvedType"/>
+        <result column="warehouse_id" property="wareHouseId"/>
+        <result column="warehousename" property="wareHouseName"/>
+    </resultMap>
+
+
+    <!--查询按案件性质统计数量-->
+    <select id="listTotalByCaseNature" resultMap="ConsoleDeskMap" parameterType="java.util.Map">
+        SELECT cd.code_desc as caseNature,cd.id as caseNatureId, COUNT(1) total FROM sa_input_record r
+        LEFT JOIN ba_case c ON c.id = r.case_id
+        LEFT JOIN xt_crime_define cd ON c.ab = cd.id
+        LEFT JOIN sa_involved i ON r.involved_id = i.id
+        where 1=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="wareHouseId !=null and wareHouseId !=0">
+            and i.warehouse_id = #{wareHouseId}
+        </if>
+        GROUP BY cd.code_desc ORDER BY total ASC LIMIT 10
+    </select>
+
+    <!--按办案单位统计数量-->
+    <select id="listTotalByOrganization" resultMap="ConsoleDeskMap" parameterType="java.util.Map">
+        select o.name as organization, COUNT(1) total from sa_input_record r
+        left join xt_organization o on o.id=r.organization_id
+        LEFT JOIN sa_involved i ON r.involved_id = i.id
+        left join ba_case ba on ba.id = r.case_id
+        where 1=1
+        <if test="wareHouseId !=null and wareHouseId !=0">
+            and i.warehouse_id = #{wareHouseId}
+        </if>
+        <if test="dataAuth!=null and dataAuth!=''">
+            and #{dataAuth}
+        </if>
+        group by r.organization_id order by total asc limit 10
+    </select>
+
+    <!--按出库方式统计数量-->
+    <select id="listTotalByOutputType" resultMap="ConsoleDeskMap" parameterType="java.util.Map">
+        select t.code_value as outputType, COUNT(1) total from sa_output_record r
+        LEFT JOIN xt_code t on r.output_type_id=t.code_key
+        LEFT JOIN sa_involved i ON r.involved_id = i.id
+        left join ba_case ba on ba.id = r.case_id
+        where t.type='INV_OUTPUT_TYPE'
+        <if test="wareHouseId !=null and wareHouseId !=0">
+            and i.warehouse_id = #{wareHouseId}
+        </if>
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        group by t.code_value order by total asc limit 10
+    </select>
+
+    <!--按物品状态统计数量-->
+    <select id="listTotalByInvolvedStatus" resultMap="ConsoleDeskMap" parameterType="java.util.Map">
+        select status,(case status
+        when 1 then '待入库'
+        when 2 then '保管中'
+        when 3 then '已出库'
+        when 4 then '检察院'
+        when 5 then '法院'
+        when 6 then '临时出库'
+        else '其它' end ) statusName,count(1) total
+        from sa_involved i
+        left join ba_case ba on ba.id = i.case_id
+        where 1=1
+        <if test="wareHouseId !=null and wareHouseId !=0">
+            and i.warehouse_id = #{wareHouseId}
+        </if>
+        <if test="dataAuth!=null and dataAuth!=''">
+            and #{dataAuth}
+        </if>
+        group by status
+    </select>
+
+    <!--按物品类型统计数量-->
+    <select id="listTotalByInvolvedType" resultMap="ConsoleDeskMap" parameterType="java.util.Map">
+        select t.code_value as involvedType, COUNT(1) total from sa_involved i
+        LEFT JOIN xt_code t on i.involved_type_id=t.code_key
+        left join ba_case ba on ba.id = i.case_id
+        where t.type='INVOLVED_TYPE'
+        <if test="wareHouseId !=null and wareHouseId !=0">
+            and i.warehouse_id = #{wareHouseId}
+        </if>
+        <if test="dataAuth!=null and dataAuth!=''">
+            and #{dataAuth}
+        </if>
+        group by t.code_value order by total asc limit 10
+    </select>
+
+    <!--查看所有涉案财物仓库-->
+    <select id="listWarehouse" resultMap="ConsoleDeskMap" parameterType="java.util.Map">
+        select b.id as warehouse_id,b.name AS warehousename from sa_warehouse b LEFT JOIN xt_organization a on
+        a.id=b.org_id
+        where 1=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and #{dataAuth}
+        </if>
+    </select>
+
+</mapper>

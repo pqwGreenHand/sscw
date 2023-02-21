@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.common.dao.operLog.IOperLogMapper">
+
+    <resultMap id="operLogResultMap" type="OperLogEntity">
+       <id property="id" column="id"/>
+       <result property="type" column="type"/>
+       <result property="content" column="content"/>
+       <result property="user" column="user"/>
+       <result property="operTime" column="oper_time"/>
+       <result property="systemName" column="system_name"/>
+       <result property="isSuccess" column="is_success"/>
+		<result column="op_pid" property="op_Pid" jdbcType="VARCHAR" />
+		<result column="op_user_id" property="op_User_Id" jdbcType="INTEGER" />
+    </resultMap>
+	<resultMap id="opertdLogResultMap" type="TdOperLogEntity">
+		<id property="id" column="id"/>
+		<result property="type" column="type"/>
+		<result property="content" column="content"/>
+		<result property="params" column="params"/>
+		<result property="uuid" column="uuid"/>
+		<result property="cuffNo" column="cuffNo"/>
+		<result property="personId" column="personId"/>
+		<result property="serialId" column="serial_id"/>
+		<result property="name" column="name"/>
+		<result property="ajbh" column="ajbh"/>
+		<result property="rybh" column="rybh"/>
+		<result property="ajmc" column="ajmc"/>
+		<result property="sfcl" column="sfcl"/>
+		<result column="inTime" property="inTime"  />
+		<result column="outTime" property="outTime"/>
+		<!--<result column="created_time" property="createdTime"/>-->
+	</resultMap>
+
+    <select id="list" parameterType="java.util.Map" resultMap="operLogResultMap">
+
+        	select * from xt_operator_log
+			where 1=1
+				<if test="dataAuth!=null and dataAuth!=''">
+					and ${dataAuth}
+				</if>
+			    <if test="system_name!=null and user!=''">
+					and system_name like '%${system_name}%'
+				</if>
+	        	<if test="user!=null and user!=''">
+					and user like '%${user}%'
+				</if>
+				<if test="content!=null and content!=''">
+					and content like '%${content}%'
+				</if>
+				<if test="start_date!=null and start_date!=''">
+					and oper_time &gt;=#{start_date}
+				</if>
+				<if test="end_date!=null and end_date!=''">
+					and oper_time &lt;=#{end_date}
+				</if>
+		order by id desc limit ${pageStart},${rows}
+    </select>
+    
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+    		select count(1) from xt_operator_log
+    		<where> 
+    		    <if test="system_name!=null and user!=''">
+					and system_name like '%${system_name}%'
+				</if>
+	        	<if test="user!=null and user!=''">
+					and user like '%${user}%'
+				</if>
+				<if test="content!=null and content!=''">
+					and content like '%${content}%'
+				</if>
+				<if test="start_date!=null and start_date!=''">
+					and oper_time &gt;=#{start_date}
+				</if>
+				<if test="end_date!=null and end_date!=''">
+					and oper_time &lt;=#{end_date}
+				</if>
+			</where>
+    </select>
+
+	<insert id="insert" parameterType="OperLogEntity" keyProperty="id">
+            insert into xt_operator_log (type,content,user,oper_time,is_success,system_name) values(#{type},#{content},#{user},now(),#{isSuccess},#{systemName})
+    </insert>
+
+	<insert id="insertTdLog" parameterType="TdOperLogEntity" keyProperty="id">
+		insert into td_operator_log (type,content,serial_id,params,sfcl,created_time) values(#{type},#{content},#{serialId},#{params},#{sfcl},now())
+	</insert>
+
+	<delete id="delete" parameterType="int">  
+            delete from xt_operator_log where id=#{id}
+    </delete>
+
+	<update id="batchClByIds" parameterType="java.util.Map">
+		update td_operator_log set sfcl = 1
+		where id in(${ids})
+	</update>
+	<select id="listTd" parameterType="java.util.Map" resultMap="opertdLogResultMap">
+
+		select tol.*,bs.ajbh,bp.id personId,bs.rybh,bf.cuff_no cuffNo,bp.`name`,bs.uuid,bs.in_time inTime,bs.out_time outTime,bc.ajmc from td_operator_log tol
+		LEFT JOIN  ba_serial bs on bs.id=tol.serial_id
+		LEFT JOIN ba_person bp ON bp.id= bs.person_id
+		LEFT JOIN ba_case bc ON bc.id= bs.case_id
+		LEFT JOIN ba_cuff bf ON bf.id=bs.cuff_id
+		where 1=1
+			<if test="system_name!=null and user!=''">
+				and bp.name like '%${system_name}%'
+			</if>
+			<if test="sfcl!=null and sfcl!=''">
+				and tol.sfcl=#{sfcl}
+			</if>
+			<if test="start_date!=null and start_date!=''">
+				and bs.in_time &gt;=#{start_date}
+			</if>
+			<if test="end_date!=null and end_date!=''">
+				and bs.in_time &gt; &lt;=#{end_date}
+			</if>
+		order by tol.id desc limit ${pageStart},${rows}
+	</select>
+
+	<select id="countTd" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from td_operator_log tol
+		LEFT JOIN  ba_serial bs on bs.id=tol.serial_id
+		LEFT JOIN ba_person bp ON bp.id= bs.person_id
+		LEFT JOIN ba_case bc ON bc.id= bs.case_id
+		LEFT JOIN ba_cuff bf ON bf.id=bs.cuff_id
+		<where>
+			<if test="system_name!=null and user!=''">
+				and bp.name like '%${system_name}%'
+			</if>
+			<if test="start_date!=null and start_date!=''">
+				and bs.in_time &gt;=#{start_date}
+			</if>
+			<if test="end_date!=null and end_date!=''">
+				and bs.in_time &gt; &lt;=#{end_date}
+			</if>
+		</where>
+	</select>
+</mapper>

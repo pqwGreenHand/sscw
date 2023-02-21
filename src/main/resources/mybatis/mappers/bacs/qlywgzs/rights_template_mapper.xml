@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacs.dao.qlywgzs.IRightsTemplateMapper">
+
+    <resultMap id="resultMap" type="com.zhixin.zhfz.bacs.entity.RightsTemplateEntity">
+        <id property="id" column="id"/>
+        <result column="name" property="name"/>
+        <result column="word" property="word"/>
+        <result column="content" property="content"/>
+        <result column="sort_no" property="sortNo"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="op_pid" property="op_Pid" jdbcType="VARCHAR" />
+        <result column="op_user_id" property="op_User_Id" jdbcType="INTEGER" />
+    </resultMap>
+
+    <select id="list" resultMap="resultMap" parameterType="java.util.Map">
+		select t.id,t.`name`,t.content,t.sort_no,t.created_time
+        from ba_rights_template t
+        <include refid="query_where"/>
+		order by t.sort_no
+		limit ${pageStart},${rows}
+    </select>
+
+    <select id="getWordById" resultMap="resultMap" parameterType="long">
+        select t.word,t.name from ba_rights_template t where t.id = #{id}
+    </select>
+
+     <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		 select count(1) from ba_rights_template t
+         <include refid="query_where"/>
+    </select>
+    
+	<insert id="insert" parameterType="com.zhixin.zhfz.bacs.entity.RightsTemplateEntity">
+        insert into ba_rights_template (`name`,word,content,sort_no,created_time,op_pid,op_user_id) values(#{name},#{word},#{content},#{sortNo},CURRENT_TIMESTAMP,#{op_Pid},#{op_User_Id})
+    </insert>
+    
+    <delete id="delete" parameterType="long">
+        delete from ba_rights_template where id=#{id}
+    </delete>
+
+    <update id="update" parameterType="com.zhixin.zhfz.bacs.entity.RecordTemplateEntity">
+        update ba_rights_template
+        <set>
+            <if test="word != null">word = #{word},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="sortNo != null and sortNo != ''">sort_no = #{sortNo}, </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <sql id="query_where">
+        <where>
+            <if test="dataAuth!=null and dataAuth!=''">
+                and ${dataAuth}
+            </if>
+            <if test="name!=null and name !=''">
+                and t.name like '%${name}%'
+            </if>
+        </where>
+    </sql>
+</mapper>

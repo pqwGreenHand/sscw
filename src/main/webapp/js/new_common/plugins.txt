@@ -1,0 +1,7 @@
+#######格式：插件显示名称@插件描述@插件文件名#######
+.NetFramework插件@用于调用笔录系统环境所需插件@dotNetFx40_Full_x86_x64.exe
+虚拟成像跟踪插件@用于开启虚拟成像跟踪系统所需插件@WQTracker.zip
+审讯笔录@用于浏览器 播放所需插件@RecordClient.exe
+远程参审@用于审讯专家远程指挥审讯@RemoteControl.exe
+flash@用于浏览器 播放所需插件@flashplayer26.exe
+光盘刻录打印系统@用于审讯相关视频及文件的下载和刻录@Burn.exe

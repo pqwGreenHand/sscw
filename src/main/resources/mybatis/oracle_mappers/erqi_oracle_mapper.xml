@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhixin.zhfz.bacs.daoOracle.ErQiOracleMapper">
+
+	<select id="queryOraclePersonXz" resultType="java.util.HashMap" parameterType="java.util.Map">
+		SELECT DISTINCT
+		b.XM,
+		b.RYBH,
+		b.ZJHM,
+		b.ZJZLID,
+		b.XBID,
+		b.HJDXZ,
+		b.LRRQ,
+		a.AJBH
+		FROM  T_RY_WFFZRYXX b, T_AJ_XZAJRYDY a
+		where  a.RYBH = b.RYBH
+		and a.RYLX = '04'
+		and b.LRDWID like '110105%'
+		/*and b.LRDWID like '110227%'*/
+		<if test="LRRQMAX !=null and LRRQMAX !=''">
+			and b.LRRQ &gt; to_date(#{LRRQMAX} , 'yyyy-mm-dd hh24:mi:ss')
+		</if>
+	</select>
+
+	<select id="queryOraclePersonXs" resultType="java.util.HashMap" parameterType="java.util.Map">
+		SELECT DISTINCT
+		b.XM,
+		b.RYBH,
+		b.ZJHM,
+		b.ZJZLID,
+		b.XBID,
+		b.HJDXZ,
+		b.LRRQ,
+		a.AJBH
+		FROM T_RY_WFFZRYXX b,T_AJ_XSAJRYDY a
+		where a.RYBH = b.RYBH
+		and a.RYLX = '04'
+		and b.LRDWID like '110105%'
+		/*and b.LRDWID like '110227%'*/
+		<if test="LRRQMAX !=null and LRRQMAX !=''">
+			and b.LRRQ &gt; to_date(#{LRRQMAX} , 'yyyy-mm-dd hh24:mi:ss')
+		</if>
+	</select>
+
+	<!-- 处理决定抽取  -->
+	<select id="queryOracleRycljd" resultType="java.util.HashMap" parameterType="java.util.Map">
+		SELECT
+		RYID,CLJD,ORGID,PZR,PZSJ,RYBH,PZSJ CZSJ,ID
+		FROM T_RY_RYCLXX
+		where
+		ORGID like '110105%'
+		<if test="pzsj !=null and pzsj !=''">
+			and  PZSJ &gt; to_date(#{pzsj} , 'yyyy-mm-dd hh24:mi:ss')
+		</if>
+	</select>
+
+</mapper>

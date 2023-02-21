@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.common.dao.monitor.IMonitorMapper" >
+  <resultMap id="BaseResultMap" type="com.zhixin.zhfz.common.entity.MonitorEntity" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="hostname" property="hostname" jdbcType="VARCHAR" />
+    <result column="ip" property="ip" jdbcType="VARCHAR" />
+    <result column="appname" property="appname" jdbcType="VARCHAR" />
+    <result column="monitor_type" property="monitorType" jdbcType="VARCHAR" />
+    <result column="monitor_way" property="monitorWay" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+    <result column="enabled" property="enabled" jdbcType="INTEGER" />
+  </resultMap>
+  
+  
+ <select id="list" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select * from xt_monitor
+        order by id asc
+ </select>
+ 
+ <select id="queryById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+       select * from xt_monitor
+       where id = #{id}
+ </select>
+ 
+ <update id="update" parameterType="java.util.Map">
+       update xt_monitor set status = #{status} , updated_time=#{updateTime}
+       where id = #{id}
+ </update>
+
+
+<insert id="insertMonitorEntity" parameterType="com.zhixin.zhfz.common.entity.MonitorEntity">
+    insert into xt_monitor (hostname,ip,appname,monitor_type,monitor_way,status,updated_time) values(#{hostname},#{ip},#{appname},#{monitorType},#{monitorWay},0,now())
+</insert>
+
+<update id="updateMonitorByID" parameterType="com.zhixin.zhfz.common.entity.MonitorEntity">
+    update xt_monitor
+    set hostname = #{hostname,jdbcType=VARCHAR},
+    ip = #{ip,jdbcType=VARCHAR},
+    appname = #{appname,jdbcType=VARCHAR},
+    monitor_type = #{monitorType,jdbcType=VARCHAR},
+    monitor_way = #{monitorWay,jdbcType=VARCHAR},
+    enabled = #{enabled,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+</update>
+
+<delete id="deleteMonitorByID" parameterType="java.lang.Integer">
+    delete from xt_monitor
+    where id = #{id,jdbcType=INTEGER}
+</delete>
+  
+
+</mapper>

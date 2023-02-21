@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.serial.IOutReportMapper" >
+  <resultMap id="outResultMap" type="com.zhixin.zhfz.bacs.entity.OutReportEntity" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="serial_no" property="serialNo" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="birth" property="birth" jdbcType="DATE" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="certificate_no" property="certificateNo" jdbcType="VARCHAR" />
+    <result column="certificateType" property="certificateType" jdbcType="VARCHAR" />
+    <result column="caseReason" property="caseReason" jdbcType="VARCHAR" />
+    <result column="entrance_procedure" property="entranceProcedure" jdbcType="VARCHAR" />
+    <result column="in_time" property="inTime" jdbcType="TIMESTAMP" />
+    <result column="medical_history" property="medicalHistory" jdbcType="VARCHAR" />
+    <result column="injury_description" property="injuryDescription" jdbcType="VARCHAR" />
+    <result column="has_injury" property="hasInjury" jdbcType="INTEGER" />
+    <result column="has_photo" property="hasPhoto" jdbcType="INTEGER" />
+    <result column="has_wine" property="hasWine" jdbcType="INTEGER" />
+    <result column="tempOutTime" property="tempOutTime" jdbcType="TIMESTAMP" />
+    <result column="tempOutReason" property="tempOutReason" jdbcType="VARCHAR" />
+    <result column="back_time" property="backTime" jdbcType="TIMESTAMP" />
+    <result column="out_time" property="outTime" jdbcType="TIMESTAMP" />
+    <result column="confirm_result" property="confirmResult" jdbcType="VARCHAR" />
+    <result column="involvedName" property="involvedName" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="detail_count" property="detailCount" jdbcType="INTEGER" />
+    <result column="unit" property="unit" jdbcType="VARCHAR" />
+    <result column="save_method" property="saveMethod" jdbcType="VARCHAR" />
+    <result column="lockerNo" property="lockerNo" jdbcType="VARCHAR" />
+    <result column="is_get" property="isGet" jdbcType="INTEGER" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="roomName" property="roomName" jdbcType="VARCHAR" />
+    <result column="camera_no" property="cameraNo" jdbcType="VARCHAR" />
+	<result column="get_result" property="result" jdbcType="VARCHAR" />
+  </resultMap>
+ 
+ 
+ 	<!-- 获得嫌疑人的基本信息 -->
+	<select id="getBaseInfo" resultMap="outResultMap" parameterType="java.util.Map">
+		select s.serial_no,p.name,
+		(case p.sex when 0 then '未知的性别' when 1 then '男' when 2 then '女' else '未说明的性别' end) as sex,
+		p.age,p.birth,p.mobile,
+		p.telephone,p.certificate_no,c.code_value as certificateType,
+		cd.code_desc as caseReason,s.entrance_procedure,s.in_time,
+		se.medical_history,se.injury_description,
+		se.has_injury,se.has_photo,se.has_wine,
+		t.out_time as tempOutTime,t.out_reason as tempOutReason,t.back_time,
+		s.out_time,s.confirm_result
+		from ba_serial s
+		left join ba_person p on p.id=s.person_id
+		left join xt_code c on c.code_key=p.certificate_type_id
+		left join ba_case ic on ic.id=s.case_id
+		left join xt_crime_define cd on cd.id=ic.ab
+		left join ba_security se on se.serial_id=s.id
+		left join ba_temp_out t on t.serial_id=s.id
+		where c.type='ZJZLID' and  s.id=#{serialId} order by t.id desc limit 1
+	</select>
+	
+	<!-- 查询暂存的随身物品 -->
+	<select id="getBelongs" resultMap="outResultMap" parameterType="java.util.Map">
+		select bd.name as involvedName,bd.description,bd.detail_count,bd.unit,bd.save_method,pd.param_key as lockerNo
+		from ba_serial s
+		inner join ba_belongings b on s.id=b.serial_id
+		inner join ba_belongings_detail bd on b.id=bd.belongings_id
+		inner join ba_personal_config_detail pd on pd.id=b.locker_id
+		where s.id=#{serialId}
+	</select>
+	
+	<select id="getWaitingRecord1" resultMap="outResultMap" parameterType="java.util.Map">
+		select r.in_time as start_time,r.out_time as end_time,m.name as roomName,r.get_result as result
+		from ba_serial s
+		inner join ba_waiting_record r on s.id=r.serial_id
+		inner join ba_room m on r.room_id=m.id
+		where s.id=#{serialId}
+	</select>
+	
+	<!-- 查询随身物品的返还情况,查出来自己判断是否有未返回物品 -->
+	<select id="getBelongsDetail" resultMap="outResultMap" parameterType="java.util.Map">
+		select bd.name as involvedName,bd.description,bd.detail_count,bd.unit,bd.save_method,bd.is_get
+		from ba_serial s
+		inner join ba_belongings b on s.id=b.serial_id
+		inner join ba_belongings_detail bd on b.id=bd.belongings_id
+		where s.id=#{serialId}
+	</select>
+</mapper>

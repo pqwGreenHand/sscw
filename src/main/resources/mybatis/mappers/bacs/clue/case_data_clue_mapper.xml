@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhixin.zhfz.bacs.dao.clue.ICaseDataClueMapper">
+
+    <resultMap id="caseDataClueResultMap" type="CaseDataClue">
+        <id property="id" column="id"/>
+        <result property="fileName" column="file_name"/>
+        <result property="fileUrl" column="file_url"/>
+        <result property="uploadUserId" column="upload_user_id"/>
+        <result property="uploadTime" column="upload_time"/>
+        <result property="lawCaseId" column="case_id"/>
+        <result property="fileDesc" column="file_desc"/>
+        <result property="policeName" column="real_name"/>
+        <result property="interrogateSerialId" column="serial_id"/>
+        <result property="personId" column="person_id"/>
+        <result property="opPid" column="op_pid"/>
+        <result property="opUserId" column="op_user_id"/>
+
+    </resultMap>
+
+    <select id="selectOneById" parameterType="java.util.Map" resultMap="caseDataClueResultMap">
+        select id,file_name,person_id,file_url,upload_user_id,upload_time,case_id,file_desc from ba_case_data_clue where
+        1=1
+        <if test="id!=null and  id!=''">
+            and id=#{id}
+        </if>
+        <if test="fileUrl!=null and fileUrl!=''">
+            and file_url like "%${fileUrl}"
+        </if>
+    </select>
+    <!-- id is same to interface'methmod -->
+    <select id="list" resultMap="caseDataClueResultMap" parameterType="java.util.Map">
+        select cdc.id id ,cdc.file_desc file_desc,cdc.file_name file_name,cdc.file_url file_url,
+        cdc.case_id case_id,cdc.upload_time upload_time ,uu.real_name real_name,cdc.person_id person_id from
+        ba_case_data_clue cdc inner join xt_user uu on
+        cdc.upload_user_id=uu.id
+        <!--   select cdc.* from case_data_clue cdc -->
+        where 1=1
+        <if test="lawCaseId!=null and lawCaseId !=''">
+            and cdc.case_id=#{lawCaseId}
+        </if>
+        <if test="personId!=null and personId !=''">
+            and cdc.person_id=#{personId}
+        </if>
+        <if test="id!=null and id !=''">
+            and cdc.id=#{id}
+        </if>
+        <if test="policeName!=null and policeName!=''">
+            and uu.real_name like "%${policeName}%"
+        </if>
+        <if test="fileName!=null and fileName!=''">
+            and cdc.file_name like "%${fileName}%"
+        </if>
+        <if test="caseDataType!=null and caseDataType!='其它材料'.toString()">
+            and cdc.file_desc = #{caseDataType}
+        </if>
+        <if test="caseDataType!=null and caseDataType=='其它材料'.toString()">
+            and ( cdc.file_desc = #{caseDataType} or cdc.file_desc is null )
+        </if>
+        limit ${pageStart},${rows}
+    </select>
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(1) from
+        ba_case_data_clue cdc inner join xt_user uu on
+        cdc.upload_user_id=uu.id
+        where 1=1
+        <if test="lawCaseId!=null and lawCaseId !=''">
+            and cdc.case_id=#{lawCaseId}
+        </if>
+        <if test="personId!=null and personId !=''">
+            and cdc.person_id=#{personId}
+        </if>
+        <if test="id!=null and id !=''">
+            and cdc.id=#{id}
+        </if>
+        <if test="policeName!=null and policeName!=''">
+            and uu.real_name like "%${policeName}%"
+        </if>
+        <if test="fileName!=null and fileName!=''">
+            and cdc.file_name like "%${fileName}%"
+        </if>
+        <if test="caseDataType!=null and caseDataType!='其它材料'.toString()">
+            and cdc.file_desc = #{caseDataType}
+        </if>
+        <if test="caseDataType!=null and caseDataType=='其它材料'.toString()">
+            and ( cdc.file_desc = #{caseDataType} or cdc.file_desc is null )
+        </if>
+    </select>
+    <insert id="insert" parameterType="CaseDataClue">
+            insert into ba_case_data_clue (file_name,
+            							 file_url,
+            							 upload_user_id,
+            							 upload_time,
+            							 case_id,
+            							 file_desc,
+            							 person_id,
+            							 op_pid,
+            							 op_user_id)
+                                 values(#{fileName},
+					             		#{fileUrl},
+					             		#{uploadUserId},
+					             		sysdate(),
+					             		#{lawCaseId},
+					             		#{fileDesc},
+					             		#{personId},
+					             		#{opPid},
+					             		#{opUserId})
+    </insert>
+    <delete id="delete" parameterType="int">  
+            delete from ba_case_data_clue where id=#{id}
+    </delete>
+    <update id="update" parameterType="CaseDataClue">  
+           update ba_case_data_clue set file_name =#{fileName},
+           							   file_url = #{fileUrl},
+           							   upload_user_id = #{uploadUserId},
+           							   upload_time = #{uploadTime},
+           							   file_desc = #{fileDesc},
+           							   serial_id = #{interrogateSerialId},
+           							   case_id = #{lawCaseId}
+           							   op_pid = #{opPid}
+           							   op_user_id = #{opUserId}
+            where id=#{id}
+    </update>
+
+</mapper>

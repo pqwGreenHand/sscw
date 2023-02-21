@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.common.dao.Icase.CasePoliceMapper" >
+  <resultMap id="BaseResultMap" type="com.zhixin.zhfz.common.entity.CasePoliceEntity" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="xbmj_id" property="xbmjId" jdbcType="INTEGER" />
+    <result column="case_id" property="caseId" jdbcType="INTEGER" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, xbmj_id, case_id, updated_time, created_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ba_case_police
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ba_case_police
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zhixin.zhfz.common.entity.CasePoliceEntity" >
+    insert into ba_case_police (id, xbmj_id, case_id, 
+      updated_time, created_time)
+    values (#{id,jdbcType=INTEGER}, #{xbmjId,jdbcType=INTEGER}, #{caseId,jdbcType=INTEGER}, 
+      #{updatedTime,jdbcType=TIMESTAMP}, #{createdTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhixin.zhfz.common.entity.CasePoliceEntity" >
+    insert into ba_case_police
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="xbmjId != null" >
+        xbmj_id,
+      </if>
+      <if test="caseId != null" >
+        case_id,
+      </if>
+      <if test="updatedTime != null" >
+        updated_time,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="xbmjId != null" >
+        #{xbmjId,jdbcType=INTEGER},
+      </if>
+      <if test="caseId != null" >
+        #{caseId,jdbcType=INTEGER},
+      </if>
+      <if test="updatedTime != null" >
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhixin.zhfz.common.entity.CasePoliceEntity" >
+    update ba_case_police
+    <set >
+      <if test="xbmjId != null" >
+        xbmj_id = #{xbmjId,jdbcType=INTEGER},
+      </if>
+      <if test="caseId != null" >
+        case_id = #{caseId,jdbcType=INTEGER},
+      </if>
+      <if test="updatedTime != null" >
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhixin.zhfz.common.entity.CasePoliceEntity" >
+    update ba_case_police
+    set xbmj_id = #{xbmjId,jdbcType=INTEGER},
+      case_id = #{caseId,jdbcType=INTEGER},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      created_time = #{createdTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <delete id="deleteByCaseId" parameterType="java.lang.Integer" >
+    delete from ba_case_police
+    where case_id = #{caseId}
+  </delete>
+  <select id="selectCasePoliceByPolice" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select
+    <include refid="Base_Column_List" />
+    from ba_case_police
+    where case_id = #{caseId}
+    and xbmj_id = #{xbmjId}
+  </select>
+</mapper>

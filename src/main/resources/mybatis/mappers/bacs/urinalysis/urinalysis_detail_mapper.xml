@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.urinalysis.UrinalysisDetailMapper" >
+  <resultMap id="BaseResultMap" type="UrinalysisDetailEntity" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="urinalysis_id" property="urinalysisId" jdbcType="INTEGER" />
+    <result column="check_item" property="checkItem" jdbcType="VARCHAR" />
+    <result column="item_result" property="itemResult" jdbcType="VARCHAR" />
+    <result column="check_user_id" property="checkUserId" jdbcType="INTEGER" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="op_pid" property="opPid" jdbcType="VARCHAR" />
+    <result column="op_user_id" property="opUserId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, urinalysis_id, check_item, item_result, check_user_id, created_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ba_urinalysis_detail
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ba_urinalysis_detail
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="UrinalysisDetailEntity" >
+    insert into ba_urinalysis_detail (id, urinalysis_id, check_item, 
+      item_result, check_user_id, created_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{urinalysisId,jdbcType=INTEGER}, #{checkItem,jdbcType=VARCHAR}, 
+      #{itemResult,jdbcType=VARCHAR}, #{checkUserId,jdbcType=INTEGER}, #{createdTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="UrinalysisDetailEntity" >
+    insert into ba_urinalysis_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="urinalysisId != null" >
+        urinalysis_id,
+      </if>
+      <if test="checkItem != null" >
+        check_item,
+      </if>
+      <if test="itemResult != null" >
+        item_result,
+      </if>
+      <if test="checkUserId != null" >
+        check_user_id,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="urinalysisId != null" >
+        #{urinalysisId,jdbcType=INTEGER},
+      </if>
+      <if test="checkItem != null" >
+        #{checkItem,jdbcType=VARCHAR},
+      </if>
+      <if test="itemResult != null" >
+        #{itemResult,jdbcType=VARCHAR},
+      </if>
+      <if test="checkUserId != null" >
+        #{checkUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="UrinalysisDetailEntity" >
+    update ba_urinalysis_detail
+    <set >
+      <if test="urinalysisId != null" >
+        urinalysis_id = #{urinalysisId,jdbcType=INTEGER},
+      </if>
+      <if test="checkItem != null" >
+        check_item = #{checkItem,jdbcType=VARCHAR},
+      </if>
+      <if test="itemResult != null" >
+        item_result = #{itemResult,jdbcType=VARCHAR},
+      </if>
+      <if test="checkUserId != null" >
+        check_user_id = #{checkUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="UrinalysisDetailEntity" >
+    update ba_urinalysis_detail
+    set urinalysis_id = #{urinalysisId,jdbcType=INTEGER},
+      check_item = #{checkItem,jdbcType=VARCHAR},
+      item_result = #{itemResult,jdbcType=VARCHAR},
+      check_user_id = #{checkUserId,jdbcType=INTEGER},
+      created_time = #{createdTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <insert id="insertList" parameterType="java.util.List"  useGeneratedKeys="true">
+    insert into ba_urinalysis_detail (urinalysis_id, check_item,
+    item_result, check_user_id, created_time,op_pid,op_user_id)
+    values
+    <foreach collection="urinalysisDetailList" item="item" index="index" separator=",">
+      (#{item.urinalysisId,jdbcType=INTEGER}, #{item.checkItem,jdbcType=VARCHAR},
+      #{item.itemResult,jdbcType=VARCHAR}, #{item.checkUserId,jdbcType=INTEGER}, #{item.createdTime,jdbcType=TIMESTAMP},
+      #{item.opPid,jdbcType=VARCHAR},#{item.opUserId,jdbcType=INTEGER})
+    </foreach>
+  </insert>
+  <delete id="deleteByUrinalysisId">
+    delete from ba_urinalysis_detail where urinalysis_id = #{urinalysisId}
+  </delete>
+
+</mapper>

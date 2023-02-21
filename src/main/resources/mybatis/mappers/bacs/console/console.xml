@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacs.dao.console.IConsoleMapper">
+	<!-- <typeAlias alias="actionLog" type="com.zhixin.rd.interrogate.web.entity.ActionLogEntity" /> -->
+	<resultMap id="SerialMap" type="com.zhixin.zhfz.bacs.entity.SerialEntity">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="areaName" property="interrogateAreaName" jdbcType="VARCHAR" />
+		<result column="count" property="count" jdbcType="INTEGER" />
+		<result column="sex" property="sex" jdbcType="INTEGER" />
+		<result column="in_time" property="inTime"  />
+		<result column="out_time" property="outTime"  />
+		<result column="written_time" property="writtenTime"  />
+		<result column="status" property="status"  />
+		<result column="confirm_result" property="confirmResult" jdbcType="VARCHAR" />
+	</resultMap>
+	<select id="countkyouttime" resultType="java.lang.Integer" parameterType="java.util.Map">
+	select count(*) from ba_serial ints
+	left join ba_person p on ints.person_id=p.id
+	left join ba_order_request o on ints.order_request_id=o.id
+	left join ba_area ia on ints.area_id=ia.id
+	left join ba_case ic on ints.case_id=ic.id
+	left join xt_crime_define ct on ct.id=ic.ab
+	left join ba_cuff c on ints.cuff_id=c.id
+	left join xt_user inuser1 on ic.zbmj_id=inuser1.id
+	left join xt_user inregister on ints.in_register_user_id=inregister.id
+	left join xt_user outregister on ints.out_register_user_id=outregister.id
+	where ints.type=0 and (ints.written_time &lt;= DATE_ADD(NOW(),INTERVAL -23 hour)) and ints.`status` &lt;11
+	  and (ints.confirm_time is null or ints.confirm_result =  '其他')
+	<if test="areaId!=null and areaId!=''">
+		and ints.area_id = #{areaId}
+	</if>
+	</select>
+	<!-- 获取各个办案中心的嫌疑人状态-->
+	<select id="queryDetainByAreaId"  resultMap="SerialMap" parameterType="java.util.Map">
+		SELECT
+		s.`status`
+		FROM
+		ba_serial s
+		LEFT JOIN ba_area a ON s.area_id = a.id
+		WHERE 1=1
+		and s.type = 0
+		<if test="areaId !=null and areaId !='' and areaId!=0">
+			and s.area_id = #{areaId}
+		</if>
+		<if test="dataAuth !=null and dataAuth !=''">
+			and  ${dataAuth}
+		</if>
+		and s.`status` &lt;&gt; 11
+	</select>
+	<!-- 获取各个办案中心的收押人数-->
+	<select id="queryCountByAreaId"  resultType="java.util.HashMap" parameterType="java.util.Map">
+		SELECT
+		SUM(r.volume) AS volume,
+		(
+		SELECT
+		count(*)
+		FROM
+		ba_waiting_record r
+		WHERE
+		`status` = 0
+		AND out_time IS NULL
+		<if test="areaId !=null and areaId !='' and areaId!=0">
+			and r.area_id = #{areaId}
+		</if>
+		<if test="dataAuth !=null and dataAuth !=''">
+			and   ${dataAuth}
+		</if>
+		) AS num
+		FROM
+		ba_room r
+		WHERE
+		r.room_type_id = 1
+		<if test="areaId !=null and areaId !='' and areaId!=0">
+			and r.area_id = #{areaId}
+		</if>
+		<if test="dataAuth !=null and dataAuth !=''">
+			and   ${dataAuth}
+		</if>
+	</select>
+	<!-- 入区人数对比-->
+	<select id="queryRenByAreaId"  resultType="java.util.HashMap" parameterType="java.util.Map">
+		SELECT
+		count(1) as count,'民警' as keyName
+		FROM
+		ba_police_entrance ints
+		WHERE
+		ints.out_time IS NULL
+		and ints.police_id is not null
+		<if test="areaId !=null and areaId !='' and areaId!=0">
+			and ints.area_id  = #{areaId}
+		</if>
+		<if test="dataAuth !=null and dataAuth !=''">
+			and   ${dataAuth}
+		</if>
+		UNION ALL
+		(	SELECT count(1) as count,'嫌疑人' keyName FROM  ba_serial ints
+		where ints.status !=11
+		and ints.`type` = 0
+		<if test="areaId !=null and areaId !='' and areaId!=0">
+			and ints.area_id = #{areaId}
+		</if>
+		<if test="dataAuth !=null and dataAuth !=''">
+			and   ${dataAuth}
+		</if>
+		)
+		UNION all
+		(SELECT
+		count(*),
+		'其他人' AS keyName
+		FROM
+		(
+		SELECT
+		id,
+		'其他人' AS keyName
+		FROM
+		ba_serial ints
+		WHERE
+		ints.out_time IS NULL
+		AND type != 0
+		<if test="areaId !=null and areaId !='' and areaId!=0">
+			and ints.area_id = #{areaId}
+		</if>
+		<if test="dataAuth !=null and dataAuth !=''">
+			and   ${dataAuth}
+		</if>
+		<!--UNION ALL
+		SELECT
+		id,
+		'其他人' AS keyName
+		FROM
+		other_person_entrance o
+		WHERE
+		o.out_time IS NULL
+		<if test="areaId !=null and areaId !=''">
+			and o.interrogate_area_id = #{areaId}
+		</if>-->
+		) a
+		)
+	</select>
+	<!-- 一天内出区 -->
+	<select id="queryChuquByDay"  resultType="java.util.HashMap" parameterType="java.util.Map">
+	select count(1)  as count from ba_serial where out_time &gt;= DATE_ADD(NOW(),INTERVAL -1 day) and  out_time is not null and type = 0
+		and STATUS = 11
+		<if test="areaId !=null and areaId !=''">
+			and area_id = #{areaId}
+		</if>
+		<if test="dataAuth !=null and dataAuth !=''">
+			and  ${dataAuth}
+		</if>
+	</select>
+
+	<select id="queryChuquByDay1"  resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1)  as count from ba_serial where out_time &gt;= DATE_ADD(NOW(),INTERVAL -1 day) and  out_time is not null and type = 0
+		and STATUS = 11
+		<if test="areaId !=null and areaId !=''">
+			and area_id = #{areaId}
+		</if>
+
+	</select>
+	<!-- 一天内临时出区 -->
+	<select id="queryLinshiByDay"  resultType="java.util.HashMap" parameterType="java.util.Map">
+		select count(1) as count from ba_serial where out_time &gt;= DATE_ADD(NOW(),INTERVAL -1 day) and  status = 10 and type = 0
+		<if test="areaId !=null and areaId !=''">
+			and area_id = #{areaId}
+		</if>
+		<if test="dataAuth !=null and dataAuth !=''">
+			and  ${dataAuth}
+		</if>
+	</select>
+
+	<select id="queryLinshiByDay1"  resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) as count from ba_serial where out_time &gt;= DATE_ADD(NOW(),INTERVAL -1 day) and  status = 10 and type = 0
+		<if test="areaId !=null and areaId !=''">
+			and area_id = #{areaId}
+		</if>
+	</select>
+	<!-- 已预约 -->
+	<select id="countOrderRequest"  resultType="java.lang.Integer" parameterType="java.util.Map">
+		SELECT
+		count(1)
+		FROM
+		ba_order_request ort
+		LEFT JOIN ba_order_person orct ON ort.id = orct.order_request_id
+		WHERE
+		ort.`status` IN (0, 1)
+		AND ort.created_time >= DATE_ADD(NOW(), INTERVAL - 1 DAY)
+		AND order_request_id IS NOT NULL
+	<if test="areaId!=null and areaId!=''">
+		and ort.area_id = #{areaId}
+	</if>
+	<if test="dataAuth !=null and dataAuth !=''">
+		and  ${dataAuth}
+	</if>
+</select>
+
+	<!-- 审讯中 -->
+	<select id="countInterrogateRecord"  resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from ba_record where start_time is not null and end_time is null
+		<if test="areaId!=null and areaId!=''">
+			and area_id = #{areaId}
+		</if>
+		<if test="dataAuth !=null and dataAuth !=''">
+			and  ${dataAuth}
+		</if>
+	</select>
+
+	<!-- 看押中 -->
+	<select id="countWaitingRecord" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from ba_waiting_record where status = 0 and created_time &gt;= DATE_ADD(NOW(),INTERVAL -1 day) and  get_result is null
+		<if test="areaId!=null and areaId!=''">
+			and area_id = #{areaId}
+		</if>
+		<if test="dataAuth !=null and dataAuth !=''">
+			and  ${dataAuth}
+		</if>
+	</select>
+	<!--其他人-->
+	<select id="countOtherentrance" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(*) from
+		(select id from ba_serial s where type!=0 and in_time &gt;= DATE_ADD(NOW(),INTERVAL -1 day) and status
+		&lt; 11
+		<if test="areaId!=null and areaId!=''">
+			and area_id = #{areaId}
+		</if>
+		<if test="dataAuth !=null and dataAuth !=''">
+			and   ${dataAuth}
+		</if>
+		)a
+	</select>
+
+
+	<select id="countInterrogateSerial" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from ba_serial where type=0 and in_time &gt;= DATE_ADD(NOW(),INTERVAL -1 day)
+		and status &lt; 11
+		<if test="areaId!=null and areaId!=''">
+			and area_id = #{areaId}
+		</if>
+
+	</select>
+	<select id="countOtherStatus" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from ba_serial where type=0 and in_time &gt;= DATE_ADD(NOW(),INTERVAL -1 day)
+		and status IN  (1,2,5)
+		<if test="areaId!=null and areaId!=''">
+			and area_id = #{areaId}
+		</if>
+
+	</select>
+
+	<!-- 查询已存物品数量 -->
+	<select id="countSscw" resultType="java.lang.Integer" parameterType="java.util.Map">
+		SELECT
+		count(detail_count)
+		FROM
+		ba_belongings_detail bbd
+		left join ba_belongings bb on bb.id = bbd.belongings_id
+		WHERE
+		1=1
+		<if test="areaId!=null and areaId!=''">
+			and bb.area_id = #{areaId}
+		</if>
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+	</select>
+
+    <!-- 查询已移交物品数量 -->
+    <select id="countSsyj" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+        count(bbd.detail_count)
+        FROM
+        ba_belongings_temp bbt
+        LEFT JOIN ba_belongings bb ON bb.id = bbt.belong_id
+        LEFT JOIN ba_belongings_detail_temp bbd ON bbd.temp_id = bbt.id
+        WHERE
+        1 = 1
+        <if test="areaId!=null and areaId!=''">
+            and bb.area_id = #{areaId}
+        </if>
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+    </select>
+
+    <!-- 查询已接收物品数量 -->
+    <select id="countSsjs" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+        count(bbd.detail_count)
+        FROM
+        ba_belongings_temp bbt
+        LEFT JOIN ba_belongings bb ON bb.id = bbt.belong_id
+        LEFT JOIN ba_belongings_detail_temp bbd ON bbd.temp_id = bbt.id
+        WHERE
+        bbt.status = 1
+        <if test="areaId!=null and areaId!=''">
+            and area_id = #{areaId}
+        </if>
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+    </select>
+
+	<!-- 查询已拒绝物品数量 -->
+	<select id="countSsjj" resultType="java.lang.Integer" parameterType="java.util.Map">
+		SELECT
+		count(bbd.detail_count)
+		FROM
+		ba_belongings_temp bbt
+		LEFT JOIN ba_belongings bb ON bb.id = bbt.belong_id
+		LEFT JOIN ba_belongings_detail_temp bbd ON bbd.temp_id = bbt.id
+		WHERE
+		bbt.status = 2
+		<if test="areaId!=null and areaId!=''">
+			and area_id = #{areaId}
+		</if>
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+	</select>
+
+
+	<!-- 当前办案区柜门使用数量 -->
+	<select id="queryUsedCountBelongDetail" resultType="java.lang.Integer" parameterType="java.util.Map">
+		SELECT
+		count(bbt.is_get = 0),
+		bcc.area_id  areaId
+		FROM
+		ba_belongings_detail bbt
+		LEFT JOIN ba_belongings bb ON bb.id = bbt.belongings_id
+		LEFT JOIN ba_case bc ON bc.id = bb.case_id
+		LEFT JOIN ba_area ba on ba.id=bb.area_id
+		LEFT JOIN ba_cabinet_config bcc ON bcc.area_id = ba.id
+		WHERE
+		bbt.is_get = 0
+		<if test="areaId!=null and areaId!=''">
+			and bcc.area_id = #{areaId}
+		</if>
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+	</select>
+
+	<!-- 当前办案区所有柜门数量 -->
+	<select id="queryAllCountBelongDetail" resultType="java.lang.Integer" parameterType="java.util.Map">
+		SELECT
+		count(bcd.id),
+		bcc.area_id areaId
+
+		FROM
+		`ba_cabinet_config` bcc
+		LEFT JOIN ba_cabinet_config_detail bcd ON bcc.id = bcd.config_id
+		WHERE
+		1 = 1
+		<if test="areaId!=null and areaId!=''">
+			and bcc.area_id = #{areaId}
+		</if>
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+	</select>
+
+
+
+	<select id="countSscwTj" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT
+		sum(case when bbd.is_get!=3 then 1 else 0 end )count,xo.name
+		FROM
+		ba_belongings_detail bbd
+		LEFT JOIN ba_belongings bb ON bb.id = bbd.belongings_id
+		LEFT JOIN ba_area ba ON ba.id = bb.area_id
+		LEFT JOIN xt_organization xo on xo.id= ba.organization_id
+		where !ISNULL(ba.name)
+		GROUP BY ba.`name`
+	</select>
+	<select id="countTj" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT
+   (SELECT count(1) from ba_case) ajcount,(SELECT count(1) from ba_case where ajlx=1) xzcount,(SELECT count(1) from ba_case where ajlx=2) xscount,
+	count(DISTINCT bbd.id) wpcount,
+   count(DISTINCT bp.id) rycount
+   FROM
+	ba_belongings_detail bbd
+   LEFT JOIN ba_belongings bb ON bb.id = bbd.belongings_id
+   LEFT JOIN ba_area ba ON ba.id = bb.area_id
+   LEFT JOIN ba_person bp ON bp.id=bb.serial_id
+	</select>
+
+</mapper>
+
+

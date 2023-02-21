@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.archives.IDvdLogMapper">
+    <resultMap id="dvdLogResultMap" type="com.zhixin.zhfz.bacs.entity.DvdLogEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="receive_user" property="receiveUser" jdbcType="VARCHAR"/>
+        <result column="receive_time" property="receiveTime" jdbcType="TIMESTAMP"/>
+        <result column="case_id" property="caseId" jdbcType="INTEGER"/>
+        <result column="area_id" property="areaId" jdbcType="INTEGER"/>
+        <result column="register_user_id" property="registerUserId" jdbcType="INTEGER"/>
+        <result column="ajmc" property="ajmc" jdbcType="VARCHAR"/>
+        <result column="areaName" property="areaName" jdbcType="VARCHAR"/>
+        <result column="registerUserName" property="registerUserName" jdbcType="VARCHAR"/>
+        <result column="op_pid" property="opPid" jdbcType="VARCHAR"/>
+        <result column="op_user_id" property="opUserId" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="list" resultMap="dvdLogResultMap" parameterType="java.util.Map">
+        select l.*,c.ajmc,a.name areaName,u.real_name registerUserName
+        from ba_dvd_log l 
+        left join ba_area a on l.area_id=a.id
+        left join ba_case c on l.case_id=c.id
+        left join xt_user u on l.register_user_id=u.id
+        <where>
+            <if test="id != null and id != ''">
+                and l.id = #{id}
+            </if>
+            <if test="receiveUser != null and receiveUser != ''">
+                and l.receive_user like '%${receiveUser}%'
+            </if>
+            <if test="caseId != null and caseId != ''">
+                and l.case_id like '%${caseId}%'
+            </if>
+            <if test="areaId != null and areaId != ''">
+                and l.area_id = #{areaId}
+            </if>
+        </where>
+        <if test="pageStart != null and rows != null">
+            limit ${pageStart},${rows}
+        </if>
+    </select>
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+    	select count(1)
+        from ba_dvd_log l 
+        left join ba_area a on l.area_id=a.id
+        left join ba_case c on l.case_id=c.id
+        left join xt_user u on l.register_user_id=u.id
+        LEFT JOIN ba_person p on l.person_id = p.id
+        LEFT JOIN xt_user s on l.receive_user = s.login_name
+        <where>
+            <if test="dataAuth!=null and dataAuth!=''">
+                and #{dataAuth}
+            </if>
+            <if test="id != null and id != ''">
+                and l.id = #{id}
+            </if>
+            <if test="receiveUser != null and receiveUser != ''">
+                and l.receive_user = '${receiveUser}'
+            </if>
+            <if test="caseId != null and caseId != ''">
+                and l.case_id = '${caseId}'
+            </if>
+            <if test="areaId != null and areaId != ''">
+                and l.area_id = #{areaId}
+            </if>
+            <if test="personId != null and personId != ''">
+	            and l.person_id = #{personId}
+	       </if>
+        </where>
+    </select>
+    <insert id="insert" parameterType="com.zhixin.zhfz.bacs.entity.DvdLogEntity" keyProperty="id" useGeneratedKeys="true">
+        insert into ba_dvd_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="receiveUser != null">
+                receive_user,
+            </if>
+            receive_time,
+            <if test="caseId != null">
+                case_id,
+            </if>
+            <if test="areaId != null">
+                area_id,
+            </if>
+            <if test="registerUserId != null">
+                register_user_id,
+            </if>
+            <if test="personId != null">
+                person_id,
+            </if>
+            <if test="opPid != null">
+                op_pid,
+            </if>
+            <if test="opUserId != null">
+                op_user_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="receiveUser != null">
+                #{receiveUser,jdbcType=VARCHAR},
+            </if>
+            now(),
+            <if test="caseId != null">
+                #{caseId,jdbcType=INTEGER},
+            </if>
+            <if test="areaId != null">
+                #{areaId,jdbcType=INTEGER},
+            </if>
+            <if test="registerUserId != null">
+                #{registerUserId,jdbcType=INTEGER},
+            </if>
+            <if test="personId != null">
+                #{personId,jdbcType=INTEGER},
+            </if>
+            <if test="opPid != null">
+                #{opPid,jdbcType=VARCHAR},
+            </if>
+            <if test="opUserId != null">
+                #{opUserId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="listByAll" resultMap="dvdLogResultMap" parameterType="java.util.Map">
+        select l.*,p.name personName,c.ajmc,a.name areaName,u.real_name registerUserName
+        from ba_dvd_log l 
+        left join ba_area a on l.area_id=a.id
+        left join ba_case c on l.case_id=c.id
+        left join xt_user u on l.register_user_id=u.id
+        LEFT JOIN ba_person p on l.person_id = p.id     
+        <where>
+            <if test="dataAuth!=null and dataAuth!=''">
+                and #{dataAuth}
+            </if>
+            <if test="id != null and id != ''">
+                and l.id = #{id}
+            </if>
+            <if test="receiveUser != null and receiveUser != ''">
+                and l.receive_user = '${receiveUser}'
+            </if>
+            <if test="caseId != null and caseId != ''">
+                and l.case_id = '${caseId}'
+            </if>
+            <if test="areaId != null and areaId != ''">
+                and l.area_id = #{areaId}
+            </if>
+            <if test="personId != null and personId != ''">
+	            and l.person_id = #{personId}
+	       </if>
+        </where>
+        <if test="pageStart != null and rows != null">
+            limit ${pageStart},${rows}
+        </if>
+    </select>
+</mapper>

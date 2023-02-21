@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.common.dao.commonConfig.ICommonConfigDetailMapper">  
+
+    <resultMap id="commonConfigDetailResultMap" type="com.zhixin.zhfz.common.entity.CommonConfigDetailEntity">
+       <id property="id" column="id"/>
+       <result property="commonConfigId" column="common_config_id"/>
+       <result property="paramKey" column="param_key"/>
+       <result property="paramValue" column="param_value"/>
+       <result property="desc" column="desc"/>
+		<result column="op_pid" property="op_Pid" jdbcType="VARCHAR" />
+		<result column="op_user_id" property="op_User_Id" jdbcType="INTEGER" />
+    </resultMap>
+
+    <!-- id is same to interface'methmod -->
+    <select id="list" resultMap="commonConfigDetailResultMap" parameterType="java.util.Map">  
+        	select * from xt_common_config_detail a 
+        	<where>
+        		a.common_config_id = #{commonConfigId}
+				<if test="dataAuth!=null and dataAuth!=''">
+					and ${dataAuth}
+				</if>
+        		<if test="paramKey !=null and paramKey !=''">
+        		 and a.param_key like "%${paramKey}%"
+        		</if>
+        		<if test="paramValue !=null and paramValue !=''">
+        		 and a.param_value like "%${paramValue}%"
+        		</if>
+        		<if test="desc !=null and desc !=''">
+        		 and a.desc like "%${desc}%"
+        		</if>
+        	</where>
+    </select>
+     <select id="listDetailsByName" resultType="java.lang.String" parameterType="java.util.Map">
+        	select param_value from xt_common_config_detail
+        	 where common_config_id = 
+        	    (select id from xt_common_config where type = #{type}) and param_key=#{param_key}
+    </select>
+     <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">  
+        	select count(1) from xt_common_config_detail a 
+        	<where>
+        		 a.common_config_id =#{commonConfigId}
+        		<if test="paramKey !=null and paramKey !=''">
+        		 and a.param_key like "%${paramKey}%"
+        		</if>
+        		<if test="paramValue !=null and paramValue !=''">
+        		 and a.param_value like "%${paramValue}%"
+        		</if>
+        		<if test="desc !=null and desc !=''">
+        		 and a.desc like "%${desc}%"
+        		</if>
+        	</where>
+    </select>
+	<insert id="insert" parameterType="com.zhixin.zhfz.common.entity.CommonConfigDetailEntity">  
+            insert into xt_common_config_detail 
+            (common_config_id,param_key,param_value,`desc`,op_pid,op_user_id)
+             values(#{commonConfigId},#{paramKey},#{paramValue},#{desc},#{op_Pid},#{op_User_Id})
+    </insert>
+    
+    <delete id="delete" parameterType="int">  
+            delete from xt_common_config_detail where id=#{id}
+    </delete>
+     <delete id="deleteByConfigId" parameterType="int">  
+            delete from xt_common_config_detail where common_config_id=#{commonConfigId}
+    </delete>
+    <update id="update" parameterType="com.zhixin.zhfz.common.entity.CommonConfigDetailEntity">  
+           update xt_common_config_detail a 
+        		 set a.param_key=#{paramKey,jdbcType=VARCHAR},
+        		  a.param_value=#{paramValue,jdbcType=VARCHAR},
+        		  a.desc = #{desc,jdbcType=VARCHAR}
+            where a.id=#{id} 
+    </update>
+    <update id="updateByConfigIdAndKey" parameterType="com.zhixin.zhfz.common.entity.CommonConfigDetailEntity">  
+           update xt_common_config_detail  
+        		 set param_value=#{paramValue,jdbcType=VARCHAR}
+            where common_config_id=#{commonConfigId}  and param_key=#{paramKey}
+    </update>
+
+
+	<select id="queryDetailByType" resultMap="commonConfigDetailResultMap" parameterType="java.util.Map">
+		select * from xt_common_config_detail d where
+		EXISTS(select 1 from xt_common_config f where d.common_config_id = f.id and  f.is_enable=1 and f.type='办案场所GIS管理');
+
+	</select>
+</mapper>

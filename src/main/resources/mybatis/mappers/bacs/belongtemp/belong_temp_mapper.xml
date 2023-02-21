@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.belongtemp.IBelongTempMapper">
+    <resultMap id="BaseResultMap" type="BelongTempEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <id column="person_id" property="personId" />
+        <id column="belong_id" property="belongId" />
+        <id column="case_id" property="caseId" />
+        <id column="status" property="status" />
+        <result column="xm" property="xm" jdbcType="VARCHAR"/>
+        <result column="sfzh" property="sfzh" jdbcType="VARCHAR"/>
+        <result column="yjdw_id" property="yjdwId" jdbcType="VARCHAR"/>
+        <result column="jsdw_id" property="jsdwId" jdbcType="VARCHAR"/>
+        <result column="yjjg" property="yjjg" jdbcType="VARCHAR"/>
+        <result column="yjyj" property="yjyj" jdbcType="VARCHAR"/>
+        <result column="wp_uuid" property="wpUuid" jdbcType="VARCHAR"/>
+        <result column="yjdwName" property="yjdwName" jdbcType="VARCHAR"/>
+        <result column="jsdwName" property="jsdwName" jdbcType="VARCHAR"/>
+        <result column="ajmc" property="ajmc" jdbcType="VARCHAR"/>
+        <result column="ajbh" property="ajbh" jdbcType="VARCHAR"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="BelongingsPhotoResultMap"
+               type="com.zhixin.zhfz.bacs.entity.BelongingsPhotoTempEntity">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="temp_id" property="tempId" jdbcType="BIGINT"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="uuid" property="uuid" jdbcType="VARCHAR"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="selectPhotoByTempId" parameterType="java.lang.Integer" resultMap="BelongingsPhotoResultMap">
+        SELECT
+        p.*
+        FROM
+        ba_belongings_photo_temp p
+        LEFT JOIN ba_belongings_temp bb ON p.temp_id = bb.id
+        WHERE
+        p.temp_id = #{tempId}
+    </select>
+
+    <!-- 插入随身物品照片到临时表  -->
+    <insert id="insertBelongphotoTemp" parameterType="com.zhixin.zhfz.bacs.entity.BelongingsPhotoTempEntity"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ba_belongings_photo_temp (
+        temp_id,
+        url,
+        created_time
+        )
+        VALUES
+        (
+        #{tempId,jdbcType=INTEGER},
+        #{url,jdbcType=VARCHAR},
+        now()
+        )
+    </insert>
+
+    <select id="list" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT
+        bbt.*,xo.`name` yjdwName,xo1.`name` jsdwName,bc.ajmc,bc.ajbh
+        from ba_belongings_temp bbt
+        LEFT JOIN xt_organization xo ON xo.org_code= bbt.yjdw_id
+        LEFT JOIN xt_organization xo1 ON xo1.org_code= bbt.jsdw_id
+        LEFT JOIN ba_case bc ON bc.id= bbt.case_id
+        <where>
+            1=1
+            <if test="dataAuth!=null and dataAuth!=''">
+                and ${dataAuth}
+            </if>
+            <if test="orgCode!=null and orgCode!=''">
+                and (bbt.yjdw_id =#{orgCode} or bbt.jsdw_id =#{orgCode})
+            </if>
+            <if test="sfzh!=null and sfzh!=''">
+                and bbt.sfzh like '%${sfzh}%'
+            </if>
+            <if test="xm!=null and xm!=''">
+                and bbt.xm like '%${xm}%'
+            </if>
+            <if test="areaId!=null and areaId!=''">
+--                 and bbt.areaId = #{areaId}
+            </if>
+        </where>
+        limit ${pageStart},${rows}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+        count(1)
+        from ba_belongings_temp bbt
+        LEFT JOIN xt_organization xo ON xo.org_code= bbt.yjdw_id
+        LEFT JOIN xt_organization xo1 ON xo1.org_code= bbt.jsdw_id
+        LEFT JOIN ba_case bc ON bc.id= bbt.case_id
+        <where>
+            1=1
+            <if test="dataAuth!=null and dataAuth!=''">
+                and ${dataAuth}
+            </if>
+            <if test="sfzh!=null and sfzh!=''">
+                and bbt.sfzh like '%${sfzh}%'
+            </if>
+            <if test="orgCode!=null and orgCode!=''">
+                and (bbt.yjdw_id =#{orgCode} or bbt.jsdw_id =#{orgCode})
+            </if>
+            <if test="xm!=null and xm!=''">
+                and bbt.xm like '%${xm}%'
+            </if>
+            <if test="areaId!=null and areaId!=''">
+--                 and bbt.areaId = #{areaId}
+            </if>
+        </where>
+    </select>
+
+    <!-- 创建临时物品记录记录 -->
+    <insert id="saveBelong" parameterType="BelongTempEntity"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ba_belongings_temp
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            <if test="personId != null">
+                person_id,
+            </if>
+            <if test="caseId != null">
+                case_id,
+            </if>
+            <if test="belongId != null">
+                belong_id,
+            </if>
+            <if test="xm != null">
+                xm,
+            </if>
+            <if test="sfzh != null">
+                sfzh,
+            </if>
+            <if test="yjdwId != null">
+                yjdw_id,
+            </if>
+            <if test="jsdwId != null">
+                jsdw_id,
+            </if>
+            <if test="yjjg != null">
+                yjjg,
+            </if>
+            <if test="yjyj != null">
+                yjyj,
+            </if>
+            updated_time,
+            created_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="personId != null">
+                #{personId},
+            </if>
+            <if test="caseId != null">
+                #{caseId},
+            </if>
+            <if test="belongId != null">
+                #{belongId},
+            </if>
+            <if test="xm != null">
+                #{xm},
+            </if>
+            <if test="sfzh != null">
+                #{sfzh},
+            </if>
+            <if test="yjdwId != null">
+                #{yjdwId},
+            </if>
+            <if test="jsdwId != null">
+                #{jsdwId},
+            </if>
+            <if test="yjjg != null">
+                #{yjjg},
+            </if>
+            <if test="yjyj != null">
+                #{yjyj},
+            </if>
+            now(),
+            now()
+        </trim>
+    </insert>
+
+    <select id="getListBySfzh" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        *
+        from
+        ba_belongings_temp
+        where 1=1 and ISNULL(yjjg)
+        <if test="sfzh != null">
+            and sfzh=#{sfzh}
+        </if>
+        <if test="jsdwId != null">
+            and jsdw_id=#{jsdwId}
+        </if>
+        ORDER BY created_time DESC limit 1
+    </select>
+
+    <select id="getEntityById" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        bbd.*,bbdt.wp_uuid as wpUuid
+        from
+        ba_belongings_temp  bbd
+        LEFT JOIN  ba_belongings_detail_temp  bbdt ON  bbd.id=  bbdt.temp_id
+        where 1=1
+        <if test="id != null">
+            and bbd.id=#{id}
+        </if>
+        <if test="wpUuid != null">
+            and bbdt.wp_uuid=#{wpUuid}
+        </if>
+    </select>
+
+    <update id="updateTempYjyj" parameterType="BelongTempEntity" >
+        update ba_belongings_temp
+        <set >
+            <if test="yjjg != null" >
+                yjjg = #{yjjg},
+            </if>
+            <if test="yjyj != null" >
+                yjyj = #{yjyj},
+            </if>
+            <if test="status != null" >
+                status = #{status},
+            </if>
+            <if test="jsdwId != null" >
+                jsdw_id = #{jsdwId},
+            </if>
+            <if test="yjdwId != null" >
+                yjdw_id = #{yjdwId},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+
+
+</mapper>

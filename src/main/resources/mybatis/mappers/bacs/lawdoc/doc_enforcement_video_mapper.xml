@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.lawdoc.IDocEnforcementVideoMapper" >
+    <resultMap id="BaseResultMap" type="com.zhixin.zhfz.bacs.entity.DocEnforcementVideoEntity" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="serial_id" property="serialId" jdbcType="BIGINT" />
+        <result column="data_content" property="dataContent" jdbcType="VARCHAR" />
+        <result column="format" property="format" jdbcType="VARCHAR" />
+        <result column="evidtime" property="evidtime" jdbcType="VARCHAR" />
+        <result column="extraction_address" property="extractionAddress" jdbcType="VARCHAR" />
+        <result column="extraction_method" property="extractionMethod" jdbcType="VARCHAR" />
+        <result column="videosource" property="videosource" jdbcType="VARCHAR" />
+        <result column="original" property="original" jdbcType="VARCHAR" />
+        <result column="reason" property="reason" jdbcType="VARCHAR" />
+        <result column="originalplace" property="originalplace" jdbcType="VARCHAR" />
+        <result column="witness_person" property="witnessPerson" jdbcType="VARCHAR" />
+        <result column="producer" property="producer" jdbcType="VARCHAR" />
+        <result column="police_name" property="policeName" jdbcType="VARCHAR" />
+        <result column="unit" property="unit" jdbcType="VARCHAR" />
+    </resultMap>
+
+
+    <select id="getEnforcementVideo" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        SELECT
+            id,
+            serial_id,
+            data_content,
+            format,
+            evidtime,
+            extraction_address,
+            extraction_method,
+            videosource,
+            original,
+            reason,
+            originalplace,
+            witness_person,
+            producer,
+            police_name,
+            unit
+        FROM
+            ba_doc_enforcement_video
+        WHERE
+            serial_id = #{serialId,jdbcType=INTEGER}
+    </select>
+</mapper>

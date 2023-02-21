@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.bacs.dao.combine.CombineInfoMapper" >
+  <resultMap id="BaseResultMap" type="CombineInfoEntity" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="serial_id" property="serialId" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="person_id" property="personId" jdbcType="BIGINT" />
+    <result column="area_id" property="areaId" jdbcType="INTEGER" />
+    <result column="case_id" property="caseId" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, serial_id, status, person_id, area_id, case_id, content, send_time, updated_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from ba_combine_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from ba_combine_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="CombineInfoEntity" >
+    insert into ba_combine_info (id, serial_id, status, 
+      person_id, area_id, case_id, 
+      content, send_time, updated_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{serialId,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, 
+      #{personId,jdbcType=BIGINT}, #{areaId,jdbcType=INTEGER}, #{caseId,jdbcType=INTEGER}, 
+      #{content,jdbcType=VARCHAR}, #{sendTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="CombineInfoEntity" >
+    insert into ba_combine_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="serialId != null" >
+        serial_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="personId != null" >
+        person_id,
+      </if>
+      <if test="areaId != null" >
+        area_id,
+      </if>
+      <if test="caseId != null" >
+        case_id,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+        send_time,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="serialId != null" >
+        #{serialId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="personId != null" >
+        #{personId,jdbcType=BIGINT},
+      </if>
+      <if test="areaId != null" >
+        #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="caseId != null" >
+        #{caseId,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      now()
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="CombineInfoEntity" >
+    update ba_combine_info
+    <set >
+      <if test="serialId != null" >
+        serial_id = #{serialId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="personId != null" >
+        person_id = #{personId,jdbcType=BIGINT},
+      </if>
+      <if test="areaId != null" >
+        area_id = #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="caseId != null" >
+        case_id = #{caseId,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="sendTime != null" >
+        send_time = #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="CombineInfoEntity" >
+    update ba_combine_info
+    set serial_id = #{serialId,jdbcType=BIGINT},
+      status = #{status,jdbcType=INTEGER},
+      person_id = #{personId,jdbcType=BIGINT},
+      area_id = #{areaId,jdbcType=INTEGER},
+      case_id = #{caseId,jdbcType=INTEGER},
+      content = #{content,jdbcType=VARCHAR},
+      send_time = #{sendTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

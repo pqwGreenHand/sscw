@@ -1,0 +1,70 @@
+@charset "utf-8";
+/* CSS Document */
+/*share*/
+*{
+	margin:0;
+	padding:0;
+	font-family:"微软雅黑","黑体","宋体"; }
+ul,li{
+	list-style:none;}
+a{   blr:expression(this.onFocus=this.blur());/*IE*/
+    outline:none;/*火狐*/
+	color:#333;
+	text-decoration:none;}
+a:hover{
+	color:#010168;}
+.clear{
+	clear:both;
+	height:0;
+	overflow:hidden;}
+body{
+	color:#333;
+	font:12px Microsoft Yahei;
+	background:#fff; padding-bottom:10px;}	
+/*end				share*/
+.loginheader{ width:100%; height:90px; border-bottom:2px solid #ffffff;background:#010066;}
+.loginheader img{ position:absolute; left:100px; top:10px;}
+
+/*error_a开始*/
+#cont_box{ width:100%; height:600px; background:#fff;}
+.error_a{ width:814px; height:464px;margin: 0 auto; background:url(../image/error/error_c.png) bottom right no-repeat;}
+.error_a img{ margin-top:30px;}
+.error_a p{ font-size:30px; margin-left:180px;}
+.error_a span{ font-size:28px; margin-left:180px; color:#999;}
+
+
+.error_a input{width:150px;height:48px;border:none;background:url(../image/error/error_b.png); margin-top:50px; margin-left:190px; color:#fff; font-size:20px; cursor:pointer;}
+.error_a input.bc_out{width:150px;height:48px;border:none;background:url(../image/error/error_b.png);}
+.error_a input.bc_on{width:150px;height:48px;border:none;background:url(../image/error/error_bb.png);}
+
+
+/*error_b开始*/
+.error_b{ width:814px; height:464px;margin: 0 auto; background:url(../image/error/error_e.png) bottom right no-repeat;}
+.error_b img{ margin-top:30px;}
+.error_b p{ font-size:30px; margin-left:180px;}
+.error_b span{ font-size:28px; margin-left:180px; color:#999;}
+
+
+.error_b input{width:150px;height:48px;border:none;background:url(../image/error/error_b.png); margin-top:50px; margin-left:190px; color:#fff; font-size:20px; cursor:pointer;}
+.error_b input.bc_out{width:150px;height:48px;border:none;background:url(../image/error/error_b.png);}
+.error_b input.bc_on{width:150px;height:48px;border:none;background:url(../image/error/error_bb.png);}
+
+
+/*error_c开始*/
+.error_c{ width:814px; height:464px;margin: 0 auto;background: url(../image/error/error_g.png) bottom right no-repeat;}
+.error_c img{ margin-top:30px;}
+.error_c p{ font-size:30px; margin-left:180px;}
+.error_c span{ font-size:28px; margin-left:180px; color:#999;}
+
+
+.error_c input{width:150px;height:48px;border:none;background:url(../image/error/error_b.png); margin-top:50px; margin-left:190px; color:#fff; font-size:20px; cursor:pointer;}
+.error_c input.bc_out{width:150px;height:48px;border:none;background:url(../image/error/error_b.png);}
+.error_c input.bc_on{width:150px;height:48px;border:none;background:url(../image/error/error_bb.png);}
+
+
+
+
+
+
+
+.loginfooter{position:fixed;bottom:10px;width:100%;height:30px!important; min-height:30px; height:30px; padding-top:10px; padding-bottom:10px; text-align:center; background:none; color:#ffffff; border-top: 3px solid #010066; }

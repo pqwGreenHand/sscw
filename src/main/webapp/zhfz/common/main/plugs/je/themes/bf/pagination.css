@@ -1,0 +1,99 @@
+.pagination {
+  zoom: 1;
+  background-color: #092c54;
+}
+.pagination table {
+  float: left;
+  height: 30px;
+}
+.pagination td {
+  border: 0;
+}
+.pagination-btn-separator {
+  float: left;
+  height: 24px;
+  border-left: 1px solid #444;
+  border-right: 1px solid #777;
+  margin: 3px 1px;
+  display: none;
+}
+.pagination .pagination-num {
+  border-width: 1px;
+  border-style: solid;
+  margin: 0 10px;
+  padding: 2px;
+  width: 20px;
+  height: auto;
+  background-color: #091c3c;
+  color: #fff;
+  border-color: #046aa0;
+  text-align: center;
+}
+.pagination-page-list {
+  margin: 0px 6px;
+  padding: 1px 2px;
+  width: auto;
+  height: auto;
+  border-width: 1px;
+  border-style: solid;
+  background-color: #091c3c;
+  color: #fff;
+  border-color: #046aa0;
+}
+.pagination-info {
+  float: right;
+  margin: 0 6px 0 0;
+  padding: 0;
+  height: 30px;
+  line-height: 30px;
+  font-size: 14px;
+  color: #046ba7;
+}
+.pagination span {
+  font-size: 14px;
+  color: #65caff;
+}
+.pagination-link .l-btn-text {
+  width: 24px;
+  text-align: center;
+  margin: 0;
+}
+.pagination-first {
+  background: url('images/pagination_icons.png') no-repeat 0 center;
+}
+.pagination-prev {
+  background: url('images/pagination_icons.png') no-repeat -16px center;
+}
+.pagination-next {
+  background: url('images/pagination_icons.png') no-repeat -32px center;
+}
+.pagination-last {
+  background: url('images/pagination_icons.png') no-repeat -48px center;
+}
+.pagination-load {
+  background: url('images/pagination_icons.png') no-repeat -64px center;
+}
+.pagination-loading {
+  background: url('images/loading.gif') no-repeat center center;
+}
+.pagination-page-list,
+.pagination .pagination-num {
+  border-color: #046aa0;
+}
+.pagination .l-btn {
+  background-color: transparent;
+  border: none;
+}
+.pagination .l-btn:hover {
+  background-color: transparent;
+  border: none;
+  opacity: 0.7;
+  filter: alpha(opacity=70);
+}
+.pagination .l-btn-plain-disabled, .pagination .l-btn-plain-disabled:hover {
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+.pagination .l-btn-selected{
+  background: #046aa0;
+}

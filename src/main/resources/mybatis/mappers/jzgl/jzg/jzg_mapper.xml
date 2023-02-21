@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhixin.zhfz.jzgl.dao.jzg.IJzgMapper">
+	<resultMap id="JzgMapper" type="com.zhixin.zhfz.jzgl.entity.JzgEntity">
+		<id property="id" column="id" />
+		<result property="mc" column="mc" />
+		<result property="ms" column="ms" />
+		<result property="ip" column="ip" />
+		<result property="dk" column="dk" />
+		<result property="lx" column="lx" />
+		<result property="dlyh" column="dlyh" />
+		<result property="dlmm" column="dlmm" />
+		<result property="orgId" column="org_id" />
+		<result property="cjsj" column="cjsj" />
+		<result property="qyz" column="qyz" />
+		<result property="bmmc" column="bmmc" />
+		<result property="organization" column="organization" />
+		<result property="lxz" column="lxz" />
+		<result property="map" column="map" />
+		<result property="mapName" column="map_name" />
+	</resultMap>
+
+	<select id="queryAllJzgGmxx" resultMap="JzgMapper"
+		parameterType="java.util.Map">
+		<!-- no ";" at the end -->
+		SELECT jzg.*,bm.name organization,
+		(SELECT COUNT(id) FROM jz_jzg_lie jl
+		WHERE jl.jzg_id = jzg.id) COUNT,
+		(SELECT j.lx FROM jz_jzg_lie j WHERE
+		j.jzg_id = jzg.id AND j.lx != 5 AND (SELECT
+		COUNT(id) FROM jz_jzg_lie
+		j2 WHERE j2.jzg_id=jzg.id AND j2.lx !=5) = 1)
+		lielx
+		FROM jz_jzg jzg ,
+		xt_organization bm
+		<where>
+			jzg.org_id = bm.id
+			<if test="organizationId != null and organizationId != ''">
+				and jzg.bm_id = #{organizationId}
+			</if>
+			<if test="dataAuth!=null and dataAuth!=''">
+				and ${dataAuth}
+			</if>
+		</where>
+		ORDER BY jzg.id
+		DESC
+	</select>
+
+	<!-- countAllJzgGmxx -->
+	<select id="countAllJzgGmxx" resultType="int" parameterType="java.util.Map">
+		-- SELECT COUNT(1) FROM jzg
+		select count(*)
+		from jz_jzg jzg ,
+		xt_organization bm
+		<where>
+			jzg.org_id = bm.id
+			<if test="organizationId != null and organizationId != ''">
+				and jzg.org_id = #{organizationId}
+			</if>
+			<if test="dataAuth!=null and dataAuth!=''">
+				and ${dataAuth}
+			</if>
+		</where>
+	</select>
+
+	<select id="queryAllGm" resultMap="JzgMapper" parameterType="java.util.Map">
+		select * from jz_jzg
+		<where>
+			<if test="dataAuth!=null and dataAuth!=''">
+				and ${dataAuth}
+			</if>
+		</where>
+	</select>
+
+</mapper>
+
+

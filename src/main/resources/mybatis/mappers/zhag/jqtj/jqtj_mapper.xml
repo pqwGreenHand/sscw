@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhixin.zhfz.zhag.dao.jqtj.IJqtjMapper">
+
+    <!-- 查询多少天内接警处警折线图 -->
+	<select id="selectJCJByDay" resultType="com.zhixin.zhfz.zhag.entity.JqxxEntity" parameterType="java.util.Map">
+		SELECT * from ag_jqxx
+		where 1=1
+		<if test="day != '' and day != null">
+		and cjsj > DATE_ADD(NOW(), INTERVAL - ${day} DAY)
+		</if>
+	</select>
+
+	<!--警情处理统计结果查询-->
+	<select id="selectHandleResultByDay" resultType="com.zhixin.zhfz.zhag.entity.JqxxEntity" parameterType="java.util.Map">
+		SELECT cljg,COUNT(1) total FROM ag_jqxx
+		where 1=1
+		<if test="day != '' and day != null">
+			and cjsj > DATE_ADD(NOW(), INTERVAL - ${day} DAY)
+		</if>
+		GROUP BY cljg
+	</select>
+
+	<!--警情类别统计结果查询-->
+	<select id="quyJQTypeByDay" resultType="com.zhixin.zhfz.zhag.entity.JqxxEntity" parameterType="java.util.Map">
+		SELECT jqlb,COUNT(1) total FROM ag_jqxx
+		where 1=1
+		<if test="day != '' and day != null">
+			and cjsj > DATE_ADD(NOW(), INTERVAL - ${day} DAY)
+		</if>
+		GROUP BY jqlb
+	</select>
+
+	<!--接警方式统计结果查询-->
+	<select id="quyJJMethedByDay" resultType="com.zhixin.zhfz.zhag.entity.JqxxEntity" parameterType="java.util.Map">
+		SELECT jjfs,COUNT(1) total FROM ag_jqxx
+		where 1=1
+		<if test="day != '' and day != null">
+			and cjsj > DATE_ADD(NOW(), INTERVAL - ${day} DAY)
+		</if>
+		GROUP BY jjfs
+	</select>
+
+	<!--受理单位统计结果查询-->
+	<select id="quySLCompanyByDay" resultType="com.zhixin.zhfz.zhag.entity.JqxxEntity" parameterType="java.util.Map">
+		SELECT sldwmc,COUNT(1) total FROM ag_jqxx
+		where 1=1
+		<if test="day != '' and day != null">
+			and cjsj > DATE_ADD(NOW(), INTERVAL - ${day} DAY)
+		</if>
+		GROUP BY sldwmc
+	</select>
+
+	<!--总警情数查询-->
+	<select id="quyAllJQNumberByDay" resultType="com.zhixin.zhfz.zhag.entity.JqxxEntity" parameterType="java.util.Map">
+		SELECT COUNT(1) total FROM ag_jqxx
+		where 1=1
+		<if test="day != '' and day != null">
+			and cjsj > DATE_ADD(NOW(), INTERVAL - ${day} DAY)
+		</if>
+	</select>
+
+	<!--处警单位统计结果查询-->
+	<select id="quyCJCompanyByDay" resultType="com.zhixin.zhfz.zhag.entity.JqxxEntity" parameterType="java.util.Map">
+		SELECT cjdwmc,COUNT(1) total FROM ag_jqxx
+		where 1=1
+		<if test="day != '' and day != null">
+			and cjsj > DATE_ADD(NOW(), INTERVAL - ${day} DAY)
+		</if>
+		GROUP BY cjdwmc
+	</select>
+
+    <!-- 查询多少天内处理未处理折线图 -->
+    <select id="selectCLByDay" resultType="com.zhixin.zhfz.zhag.entity.JqxxEntity" parameterType="java.util.Map">
+        SELECT * from ag_jqxx
+        where 1=1
+        <if test="day != '' and day != null">
+            and cjsj > DATE_ADD(NOW(), INTERVAL - ${day} DAY)
+        </if>
+    </select>
+
+</mapper>

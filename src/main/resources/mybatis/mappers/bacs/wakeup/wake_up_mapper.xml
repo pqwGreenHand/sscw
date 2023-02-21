@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.zhixin.zhfz.bacs.dao.wakeup.IWakeUpMapper">
+
+    <resultMap id="resultMap" type="com.zhixin.zhfz.bacs.entity.WakeUpEntity">
+        <id property="id" column="id"/>
+        <result column="serial_id" property="serialId"/>
+        <result column="person_id" property="personId"/>
+        <result column="register_user_id" property="registerUserId"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="case_id" property="caseId"/>
+        <result column="area_id" property="areaId"/>
+        <result column="updated_time" property="updatedTime"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="in_description" property="inDescription"/>
+        <result column="out_description" property="outDescription"/>
+        <result column="r_real_name" property="registerUserName"/>
+        <result column="i_real_name" property="inUserName"/>
+        <result column="in_user_id" property="inUserId"/>
+        <result column="o_real_name" property="outUserName"/>
+        <result column="out_user_id" property="outUserId"/>
+        <result column="person_name" property="personName"/>
+        <result column="case_no" property="caseNo"/>
+        <result column="area_name" property="areaName"/>
+        <result column="detain_police_id" property="detainPoliceId"/>
+        <result column="detain_police_no" property="detainPoliceNo"/>
+        <result column="certificate_no" property="policeNo" jdbcType="VARCHAR" />
+        <result column="op_pid" property="opPid" jdbcType="VARCHAR" />
+        <result column="op_user_id" property="opUserId" jdbcType="INTEGER" />
+    </resultMap>
+
+    <select id="list" resultMap="resultMap" parameterType="java.util.Map">
+        SELECT
+            w.id,
+            w.serial_id,
+            w.person_id,
+            w.register_user_id,
+            w.in_user_id,
+            w.out_user_id,
+            w.case_id,
+            w.area_id,
+            w.detain_police_id,
+            w.created_time,
+            w.updated_time,
+            w.start_time,
+            w.end_time,
+            i.certificate_no,
+            w.in_description,
+            w.out_description,
+            p.`name` AS person_name,
+            c.ajbh AS case_no,
+            r.real_name AS r_real_name,
+            i.real_name AS i_real_name,
+            o.real_name AS o_real_name,
+            o.certificate_no AS detain_police_no,
+            a.`name` AS area_name
+        FROM
+            ba_wake_up AS w
+            LEFT JOIN ba_person AS p ON w.person_id = p.id
+            LEFT JOIN ba_case AS c ON w.case_id = c.id
+            LEFT JOIN xt_user AS r ON w.register_user_id = r.id
+            LEFT JOIN xt_user AS i ON w.in_user_id = i.id
+            LEFT JOIN xt_user AS o ON w.out_user_id = o.id
+            LEFT JOIN xt_user AS d ON w.detain_police_id = d.id
+            LEFT JOIN ba_area AS a ON w.area_id = a.id
+        <include refid="query_where"/>
+        ORDER BY r.created_time DESC
+		limit ${pageStart},${rows}
+    </select>
+
+
+     <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		 select count(w.id) from ba_wake_up w
+		 LEFT JOIN ba_person AS p ON w.person_id = p.id
+         LEFT JOIN ba_case AS c ON w.case_id = c.id
+         LEFT JOIN xt_user AS r ON w.register_user_id = r.id
+         LEFT JOIN xt_user AS i ON w.in_user_id = i.id
+         LEFT JOIN xt_user AS o ON w.out_user_id = o.id
+         LEFT JOIN xt_user AS d ON w.detain_police_id = d.id
+         LEFT JOIN ba_area AS a ON w.area_id = a.id
+         <include refid="query_where"/>
+    </select>
+    
+	<insert id="insert" parameterType="com.zhixin.zhfz.bacs.entity.WakeUpEntity">
+      INSERT INTO ba_wake_up
+        ( serial_id, person_id, in_user_id, register_user_id, case_id, area_id, in_description, created_time, start_time,register_time,detain_police_id ,op_pid,op_user_id)
+      VALUES
+	    (#{serialId},#{personId},#{inUserId},#{registerUserId},#{caseId},#{areaId},#{inDescription},now(),#{startTime},now(),#{detainPoliceId},#{opPid},#{opUserId})
+    </insert>
+    
+    <delete id="delete" parameterType="long">
+        delete from ba_wake_up where id=#{id}
+    </delete>
+
+    <update id="update" parameterType="com.zhixin.zhfz.bacs.entity.WakeUpEntity">
+        update ba_wake_up
+        <set>
+            updated_time = now(),
+            <if test="serialId != null and serialId != ''">serial_id = #{serialId},</if>
+            <if test="personId != null and personId != ''">person_id = #{personId},</if>
+            <if test="inUserId != null and inUserId != ''">`in_user_id` = #{inUserId},</if>
+            <if test="registerUserId != null and registerUserId != ''">register_user_id = #{registerUserId},</if>
+            <if test="caseId != null and caseId != ''">case_id = #{caseId}, </if>
+            <if test="inDescription != null and inDescription != ''">in_description = #{inDescription}, </if>
+            <if test="outDescription != null and outDescription != ''">out_description = #{outDescription}, </if>
+            <if test="areaId != null and areaId != ''">area_id = #{areaId}, </if>
+            <if test="outUserId != null and outUserId != ''">out_user_id = #{outUserId}, </if>
+            <if test="startTime != null">start_time = #{startTime}, </if>
+            <if test="endTime != null">end_time = #{endTime}, </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <sql id="query_where">
+        <where>
+            1=1
+            <if test="personId!=null and personId !=''">
+                and w.person_id = #{personId}
+            </if>
+            <if test="name!=null and name !=''">
+                and p.`name` LIKE '%${name}%'
+            </if>
+            <if test="areaId!=null and areaId !=''">
+                and w.area_id = #{areaId}
+            </if>
+            <if test="dataAuth!=null and dataAuth!=''">
+                and ${dataAuth}
+            </if>
+        </where>
+    </sql>
+</mapper>
