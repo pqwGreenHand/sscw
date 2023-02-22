@@ -102,7 +102,6 @@
                 <a href="#" class="easyui-menubutton theme-navigate-more-button"
                    data-options="menu:'#more',hasDownArrow:false"></a>
                 <div id="more" class="theme-navigate-more-panel">
-                    <div>修改资料</div>
                     <div onclick="modifyPassword()">修改密码</div>
                     <div onclick="logout()">注销</div>
                 </div>
@@ -324,6 +323,34 @@
 </div>
 <div id="dlg"></div>
 
+<div id="updatePw" style="display: none">
+    <form id="keyForm" >
+        <input type="hidden" id="id" name="id" />
+            <table style="margin: 0 auto; padding: 10px;width: 90%">
+                <tr>
+                    <td>旧&nbsp;&nbsp;&nbsp;&nbsp;密&nbsp;&nbsp;&nbsp;码：:</td>
+                    <td><input  id="oldPwd" name="oldPwd" type="password"  class="easyui-textbox" required="true" style="margin: -2px; width: 170px; height: 28px" ><font color="red">*</font>
+                    </td>
+                </tr>
+                <tr>
+                    <td>新&nbsp;&nbsp;&nbsp;密&nbsp;&nbsp;&nbsp;码</td>
+                    <td><input id="newPwd" name="newPwd" type="password" class="easyui-textbox" required="true" style="margin: -2px; width: 170px; height: 28px" ><font color="red">*</font>
+                    </td>
+                </tr>
+                <tr>
+                    <td>确认新密码</td>
+                    <td><input id="confirmPwd" name="confirmPwd" type="password" class="easyui-textbox" required="true" style="margin: -2px; width: 170px; height: 28px" ><font color="red">*</font>
+                    </td>
+                </tr>
+            </table>
+    </form>
+
+  <%--  <div id="changeps-buttons">
+        <a href="#" class="easyui-linkbutton" iconCls="icon-ok" name="noButton" onclick="updatePwdSave()">保存</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" name="noButton" onclick="closeUpdatePw();">关闭</a>
+    </div>--%>
+</div>
+
 <script>
     $(function () {
         // initMenuFun(2);
@@ -457,91 +484,66 @@
     }
 
     /**
-     * 修改用户资料
+     * 修改，密码
      * @param id
      */
-    function modifyUserInfo() {
-        var dialog = $("#dlg").dialog({
-            title: '修改资料',
-            width: 380,
-            height: 300,
-            href: '${ctx}/admin/user/edit/${user.id}',
-            maximizable: false,
-            modal: true,
-            buttons: [{
-                text: '确认',
-                iconCls: 'icon-ok',
-                handler: function () {
-                    var isValid = $("#form").form('validate');
-                    if (isValid) {
-                        U.post({
-                            url: "${ctx}/sys/user/update",
-                            loading: true,
-                            data: $('#form').serialize(),
-                            success: function (data) {
-                                if (data.code == 200) {
-                                    U.msg('修改成功，请重新登录！');
-                                    dialog.dialog('close');
-
-                                    setTimeout(function () {
-                                        window.location.href = '${ctx}/account/logout';
-                                    }, 2000);
-                                } else if (data.code == 400) {//参数验证失败
-                                    U.msg('参数验证失败');
-                                } else if (data.code == 404) {
-                                    U.msg('未找到该用户');
-                                } else {
-                                    U.msg('服务器异常');
-                                }
-                            }
-                        });
-                    }
-                }
-            }, {
-                text: '取消', iconCls: 'icon-cancel',
-                handler: function () {
-                    dialog.dialog('close');
-                }
-            }]
-        });
-    }
-
     function modifyPassword() {
-        var dialog = $("#dlg").dialog({
+        var dialog = $("#updatePw").dialog({
             title: '修改密码',
-            width: 380,
+            width: 480,
             height: 260,
-            href: '${ctx}/admin/user/${user.id}/modifypwd',
             maximizable: false,
+            // href: 'person/personadd.jsp',
             modal: true,
             buttons: [{
                 text: '确认',
                 iconCls: 'icon-ok',
                 handler: function () {
-                    var isValid = $("#form").form('validate');
+                    var isValid = $("#updatePw").form('validate');
                     if (isValid) {
-                        U.post({
-                            url: "${ctx}/sys/user/${user.id}/modifypwd",
-                            loading: true,
-                            data: {
-                                originalPassword: $('#originalPassword').val(),
-                                newPassword: $('#newPassword').val()
-                            },
-                            success: function (data) {
-                                if (data.code == 200) {
-                                    U.msg('修改成功，请重新登录！');
-                                    dialog.dialog('close');
+                        var entForm = $('#keyForm');
+                        var obj = entForm.serializeObject();
+                        if (!obj.oldPwd) {
+                            alert("请输入旧密码！");
+                            return;
+                        }
+                        if (obj.newPwd.length < 6) {
+                            alert("请输入6位及6位以上的新密码！");
+                            return;
+                        }
+                        if (obj.newPwd != obj.confirmPwd) {
+                            alert("输入的两次密码不一致！");
+                            return;
+                        }
+                        var enterpriseinfo = JSON.stringify(obj);
 
-                                    setTimeout(function () {
-                                        window.location.href = '${ctx}/account/logout';
-                                    }, 2000);
-                                } else if (data.code == 200003) {
-                                    U.msg('原密码错误');
-                                } else if (data.code == 404) {
-                                    U.msg('未找到该用户');
+                        jQuery.ajax({
+                            type: 'POST',
+                            contentType: 'application/json',
+                            url: '/zhfz/zhfz/common/user/changePsw.do',
+                            data: enterpriseinfo,
+                            dataType: 'json',
+                            success: function (data) {
+                                if (data.msg == '密码修改成功！') {
+                                    dialog.dialog('close');
+                                    $.messager.show({
+                                        title: '提示',
+                                        msg: data.msg,
+                                        timeout: 3000
+                                    });
+                                    parent.$.messager.confirm('提示', '您确定要退出系统重新登录吗？', function (data) {
+                                        if (data) {
+                                            window.location.href = '${ctx}/logout.do';
+                                        }
+                                    });
                                 } else {
-                                    U.msg('服务器异常');
+                                    U.msg(data.msg);
+                                    $.messager.progress('close');
                                 }
+                            },
+                            error: function (data) {
+                                $.messager.progress('close');
+                                U.msg('系统错误!' + data.Msg);
                             }
                         });
                     }

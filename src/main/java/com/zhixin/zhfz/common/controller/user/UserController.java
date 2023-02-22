@@ -260,14 +260,6 @@ public class UserController {
             if(form.getOldPwd().equals(ControllerTool.getUser(request).getPassword())){
                 userService.changePswByID(entity);
                 this.operLogService.insertLog(OperLogEntity.EDIT_TYPE, "修改用户密码" + entity, "system", true, "系统");
-                String url = "http://10.11.229.144:7000/TDITSUploaderForZhiXin/servlet/SynUser";
-                Map<String, String> param = new HashMap<>();
-                try {
-                    HttpClientUtil.get(url, "");
-                } catch (Exception e) {
-
-                }
-                logger.info("-------刷新权限------" +url+"-----------"+ param);
                 msg = "密码修改成功！";
             }else{
                 this.operLogService.insertLog(OperLogEntity.EDIT_TYPE, "修改用户密码" + entity, "system", false, "系统");
