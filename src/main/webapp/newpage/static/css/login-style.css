@@ -82,6 +82,7 @@ h2{font-weight:normal;}
     display: inline-block;
     line-height: 98px;
     padding-left: 110px;
+    font-weight: bold;
     position: relative;
 }
 .logo span:before {

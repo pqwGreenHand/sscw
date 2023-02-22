@@ -67,7 +67,7 @@
         <div class="theme-navigate">
             <div class="left">
                 <div class="logo">
-                    <span style="font-size: 35px;font-family: emoji;font-weight:600;color: white;">平谷分局涉案人员随身财物管理智能化系统</span>
+                    <span style="font-size: 35px;font-weight:bold;">平谷分局涉案人员随身财物管理智能化系统</span>
                 </div>
               <%--  <a href="#" class="easyui-linkbutton left-control-switch"><i class="fa fa-bars fa-lg"></i></a>
                --%> <%--<a href="#" class="easyui-menubutton theme-navigate-user-button"
