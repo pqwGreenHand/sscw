@@ -25,14 +25,50 @@
         /*.panel-body .accordion-body{*/
             /*height:fit-content !important;*/
         /*}*/
+        .logo {
+            display: block;
+            width: 1200px;
+            height: 98px;
+            z-index: 4;
+            margin: auto;
+            position: relative;
+            text-align: center;
+            margin-bottom: 30px;
+            margin-top: -10px;
+        }
+        .logo span {
+            color: #fff;
+            font-size: 44px;
+            color: #fff;
+            display: inline-block;
+            line-height: 98px;
+            padding-left: 110px;
+            position: relative;
+        }
+        .logo span:before {
+            content: '';
+            display: inline-block;
+            width: 90px;
+            height: 98px;
+            background-image: url(static/images/login-5.png);
+            position: absolute;
+            left: 0;
+            /* top: 0; */
+            bottom: 0;
+            margin: auto;
+        }
     </style>
 </head>
 
 <body>
 <div id="master-layout">
     <div data-options="region:'north',border:false,bodyCls:'theme-header-layout'">
+
         <div class="theme-navigate">
             <div class="left">
+                <div class="logo">
+                    <span style="font-size: 35px;font-family: emoji;font-weight:600;color: white;">平谷分局涉案人员随身财物管理智能化系统</span>
+                </div>
               <%--  <a href="#" class="easyui-linkbutton left-control-switch"><i class="fa fa-bars fa-lg"></i></a>
                --%> <%--<a href="#" class="easyui-menubutton theme-navigate-user-button"
                    data-options="menu:'.theme-navigate-user-panel'">${user.username}&lt;%&ndash;匿名&ndash;%&gt;</a>--%>
