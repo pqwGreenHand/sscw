@@ -146,6 +146,9 @@
 
     //校验输入的警号
     function checkUserIdedit(obj) {
+        if(obj==null){
+            return
+        }
         var userNo = obj;
         if (userNo.indexOf('(') >= 0) {
             userNo = userNo.substring(0, userNo.indexOf('('));
