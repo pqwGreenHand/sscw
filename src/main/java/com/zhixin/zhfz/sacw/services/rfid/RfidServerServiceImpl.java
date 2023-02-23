@@ -71,73 +71,7 @@ public class RfidServerServiceImpl implements IRfidServerService {
     @PostConstruct
     public void init() {
 
-        try {
-            Long warehouse =Long.parseLong(PropertyUtil.getContextProperty("warehouse.id").toString()) ;
-            SaPersonalConfigDetailEntity saPersonalConfigDetail = detailService.listDetailByCodeAndParam("rfid", "enable", warehouse);
 
-           int flag =Integer.parseInt(saPersonalConfigDetail.getParamValue()) ;
-            if (flag == 0) {
-                return;
-            }
-
-            server = new ServerSocket();
-        //    svrhost = PropertyUtil.getContextProperty("rfid.server.host").toString().trim();
-            svrhost =  detailService.listDetailByCodeAndParam("rfid", "server.host", warehouse).getParamValue();
-
-         //   svrport = Integer.parseInt(PropertyUtil.getContextProperty("rfid.server.port").toString().trim());
-            svrport =Integer.parseInt(detailService.listDetailByCodeAndParam("rfid", "server.port", warehouse).getParamValue());
-         //   intervalSecond = Integer.parseInt(PropertyUtil.getContextProperty("rfid.receiver.interval.second").toString().trim());
-            intervalSecond =Integer.parseInt(detailService.listDetailByCodeAndParam("rfid", "data.interval.second", warehouse).getParamValue());
-       //     repeatDataIntervalSecond = Integer.parseInt(PropertyUtil.getContextProperty("rfid.data.interval.second").toString().trim());
-         //   repeatDataAlarmIntervalSecond = Integer.parseInt(PropertyUtil.getContextProperty("rfid.data.alarm.interval.second").toString().trim());
-            repeatDataAlarmIntervalSecond =Integer.parseInt(detailService.listDetailByCodeAndParam("rfid", "data.alarm.interval.second", warehouse).getParamValue());
-            //加载出区告警的激活器编号-----------------------start
-         //   alarmList = PropertyUtil.getContextProperty("rfid.alarm.devices").toString().trim();
-            alarmList =detailService.listDetailByCodeAndParam("rfid", "alarm.devices", warehouse).getParamValue();
-            //---------------------------------------------------end
-
-            //---查询已激活的标签---------------start-----------
-            Map<String, Object> map = new HashMap<>();
-            map.put("status", 1);
-            map.put("warehouseId", PropertyUtil.getContextProperty("warehouse.id").toString());
-            //labelService=new LabelServiceImpl();
-            List<LabelEntity> labelEntities = labelService.listLabelByStatus(map);
-            if (labelEntities != null && labelEntities.size() > 0) {
-                for (LabelEntity labelEntity : labelEntities) {
-                    if (!activeLabelMap.containsKey(labelEntity.getLabelNo())) {
-                        activeLabelMap.put(Integer.parseInt(labelEntity.getLabelNo()), labelEntity);
-                        //System.out.println(labelEntity);
-                    }
-                }
-            } else {
-                activeLabelMap = new HashMap<>();
-            }
-            //---查询已激活的标签---------------end-----------
-
-            //---查询定位基站的信息---------------start-----------
-            Map<String, Object> mapDevice = new HashMap<>();
-            mapDevice.put("pageStart", 0);
-            mapDevice.put("rows", 100000);
-            mapDevice.put("warehouseId", PropertyUtil.getContextProperty("warehouse.id").toString());
-            //labelService=new LabelServiceImpl();
-            List<SaPositionDeviceEntity> positionDeviceEntities = positionDeviceService.list(mapDevice);
-            if (positionDeviceEntities != null && positionDeviceEntities.size() > 0) {
-                for (SaPositionDeviceEntity positionDeviceEntity : positionDeviceEntities) {
-                    if (!positionDeviceMap.containsKey(positionDeviceEntity.getDeviceNo())) {
-                        positionDeviceMap.put(positionDeviceEntity.getDeviceNo(), positionDeviceEntity);
-                    }
-                }
-            }
-            //---查询已激活的标签---------------end-----------
-
-            server.bind(new InetSocketAddress(svrhost, svrport));
-            //server.bind(new InetSocketAddress(svrport));
-            new Accepter().start();
-            logger.info("Server is running!");
-        } catch (Exception e) {
-            logger.info("new RfidSocketServerService exception!");
-            e.printStackTrace();
-        }
     }
 
     private class Accepter extends Thread {

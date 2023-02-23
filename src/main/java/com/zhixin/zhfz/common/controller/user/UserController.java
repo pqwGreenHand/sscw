@@ -49,7 +49,7 @@ public class UserController {
         Collection<UserEntity> users = new ArrayList<UserEntity>();
         int count = 0;
         boolean flag = true;
-
+//
         Map<String, Object> map = ControllerTool.mapFilter(params);
         SessionInfo sessionInfo = ControllerTool.getSessionInfo(request);
 
@@ -61,14 +61,15 @@ public class UserController {
             map.put("dataAuth","u.op_pid like " + sessionInfo.getSuperAndSubOrgPid());
         } else if (RoleEntity.DATA_AUTH_SELFORG == (ControllerTool.getRoleDataAuthForXtConf(request))) {
             // 本部门
-            map.put("dataAuth","u.op_pid = " + sessionInfo.getCurrentOrgPid());
+            map.put("dataAuth","u.organization_id = " + sessionInfo.getUser().getOrganizationId());
         } else if(RoleEntity.DATA_AUTH_FULL == (ControllerTool.getRoleDataAuthForXtConf(request))){
             //全部
         }else if(RoleEntity.DATA_AUTH_SELF == (ControllerTool.getRoleDataAuthForXtConf(request))){
             //本人
-        	String sql = " (u.op_user_id = " + ControllerTool.getUserID(request)
+        	/*String sql = " (u.op_user_id = " + ControllerTool.getUserID(request)
         	+" or u.id="+ControllerTool.getUserID(request)+")";
-            map.put("dataAuth",sql);
+            map.put("dataAuth",sql);*/
+            map.put("dataAuth","u.organization_id = " + sessionInfo.getUser().getOrganizationId());
         }else{
             flag = false;
         }

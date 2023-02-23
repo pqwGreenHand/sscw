@@ -218,7 +218,7 @@
             title: '选择嫌疑人',
             width: 1200,
             height: 550,
-            href: 'person.jsp',
+            href: 'user.jsp',
             maximizable: false,
             modal: true,
             buttons: [{

@@ -140,8 +140,8 @@ i, cite, em, var, address, dfn {/*斜体*/
 	.theme-navigate .left{ float:left;}
 	.theme-navigate .right{ float:right; padding:0 20px 0 0;}
 	.theme-navigate .l-btn-text{ color:#c3c3c3; margin: 3px 5px;}
-	.theme-navigate .l-btn,.theme-navigate .l-btn:hover{ padding:3px 8px;border:none;background:none;}
-	.theme-navigate .l-btn:hover,.theme-navigate .m-btn-plain-active{ background:#2d2d2d;}
+	.theme-navigate .l-btn,.theme-navigate .l-btn:hover{ padding:35px 8px;border:none;background:none;}
+	.theme-navigate .l-btn:hover,.theme-navigate .m-btn-plain-active{ background: #2380b7;}
 	/*头部菜单按钮全局样式,根据需要删减*/
 
 	/*头部用户信息,根据需要删减*/
@@ -174,7 +174,7 @@ i, cite, em, var, address, dfn {/*斜体*/
 	/*头部用户信息,根据需要删减*/
 
 	/*头部更多菜单,根据需要删减*/
-	.theme-navigate-more-button .l-btn-text{ background:url(images/navigate_more.png) center center no-repeat;}
+	.theme-navigate-more-button .l-btn-text{ background:url(images/navigate_more.png) center center no-repeat;background-size: 100%;}
 	.theme-navigate-menu-panel.menu,.theme-navigate-user-panel.menu,.theme-navigate-more-panel.menu{
 		-moz-border-radius: 0 0 3px 3px;
 		-webkit-border-radius: 0 0 3px 3px;

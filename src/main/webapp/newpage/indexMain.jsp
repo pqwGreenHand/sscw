@@ -210,7 +210,7 @@
                             <div title="民警管理">
                                 <ul class="easyui-datalist"
                                     data-options="border:false, onClickRow:function(index,row){ztab.open(row.text,row.value)}">
-                                    <li value="${ctx}/newpage/dzda/dzda.jsp">民警管理</li>
+                                    <li value="${ctx}/newpage/user/user.jsp">民警管理</li>
                                 </ul>
                             </div>
                         <%--
