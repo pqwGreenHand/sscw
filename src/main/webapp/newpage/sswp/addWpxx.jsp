@@ -9,7 +9,7 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta content="always" name="referrer">
-    <title>案件管理</title>
+    <title>添加物品</title>
     <%@ include file="../common.jsp" %>
     <%--<script type="text/javascript" src="ajxx.js"></script>--%>
 
@@ -26,13 +26,16 @@
             <table style="margin: 0 auto; padding: 10px;width: 100%">
                 <tr>
                     <td>选择嫌疑人:</td>
-                    <td><a href="javascript:void(0)" class="easyui-menubutton  button-line-blue"
+                    <td><a href="javascript:void(0)" onclick="selectPerson()" class="easyui-menubutton  button-line-blue"
+                           data-options="iconCls:'icon-search'">高级查询</a>
+                    </td>
+                    <%--<td><a href="javascript:void(0)" class="easyui-menubutton  button-line-blue"
                            data-options="menu:'#mm',iconCls:'icon-search'">高级查询</a>
                         <div id="mm" style="width:150px;">
                             <div onclick="selectPerson()">本系统人员</div>
                             <div onclick="selectZfbaPerson()">市局平台人员</div>
                         </div>
-                    </td>
+                    </td>--%>
                     <td>嫌疑人姓名:</td>
                     <td><input id="personName" name="personName" class="easyui-textbox" data-options="required:true"/>
                     </td>
@@ -218,7 +221,7 @@
             title: '选择嫌疑人',
             width: 1200,
             height: 550,
-            href: 'user.jsp',
+            href: 'person.jsp',
             maximizable: false,
             modal: true,
             buttons: [{

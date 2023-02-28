@@ -55,6 +55,22 @@ var ztab = {
                 }
             }
         },
+        closeByTitle: function (title) {
+            var titles = new Array();
+            var tabs = $(ztab.tabs).tabs('tabs');
+            var len = tabs.length;
+            if (len > 0) {
+                for (var j = 1; j < len; j++) {
+                    var a = tabs[j].panel('options').title;
+                    titles.push(a);
+                }
+                for (var i = 0; i < titles.length; i++) {
+                    if(titles[i]==title){
+                        $(ztab.tabs).tabs('close', titles[i]);
+                    }
+                }
+            }
+        },
         refresh: function (title) {
             var tab = $(ztab.tabs).tabs('getTab', title);
             // var content = '<iframe scrolling="auto" frameborder="0"  src="' + url + '" style="width:100%;height:100%;"></iframe>';

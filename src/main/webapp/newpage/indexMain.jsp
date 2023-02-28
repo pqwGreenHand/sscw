@@ -204,7 +204,7 @@
                             <div title="物品明细">
                                 <ul class="easyui-datalist"
                                     data-options="border:false, onClickRow:function(index,row){ztab.open(row.text,row.value)}">
-                                    <li value="${ctx}/newpage/dashboard.jsp">物品明细</li>
+                                    <li value="${ctx}/newpage/sswpmx/sswpdetail.jsp">物品明细</li>
                                 </ul>
                             </div>
                             <div title="民警管理">
