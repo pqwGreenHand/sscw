@@ -1,18 +1,10 @@
-var tempId = null;
-var flag = 0;
-var jzAjlyCode = 0;
-var caseAjlyCode = 1;
-var orderRequestDataId = "";
-var personUrl = "";
-var sfaj = "";
-
 var datagridPerson;
 var dialog;
 $(function () {
     loadSexSearch();
     datagridPerson = $('#dg').datagrid({
         method: "get",
-        url: '/zhfz/zhfz/common/user/getUsersInfo.do',
+        url: '/zhfz/zhfz/bacs/belong/listAllBelong.do',
         fit: true,
         fitColumns: true,
         border: true,
@@ -30,18 +22,128 @@ $(function () {
         columns: [[
             {field: 'ck', checkbox: true},
             {field: 'id', title: 'id', hidden: true},
-            {field: 'loginName', title: '登录名', width: 150},
-            {field: 'realName', title: '真实姓名', width: 150},
-            {field: 'jobTitle', title: '职务', width: 150},
-            {field: 'certificateNo', title: '证件号码', width: 150},
-            {field: 'organizationName', title: '单位名称', width: 150},
-            {field: 'mobile', title: '手机号码', width: 150},
+            {
+                field: 'personname', title: '嫌疑人', width: 20,
+                formatter: function (value, row, index) {
+                    return "<font>" + value + "</font>";
+                }
+            }, {
+                field: 'certificateNo', title: '身份证号', width: 50,
+                formatter: function (value, row, index) {
+                    return "<font>" + value + "</font>";
+                }
+            },
+            {
+                field: 'lockerId', title: '储物柜编号', width: 60,
+                formatter: function (field, rec, index) {
+                    return rec.cabinetGroup + " " + rec.cabinetNo + "号柜";
+                }
+            },
+            {
+                field: 'isGet', title: '是否已领取', width: 30,
+                formatter: function (value, rec) {
+                    if ('true' == value || "1" == value) {
+                        return '<font color="green">已领取</font>';
+                    } else if ("0" == value) {
+                        return '未领取';
+                    }
+                }
+            },
+            {field: 'areaName', title: '办案单位', width: 50},
+            {
+                field: 'operate', title: '操作', width: 45,
+                formatter: function (value, row, index) {
+                    var d = "<a onclick='remove(" + row.id + ")' class='button-delete button-red'>删除</a>";
+                    var e = "<a onclick='edit(" + row.id + ")' class='button-edit button-blue'>照片</a>";
+                    return e + '  ' + d;
+                }
+            }
+        ]],
+        onLoadSuccess: function (data) {
+            $('.button-delete').linkbutton({});
+            $('.button-edit').linkbutton({});
+
+            if (data) {
+                $.each(data.rows,
+                    function (index, item) {
+                        if (item.checked) {
+                            $('#dg').datagrid('checkRow', index);
+                        }
+                    });
+            }
+        },
+        onSelect: function (index, row) {
+            //行选择方法，进行条件触发
+            detailgridLoad(row);
+        }
+    });
+
+    datagridPerson = $('#dgdetail').datagrid({
+        method: "get",
+        url: '/zhfz/zhfz/bacs/belong/listAllBelongdet.do',
+        fit: true,
+        fitColumns: true,
+        border: true,
+        idField: 'id',
+        striped: true,
+        pagination: true,
+        rownumbers: true,
+        pageNumber: 1,
+        pageSize: 15,
+        pageList: [15, 20, 30, 50, 100],
+        singleSelect: true,
+        selectOnCheck: true,
+        checkOnSelect: true,
+        queryParams: {'enpId': '-99', 'trefresh': new Date().getTime()},
+        // toolbar: '#tb',
+        columns: [[
+            {field: 'ck', checkbox: true},
+            {field: 'id', title: 'id', hidden: true},
+            {field: 'name', title: '名称', width: 70},
+            {field: 'detailCount', title: '数量', width: 30,},
+            {field: 'unit', title: '单位', width: 40},
+            {
+                field: 'isGet', title: '是否已领取', width: 50,
+                formatter: function (value, rec) {
+                    if ('true' == value || "1" == value) {
+                        return '已领取';
+                    } else if ("0" == value) {
+                        return '未领取';
+                    }
+                }
+            },
+            {
+                field: 'getWay', title: '领取方式', width: 60,
+                formatter: function (value, rec) {
+                    if ('true' == value || "1" == value) {
+                        return '本人领取';
+                    } else if ("0" == value) {
+                        return '未领取';
+                    } else if ("2" == value) {
+                        return '委托他人代为领取';
+                    } else if ("3" == value) {
+                        return '本人收到扣押物品清单';
+                    } else if ("4" == value) {
+                        return '转涉案财物';
+                    } else if ("5" == value) {
+                        return '移交';
+                    }
+                }
+            },
+            {field: 'getPerson', title: '领取人', width: 50},
+            {
+                field: 'getTime', title: '领取时间', width: 80,
+                formatter: function (value, rec) {
+                    return valueToDate(value);
+                }
+            },
+            {field: 'saveMethod', title: '保管措施', width: 50},
+            {field: 'description', title: '特征', width: 100},
             {
                 field: 'operate', title: '操作', width: 120,
                 formatter: function (value, row, index) {
-                    var d = "<a onclick='remove(" + row.id + ")' class='button-delete button-red'>删除</a>";
-                    var e = "<a onclick='edit(" + row.id + ")' class='button-edit button-blue'>编辑</a>";
-                    return e + '  ' + d;
+                    var e = "<a onclick='queryGjWpxx(" + row.id+ ")' class='button-edit button-blue'>轨迹时间轴</a>";
+                    return e;
                 }
             }
         ]],
@@ -66,26 +168,45 @@ $(function () {
 //                    $('#btn-edit').show();
                 $('#btn-delete').show();
             }
-        },
-        queryParams: {
-            username: $('#username').val(),
-            mobile: $('#mobile').val(),
-            gender: $('#gender').val()
         }
+
     });
 });
 
+function  queryGjWpxx(id){
+    dialog = $("#dlg").dialog({
+        title: '轨迹时间轴',
+        width: 1100,
+        height: 350,
+        href: 'wpsjz.jsp?id='+id,
+        maximizable: false,
+        modal: true,
+        buttons: [{
+            text: '关闭', iconCls: 'icon-cancel',
+            handler: function () {
+                dialog.dialog('close');
+            }
+        }]
+    });
+}
+
+//选中触发刷新
+function detailgridLoad(rowData)
+{
+    $('#dgdetail').datagrid('load',{enpId:rowData.id,trefresh:new Date().getTime()});
+}
+
 function queryUsers() {
     $(datagridPerson).datagrid('load', {
-            real_name_t: $('#s_real_name').textbox('getValue'),
-            certificate_no_t: $('#s_certificate_no').textbox('getValue'),
+            name: $('#name').textbox('getValue'),
+            certificateNo: $('#certificate_no').textbox('getValue'),
         }
     );
 }
 
 function clearSearch() {
-    $('#s_certificate_no').textbox('setValue', '');
-    $('#s_real_name').textbox('setValue', '');
+    $('#name').textbox('setValue', '');
+    $('#certificate_no').textbox('setValue', '');
 }
 
 function loadSexSearch() {

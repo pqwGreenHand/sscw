@@ -48,6 +48,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -104,6 +105,91 @@ public class BelongController {
     @Resource
     private IZfbaService zfbaService;
 
+
+    /**
+     * 轨迹时间轴
+     *
+     * @param map
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/getSjz")
+    @ResponseBody
+    public Map<String, Object> getSjz(@RequestParam Map<String, Object> map, HttpServletRequest request,
+                                      HttpServletResponse response) throws Exception {
+        String id = request.getParameter("id");
+        BelongEntity belongdetById = belongService.getBelongdetById(Integer.valueOf(id));
+        Map<String, Object> result = new HashMap<String, Object>();
+        List<Map> list = new ArrayList<Map>();
+        if (belongdetById == null) {
+            result.put("result", list);
+            return result;
+        }
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (belongdetById.getCreatedTime() != null) {
+            Map smap = new HashMap();
+            smap.put("startTime", format.format(belongdetById.getCreatedTime()));
+            smap.put("url", "");
+            smap.put("name", "存物");
+            list.add(smap);
+        }
+        if (belongdetById.getGetTime() != null) {
+            Map smap = new HashMap();
+            smap.put("startTime", format.format(belongdetById.getGetTime()));
+            smap.put("url", "");
+            String value = belongdetById.getGetWay();
+            String name = "取物";
+            if ("1".equals(value) ) {
+                name = "本人领取";
+            } else if ("0".equals(value) ) {
+                name = "未领取";
+            } else if ("2".equals(value) ) {
+                name = "委托他人代为领取";
+            } else if ("3".equals(value) ) {
+                name = "本人收到扣押物品清单";
+            } else if ("4".equals(value) ) {
+                name = "转涉案财物";
+            } else if ("5".equals(value) ) {
+                name = "移交";
+            }
+            smap.put("name", "取物__"+name);
+            list.add(smap);
+        }
+        ListSorts(list);
+        result.put("result", list);
+        return result;
+    }
+
+    private static void ListSorts(List<Map> list) {
+        final SimpleDateFormat sdfs = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        // 按照进入时间
+        Collections.sort(list, new Comparator<Map>() {
+            @Override
+            public int compare(Map u1, Map u2) {
+                String D1 = u1.get("startTime").toString();
+                String D2 = u2.get("startTime").toString();
+                Date u1s = new Date();
+                Date u2s = new Date();
+                try {
+                    u1s = sdfs.parse(D1);
+                    u2s = sdfs.parse(D2);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if ((u1s).compareTo(u2s) > 0) {
+                    return 1;
+                }
+                if ((u1s).compareTo(u2s) == 0) {
+                    return 0;
+                }
+                return -1;
+            }
+        });
+    }
+
     /**
      * 查询物品信息
      *
@@ -150,7 +236,7 @@ public class BelongController {
 
         try {
             PersonEntity personEntity = personService.getPersonById(tempEntity.get(0).getPersonId());
-            if(ControllerTool.getCurrentAreaID(request)!=personEntity.getAreaId()){
+            if (ControllerTool.getCurrentAreaID(request) != personEntity.getAreaId()) {
                 personEntity.setId(null);
                 personEntity.setAreaId(ControllerTool.getCurrentAreaID(request));
                 personService.insert(personEntity);
@@ -255,7 +341,7 @@ public class BelongController {
 //                    }
 //                }
             }
-            return new MessageEntity().addCode(1).addIsError(false).addTitle("通知").addContent(personEntity.getId()+"");
+            return new MessageEntity().addCode(1).addIsError(false).addTitle("通知").addContent(personEntity.getId() + "");
         } catch (Exception e) {
             logger.info("" + e);
             return new MessageEntity().addCode(1).addIsError(true).addTitle("错误").addContent("添加失败!");
@@ -709,10 +795,10 @@ public class BelongController {
             if (result == 0) {// 判断柜子是否被占用，返回提示
                 return new MessageEntity().addCode(1).addIsError(true).addTitle("失败").addContent("该柜已被占用,请选择其他柜!");
             }
-            this.operLogService.insertLog(OperLogEntity.INSERT_TYPE, "新增随身物品(存柜)" , ControllerTool.getLoginName(request), true, "办案场所");
+            this.operLogService.insertLog(OperLogEntity.INSERT_TYPE, "新增随身物品(存柜)", ControllerTool.getLoginName(request), true, "办案场所");
         } catch (Exception e) {
             logger.info("" + e);
-            this.operLogService.insertLog(OperLogEntity.INSERT_TYPE, "新增随身物品(存柜)" , ControllerTool.getLoginName(request), false, "办案场所");
+            this.operLogService.insertLog(OperLogEntity.INSERT_TYPE, "新增随身物品(存柜)", ControllerTool.getLoginName(request), false, "办案场所");
             return new MessageEntity().addCode(1).addIsError(true).addTitle("错误").addContent("添加失败!");
         }
         return new MessageEntity().addCode(1).addIsError(false).addTitle("通知").addContent("添加成功!").addCallbackData(form.getSerialId());

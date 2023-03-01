@@ -296,51 +296,10 @@
         b.locker_id,
         b.is_get,
         pn.`name` personname,
+        pn.certificate_no,
         cf.`name` cabinet_group,
         dl.open_key cabinet_no,
-        ia.`name` area_name,
-        REPLACE (
-        REPLACE (
-        bp.url,
-        '{startTime}',
-        DATE_FORMAT(
-        DATE_ADD(
-        b.created_time,
-        INTERVAL - 2 MINUTE
-        ),
-        '%Y%m%dT%H%i%s'
-        )
-        ),
-        '{endTime}',
-        DATE_FORMAT(
-        DATE_ADD(
-        b.created_time,
-        INTERVAL 2 MINUTE
-        ),
-        '%Y%m%dT%H%i%s'
-        )
-        ) AS cwurl,
-        REPLACE (
-        REPLACE (
-        bp.url,
-        '{startTime}',
-        DATE_FORMAT(
-        DATE_ADD(
-        bbd.get_time,
-        INTERVAL - 2 MINUTE
-        ),
-        '%Y%m%dT%H%i%s'
-        )
-        ),
-        '{endTime}',
-        DATE_FORMAT(
-        DATE_ADD(
-        bbd.get_time,
-        INTERVAL 2 MINUTE
-        ),
-        '%Y%m%dT%H%i%s'
-        )
-        ) AS qwurl
+        ia.`name` area_name
         FROM
         ba_belongings b
         LEFT JOIN ba_belongings_detail bbd ON b.id = bbd.belongings_id
@@ -349,7 +308,6 @@
         LEFT JOIN ba_cabinet_config cf ON cf.id = dl.config_id
         LEFT JOIN ba_area ia ON b.area_id = ia.id
         LEFT JOIN ba_case ba ON ba.id = b.case_id
-        LEFT JOIN belong_sp_url bp ON bp.area_id = ia.id
         where 1=1
         <if test="dataAuth!=null and dataAuth!=''">
             and ${dataAuth}
@@ -359,6 +317,9 @@
         </if>
         <if test="name!=null and name!=''">
             and pn.`name` like '%${name}%'
+        </if>
+        <if test="certificateNo!=null and certificateNo!=''">
+            and pn.certificate_no like '%${certificateNo}%'
         </if>
         <if test="start_date!=null and start_date!=''">
             and b.created_time &gt;=#{start_date}
@@ -370,8 +331,9 @@
             and b.area_id = #{areaId}
         </if>
         <if test="flag == 'Belong'">
---             and cf.type = 1
+            and cf.type = 1
         </if>
+        GROUP BY b.id
         order by b.id desc
         limit ${pageStart},${rows}
     </select>
@@ -506,6 +468,9 @@
         </if>
         <if test="name!=null and name!=''">
             and pn.`name` like '%${name}%'
+        </if>
+        <if test="certificateNo!=null and certificateNo!=''">
+            and pn.certificate_no like '%${certificateNo}%'
         </if>
         <if test="start_date!=null and start_date!=''">
             and b.created_time &gt;=#{start_date}

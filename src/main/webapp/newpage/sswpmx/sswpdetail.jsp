@@ -19,8 +19,8 @@
 <body>
 <div class="easyui-layout" data-options="fit:true,border:false,minWidth:560">
     <div data-options="region:'north',border:false" style="padding: 10px 5px;">
-        <input id="s_real_name" class="easyui-textbox" data-options="label:'姓名'" style="width:150px;"/>
-        <input id="s_certificate_no" class="easyui-textbox" data-options="label:'证件号码'" style="width:220px;"/>
+        <input id="name" class="easyui-textbox" data-options="label:'姓名'" style="width:150px;"/>
+        <input id="certificate_no" class="easyui-textbox" data-options="label:'证件号码'" style="width:220px;"/>
         <a href="javascript:void(0)" onclick="queryUsers()" class="easyui-linkbutton button-line-blue"
            style="width: 70px;margin-left: 10px;">查&nbsp;询</a>
         <a href="javascript:void(0)" onclick="clearSearch()" class="easyui-linkbutton button-line-red"
@@ -30,24 +30,15 @@
            plain="true">添加</a>
     </div>
 
-    <div data-options="region:'center',border:false" style="height:100%">
-        <table id="dg" style="width:100%;height:100%;">
+    <div data-options="region:'center',border:false" style="height:40%">
+        <table id="dg" style="width:100%;">
         </table>
-        <div id="tb" style="padding:2px 5px;">
-            <%--<a href="javascript:void(0)" onclick="add()" class="easyui-linkbutton" iconCls="icon-add"
-               plain="true">添加</a>
-            <a id="btn-edit" href="javascript:void(0)" onclick="edit()" class="easyui-linkbutton" iconCls="icon-edit"
-               plain="true">编辑</a>
-            <a id="btn-delete" href="javascript:void(0)" onclick="remove()" class="easyui-linkbutton"
-               iconCls="icon-remove"
-               plain="true">删除</a>--%>
-            <%--<a href="javascript:void(0)" onclick="getRoles()" class="easyui-linkbutton" iconCls="icon-user-config"
-               plain="true">角色设置</a>--%>
-            <%--<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-save" plain="true">保存</a>
-            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cut" plain="true">剪切</a>--%>
-
-        </div>
     </div>
+    <div data-options="region:'south',border:false,title:'详情'" style="height:60%;">
+        <table id="dgdetail" style="width:100%;">
+        </table>
+    </div>
+
 </div>
 <div id="dlg"></div>
 <div id="ajdlg"></div>

@@ -149,6 +149,7 @@ public class UserAuthorityInterceptor extends HandlerInterceptorAdapter {
         exceptionUrlList.add("/zhfz/bacs/belong/listBelongVideo.do");
         exceptionUrlList.add("/zhfz/bacs/belong/removeBelongVideo.do");
         exceptionUrlList.add("/zhfz/bacs/belong/listBelongVideo.do");
+        exceptionUrlList.add("/zhfz/bacs/belong/getSjz.do");
         exceptionUrlList.add("/zhfz/common/combobox/listWMSCount");
         exceptionUrlList.add("/zhfz/common/combobox/certificateTypes.do");
         exceptionUrlList.add("/zhfz/common/user/getUsersInfo.do");
