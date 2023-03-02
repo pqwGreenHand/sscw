@@ -292,66 +292,45 @@ function add() {
 }
 
 function edit(id) {
-    if (id == null) {
-        var row = datagridPerson.datagrid('getSelected');
-        if (row == null) {
-            U.msg('请先选择修改的一行数据');
-            return
-        } else {
-            id = row.id;
-        }
-    }
-
-    dialog = $("#dlg").dialog({
-        title: '修改人员',
-        width: 540,
-        height: 460,
-        href: 'personedit.jsp',
-        maximizable: false,
-        modal: true,
-        buttons: [{
-            text: '确认',
-            iconCls: 'icon-ok',
-            handler: function () {
-                var isValid = $("#form").form('validate');
-                if (isValid) {
-                    if ($('#person_certificate_type').combobox('getValue') == 111) {
-                        if (!U.validatorZjhm($("#person_certificate_no").textbox('getValue'))) {
-                            U.msg('请输入正确的身份证号');
-                            return;
-                        }
+    $("#wpImage").html("");
+    var belongingsId = id;
+    $.messager.progress({
+        title: '请等待',
+        msg: '加载数据中...'
+    });
+    jQuery.ajax({
+        type: 'POST',
+        url: "/zhfz/zhfz/bacs/belong/getImages.do",
+        data: {belongingsId: belongingsId},
+        dataType: 'json',
+        success: function (data) {
+            $.messager.progress('close');
+            for (var i = 0; i < data.length; i++) {
+                var url = encodeURI(data[i]);
+                $("#wpImage").append('<img width="350" src="' + url + '" /><br/><br/>');
+            }
+            // showDialog('#showPic_dialog', '照片');
+            dialog = $("#wpImage").dialog({
+                title: '照片',
+                width: 640,
+                height: 450,
+                maximizable: false,
+                modal: true,
+                buttons: [{
+                    text: '关闭',
+                    handler: function () {
+                        dialog.dialog('close');
                     }
-                    $.messager.progress({
-                        title: '请等待',
-                        msg: '添加/修改数据中...'
-                    });
-                    var personList = $("#form").serializeObject();
-                    var personsJson = JSON.stringify(personList);
-                    jQuery.ajax({
-                        type: 'POST',
-                        contentType: 'application/json',
-                        url: "/zhfz/zhfz/bacs/person/updatePerson.do",
-                        data: personsJson,
-                        dataType: 'json',
-                        success: function (data) {
-                            U.msg(data.content);
-                            dialog.dialog('close');
-                            $.messager.progress('close');
-                            queryUsers();
-                        },
-                        error: function (data) {
-                            $.messager.progress('close');
-                            U.msg(data.content);
-                        }
-                    });
-                }
-            }
-        }, {
-            text: '取消', iconCls: 'icon-cancel',
-            handler: function () {
-                dialog.dialog('close');
-            }
-        }]
+                }]
+            });
+
+
+        },
+        error: function (data) {
+            $.messager.progress('close');
+            //exception in java
+            U.msg(data.content);
+        }
     });
 }
 

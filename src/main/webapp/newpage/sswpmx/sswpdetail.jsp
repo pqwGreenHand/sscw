@@ -42,6 +42,7 @@
 </div>
 <div id="dlg"></div>
 <div id="ajdlg"></div>
+<div id="wpImage" style="display: none"></div>
 <script>
 
 </script>

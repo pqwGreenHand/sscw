@@ -45,9 +45,9 @@
                     <a href="javascript:void(0)" onclick="goBelongout('<%=ssareaid%>');" data-options="iconCls:'icon-redo'"
                        class="easyui-linkbutton button-line-blue"
                        style="width: 80px;margin-left: 10px;">取物</a>
-                    <a href="javascript:void(0)" onclick="goBelongManage('<%=ssareaid%>');" data-options="iconCls:'icon-set'"
+                  <%--  <a href="javascript:void(0)" onclick="goBelongManage('<%=ssareaid%>');" data-options="iconCls:'icon-set'"
                        class="easyui-linkbutton button-line-blue"
-                       style="width: 80px;margin-left: 10px;">管理</a>
+                       style="width: 80px;margin-left: 10px;">管理</a>--%>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <a href="javascript:void(0)" onclick="javascript:window.location.href ='index.jsp';" data-options="iconCls:'icon-back'"
                        class="easyui-linkbutton button-line-blue"

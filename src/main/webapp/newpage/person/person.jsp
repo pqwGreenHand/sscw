@@ -32,6 +32,9 @@
         &nbsp;&nbsp;
         <a href="javascript:void(0)" onclick="add()" class="easyui-linkbutton button-line-blue" iconCls="icon-add"
            plain="true">添加</a>
+
+        <a href="javascript:void(0)" onclick="getRoles()" class="easyui-linkbutton button-line-brown" iconCls="icon-user-config"
+           plain="true">同步执法办案平台数据</a>
     </div>
 
     <div data-options="region:'center',border:false" style="height:100%">

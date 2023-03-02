@@ -84,6 +84,9 @@
         <if test="dataAuth!=null and dataAuth!=''">
             and ${dataAuth}
         </if>
+        <if test="orgCode!=null and orgCode!=''">
+            or  EXISTS(SELECT * FROM ba_belongings_temp bbt where  bbt.case_id=c.id and bbt.status=1 and bbt.jsdw_id=#{orgCode})
+        </if>
         order by c.id desc
         <if test="pageStart != null and rows != null">
             limit ${pageStart},${rows}
@@ -134,6 +137,9 @@
         </if>
         <if test="dataAuth!=null and dataAuth!=''">
             and ${dataAuth}
+        </if>
+        <if test="orgCode!=null and orgCode!=''">
+            or  EXISTS(SELECT * FROM ba_belongings_temp bbt where  bbt.case_id=c.id and bbt.status=1 and bbt.jsdw_id=#{orgCode})
         </if>
         order by c.id desc
     </select>

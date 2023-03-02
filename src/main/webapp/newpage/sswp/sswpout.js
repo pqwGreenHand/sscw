@@ -46,7 +46,7 @@ $(function () {
                 field: 'isGet', title: '是否已领取', width: 40,
                 formatter: function (value, rec) {
                     if ('true' == value || "1" == value) {
-                        return '<font color="yellow">已领取</font>'
+                        return '<font color="green">已领取</font>'
                     }
                     else if ("0" == value) {
                         return '<font color="red">未领取</font>'

@@ -115,6 +115,7 @@ public class DzRecordController {
                     + " or a.op_pid = " + sessionInfo.getCurrentOrgPid()
                     + " ) ");
         }
+        map.put("orgCode",sessionInfo.getCurrentOrg().getOrgCode());
         List<ArchivesTreeEntity> list = null;
         int total = 0;        
         list = archivesService.listCaseTree(map);

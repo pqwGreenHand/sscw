@@ -72,7 +72,7 @@
         left join xt_code cf on cf.type='MZID' and p.nation=cf.code_key
         left join xt_code cs on cs.type='XBID' and p.sex=cs.code_key
         left join xt_code cr on cr.type='RDDBID' and p.officer=cr.code_key
-        where 1=1 and p.case_id is not NULL
+        where 1=1
             <if test="dataAuth!=null and dataAuth!=''">
                 and ${dataAuth}
             </if>
@@ -100,6 +100,9 @@
             <if test="areaId!=null and areaId!=0">
                 and m.id=#{areaId}
             </if>
+        <if test="orgCode!=null and orgCode!=''">
+            or EXISTS(SELECT * FROM ba_belongings_temp bbt where bbt.person_id=p.id and bbt.status=1 and bbt.jsdw_id=#{orgCode})
+        </if>
         order by p.id desc
         limit ${pageStart},${rows}
     </select>
@@ -145,6 +148,9 @@
             </if>
             <if test="areaId!=null and areaId!=0">
                 and m.id=#{areaId}
+            </if>
+            <if test="orgCode!=null and orgCode!=''">
+                or  EXISTS(SELECT * FROM ba_belongings_temp bbt where  bbt.person_id=p.id and bbt.status=1 and bbt.jsdw_id=#{orgCode})
             </if>
         </where>
         order by p.id desc

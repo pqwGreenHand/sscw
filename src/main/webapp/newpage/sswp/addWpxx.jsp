@@ -51,17 +51,17 @@
                 </tr>
                 <tr>
                     <td>数量:</td>
-                    <td><input id="detailCount" name="detailCount" class="easyui-textbox" data-options="required:true"/>
+                    <td><input id="detailCount1" name="detailCount" class="easyui-textbox" data-options="required:true"/>
                     </td>
                     <td>单位:</td>
-                    <td><input id="unit" name="unit" class="easyui-combobox"
+                    <td><input id="unit1" name="unit" class="easyui-combobox"
                                data-options="url: 'json/unit.json',valueField: 'id',textField: 'text',required:true"/>
                     </td>
                 </tr>
 
                 <tr>
                     <td>特征:</td>
-                    <td><input id="description" name="description" class="easyui-textbox" data-options="required:true"/>
+                    <td><input id="description1" name="description" class="easyui-textbox" data-options="required:true"/>
                     </td>
                     <td>暂存方式:</td>
                     <td><input id="saveMethod" name="saveMethod" class="easyui-combobox"
@@ -284,9 +284,9 @@
                         enpId: data.callbackData, areaId: ssareaid, trefresh: new Date().getTime()
                     });
                     $.messager.progress('close');
-                    $('#unit').combobox('clear');
-                    $('#detailCount').textbox('setValue', '');
-                    $('#description').textbox('setValue', '');
+                    $('#unit1').combobox('clear');
+                    $('#detailCount1').textbox('setValue', '');
+                    $('#description1').textbox('setValue', '');
                 },
                 error: function (data) {
                     $.messager.progress('close');

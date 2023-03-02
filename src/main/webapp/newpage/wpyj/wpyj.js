@@ -209,7 +209,6 @@ function yjAccept() {
                                     dataType: 'json',
                                     data: enterpriseinfo,
                                     success: function (data) {
-                                        self.parent.ztab.closeByTitle("移交接收");
                                         self.parent.ztab.open("随身物品接收", "../newpage/sswp/sswpin.jsp?ssareaid="+sessionObj.currentArea.id+"&personId="+data.content);
                                         U.msg("随身物品接收成功");
                                         dialog.dialog('close');

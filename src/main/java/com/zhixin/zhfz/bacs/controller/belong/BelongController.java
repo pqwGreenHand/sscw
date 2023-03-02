@@ -236,11 +236,11 @@ public class BelongController {
 
         try {
             PersonEntity personEntity = personService.getPersonById(tempEntity.get(0).getPersonId());
-            if (ControllerTool.getCurrentAreaID(request) != personEntity.getAreaId()) {
+            /*if (ControllerTool.getCurrentAreaID(request) != personEntity.getAreaId()) {
                 personEntity.setId(null);
                 personEntity.setAreaId(ControllerTool.getCurrentAreaID(request));
                 personService.insert(personEntity);
-            }
+            }*/
             for (BelongDetailTempEntity belongEntity : detailEntity) {
                 entity.setSerialId(personEntity.getId());
                 entity.setRegisterUserId(ControllerTool.getUserID(request));
@@ -429,6 +429,7 @@ public class BelongController {
         logger.info("开始警综信息数据查询------------------");
         Map<String, Object> map = ControllerTool.mapFilter(pageMap);
         SessionInfo sessionInfo = ControllerTool.getSessionInfo(request);
+        map.put("orgCode",sessionInfo.getCurrentOrg().getOrgCode());
         if (RoleEntity.DATA_AUTH_SELFAREA == (ControllerTool.getRoleDataAuth(request))) {
             // 办案场所-本办案场所
             map.put("dataAuth", " ( c.area_id = " + ControllerTool.getCurrentAreaID(request)
@@ -453,6 +454,7 @@ public class BelongController {
         logger.info("开始警综信息数据查询------------------");
         Map<String, Object> map = ControllerTool.mapFilter(pageMap);
         SessionInfo sessionInfo = ControllerTool.getSessionInfo(request);
+        map.put("orgCode",sessionInfo.getCurrentOrg().getOrgCode());
         if (RoleEntity.DATA_AUTH_SELFAREA == (ControllerTool.getRoleDataAuth(request))) {
             // 办案场所-本办案场所
             map.put("dataAuth", " ( m.id = " + ControllerTool.getCurrentAreaID(request)
