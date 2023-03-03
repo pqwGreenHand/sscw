@@ -69,6 +69,4 @@ http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
 		p:basePackage="com.zhixin.zhfz.**.dao">
 	</bean>
 	
-	<!-- 柜门配置 -->
-	<bean class="com.zhixin.zhfz.jzgl.common.PowerCacheUtilForJZ"></bean>
 </beans>

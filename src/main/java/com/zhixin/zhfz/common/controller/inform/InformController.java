@@ -1,9 +1,5 @@
 package com.zhixin.zhfz.common.controller.inform;
 
-
-import com.zhixin.zhfz.bacsapp.entity.InformationEntity;
-import com.zhixin.zhfz.bacsapp.services.Information.IInformationService;
-import com.zhixin.zhfz.bacsapp.services.common.ICommonService;
 import com.zhixin.zhfz.common.dao.common.ICommonCommonMapper;
 import com.zhixin.zhfz.common.entity.MessageEntity;
 import com.zhixin.zhfz.common.entity.OperLogEntity;
@@ -43,8 +39,6 @@ public class InformController {
     private IMyNoticeService iMyNoticeService;
     @Autowired
     private IOperLogService operLogService;
-    @Autowired
-    private IInformationService iInformationService;
     @Autowired
     private IUserService userService;
     @Resource
@@ -95,44 +89,6 @@ public class InformController {
     public MessageEntity ggInformInsert(@RequestBody final InformForm informForm, HttpServletRequest request) {
 
         try {
-            final List<UserEntity> userInfo = userService.getAllUsers();
-            Integer sendId = ControllerTool.getUser(request).getId();
-            String pid = ControllerTool.getSessionInfo(request).getCurrentOrg().getPid();
-            final InformationEntity inform = new InformationEntity();
-            inform.setSenderId(Long.parseLong(sendId + ""));
-            inform.setTitle(informForm.getTitle());
-            inform.setContent(informForm.getContent());
-            inform.setSendTime(new Date());
-            inform.setSystemName("BA");
-            inform.setType(0);
-            inform.setIsRead(0);
-            inform.setOpPid(pid);
-            inform.setOpUserId(sendId);
-
-            new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < userInfo.size(); i++) {
-                    inform.setId(null);
-                    inform.setReceiverId(Long.parseLong(userInfo.get(i).getId() + ""));
-                    try {
-                        iInformationService.insertInform(inform);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                Map<String, Object> map = new HashMap<>();
-                if("停止预约".equals(informForm.getTitle())){
-                    //更新表，页面提示不在进行预约操作
-                    map.put("status",1);
-                    commonCommonMapper.updateStatus(map);
-                }else if("开始预约".equals(informForm.getTitle())){
-                    //更新表，页面提示可进行预约操作
-                    map.put("status",2);
-                    commonCommonMapper.updateStatus(map);
-                }
-            }
-        }).start();
 
         } catch (Exception e) {
             e.printStackTrace();

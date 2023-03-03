@@ -33,20 +33,8 @@
 		<typeAlias type="com.zhixin.zhfz.bacs.entity.CrimeDefineEntity" alias="CrimeDefineEntity"/>
 		<typeAlias type="com.zhixin.zhfz.bacs.entity.PositionDeviceEntity" alias="PositionDeviceEntity"/>
 		<typeAlias type="com.zhixin.zhfz.bacs.entity.PositionAlarmEntity" alias="PositionAlarmEntity"/>
-		<typeAlias type="com.zhixin.zhfz.sacw.entity.LocationEntity" alias="LocationEntity"/>
-		<typeAlias type="com.zhixin.zhfz.sacw.entity.LabelEntity" alias="LabelEntity"/>
-		<typeAlias type="com.zhixin.zhfz.sacw.entity.ShelfEntity" alias="ShelfEntity"/>
-		<typeAlias type="com.zhixin.zhfz.sacw.entity.LabelLogEntity" alias="LabelLogEntity"/>
-		<typeAlias type="com.zhixin.zhfz.sacw.entity.RemoteLookEntity" alias="RemoteLookEntity"/>
-		<typeAlias type="com.zhixin.zhfz.sacw.entity.BoundAlarmEntity" alias="BoundAlarmEntity"/>
-		<typeAlias type="com.zhixin.zhfz.sacw.entity.SaNvrEntity" alias="SaNvrEntity"/>
-		<typeAlias type="com.zhixin.zhfz.sacw.entity.SaPersonalConfigDetailEntity" alias="SaPersonalConfigDetail"/>
-		<typeAlias type="com.zhixin.zhfz.sacw.entity.SaPersonalConfigEntity" alias="SaPersonalConfig"/>
-		<typeAlias type="com.zhixin.zhfz.sacw.entity.SaPositionDeviceEntity" alias="SaPositionDeviceEntity"/>
-		<typeAlias type="com.zhixin.zhfz.sacw.entity.SaCameraEntity" alias="SaCameraEntity"/>
 		<typeAlias alias="PersonalConfig" type="com.zhixin.zhfz.bacs.entity.PersonalConfigEntity" />
 		<typeAlias alias="PersonalConfigDetail" type="com.zhixin.zhfz.bacs.entity.PersonalConfigDetailEntity" />
-		<typeAlias alias="SearchInvolvedEntity" type="com.zhixin.zhfz.sacw.entity.SearchInvolvedEntity" />
 		<typeAlias alias="OrderRequestEntity" type="com.zhixin.zhfz.bacs.entity.OrderRequestEntity" />
 		<typeAlias alias="OrderPersonEntity" type="com.zhixin.zhfz.bacs.entity.OrderPersonEntity" />
 		<typeAlias alias="OrderStatusEntity" type="com.zhixin.zhfz.bacs.entity.OrderStatusEntity" />
@@ -57,11 +45,6 @@
 		<typeAlias alias="UrinalysisDetailEntity" type="com.zhixin.zhfz.bacs.entity.UrinalysisDetailEntity" />
 		<typeAlias alias="CuffLogEntity" type="com.zhixin.zhfz.bacs.entity.CuffLogEntity" />
 		<typeAlias alias="CombineInfoEntity" type="com.zhixin.zhfz.bacs.entity.CombineInfoEntity" />
-		<typeAlias alias="BaCaseEntity" type="com.zhixin.zhfz.glpt.entity.BaCaseEntity" />
-		<typeAlias alias="BaSerialEntity" type="com.zhixin.zhfz.glpt.entity.BaSerialEntity" />
-		<typeAlias alias="AlarmEntity" type="com.zhixin.zhfz.glpt.entity.AlarmEntity" />
-		<typeAlias alias="ConsoleEntity" type="com.zhixin.zhfz.sacw.entity.ConsoleEntity" />
-		<typeAlias alias="CwAlarmEntity" type="com.zhixin.zhfz.sacw.entity.CwAlarmEntity" />
 		<typeAlias alias="JingwuInfoEntity" type="com.zhixin.zhfz.bacs.entity.JingwuInfoEntity" />
 		<typeAlias alias="JwTodayPrisonerEntity" type="com.zhixin.zhfz.bacs.entity.JwTodayPrisonerEntity" />
 		<typeAlias alias="JwWeekCaseEntity" type="com.zhixin.zhfz.bacs.entity.JwWeekCaseEntity" />

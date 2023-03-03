@@ -63,13 +63,10 @@ public class BacsComboboxController {
 			params.put("dataAuth", " o.op_user_id = " + ControllerTool.getUserID(request) );
 		}  else if (RoleEntity.DATA_AUTH_SELFAREA == (ControllerTool.getRoleDataAuthForBacsConf(request))) {
 			// 办案场所-本办案场所
-			params.put("dataAuth", " a.id=" + ControllerTool.getCurrentWarehouseID(request));
 		} else if (RoleEntity.DATA_AUTH_DOWN_CASCADEAREA == (ControllerTool.getRoleDataAuthForBacsConf(request))) {
 			// 本办案场所及下级办案场所
-			params.put("dataAuth", " a.id " + sessionInfo.getCurrentAndSubWarehouseInStr());
 		} else if (RoleEntity.DATA_AUTH_UP_CASCADEAREA == (ControllerTool.getRoleDataAuthForBacsConf(request))) {
 			// 上级办案场所及其下级办案场所
-			params.put("dataAuth", " a.id " + sessionInfo.getSuperAndSubWarehouseInStr());
 		}else if (RoleEntity.DATA_AUTH_SELFORG == (ControllerTool.getRoleDataAuthForBacsConf(request))) {
 			// 本部门
 			params.put("dataAuth", "o.op_pid = " + sessionInfo.getCurrentOrgPid()+" or o.p_id ="+sessionInfo.getCurrentOrgPid());
@@ -266,16 +263,7 @@ public class BacsComboboxController {
 		if (RoleEntity.DATA_AUTH_SELF == (ControllerTool.getRoleDataAuthForBacsConf(request))) {
 			// 办案人员-本人
 			params.put("dataAuth", " o.op_user_id = " + ControllerTool.getUserID(request) );
-		}  else if (RoleEntity.DATA_AUTH_SELFAREA == (ControllerTool.getRoleDataAuthForBacsConf(request))) {
-			// 办案场所-本办案场所
-			params.put("dataAuth", " ia.id=" + ControllerTool.getCurrentWarehouseID(request));
-		} else if (RoleEntity.DATA_AUTH_DOWN_CASCADEAREA == (ControllerTool.getRoleDataAuthForBacsConf(request))) {
-			// 本办案场所及下级办案场所
-			params.put("dataAuth", " ia.id " + sessionInfo.getCurrentAndSubWarehouseInStr());
-		} else if (RoleEntity.DATA_AUTH_UP_CASCADEAREA == (ControllerTool.getRoleDataAuthForBacsConf(request))) {
-			// 上级办案场所及其下级办案场所
-			params.put("dataAuth", " ia.id " + sessionInfo.getSuperAndSubWarehouseInStr());
-		}else if (RoleEntity.DATA_AUTH_SELFORG == (ControllerTool.getRoleDataAuthForBacsConf(request))) {
+		} else if (RoleEntity.DATA_AUTH_SELFORG == (ControllerTool.getRoleDataAuthForBacsConf(request))) {
 			// 本部门
 			params.put("dataAuth", "ia.op_pid = " + sessionInfo.getCurrentOrgPid()+" or o.p_id ="+sessionInfo.getCurrentOrgPid());
 		} else if (RoleEntity.DATA_AUTH_UP_CASCADEORG == (ControllerTool.getRoleDataAuthForBacsConf(request))) {

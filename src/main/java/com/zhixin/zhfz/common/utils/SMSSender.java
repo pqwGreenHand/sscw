@@ -5,7 +5,6 @@ import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.api.json.JSONConfiguration;
-import com.zhixin.zhfz.sacw.entity.SMSEntity;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 
@@ -58,18 +57,6 @@ public class SMSSender {
 			// "http://127.0.0.1:11009/interrogate-win/restful/ws/";
 			// String url =
 			// "http://192.168.201.54:7070/interrogate-win/restful/ws/";
-			String url = PropertyUtil.getContextProperty("sms.url").toString();
-			WebResource r = c.resource(url);
-			SMSEntity sms = new SMSEntity();
-			// String[] phones={"18721929931","15021830472"};
-			// sms.setPhones(new String[] { "18901860169" });
-			// sms.setMessage("短信内容123adc！。??11111");
-			sms.setPhones(ps);
-			sms.setMessage(content);
-			// 处理string返回值
-			logger.info("### 发送短信 ###"
-					+ r.path("sendsms").path("DHSAJ-KLJCX-DHSKJ").accept(new String[] { MediaType.APPLICATION_JSON })
-							.entity(sms, MediaType.APPLICATION_JSON).post(String.class));
 		} catch (Exception e) {
 			logger.error("", e);
 		}

@@ -14,7 +14,7 @@ import com.zhixin.zhfz.common.form.IDForm;
 import com.zhixin.zhfz.common.services.operLog.IOperLogService;
 import com.zhixin.zhfz.common.utils.ControllerTool;
 import com.zhixin.zhfz.common.utils.PropertyUtil;
-import com.zhixin.zhfz.sacw.common.Utils;
+import com.zhixin.zhfz.common.utils.Utils;
 import org.apache.commons.io.FileUtils;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -221,7 +221,6 @@ public class CaseDataClueController {
 	}
 	/**
 	 * 根据id删除证件类型
-	 * @param id
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/updateByAuto")
@@ -278,7 +277,6 @@ public class CaseDataClueController {
 	/**
 	 * 轨迹视频
 	 *
-	 * @param pageMap
 	 * @param request
 	 * @param response
 	 * @throws IOException
@@ -341,7 +339,6 @@ public class CaseDataClueController {
 	/**
 	 * 笔录信息
 	 *
-	 * @param pageMap
 	 * @param request
 	 * @param response
 	 * @throws IOException

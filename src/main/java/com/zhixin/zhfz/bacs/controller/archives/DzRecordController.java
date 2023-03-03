@@ -15,6 +15,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.zhixin.zhfz.common.utils.Utils;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +40,6 @@ import com.zhixin.zhfz.common.entity.UserEntity;
 import com.zhixin.zhfz.common.services.user.IUserService;
 import com.zhixin.zhfz.common.utils.ControllerTool;
 import com.zhixin.zhfz.common.utils.PropertyUtil;
-import com.zhixin.zhfz.sacw.common.Utils;
 
 /**
  * 电子账单

@@ -1,13 +1,13 @@
 package com.zhixin.zhfz.bacs.controller.lawdoc;
 
 
+import com.zhixin.zhfz.bacs.entity.BaCaseEntity;
 import com.zhixin.zhfz.bacs.entity.SerialEntity;
 import com.zhixin.zhfz.bacs.form.LawDocForm;
+import com.zhixin.zhfz.bacs.services.bacase.IBaCaseService;
 import com.zhixin.zhfz.common.entity.RoleEntity;
 import com.zhixin.zhfz.common.utils.ControllerTool;
-import com.zhixin.zhfz.glpt.entity.BaCaseEntity;
-import com.zhixin.zhfz.glpt.services.IBaCaseService;
-import com.zhixin.zhfz.sacw.common.Utils;
+import com.zhixin.zhfz.common.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -26,11 +26,7 @@
 				<value>classpath:conf.properties</value>
 				<!--有用，勿删-->
 				<value>classpath:jdbc_zhfz_mysql.properties</value>
-				<value>classpath:jdbc_oraytalk_mysql.properties</value>
 				<value>classpath:jdbc_zhfz_oracle.properties</value>
-				<value>classpath:jdbc_sacw_mysql.properties</value>
-				<value>classpath:jdbc_sacw_sqlserver.properties</value>
-
 				<value>classpath:jdbc_bazx_mysql.properties</value>
 				<value>classpath:jdbc_zfba_mysql.properties</value>
 			</list>

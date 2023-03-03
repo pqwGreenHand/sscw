@@ -1,4 +1,3 @@
-
 var datagridDit
 var dialog;
 var ssareaid;
@@ -89,7 +88,7 @@ function loadPerson() {
         idField: 'id',
         textField: 'name',
         columns: [[
-            {field: 'id', title: '姓名', width: 100,hidden: true},
+            {field: 'id', title: '姓名', width: 100, hidden: true},
             {field: 'name', title: '姓名', width: 100},
             {field: 'certificateNo', title: '证件号码', width: 260}
         ]],
@@ -108,7 +107,7 @@ function loadPerson() {
             }
         },
         onLoadSuccess: function (data) {
-            if(personId!=null&& personId!="null"){
+            if (personId != null && personId != "null") {
                 $('#serialIdQuery').combogrid('setValue', personId);
             }
         }
@@ -131,7 +130,7 @@ function shuaxin() {
         idField: 'id',
         textField: 'name',
         columns: [[
-            {field: 'id', title: '姓名', width: 100,hidden: true},
+            {field: 'id', title: '姓名', width: 100, hidden: true},
             {field: 'name', title: '姓名', width: 100},
             {field: 'certificateNo', title: '证件号码', width: 260}
         ]],
@@ -175,6 +174,36 @@ function add() {
                 dialog.dialog('close');
             }
         }]
+    });
+}
+
+function showphotowid() {
+    var cg = $('#interrogateSerialId').combogrid('grid');	// 获取数据表格对象
+    var row = cg.datagrid('getSelected');
+    //上传图片开始
+    var params = {
+        "ServiceUrl": "http://14.196.97.86:8083/zhfz-common-service/FileService/ba",
+        "Uuid": "",//uuid为空是调用回调函数，不为空时调用文件上传服务
+        "Type": "CW",
+        "UserId": 0,
+        "FunctionId": row.belongingsId,
+        "CallbackUrl": "http://127.0.0.1:8081/zhfz/restful/insertPhotoWS/insertPhoto",
+        "SaRecordId": row.belongingsId
+    };
+
+    var param = JSON.stringify(params);//需要变成字符串格式
+    jQuery.ajax({
+        type: "post",
+        dataType: "json",
+        // headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        url: "http://127.0.0.1:22000/CameraCapture",
+        contentType: "application/json;charset=UTF-8",//指定消息请求类型
+        data: param,
+        success: function (result) {
+            console.dir(result);//在控制台打印结果
+            $.messager.progress('close');
+            window.close();
+        }
     });
 }
 
@@ -285,7 +314,7 @@ function edit(index) {
                         msg: '添加/修改数据中...'
                     });
                     var edtList = $("#form").serializeObject();
-                    edtList['id']=rows.id;
+                    edtList['id'] = rows.id;
                     var edtJson = JSON.stringify(edtList);
                     jQuery.ajax({
                         type: 'POST',
@@ -299,7 +328,11 @@ function edit(index) {
                             $.messager.progress('close');
                             var cg = $('#serialIdQuery').combogrid('grid');	// 获取数据表格对象
                             var row = cg.datagrid('getSelected');
-                            $('#detid').datagrid('reload', {enpId: row.id, areaId: ssareaid, trefresh: new Date().getTime()});
+                            $('#detid').datagrid('reload', {
+                                enpId: row.id,
+                                areaId: ssareaid,
+                                trefresh: new Date().getTime()
+                            });
                             $('#det_dialog').dialog('close');
                         },
                         error: function (data) {
@@ -343,7 +376,7 @@ function remove(id) {
             jQuery.ajax({
                 type: 'POST',
                 contentType: 'application/json',
-                url: '/zhfz/zhfz/bacs/belong/removeBelongdet.do?belongingsId='+belongingsId+"&detailId="+detailId,
+                url: '/zhfz/zhfz/bacs/belong/removeBelongdet.do?belongingsId=' + belongingsId + "&detailId=" + detailId,
                 // data: {belongingsId: belongingsId, detailId: detailId},
                 dataType: 'json',
                 success: function (data) {

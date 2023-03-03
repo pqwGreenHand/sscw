@@ -175,4 +175,10 @@ public interface IBelongService {
     List<BelongingsPhotoTempEntity> selectPhotoByTempId(Integer tempId);
 
     List<BelongEntity> addBelongcodNew(Map<String, Object> fileMap);
+
+    List<Map<String,Object>> listCaseZfba(Map<String, Object> map);
+
+    int listCaseZfbaCount(Map<String, Object> map);
+
+    List<Map<String,Object>> listPersonZfba(Map<String, Object> map);
 }

@@ -5,8 +5,6 @@ import com.zhixin.zhfz.bacs.entity.ArraignEntity;
 import com.zhixin.zhfz.bacs.entity.RoomAssignEntity;
 import com.zhixin.zhfz.bacs.form.ArraignForm;
 import com.zhixin.zhfz.common.entity.MessageEntity;
-import com.zhixin.zhfz.common.entity.UserEntity;
-import com.zhixin.zhfz.sacw.form.UserNoSearchForm;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -21,8 +19,6 @@ public interface IArraignService {
     Long getMaxId();
 
     MessageEntity clear(Long roomId, Integer serialId, HttpServletRequest request) throws Exception;
-
-    UserEntity checkPolceNo(UserNoSearchForm form) throws Exception;
 
     List<ArraignEntity> listAllRecordRoom(Map<String,Object> params);
 

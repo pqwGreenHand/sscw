@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhixin.zhfz.bacs.dao.bacase.IBaCaseMapper">
+    <!-- <typeAlias alias="actionLog" type="com.zhixin.rd.interrogate.web.entity.ActionLogEntity" /> -->
+    <resultMap id="bacaseMap" type="com.zhixin.zhfz.bacs.entity.BaCaseEntity">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="ajmc" property="ajmc" jdbcType="VARCHAR" />
+        <result column="ajbh" property="ajbh" jdbcType="VARCHAR" />
+        <result column="ajlx" property="ajlx" jdbcType="INTEGER" />
+        <result column="abmc" property="abmc" jdbcType="VARCHAR" />
+        <result column="created_time" property="createdTime"  />
+        <result column="certificate_no" property="certificateNo"  />
+        <result column="involved_reason" property="involvedReason"  />
+        <result column="personName" property="personName"  />
+        <result column="personId" property="personId"  />
+        <result column="belongId" property="belongId"  />
+        <result column="areaName" property="areaName"  />
+
+    </resultMap>
+
+    <!--文书sql-->
+    <select id="listAllLawPerson" resultMap="bacaseMap"  parameterType="java.util.Map">
+        select
+        ia.name areaName,
+        bb.id belongId,
+        p.uuid,
+        ia.id,
+        p.certificate_no,
+        p.name personName,
+        bc.ajmc,
+        bc.ajbh,
+        (select ct.code_desc  from xt_crime_define ct where ct.id = bc.ab) involved_reason,
+        bc.ajlx,
+        p.id AS personId,
+        bc.abmc
+        from
+        ba_belongings bb
+        left join ba_person p on bb.serial_id = p.id
+        left join  ba_case bc on bb.case_id= bc.id
+        left join xt_code tc on p.certificate_type_id=tc.code_key and tc.type = 'ZJZLID'
+        left join ba_area ia on bb.area_id=ia.id
+        where 1=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="personName != null and personName !=''">
+            and p.name like '%${personName}%'
+        </if>
+        <if test="certificateNo != null and certificateNo !=''">
+            and p.certificate_no like '%${certificateNo}%'
+        </if>
+        <if test="areaId != null and areaId != ''">
+            and bb.area_id = #{areaId}
+        </if>
+        ORDER BY p.created_time desc
+        limit ${pageStart},${rows}
+    </select>
+
+    <select id="countAllLawPerson" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select
+        count(1)
+        from
+        ba_belongings bb
+        left join ba_person p on bb.serial_id = p.id
+        left join   ba_case bc on bb.case_id= bc.id
+        left join xt_code tc on p.certificate_type_id=tc.code_key and tc.type = 'ZJZLID'
+        left join ba_area ia on bb.area_id=ia.id
+        where 1=1
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="personName != null and personName !=''">
+            and p.name like '%${personName}%'
+        </if>
+        <if test="certificateNo != null and certificateNo !=''">
+            and p.certificate_no like '%${certificateNo}%'
+        </if>
+        <if test="areaId != null and areaId != ''">
+            and bb.area_id = #{areaId}
+        </if>
+    </select>
+
+</mapper>
+
+

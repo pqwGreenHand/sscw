@@ -370,7 +370,12 @@
         <if test="dataAuth!=null and dataAuth!=''">
             and ${dataAuth}
         </if>
+    </select>
 
+    <select id="queryCaseByAjbh" resultMap="BaseResultMap" parameterType="String">
+        select ic.* from ba_case ic
+        where   1=1
+        and ic.ajbh = #{ajbh,jdbcType=VARCHAR}
     </select>
 
 </mapper>

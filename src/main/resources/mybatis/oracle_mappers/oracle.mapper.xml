@@ -4,17 +4,17 @@
 
     <select id="queryJzDataAjxx" parameterType="java.util.Map" resultType="java.util.Map">
         SELECT * FROM (SELECT tt.*, ROWNUM AS rowno
-        FROM (  SELECT distinct
-        AJBH,AJMC,FADDXZ,TO_CHAR(FXSJ,'yyyy-MM-dd HH:mm:ss') as FXSJ
+        FROM ( SELECT
+        AJBH,AJMC,FADDXZ,TO_CHAR(FXSJ,'yyyy-MM-dd HH:mm:ss') as FXSJ,AJLX,ZBR_XM,ZBR_SFZH,ZBDW_BH
         FROM SJJH_WA_AJXX where 1=1
         <if test="ajbh!=null and ajbh!=''">
-            and AJBH in (${ajbh})
+            and AJBH like  '%${ajbh}%'
         </if>
         <if test="caseName!=null and caseName!=''">
-            and AJMC  like '%' || #{caseName} || '%'
+            and AJMC like '%' || #{caseName} || '%'
         </if>
         <if test="orgCode!=null and orgCode!=''">
-            and ZBDW_BH  in (${orgCode})
+            and ZBDW_BH in (${orgCode})
         </if>
         ORDER BY FXSJ DESC) tt) table_alias
         <if test="start!=null and start!=''">
@@ -24,15 +24,15 @@
 
 
     <select id="queryJzDataAjxxCount" resultType="java.lang.Integer" parameterType="java.util.Map">
-        SELECT count(1) FROM SJJH_WA_AJXX where  1=1
+        SELECT count(1) FROM SJJH_WA_AJXX where 1=1
         <if test="ajbh!=null and ajbh!=''">
-            and AJBH in (${ajbh})
+            and AJBH like  '%${ajbh}%'
         </if>
         <if test="caseName!=null and caseName!=''">
-            and AJMC  like '%' || #{caseName} || '%'
+            and AJMC like '%' || #{caseName} || '%'
         </if>
         <if test="orgCode!=null and orgCode!=''">
-            and ZBDW_BH  in (${orgCode})
+            and ZBDW_BH in (${orgCode})
         </if>
 
     </select>
@@ -40,9 +40,9 @@
 
     <select id="queryJzDataPerson" resultType="java.util.Map" parameterType="java.util.Map">
         SELECT
-            RYXM,XB,ZJHM,AJBH,RYBH,TO_CHAR(LRSJ,'yyyy-MM-dd hh:mi:ss am') as LRSJ,XZDXZ
+        RYXM,XB,ZJHM,AJBH,RYBH,TO_CHAR(LRSJ,'yyyy-MM-dd hh:mi:ss am') as LRSJ,HJDXZ,GJ,AGE,CSRQ,MZ
         FROM SJJH_WA_RYXX
-        where  1=1
+        where 1=1
         <if test="caseNo!=null and caseNo!=''">
             and AJBH = #{caseNo}
         </if>

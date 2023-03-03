@@ -12,8 +12,6 @@ import com.zhixin.zhfz.common.entity.UserEntity;
 import com.zhixin.zhfz.common.entity.UserImportEntity;
 
 import com.zhixin.zhfz.common.utils.ControllerTool;
-import com.zhixin.zhfz.sacw.dao.warehouse.IWareHouseMapper;
-import com.zhixin.zhfz.sacw.entity.WareHouseEntity;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -46,8 +44,6 @@ public class OrganizationServiceImpl implements IOrganizationService {
 	private IUserMapper userMapper;
 	@Autowired
 	private IAreaMapper areaMapper;
-	@Autowired
-	private IWareHouseMapper WareHouseMapper;
 
 	@Override
 	public List<OrganizationEntity> list(Map<String, Object> map) {
@@ -208,51 +204,6 @@ public class OrganizationServiceImpl implements IOrganizationService {
 			superOrgSubArea.add(areaEntity);
 		}
 		sessionInfo.setSuperAndSubArea(superOrgSubArea);
-		//获取本涉案场所信息
-		map.clear();
-		map.put("orgId", currentOrg.getId());
-		List<WareHouseEntity> wareHouseEntities = WareHouseMapper.AllWareHouse(map);
-		WareHouseEntity currentWareHouse = (wareHouseEntities!=null&&(wareHouseEntities.size()>0))?wareHouseEntities.get(0):null;
-		if (currentWareHouse==null){
-			currentWareHouse = new WareHouseEntity();
-			currentWareHouse.setOrgId(-100);
-			currentWareHouse.setId(-100);
-		}
-		sessionInfo.setCurrentWarehoouse(currentWareHouse);
-		//获取本部门下级所有的涉案场所信息
-		List<WareHouseEntity> currentOrgSubWareHouse =null;
-		map.clear();
-		map.put("orgStr", orgStr(currentAndSubOrg));
-		currentOrgSubWareHouse=WareHouseMapper.AllWareHouse(map);
-		if (currentOrgSubWareHouse==null || currentOrgSubWareHouse.size()==0){
-			WareHouseEntity wareHouseEntity = new WareHouseEntity();
-			wareHouseEntity.setOrgId(-100);
-			wareHouseEntity.setId(-100);
-			currentOrgSubWareHouse.add(wareHouseEntity);
-		}
-		sessionInfo.setCurrentAndSubWarehoouse(currentOrgSubWareHouse);
-		//获取上级部门下面所有的办案场所信息
-		List<WareHouseEntity> superOrgSubWareHouse = null;
-		if(sessionInfo.getUser().getId()==1){
-			superOrgSubWareHouse=WareHouseMapper.AllWareHouse(map);
-		}else{
-			String orgString = orgStr(superAndSubOrg);
-			if(orgString!=null && !"".equals(orgString.trim())){
-				map.clear();
-				map.put("orgStr", orgString);
-				superOrgSubWareHouse=WareHouseMapper.AllWareHouse(map);
-			}
-		}
-		if(superOrgSubWareHouse==null){
-			superOrgSubWareHouse=new ArrayList<WareHouseEntity>();
-		}
-		if(superAndSubOrg==null || superAndSubOrg.size()==0){
-			WareHouseEntity wareHouseEntity = new WareHouseEntity();
-			wareHouseEntity.setOrgId(-100);
-			wareHouseEntity.setId(-100);
-			superOrgSubWareHouse.add(wareHouseEntity);
-		}
-		sessionInfo.setSuperAndSubWarehoouse(superOrgSubWareHouse);
 		logger.info(sessionInfo.toString());
 	}
 

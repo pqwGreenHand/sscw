@@ -98,13 +98,6 @@ public class ControllerTool {
         return null;
     }
 
-    public static Integer getCurrentWarehouseID(HttpServletRequest request) {
-        SessionInfo sessionInfo = ControllerTool.getSessionInfo(request);
-        if (sessionInfo.getCurrentWarehoouse() != null && sessionInfo.getCurrentWarehoouse().getId() != 0) {
-            return sessionInfo.getCurrentWarehoouse().getId();
-        }
-        return null;
-    }
 
     public static Integer getCurrentOrgID(HttpServletRequest request) {
         SessionInfo sessionInfo = ControllerTool.getSessionInfo(request);

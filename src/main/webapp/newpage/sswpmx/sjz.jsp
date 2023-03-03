@@ -19,6 +19,7 @@
 
     <!--插件-->
     <script src="../../js/jquery.min.js"></script>
+    <script src="sjz.js"></script>
     <script src="statics/js/swiper-3.4.2.jquery.min.js" type="text/javascript" charset="utf-8"></script>
 
 </head>
@@ -96,7 +97,47 @@
     })
 
     function test(url) {
-        window.open(url, "_blank");
+        // window.open(url, "_blank");
+        var playParam = {};
+
+       /* playParam.NodeName = row.cameraName;//房间name
+        playParam.VenderType = row.type;//nvrTpye
+        playParam.DeviceIp = row.ip;//nvrip
+        playParam.Port = row.port;//nvr
+        playParam.Account = row.account;//nvr用户
+        playParam.Password = row.password;//nvr密码
+        playParam.Channel = row.channel;//摄像头通道
+        playParam.CameraNo = row.camera_no;//摄像头编号
+        playParam.StartTime = valueToDate(row.time);//开始时间
+        playParam.EndTime = valueToDate(row.time + 5 * 60 * 1000);//结束时间,往后推5分钟*/
+
+        playParam.NodeName = "随身物品登记室";//房间name
+        playParam.VenderType = "1";//nvrTpye
+        playParam.DeviceIp = "127.0.0.1";//nvrip
+        playParam.Port = "8000";//nvr
+        playParam.Account = "admin";//nvr用户
+        playParam.Password = "password1";//nvr密码
+        playParam.Channel = "1";//摄像头通道
+        playParam.CameraNo = "1";//摄像头编号
+        playParam.StartTime = valueToDate(new Date().getTime()-10 * 60 * 1000);//开始时间
+        playParam.EndTime = valueToDate(new Date().getTime() - 5 * 60 * 1000);//结束时间,往后推5分钟
+        var json = JSON.stringify(playParam);//需要变成字符串格式
+        $.ajax({
+            type: "POST",
+            url: "http://127.0.0.1:28281/PlayBack/Play",
+            data: json,
+            dataType: "json",
+            success: function (data) {
+            }
+        });
+
+    }
+
+    /*时间转换*/
+    function valueToDate(value) {
+         var formatStr = 'yyyy-MM-dd hh:mm:ss';
+            var d = new Date(value);
+            return d.format(formatStr);
     }
 </script>
 </body>

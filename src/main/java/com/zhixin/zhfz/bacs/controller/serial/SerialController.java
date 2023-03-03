@@ -25,8 +25,6 @@ import com.zhixin.zhfz.bacs.services.serial.*;
 import com.zhixin.zhfz.bacs.services.serialVideoMapping.ISerialVideoMappingService;
 import com.zhixin.zhfz.bacs.services.track.ITrackService;
 import com.zhixin.zhfz.bacs.services.waitingmanage.IWaitingManageService;
-import com.zhixin.zhfz.bacsapp.entity.InformationEntity;
-import com.zhixin.zhfz.bacsapp.services.Information.IInformationService;
 import com.zhixin.zhfz.common.common.*;
 import com.zhixin.zhfz.common.entity.*;
 import com.zhixin.zhfz.common.form.FileUploadForm;
@@ -36,12 +34,7 @@ import com.zhixin.zhfz.common.services.notice.IMyNoticeService;
 import com.zhixin.zhfz.common.services.operLog.IOperLogService;
 import com.zhixin.zhfz.common.services.organiztion.IOrganizationService;
 import com.zhixin.zhfz.common.services.user.IUserService;
-import com.zhixin.zhfz.common.utils.ControllerTool;
-import com.zhixin.zhfz.common.utils.PropertyUtil;
-import com.zhixin.zhfz.common.utils.RMIUtil;
-import com.zhixin.zhfz.sacw.common.BaseConfig;
-import com.zhixin.zhfz.sacw.common.FreemarkerUtil;
-import com.zhixin.zhfz.sacw.common.Utils;
+import com.zhixin.zhfz.common.utils.*;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.math.RandomUtils;
@@ -91,8 +84,6 @@ public class SerialController {
     private ICuffService cuffService;
     @Autowired
     private ICuffLogService cuffLogService;
-    @Autowired
-    private IInformationService iInformationService;
     @Autowired
     private IOrderRequestService orderRequestService;
     @Autowired
@@ -1075,19 +1066,6 @@ public class SerialController {
                                     schedule.setOpPid(pid);
                                     schedule.setOpUserId(sendId);
                                     noticeService.insertSchedule(schedule);
-                                    /* 添加通知 */
-                                    InformationEntity inform = new InformationEntity();
-                                    inform.setSenderId(Long.parseLong(sendId + ""));
-                                    inform.setReceiverId(Long.parseLong(sendId + ""));
-                                    inform.setTitle("入区通知");
-                                    inform.setContent(serialForm.getName() + "已入区");
-                                    inform.setSendTime(new Date());
-                                    inform.setSystemName("BA");
-                                    inform.setType(0);
-                                    inform.setIsRead(0);
-                                    inform.setOpPid(pid);
-                                    inform.setOpUserId(sendId);
-                                    iInformationService.insertInform(inform);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -1098,19 +1076,6 @@ public class SerialController {
                                 logger.info("案件审核通知循环");
                                 for (int i = 0; i < userAs.size(); i++) {
                                     try {
-                                        /* 添加通知 */
-                                        InformationEntity inform = new InformationEntity();
-                                        inform.setSenderId(Long.parseLong(sendId + ""));
-                                        inform.setReceiverId(Long.parseLong(sendId + ""));
-                                        inform.setTitle("入区案件审核通知");
-                                        inform.setContent(serialForm.getName() + "已入区");
-                                        inform.setSendTime(new Date());
-                                        inform.setSystemName("BA");
-                                        inform.setType(0);
-                                        inform.setIsRead(0);
-                                        inform.setOpPid(pid);
-                                        inform.setOpUserId(sendId);
-                                        iInformationService.insertInform(inform);
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
@@ -1620,17 +1585,6 @@ public class SerialController {
             if (tzusers != null && tzusers.size() > 0) {
                 logger.info("通知循环");
                 for (int i = 0; i < tzusers.size(); i++) {
-                    /* 添加通知 */
-                    InformationEntity inform = new InformationEntity();
-                    inform.setSenderId(ControllerTool.getSessionInfo(request).getUser().getId().longValue());
-                    inform.setReceiverId(tzusers.get(i).getId().longValue());
-                    inform.setTitle("出区通知");
-                    inform.setContent(entity.getName() + "已出区");
-                    inform.setType(0);
-                    inform.setIsRead(0);
-                    inform.setSendTime(new Date());
-                    inform.setSystemName("BA");
-                    this.iInformationService.insertInform(inform);
                 }
             }
             logger.info("嫌疑人出区发送消息结束======" + (System.currentTimeMillis() - startTime));

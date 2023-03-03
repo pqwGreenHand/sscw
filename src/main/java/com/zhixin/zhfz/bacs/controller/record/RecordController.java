@@ -20,8 +20,7 @@ import com.zhixin.zhfz.common.services.organiztion.IOrganizationService;
 import com.zhixin.zhfz.common.services.user.IUserService;
 import com.zhixin.zhfz.common.utils.ControllerTool;
 import com.zhixin.zhfz.common.utils.PropertyUtil;
-import com.zhixin.zhfz.sacw.common.Utils;
-import com.zhixin.zhfz.sacw.form.UserNoSearchForm;
+import com.zhixin.zhfz.common.utils.Utils;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1050,19 +1049,6 @@ public class RecordController {
             e.printStackTrace();
         }
         return new MessageEntity().addIsError(false).addCallbackData(result);
-    }
-
-    @RequestMapping(value = "/searchUser")
-    @ResponseBody
-    public MessageEntity searchUser(@RequestBody UserNoSearchForm form) throws Exception {
-        UserEntity user = userService.getUserByCertificateNo(form.getUserNo());
-        if (user != null) {
-            return new MessageEntity().addCode(1).addIsError(false).addTitle("提醒")
-                    .addContent("警号" + form.getUserNo() + "有效!").addCallbackData(user.getId());
-        } else {
-            return new MessageEntity().addCode(1).addIsError(true).addTitle("错误")
-                    .addContent("警号" + form.getUserNo() + "不存在!");
-        }
     }
 
 

@@ -2,7 +2,6 @@ package com.zhixin.zhfz.common.entity;
 
 
 import com.zhixin.zhfz.bacs.entity.AreaEntity;
-import com.zhixin.zhfz.sacw.entity.WareHouseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +19,6 @@ public class SessionInfo implements java.io.Serializable {
     private OrganizationEntity currentOrg;//本部门信息
     private List<OrganizationEntity> currentAndSubOrg;//本部门及所有下级部门
     private List<OrganizationEntity> superAndSubOrg;//上级部门及所有下级部门
-    private WareHouseEntity currentWarehoouse;//本部门的涉案场所信息
-    private List<WareHouseEntity> currentAndSubWarehoouse;//本部门下面的所有涉案场所
-    private List<WareHouseEntity> superAndSubWarehoouse;//上级部门下面的所有涉案场所
     private String currentOrgPid;//本部门pid
     private String currentAndSubOrgPid;//本部门及所有下级部门pid
     private String superAndSubOrgPid;//上级部门及所有下级部门pid
@@ -133,30 +129,6 @@ public class SessionInfo implements java.io.Serializable {
         return list;
     }
 
-    public WareHouseEntity getCurrentWarehoouse() {
-        return currentWarehoouse;
-    }
-
-    public void setCurrentWarehoouse(WareHouseEntity currentWarehoouse) {
-        this.currentWarehoouse = currentWarehoouse;
-    }
-
-    public List<WareHouseEntity> getCurrentAndSubWarehoouse() {
-        return currentAndSubWarehoouse;
-    }
-
-    public void setCurrentAndSubWarehoouse(List<WareHouseEntity> currentAndSubWarehoouse) {
-        this.currentAndSubWarehoouse = currentAndSubWarehoouse;
-    }
-
-    public List<WareHouseEntity> getSuperAndSubWarehoouse() {
-        return superAndSubWarehoouse;
-    }
-
-    public void setSuperAndSubWarehoouse(List<WareHouseEntity> superAndSubWarehoouse) {
-        this.superAndSubWarehoouse = superAndSubWarehoouse;
-    }
-
     //本办案场所和所有下级办案场所id字符串
     public String getCurrentAndSubAreaInStr() {
         if(currentAndSubArea != null && currentAndSubArea.size()>0){
@@ -186,34 +158,7 @@ public class SessionInfo implements java.io.Serializable {
         return "in(0)";
     }
 
-    //本办案场所和所有下级办案场所id字符串
-    public String getCurrentAndSubWarehouseInStr() {
-        if(currentAndSubWarehoouse != null && currentAndSubWarehoouse.size()>0){
-            StringBuffer inStr = new StringBuffer();
-            inStr.append(" in (0");
-            for (WareHouseEntity wareHouseEntity : currentAndSubWarehoouse) {
-                inStr.append(",");
-                inStr.append(wareHouseEntity.getId());
-            }
-            inStr.append(")");
-            return inStr.toString();
-        }
-        return "in(0)";
-    }
 
-    // 上下级办案场所id字符串
-    public String getSuperAndSubWarehouseInStr() {
-        if (superAndSubWarehoouse != null && superAndSubWarehoouse.size() > 0) {
-            StringBuffer inStr = new StringBuffer("in ( 0");
-            for (WareHouseEntity wareHouseEntity : superAndSubWarehoouse) {
-                inStr.append(",");
-                inStr.append(wareHouseEntity.getId());
-            }
-            inStr.append(")");
-            return inStr.toString();
-        }
-        return "in(0)";
-    }
     public String getCurrentAndSubOrgInStr() {
         if (currentAndSubOrg != null && currentAndSubOrg.size() > 0) {
             StringBuffer inStr = new StringBuffer("in ( 0");

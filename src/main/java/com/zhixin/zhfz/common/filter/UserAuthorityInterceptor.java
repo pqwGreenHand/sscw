@@ -150,10 +150,13 @@ public class UserAuthorityInterceptor extends HandlerInterceptorAdapter {
         exceptionUrlList.add("/zhfz/bacs/belong/removeBelongVideo.do");
         exceptionUrlList.add("/zhfz/bacs/belong/listBelongVideo.do");
         exceptionUrlList.add("/zhfz/bacs/belong/getSjz.do");
+        exceptionUrlList.add("/zhfz/bacs/belong/listCaseZfba.do");
+        exceptionUrlList.add("/zhfz/bacs/belong/listPersonZfba.do");
         exceptionUrlList.add("/zhfz/common/combobox/listWMSCount");
         exceptionUrlList.add("/zhfz/common/combobox/certificateTypes.do");
         exceptionUrlList.add("/zhfz/common/user/getUsersInfo.do");
         exceptionUrlList.add("/zhfz/common/user/delete.do");
+        exceptionUrlList.add("/zhfz/common/case/addPersonAndCase.do");
     }
 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

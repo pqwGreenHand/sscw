@@ -54,4 +54,5 @@ public interface ICaseService {
         List<CaseEntity> listCase(Integer areaId, String str) throws Exception;
 
 
+    List<CaseEntity> queryCaseByAjbh(String ajbh);
 }

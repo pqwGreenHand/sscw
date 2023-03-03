@@ -11,8 +11,6 @@ import com.zhixin.zhfz.bacs.services.record.IRecordService;
 import com.zhixin.zhfz.bacs.services.room.IRoomService;
 import com.zhixin.zhfz.bacs.services.serial.ISerialService;
 import com.zhixin.zhfz.bacs.services.waitingmanage.IWaitingManageService;
-import com.zhixin.zhfz.bacsapp.entity.InformationEntity;
-import com.zhixin.zhfz.bacsapp.services.Information.IInformationService;
 import com.zhixin.zhfz.common.common.AsynUtil;
 import com.zhixin.zhfz.common.common.Base64Util;
 import com.zhixin.zhfz.common.common.HttpClientUtil;
@@ -25,9 +23,7 @@ import com.zhixin.zhfz.common.services.operLog.IOperLogService;
 import com.zhixin.zhfz.common.services.user.IUserService;
 import com.zhixin.zhfz.common.utils.ControllerTool;
 import com.zhixin.zhfz.common.utils.PropertyUtil;
-import com.zhixin.zhfz.glpt.entity.AlarmEntity;
-import com.zhixin.zhfz.glpt.services.areaPatrol.IAreaPatrolService;
-import com.zhixin.zhfz.sacw.common.Utils;
+import com.zhixin.zhfz.common.utils.Utils;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,8 +55,6 @@ public class WaitingManageController {
     @Autowired
     private IRecordService recordService;
     @Autowired
-    private IAreaPatrolService areaPatrolService;
-    @Autowired
     private ISerialService serialService;
     @Autowired
     private IArraignService arraignService;
@@ -68,8 +62,6 @@ public class WaitingManageController {
     private IUserService userService;
     @Autowired
     private IPersonService personService;
-    @Autowired
-    private IInformationService iInformationService;
     @Autowired
     private ICaseService caseService;
     @Autowired
@@ -322,17 +314,6 @@ public class WaitingManageController {
                 for (int i = 0; i < users.size(); i++) {
                     /* 添加通知 */
                     PersonEntity personById = personService.getPersonById(form.getPersonId());
-                    System.err.println(personById);
-                    InformationEntity inform = new InformationEntity();
-                    inform.setSenderId(ControllerTool.getSessionInfo(request).getUser().getId().longValue());
-                    inform.setReceiverId(users.get(i).getId().longValue());
-                    inform.setTitle("看押通知");
-                    inform.setContent("嫌疑人：" + personById.getName() + "已看押!");
-                    inform.setSystemName("BA");
-                    inform.setSendTime(new Date());
-                    inform.setType(0);
-                    inform.setIsRead(0);
-                    this.iInformationService.insertInform(inform);
                 }
             }
         } catch (Exception e) {
@@ -467,7 +448,7 @@ public class WaitingManageController {
                 String dirUrl = "/Inquest/" + Utils.getDateFromSerialNO(serialNo) + "/";
                 AsynUtil.getInstance().createFTPDirectory(dirUrl);
 //                dirUrl += serialEntity.getUuid()+ "/";
-                String uuid=Utils.getUUId();
+                String uuid= Utils.getUUId();
                 dirUrl += uuid+ "/";
                 AsynUtil.getInstance().createFTPDirectory(dirUrl);
                 ftpJsonObject.put("ftpPathInquest", dirUrl);
@@ -529,16 +510,6 @@ public class WaitingManageController {
                     /* 添加通知 */
                     PersonEntity personById = personService.getPersonById(serialEntity.getPersonId());
                     System.err.println(personById);
-                    InformationEntity inform = new InformationEntity();
-                    inform.setSenderId(ControllerTool.getSessionInfo(request).getUser().getId().longValue());
-                    inform.setReceiverId(users.get(i).getId().longValue());
-                    inform.setTitle("提讯通知");
-                    inform.setContent("嫌疑人：" + personById.getName() + "已提讯!去向为" + direction);
-                    inform.setSystemName("BA");
-                    inform.setSendTime(new Date());
-                    inform.setType(0);
-                    inform.setIsRead(0);
-                    this.iInformationService.insertInform(inform);
                 }
             }
         } catch (Exception e) {
@@ -691,7 +662,6 @@ public class WaitingManageController {
                 entity.setAlarmName("同案看押告警");
                 entity.setAlarmType(12);
                 entity.setStatus(0);
-                areaPatrolService.addAlarm(entity);
             }
 
         } catch (Exception e) {

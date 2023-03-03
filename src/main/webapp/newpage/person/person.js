@@ -207,6 +207,79 @@ function add() {
     });
 }
 
+function sysZfbaData() {
+    dialog = $("#dlg").dialog({
+        title: '同步数据',
+        width: 1200,
+        height: 700,
+        href: '../../newpage/ajxx/zfbadata.jsp',
+        maximizable: false,
+        modal: true,
+        buttons: [{
+            text: '确认',
+            iconCls: 'icon-ok',
+            handler: function () {
+                var rowAJ = datagridaj.datagrid('getSelected');
+                var rowPerson = datagridperson.datagrid('getSelected');
+
+                var CaseForm = $('#form').serializeObject();
+                if(rowAJ!=null){
+                    CaseForm["ajbh"] = rowAJ.AJBH;
+                    CaseForm["ajmc"] = rowAJ.AJMC;
+                    CaseForm["afdd"] = rowAJ.FADDXZ;
+                    CaseForm["zbmjxm"] = rowAJ.ZBR_XM;
+                    CaseForm["zbdwbh"] = rowAJ.ZBDW_BH;
+                    CaseForm["afsj"] = rowAJ.FXSJ;
+                    CaseForm["ajlx"] = rowAJ.AJLX;
+                    CaseForm["ajly"] = 2;
+                }
+
+                //人员
+                if(rowPerson!=null){
+                    CaseForm["name"] = rowPerson.RYXM;
+                    CaseForm["gj"] = rowPerson.GJ;
+                    CaseForm["sex"] = rowPerson.XB;
+                    CaseForm["age"] = rowPerson.AGE;
+                    CaseForm["birth"] = rowPerson.CSRQ;
+                    CaseForm["nation"] = rowPerson.MZ;
+                    CaseForm["certificateNo"] = rowPerson.ZJHM;
+                    CaseForm["censusRegister"] = rowPerson.HJDXZ;
+                    CaseForm["rybh"] = rowPerson.RYBH;
+                }
+
+                var CaseFormJson = JSON.stringify(CaseForm);
+                $.messager.progress({
+                    title: '请等待',
+                    msg: '添加/修改数据中...'
+                });
+                jQuery.ajax({
+                    type: 'POST',
+                    url: "/zhfz/zhfz/common/case/addPersonAndCase.do",
+                    data: {
+                        form: CaseFormJson
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        U.msg(data.content);
+                        dialog.dialog('close');
+                        $.messager.progress('close');
+                        queryUsers();
+                    },
+                    error: function (data) {
+                        $.messager.progress('close');
+                        U.msg(data.content);
+                    }
+                });
+            }
+        }, {
+            text: '取消', iconCls: 'icon-cancel',
+            handler: function () {
+                dialog.dialog('close');
+            }
+        }]
+    });
+}
+
 function edit(id) {
     if (id == null) {
         var row = datagridPerson.datagrid('getSelected');

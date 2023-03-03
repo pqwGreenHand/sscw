@@ -13,9 +13,6 @@ import com.zhixin.zhfz.bacs.services.order.IOrderRequestService;
 import com.zhixin.zhfz.bacs.services.order.IOrderStatusService;
 import com.zhixin.zhfz.bacs.services.person.IPersonService;
 import com.zhixin.zhfz.bacs.services.serial.ISerialService;
-import com.zhixin.zhfz.bacsapp.entity.InformationEntity;
-import com.zhixin.zhfz.bacsapp.services.Information.IInformationService;
-import com.zhixin.zhfz.common.common.HttpClientUtil;
 import com.zhixin.zhfz.common.dao.common.ICommonCommonMapper;
 import com.zhixin.zhfz.common.entity.*;
 import com.zhixin.zhfz.common.services.notice.IMyNoticeService;
@@ -25,7 +22,6 @@ import com.zhixin.zhfz.common.services.user.IUserService;
 import com.zhixin.zhfz.common.utils.ControllerTool;
 import com.zhixin.zhfz.common.utils.PropertyUtil;
 import com.zhixin.zhfz.common.utils.SMSSender;
-import com.zhixin.zhfz.sacw.form.UserNoSearchForm;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -76,8 +72,6 @@ public class OrderRequestController {
     private IAreaService areaService;
     @Autowired
     private IJzPersonService jzPersonService;
-    @Autowired
-    private IInformationService iInformationService;
     @Resource
     private ICommonCommonMapper commonCommonMapper;
 
@@ -135,29 +129,6 @@ public class OrderRequestController {
                     List<OrderPersonEntity> list = orderPersonService.orderPersonList(map);
                     Integer sendId = ControllerTool.getUser(request).getId();
                     String pid = ControllerTool.getSessionInfo(request).getCurrentOrg().getPid();
-                    InformationEntity inform = new InformationEntity();
-                    inform.setSenderId(Long.parseLong(sendId + ""));
-                    inform.setReceiverId(Long.parseLong(orderUserId + ""));
-                    inform.setTitle("预约审核");
-                    String content = "";
-                    entity.setShzt(shzt);
-                    entity.setShjg(shjg);
-                    entity.setId(orderPersonId);
-                    orderPersonService.update(entity);
-                    if (shzt == 1) {
-                        content = "您的预约,嫌疑人" + list.get(0).getName() + "审核已通过，请入区。";
-                    } else {
-                        content = "您的预约" + list.get(0).getName() + "审核未通过，请重新预约。";
-                    }
-                    inform.setShzt(shzt);
-                    inform.setContent(content);
-                    inform.setSendTime(new Date());
-                    inform.setSystemName("BA");
-                    inform.setType(0);
-                    inform.setIsRead(0);
-                    inform.setOpPid(pid);
-                    inform.setOpUserId(sendId);
-                    iInformationService.insertInform(inform);
                 }
             }
         } catch (Exception e) {
@@ -179,30 +150,7 @@ public class OrderRequestController {
             List<OrderPersonEntity> list = orderPersonService.orderPersonList(map);
             Integer sendId = ControllerTool.getUser(request).getId();
             String pid = ControllerTool.getSessionInfo(request).getCurrentOrg().getPid();
-            InformationEntity inform = new InformationEntity();
-            inform.setSenderId(Long.parseLong(sendId + ""));
-            inform.setReceiverId(Long.parseLong(orderUserId + ""));
-            inform.setTitle("预约审核");
-            String content = "";
-            entity.setShzt(shzt);
-            entity.setShjg(shjg);
-            entity.setId(orderPersonId);
             orderPersonService.update(entity);
-            if (shzt == 1) {
-                content = "您的预约,嫌疑人" + list.get(0).getName() + "审核已通过，请入区。";
-            } else {
-                content = "您的预约" + list.get(0).getName() + "审核未通过，请重新预约。";
-            }
-
-            inform.setShzt(shzt);
-            inform.setContent(content);
-            inform.setSendTime(new Date());
-            inform.setSystemName("BA");
-            inform.setType(0);
-            inform.setIsRead(0);
-            inform.setOpPid(pid);
-            inform.setOpUserId(sendId);
-            iInformationService.insertInform(inform);
         } catch (Exception e) {
             logger.error("Error on edit orderrequest!", e);
             return new MessageEntity().addCode(1).addIsError(true).addTitle("错误").addContent("审核失败!");
@@ -455,19 +403,6 @@ public class OrderRequestController {
                         inform.setIsRead(0);
                         this.noticeService.insertInform(inform);
 
-                        InformationEntity informationEntity = new InformationEntity();
-                        Integer userId = ControllerTool.getSessionInfo(request).getUser().getId();
-                        informationEntity.setSenderId(userId.longValue());
-                        informationEntity.setReceiverId(tzusers.get(i).getId().longValue());
-                        informationEntity.setTitle("预约通知");
-                        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        informationEntity.setContent(userService.getUserByID(entity.getOrderUserId()).getRealName() + "预约成功，预计到达时间" + df.format(entity.getPlanTime()));
-                        informationEntity.setSendTime(new Date());
-                        informationEntity.setIsRead(0);
-                        informationEntity.setSystemName("BA");
-                        informationEntity.setOpPid(ControllerTool.getSessionInfo(request).getCurrentOrg().getPid());
-                        informationEntity.setOpUserId(userId);
-                        this.iInformationService.insertInform(informationEntity);
                     }
                 }
 
@@ -702,20 +637,6 @@ public class OrderRequestController {
     /**
      * 查询警号是否存在
      *
-     * @param form
-     * @return
-     * @throws Exception
-     */
-    @RequestMapping(value = "/searchUser")
-    @ResponseBody
-    public UserEntity searchUser(@RequestBody UserNoSearchForm form) throws Exception {
-        UserEntity user = userService.getUserByCertificateNo(form.getUserNo());
-        if (user != null) {
-            return user;
-        } else {
-            return null;
-        }
-    }
 
     //验证预约房间人数
     @RequestMapping(value = "/checkPersonCount")

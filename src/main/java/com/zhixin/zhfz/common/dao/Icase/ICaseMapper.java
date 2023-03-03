@@ -47,4 +47,5 @@ public interface ICaseMapper {
     List<CaseEntity> listCase(Map<String, Object> map) throws Exception;
 
 
+    List<CaseEntity> queryCaseByAjbh(String ajbh);
 }

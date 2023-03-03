@@ -28,8 +28,9 @@
         &nbsp;&nbsp;
         <a href="javascript:void(0)" onclick="add()" class="easyui-linkbutton button-line-blue" iconCls="icon-add"
            plain="true">添加</a>
-&nbsp;&nbsp;
-        <a href="javascript:void(0)" onclick="getRoles()" class="easyui-linkbutton button-line-brown" iconCls="icon-user-config"
+        &nbsp;&nbsp;
+        <a href="javascript:void(0)" onclick="sysZfbaData()" class="easyui-linkbutton button-line-brown"
+           iconCls="icon-user-config"
            plain="true">同步执法办案平台数据</a>
     </div>
 
@@ -37,13 +38,13 @@
         <table id="dg" style="width:100%;height:100%;">
         </table>
         <div id="tb" style="padding:2px 5px;">
-           <%-- <a href="javascript:void(0)" onclick="add()" class="easyui-linkbutton" iconCls="icon-add"
-               plain="true">添加</a>
-            <a id="btn-edit" href="javascript:void(0)" onclick="edit()" class="easyui-linkbutton" iconCls="icon-edit"
-               plain="true">编辑</a>
-            <a id="btn-delete" href="javascript:void(0)" onclick="remove()" class="easyui-linkbutton"
-               iconCls="icon-remove"
-               plain="true">删除</a>--%>
+            <%-- <a href="javascript:void(0)" onclick="add()" class="easyui-linkbutton" iconCls="icon-add"
+                plain="true">添加</a>
+             <a id="btn-edit" href="javascript:void(0)" onclick="edit()" class="easyui-linkbutton" iconCls="icon-edit"
+                plain="true">编辑</a>
+             <a id="btn-delete" href="javascript:void(0)" onclick="remove()" class="easyui-linkbutton"
+                iconCls="icon-remove"
+                plain="true">删除</a>--%>
             <%--<a href="javascript:void(0)" onclick="getRoles()" class="easyui-linkbutton" iconCls="icon-user-config"
                plain="true">角色设置</a>
            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-save" plain="true">保存</a>
@@ -188,6 +189,79 @@
         $('#ajbh').textbox('setValue', '');
     }
 
+    function sysZfbaData() {
+        dialog = $("#dlg").dialog({
+            title: '同步数据',
+            width: 1200,
+            height: 700,
+            href: '${ctx}/newpage/ajxx/zfbadata.jsp',
+            maximizable: false,
+            modal: true,
+            buttons: [{
+                text: '确认',
+                iconCls: 'icon-ok',
+                handler: function () {
+                    var rowAJ = datagridaj.datagrid('getSelected');
+                    var rowPerson = datagridperson.datagrid('getSelected');
+
+                    var CaseForm = $('#form').serializeObject();
+                    if(rowAJ!=null){
+                        CaseForm["ajbh"] = rowAJ.AJBH;
+                        CaseForm["ajmc"] = rowAJ.AJMC;
+                        CaseForm["afdd"] = rowAJ.FADDXZ;
+                        CaseForm["zbmjxm"] = rowAJ.ZBR_XM;
+                        CaseForm["zbdwbh"] = rowAJ.ZBDW_BH;
+                        CaseForm["afsj"] = rowAJ.FXSJ;
+                        CaseForm["ajlx"] = rowAJ.AJLX;
+                        CaseForm["ajly"] = 2;
+                    }
+
+                    //人员
+                    if(rowPerson!=null){
+                        CaseForm["name"] = rowPerson.RYXM;
+                        CaseForm["gj"] = rowPerson.GJ;
+                        CaseForm["sex"] = rowPerson.XB;
+                        CaseForm["age"] = rowPerson.AGE;
+                        CaseForm["birth"] = rowPerson.CSRQ;
+                        CaseForm["nation"] = rowPerson.MZ;
+                        CaseForm["certificateNo"] = rowPerson.ZJHM;
+                        CaseForm["censusRegister"] = rowPerson.HJDXZ;
+                        CaseForm["rybh"] = rowPerson.RYBH;
+                    }
+
+                    var CaseFormJson = JSON.stringify(CaseForm);
+                    $.messager.progress({
+                        title: '请等待',
+                        msg: '添加/修改数据中...'
+                    });
+                    jQuery.ajax({
+                        type: 'POST',
+                        url: "/zhfz/zhfz/common/case/addPersonAndCase.do",
+                        data: {
+                            form: CaseFormJson
+                        },
+                        dataType: 'json',
+                        success: function (data) {
+                            U.msg(data.content);
+                            dialog.dialog('close');
+                            $.messager.progress('close');
+                            queryUsers();
+                        },
+                        error: function (data) {
+                            $.messager.progress('close');
+                            U.msg(data.content);
+                        }
+                    });
+                }
+            }, {
+                text: '取消', iconCls: 'icon-cancel',
+                handler: function () {
+                    dialog.dialog('close');
+                }
+            }]
+        });
+    }
+
     function add() {
         dialog = $("#dlg").dialog({
             title: '添加案件',
@@ -287,7 +361,7 @@
                 handler: function () {
                     var isValid = $("#formedit").form('validate');
                     if (isValid) {
-                        var address =$('#afdd').textbox("getValue");
+                        var address = $('#afdd').textbox("getValue");
                         var CaseForm = $('#formedit').serializeObject();
                         CaseForm["id"] = id;
                         CaseForm["abmc"] = $('#ab').combobox('getText');

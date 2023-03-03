@@ -10,7 +10,7 @@ import com.zhixin.zhfz.common.entity.*;
 import com.zhixin.zhfz.common.services.user.IUserService;
 import com.zhixin.zhfz.common.utils.ControllerTool;
 import com.zhixin.zhfz.common.utils.PropertyUtil;
-import com.zhixin.zhfz.sacw.common.Utils;
+import com.zhixin.zhfz.common.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

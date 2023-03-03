@@ -2,9 +2,11 @@ package com.zhixin.zhfz.common.controller.Icase;
 
 import com.zhixin.zhfz.bacs.entity.JzAjxxEntity;
 import com.zhixin.zhfz.bacs.entity.OrderRequestEntity;
+import com.zhixin.zhfz.bacs.entity.PersonEntity;
 import com.zhixin.zhfz.bacs.services.jzAjxx.IJzAjxxService;
 import com.zhixin.zhfz.bacs.services.order.IOrderPersonService;
 import com.zhixin.zhfz.bacs.services.order.IOrderRequestService;
+import com.zhixin.zhfz.bacs.services.person.IPersonService;
 import com.zhixin.zhfz.common.entity.*;
 import com.zhixin.zhfz.common.form.CaseForm;
 import com.zhixin.zhfz.common.services.Icase.CasePoliceService;
@@ -38,15 +40,11 @@ public class ICaseController {
     private IUserService userService;
     @Autowired
     private ICaseService caseService;
+    @Autowired
+    private IPersonService personService;
 
     @Autowired
     private IOperLogService operLogService;
-    @Autowired
-    private IOrderRequestService orderRequestService;
-    @Autowired
-    private IOrderPersonService orderPersonServicee;
-    @Autowired
-    private CasePoliceService casePoliceService;
     @Autowired
     private IOrganizationService organizationService;
 
@@ -122,6 +120,91 @@ public class ICaseController {
         return result;
     }
 
+    // 添加案件
+    @RequestMapping(value = "/addPersonAndCase")
+    @ResponseBody
+    public MessageEntity addPersonAndCase(@RequestParam Map<String, Object> params, HttpServletRequest request) throws Exception {
+        System.out.println("+++++++++++++addCase+++++ Start+++++++++++++++");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd");
+        CaseEntity caseEntity = new CaseEntity();
+        MessageEntity messageEntity = new MessageEntity();
+        try {
+            JSONObject orderJson = JSONObject.fromObject(params.get("form"));
+            logger.info(orderJson.toString());
+            CaseForm caseForm = (CaseForm) JSONObject.toBean(orderJson, CaseForm.class);
+            String CaseNo = "AJ" + new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
+            caseEntity.setAfsj(df.parse(caseForm.getAfsj()));
+            caseEntity.setAjbh(caseForm.getAjbh());
+            caseEntity.setAreaId(ControllerTool.getCurrentArea(request).getId());
+            if (caseForm.getAjbh() == null || "null".equals(caseForm.getAjbh()) || "".equals(caseForm.getAjbh())) {
+                caseEntity.setAjbh(CaseNo);
+            }
+            caseEntity.setAjmc(caseForm.getAjmc());
+            caseEntity.setAjly(caseForm.getAjly());
+            caseEntity.setAjlx(Integer.valueOf(formatStr(caseForm.getAjlx())));
+//            caseEntity.setAb(caseForm.getAb());//无
+//            caseEntity.setAbmc(caseForm.getAbmc());//无
+            caseEntity.setUuid(java.util.UUID.randomUUID().toString());
+            caseEntity.setAfdd(formatStr(caseForm.getAfdd()));
+            caseEntity.setCreatedTime(new Date());
+            caseEntity.setUpdatedTime(caseForm.getCreatedTime());
+            caseEntity.setZbmjxm(formatStr(caseForm.getZbmjxm()));
+
+//            caseEntity.setZbmjId(caseForm.getZbmjId());
+//            caseEntity.setCjr(ControllerTool.getUser(request).getId());
+            //根据zbdwbh查询单位
+            String zbdwbh = formatStr(caseForm.getZbdwbh());
+            List<OrganizationEntity> organizationEntities = organizationService.listOrgByOrgCode(Long.valueOf(zbdwbh));
+            if (organizationEntities.size() > 0) {
+                caseEntity.setZbdwmc(organizationEntities.get(0).getName());
+                caseEntity.setZbdwId(organizationEntities.get(0).getId());
+            }
+
+            //查询案件编号是否已存在
+            List<CaseEntity> casea = caseService.queryCaseByAjbh(caseEntity.getAjbh());
+            if (casea.size() > 0) {
+                caseEntity.setId(casea.get(0).getId());
+            } else {
+                caseService.insertCase(caseEntity);
+            }
+            //插入嫌疑人
+            if(caseForm.getName()!=null||"".equals(caseForm.getName())){
+                PersonEntity entity = new PersonEntity();
+                entity.setCertificateTypeId(111);
+                entity.setCaseId(caseEntity.getId());
+                entity.setRybh(caseForm.getRybh());
+                entity.setCertificateNo(formatStr(caseForm.getCertificateNo()));
+                entity.setName(formatStr(caseForm.getName()));
+                entity.setSex(Integer.valueOf(formatStr(caseForm.getSex())));
+                entity.setCountry(Integer.valueOf(formatStr(caseForm.getCountry())));
+                entity.setNation(Integer.valueOf(formatStr(caseForm.getNation())));
+                entity.setAreaId(ControllerTool.getCurrentArea(request).getId());
+                entity.setCensusRegister(formatStr(caseForm.getCensusRegister()));
+                String uuid = UUID.randomUUID().toString().replace("-", "");
+                entity.setUuid(uuid);
+                entity.setOpPid(ControllerTool.getSessionInfo(request).getCurrentOrg().getPid());
+                entity.setOpUserId(ControllerTool.getSessionInfo(request).getUser().getId());
+                personService.insert(entity);
+            }
+
+        } catch (ParseException e) {
+            logger.error("Error on adding user!", e);
+            this.operLogService.insertLog(OperLogEntity.INSERT_TYPE, "添加案件" + caseEntity, ControllerTool.getUser(request).getLoginName(), false, OperLogEntity.SYSTEM_XTPZ);
+            return new MessageEntity().addCode(1).addIsError(true).addTitle("Error").addContent("Add failure!");
+        }
+        this.operLogService.insertLog(OperLogEntity.INSERT_TYPE, "添加案件" + caseEntity, ControllerTool.getUser(request).getLoginName(), true, OperLogEntity.SYSTEM_XTPZ);
+        messageEntity.addCode(1).addIsError(false).addTitle("消息").addContent("添加成功!");
+        return messageEntity;
+    }
+
+    private String formatStr(Object obj) {
+        if (null == obj || "null".equals(obj) || "".equals(obj)) {
+            return "0";
+        } else {
+            return obj.toString();
+        }
+    }
+
 
     // 添加案件
     @RequestMapping(value = "/addCase")
@@ -139,7 +222,7 @@ public class ICaseController {
             caseEntity.setAfsj(df.parse(caseForm.getAfsj()));
             caseEntity.setAreaId(ControllerTool.getCurrentArea(request).getId());
             String casedata = sdf2.format(caseEntity.getAfsj());
-            if(caseForm.getAjbh()==null||"null".equals(caseForm.getAjbh())||"".equals(caseForm.getAjbh())){
+            if (caseForm.getAjbh() == null || "null".equals(caseForm.getAjbh()) || "".equals(caseForm.getAjbh())) {
                 caseEntity.setAjbh(CaseNo);
             }
             caseEntity.setAjmc(casedata + " " + caseForm.getAfdd() + " " + caseForm.getAbmc());

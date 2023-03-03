@@ -6,6 +6,8 @@ import com.zhixin.zhfz.bacs.dao.belong.IOpenCabinetMapper;
 import com.zhixin.zhfz.bacs.dao.belongtemp.IBelongDetailTempMapper;
 import com.zhixin.zhfz.bacs.dao.belongtemp.IBelongTempMapper;
 import com.zhixin.zhfz.bacs.dao.serial.ISerialMapper;
+import com.zhixin.zhfz.bacs.daoOracle.IAjxxOracleMapper;
+import com.zhixin.zhfz.bacs.daoOracle.IOracleMapper;
 import com.zhixin.zhfz.bacs.entity.*;
 import com.zhixin.zhfz.bacs.services.belongtemp.IBelongDetailTempService;
 import com.zhixin.zhfz.bacs.services.belongtemp.IBelongTempService;
@@ -48,6 +50,8 @@ public class BelongServiceImpl implements IBelongService {
     private IBelongDetailTempMapper belongDetailTempService;
     @Resource
     private IOrganizationService organizationService;
+    @Resource
+    private IOracleMapper iOracleMapper;
 
     /**
      * 查询某存物柜的存物信息
@@ -657,6 +661,21 @@ public class BelongServiceImpl implements IBelongService {
     public List<BelongEntity> addBelongcodNew(Map<String, Object> fileMap) {
         List<BelongEntity> s = belongMapper.selectcodinfoNew(fileMap);
         return s;
+    }
+
+    @Override
+    public List<Map<String, Object>> listCaseZfba(Map<String, Object> map) {
+        return iOracleMapper.queryJzDataAjxx(map);
+    }
+
+    @Override
+    public int listCaseZfbaCount(Map<String, Object> map) {
+        return iOracleMapper.queryJzDataAjxxCount(map);
+    }
+
+    @Override
+    public List<Map<String, Object>> listPersonZfba(Map<String, Object> map) {
+        return iOracleMapper.queryJzDataPerson(map);
     }
 
 }

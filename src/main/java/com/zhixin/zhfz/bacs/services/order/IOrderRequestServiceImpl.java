@@ -6,13 +6,11 @@ import com.zhixin.zhfz.bacs.dao.person.IPersonMapper;
 import com.zhixin.zhfz.bacs.entity.*;
 import com.zhixin.zhfz.common.entity.SessionInfo;
 import com.zhixin.zhfz.common.utils.ControllerTool;
-import com.zhixin.zhfz.glpt.dao.areaPatrol.IAreaPatrolMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
-import com.zhixin.zhfz.glpt.entity.AlarmEntity;
 
 @Service
 public class IOrderRequestServiceImpl implements IOrderRequestService {
@@ -22,8 +20,6 @@ public class IOrderRequestServiceImpl implements IOrderRequestService {
 	private IOrderStatusMapper orderStatusMapper;
 	@Resource
 	private IPersonMapper personMapper;
-	@Resource
-	private IAreaPatrolMapper areaPatrolMapper;
 	@Override
 	public List<OrderRequestEntity> list(Map<String, Object> params) throws Exception {
 
@@ -235,20 +231,17 @@ public class IOrderRequestServiceImpl implements IOrderRequestService {
 		}
 		if (femalCountAdd > 0) {
 			alarm.setAlarmName("侯问室不满足女性数量");
-			areaPatrolMapper.addAlarm(alarm);
 			return "侯问室不满足女性数量！";
 		}
 		//传染病人
 		if (specialCountAdd > 0) {
 			alarm.setAlarmName("侯问室不满足传染病人数量");
-			areaPatrolMapper.addAlarm(alarm);
 			//return "侯问室不满足未成年人数量！";
 			return "侯问室不满足传染病人数量！";
 		}
 		//未成年人
 		if (juvenilesCountAdd > 0) {
 			alarm.setAlarmName("侯问室不满足未成年人数量");
-			areaPatrolMapper.addAlarm(alarm);
 			//return "侯问室不满足传染病人数量！";
 			return "侯问室不满足未成年人数量！";
 		}

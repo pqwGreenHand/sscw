@@ -10,14 +10,10 @@ import com.zhixin.zhfz.bacs.services.record.IRecordService;
 import com.zhixin.zhfz.bacs.services.serial.ISerialService;
 import com.zhixin.zhfz.bacs.services.waitingmanage.IWaitingManageService;
 import com.zhixin.zhfz.common.entity.MessageEntity;
-import com.zhixin.zhfz.common.entity.UserEntity;
 import com.zhixin.zhfz.common.services.user.IUserService;
 import com.zhixin.zhfz.common.utils.BeanUtils;
-import com.zhixin.zhfz.common.utils.ControllerTool;
-import com.zhixin.zhfz.sacw.form.UserNoSearchForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
@@ -149,22 +145,6 @@ public class ArraignServiceImpl implements IArraignService {
 //        wentity.setOpUserId(ControllerTool.getUserID(request));
 //        waitingManageService.insert(wentity);
         return new MessageEntity().addCode(0).addIsError(false).addTitle("通知").addContent("清理成功!");
-    }
-
-    @Override
-    public UserEntity checkPolceNo(UserNoSearchForm form)throws Exception{
-        UserEntity userEntity = userService.getUserByCertificateNo(form.getUserNo());
-        if(userEntity != null){
-            PoliceEntranceEntity policeEntranceEntity = policeEntranceService.findPoliceEntranceByPoliceId(userEntity.getId());
-            if(policeEntranceEntity != null && policeEntranceEntity.getId() != 0){
-                return userEntity;
-            } else{
-                //当民警未入区时返回id为-1的user
-                userEntity.setId(-1);
-                return userEntity;
-            }
-        }
-        return null;
     }
 
 

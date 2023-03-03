@@ -50,26 +50,6 @@
 	<!--</bean>-->
 
 	<!-- 周期告警插入 -->
-	<bean id="alarmtimeQuartz" class="com.zhixin.zhfz.sacw.quartz.cwalarmquartz.CwalarmQuartz" />
-	<bean id="methodAlarmOvertimeQuartz"
-		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject">
-			<ref bean="alarmtimeQuartz" />
-		</property>
-		<property name="targetMethod">
-			<value>timeTaskInsertAlarm</value>
-		</property>
-	</bean>
-	<bean id="alarmTasktime"
-		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail">
-			<ref bean="methodAlarmOvertimeQuartz" />
-		</property>
-		<property name="cronExpression">
-			<!-- 每10s一次 -->
-			<value>0/10 * * * * ?</value>
-		</property>
-	</bean>
 	<!--&lt;!&ndash; 周期计算侯问容积告警   &ndash;&gt;-->
 	<!--<bean id="witTimeQuartz" class="com.zhixin.zhfz.bacs.controller.quartz.WaitTimeQuartz" />-->
 	<!--<bean id="methodInvokingWaitTimeQuartz"-->

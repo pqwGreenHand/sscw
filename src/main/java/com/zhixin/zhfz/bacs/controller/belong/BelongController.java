@@ -29,7 +29,6 @@ import com.zhixin.zhfz.common.services.operLog.IOperLogService;
 import com.zhixin.zhfz.common.services.organiztion.IOrganizationService;
 import com.zhixin.zhfz.common.utils.ControllerTool;
 import com.zhixin.zhfz.common.utils.PropertyUtil;
-import com.zhixin.zhfz.sacw.common.Utils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -105,7 +104,33 @@ public class BelongController {
     @Resource
     private IZfbaService zfbaService;
 
-
+    @RequestMapping(value = "/listCaseZfba")
+    @ResponseBody
+    public Map<String, Object> listCaseZfba(@RequestParam Map<String, Object> pageMap, HttpServletRequest request,
+                                         HttpServletResponse response) throws Exception {
+        Map<String, Object> map = ControllerTool.mapFilter(pageMap);
+        SessionInfo sessionInfo = ControllerTool.getSessionInfo(request);
+        map.put("orgCode",sessionInfo.getCurrentOrg().getOrgCode());
+        map.put("start", (Integer.parseInt(map.get("page").toString()) - 1) * Integer.parseInt(map.get("rows").toString()) + 1);
+        map.put("end", Integer.parseInt(map.get("page").toString()) * Integer.parseInt(map.get("rows").toString()));
+        Map<String, Object> result = new HashMap<String, Object>();
+        List<Map<String, Object>> list = belongService.listCaseZfba(map);
+        int total = belongService.listCaseZfbaCount(map);
+        result.put("total", total);
+        result.put("rows", list);
+        return result;
+    }
+    @RequestMapping(value = "/listPersonZfba")
+    @ResponseBody
+    public Map<String, Object> listPersonZfba(@RequestParam Map<String, Object> pageMap, HttpServletRequest request,
+                                         HttpServletResponse response) throws Exception {
+        Map<String, Object> map = ControllerTool.mapFilter(pageMap);
+        SessionInfo sessionInfo = ControllerTool.getSessionInfo(request);
+        Map<String, Object> result = new HashMap<String, Object>();
+        List<Map<String, Object>> list = belongService.listPersonZfba(map);
+        result.put("rows", list);
+        return result;
+    }
     /**
      * 轨迹时间轴
      *

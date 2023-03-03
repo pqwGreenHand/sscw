@@ -13,7 +13,6 @@ import com.zhixin.zhfz.common.common.LedOldUtil;
 import com.zhixin.zhfz.common.common.led.LedUtil;
 import com.zhixin.zhfz.common.entity.UserEntity;
 import com.zhixin.zhfz.common.services.user.IUserService;
-import com.zhixin.zhfz.sacw.form.UserNoSearchForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,27 +88,6 @@ public class ArraignController {
             e.printStackTrace();
             this.operLogService.insertLog(OperLogEntity.UPLOAD_TYPE, "清理提讯", ControllerTool.getLoginName(request), false,"办案场所");
             return new MessageEntity().addCode(1).addIsError(true).addTitle("通知").addContent("清理失败!");
-        }
-    }
-    //检验警号是否辞职以及是否入区
-    @RequestMapping("/checkPolceNo")
-    @ResponseBody
-    public MessageEntity checkPolceNo(@RequestBody UserNoSearchForm form, HttpServletRequest request) {
-        logger.info("======clear========");
-        try {
-            UserEntity userEntity = service.checkPolceNo(form);
-            if(null == userEntity){
-                return new MessageEntity().addCode(0).addIsError(true).addTitle("通知").addContent("警号不存在");
-            } else {
-                if(userEntity.getId() != -1){
-                     return new MessageEntity().addCode(0).addIsError(false).addTitle("通知").addContent("查询警号成功").addCallbackData(userEntity);
-                }else{
-                    return new MessageEntity().addCode(0).addIsError(true).addTitle("通知").addContent("请先办理民警入区手续");
-                 }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new MessageEntity().addCode(0).addIsError(true).addTitle("通知").addContent("查询警号失败" + e);
         }
     }
 

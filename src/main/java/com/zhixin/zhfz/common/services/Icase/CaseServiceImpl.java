@@ -70,4 +70,9 @@ public class CaseServiceImpl implements ICaseService {
         return list;
     }
 
+    @Override
+    public List<CaseEntity> queryCaseByAjbh(String ajbh) {
+        return caseMapper.queryCaseByAjbh(ajbh);
+    }
+
 }

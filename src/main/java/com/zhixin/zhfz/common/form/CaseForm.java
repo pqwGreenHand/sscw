@@ -72,6 +72,96 @@ public class CaseForm implements java.io.Serializable{
     private String abmc;
     // 案件状态
     private String ajzt;
+    private String zbdwbh;
+    private String name;
+    private String certificateNo;
+    private String sex;
+    private String country;
+    private String nation;
+    private String age;
+    private String birth;
+    private String censusRegister;
+    private String rybh;
+
+    public String getRybh() {
+        return rybh;
+    }
+
+    public void setRybh(String rybh) {
+        this.rybh = rybh;
+    }
+
+    public String getZbdwbh() {
+        return zbdwbh;
+    }
+
+    public void setZbdwbh(String zbdwbh) {
+        this.zbdwbh = zbdwbh;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCertificateNo() {
+        return certificateNo;
+    }
+
+    public void setCertificateNo(String certificateNo) {
+        this.certificateNo = certificateNo;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getNation() {
+        return nation;
+    }
+
+    public void setNation(String nation) {
+        this.nation = nation;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
+    }
+
+    public String getBirth() {
+        return birth;
+    }
+
+    public void setBirth(String birth) {
+        this.birth = birth;
+    }
+
+    public String getCensusRegister() {
+        return censusRegister;
+    }
+
+    public void setCensusRegister(String censusRegister) {
+        this.censusRegister = censusRegister;
+    }
 
     public String getAjzt() {
         return ajzt;

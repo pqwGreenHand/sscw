@@ -15,7 +15,7 @@ import com.zhixin.zhfz.bacs.entity.SerialEntity;
 import com.zhixin.zhfz.common.entity.SessionInfo;
 import com.zhixin.zhfz.common.services.operLog.IOperLogService;
 import com.zhixin.zhfz.common.utils.ControllerTool;
-import com.zhixin.zhfz.sacw.common.Utils;
+import com.zhixin.zhfz.common.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
