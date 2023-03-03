@@ -33,7 +33,7 @@
     $(function () {
         add();
         $('#area').combobox({
-            url: '/zhfz/zhfz/bacs/order/comboArea.do',
+            url: '/sscw/zhfz/bacs/order/comboArea.do',
             valueField: 'id',
             textField: 'name',
             onLoadSuccess: function (data) {

@@ -48,7 +48,7 @@
     $(function () {
         datagridaj = $('#dgaj').datagrid({
             method: "get",
-            url: '/zhfz/zhfz/bacs/belong/listCaseZfba.do',
+            url: '/sscw/zhfz/bacs/belong/listCaseZfba.do',
             fit: true,
             fitColumns: true,
             border: true,
@@ -113,7 +113,7 @@
 
         datagridperson = $('#dgdetail').datagrid({
             method: "get",
-            url: '/zhfz/zhfz/bacs/belong/listPersonZfba.do',
+            url: '/sscw/zhfz/bacs/belong/listPersonZfba.do',
             fit: true,
             fitColumns: true,
             border: true,
@@ -185,7 +185,7 @@
     //加载主办单位
     function loadZbdw(zbdwId) {
         $("#zbdwId").combobox({
-            url: '/zhfz/zhfz/common/combobox/listAllOrganizationNameCombobox.do',
+            url: '/sscw/zhfz/common/combobox/listAllOrganizationNameCombobox.do',
             valueField: 'id',
             textField: 'value',
             onLoadSuccess: function () {

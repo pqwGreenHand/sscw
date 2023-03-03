@@ -12,7 +12,7 @@ $(function () {
     loadSexSearch();
     datagridPerson = $('#dg').datagrid({
         method: "get",
-        url: '/zhfz/zhfz/common/user/getUsersInfo.do',
+        url: '/sscw/zhfz/common/user/getUsersInfo.do',
         fit: true,
         fitColumns: true,
         border: true,
@@ -94,7 +94,7 @@ function loadSexSearch() {
 
 function codeCombo(id, type, selectedId) {
     $('#' + id).combobox({
-        url: "/zhfz/zhfz/common/code/listCodeByType.do?type=" + type,
+        url: "/sscw/zhfz/common/code/listCodeByType.do?type=" + type,
         valueField: 'codeKey',
         textField: 'codeValue',
         editable: false,
@@ -144,7 +144,7 @@ function add() {
                     jQuery.ajax({
                         type: 'POST',
                         contentType: 'application/json',
-                        url: "/zhfz/zhfz/bacs/person/insertPerson.do",
+                        url: "/sscw/zhfz/bacs/person/insertPerson.do",
                         data: personsJson,
                         dataType: 'json',
                         success: function (data) {
@@ -209,7 +209,7 @@ function edit(id) {
                     jQuery.ajax({
                         type: 'POST',
                         contentType: 'application/json',
-                        url: "/zhfz/zhfz/bacs/person/updatePerson.do",
+                        url: "/sscw/zhfz/bacs/person/updatePerson.do",
                         data: personsJson,
                         dataType: 'json',
                         success: function (data) {
@@ -255,7 +255,7 @@ function remove(id) {
             jQuery.ajax({
                 type: 'POST',
                 contentType: 'application/json',
-                url: '/zhfz/zhfz/common/user/delete.do',
+                url: '/sscw/zhfz/common/user/delete.do',
                 data: jsonrtinfo,
                 dataType: 'json',
                 success: function (data) {

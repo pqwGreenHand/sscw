@@ -61,7 +61,7 @@
         datagrid = $('#dg').datagrid({
             method: "get",
             <%--url: '${ctx}/sys/user/page',--%>
-            url: '/zhfz/zhfz/bacs/belong/queryCase.do',
+            url: '/sscw/zhfz/bacs/belong/queryCase.do',
             fit: true,
             fitColumns: true,
             border: true,
@@ -236,7 +236,7 @@
                     });
                     jQuery.ajax({
                         type: 'POST',
-                        url: "/zhfz/zhfz/common/case/addPersonAndCase.do",
+                        url: "/sscw/zhfz/common/case/addPersonAndCase.do",
                         data: {
                             form: CaseFormJson
                         },
@@ -311,7 +311,7 @@
                         });
                         jQuery.ajax({
                             type: 'POST',
-                            url: "/zhfz/zhfz/common/case/addCase.do",
+                            url: "/sscw/zhfz/common/case/addCase.do",
                             data: {
                                 form: CaseFormJson
                             },
@@ -376,7 +376,7 @@
                         });
                         jQuery.ajax({
                             type: 'POST',
-                            url: "/zhfz/zhfz/common/case/editCase.do",
+                            url: "/sscw/zhfz/common/case/editCase.do",
                             data: {
                                 form: CaseFormJson
                             },
@@ -418,7 +418,7 @@
             if (data) {
                 jQuery.ajax({
                     type: 'POST',
-                    url: '/zhfz/zhfz/common/case/removeCase.do',
+                    url: '/sscw/zhfz/common/case/removeCase.do',
                     data: {
                         "caseId": id,
                     },

@@ -93,7 +93,7 @@
             collapsible: true,
             loadMsg: 'Loading...',
             method: 'get',
-            url: '/zhfz/zhfz/bacs/dzRecord/listTree.do',
+            url: '/sscw/zhfz/bacs/dzRecord/listTree.do',
             queryParams: {
                 trefresh: new Date().getTime()
             },
@@ -170,7 +170,7 @@
 
                         var fileType = $("#fileType").combobox("getValue");
                         var personId = $("#person").combobox("getValue");
-                        var add =  "/zhfz/zhfz/bacs/archives/onlineupload.do?personId=" + personId + "&fileType=" + fileType + "&caseId=" + caseId;
+                        var add =  "/sscw/zhfz/bacs/archives/onlineupload.do?personId=" + personId + "&fileType=" + fileType + "&caseId=" + caseId;
                         $('#fam').form('submit', {
                             url: add,
                             onSubmit: function () {
@@ -206,7 +206,7 @@
 
     function loadPerson(personId, caseid) {
         $('#person').combobox({
-            url: '/zhfz/zhfz/bacs/combobox/listPerson.do?caseId=' + caseid,
+            url: '/sscw/zhfz/bacs/combobox/listPerson.do?caseId=' + caseid,
             valueField: 'id',
             textField: 'value',
             onLoadSuccess: function (data) {
@@ -251,7 +251,7 @@
             remoteSort: false,
             //idField:'code',
             queryParams: {lawCaseId: id, personId: pid, caseDataType: "1", trefresh: new Date().getTime()},
-            url: '/zhfz/zhfz/bacs/clue/listCaseDataClue.do',
+            url: '/sscw/zhfz/bacs/clue/listCaseDataClue.do',
             singleSelect: true,
             columns: [[
                 {field: 'checked', checkbox: true, width: 0},
@@ -266,7 +266,7 @@
                     field: 'id', title: '操作', width: 50,
                     formatter: function (value, row, index) {
                         var d = '';
-                        d = '<a  href="/zhfz/zhfz/bacs/clue/download.do?id=' + value + '" class="button-delete button-red" >下载</a>';
+                        d = '<a  href="/sscw/zhfz/bacs/clue/download.do?id=' + value + '" class="button-delete button-red" >下载</a>';
                         return d;
                     }
                 }
@@ -301,7 +301,7 @@
             remoteSort: false,
             //idField:'code',
             queryParams: {lawCaseId: id, personId: pid, caseDataType: "2", trefresh: new Date().getTime()},
-            url: '/zhfz/zhfz/bacs/clue/listCaseDataClue.do',
+            url: '/sscw/zhfz/bacs/clue/listCaseDataClue.do',
             singleSelect: true,
             columns: [[
                 {field: 'checked', checkbox: true, width: 0},
@@ -316,7 +316,7 @@
                     field: 'id', title: '操作', width: 50,
                     formatter: function (value, row, index) {
                         var d = '';
-                        d = '<a  href="/zhfz/zhfz/bacs/clue/download.do?id=' + value + '" class="button-delete button-red">下载</a>';
+                        d = '<a  href="/sscw/zhfz/bacs/clue/download.do?id=' + value + '" class="button-delete button-red">下载</a>';
                         return d;
                     }
                 }
@@ -351,7 +351,7 @@
             remoteSort: false,
             //idField:'code',
             queryParams: {lawCaseId: id, personId: pid, caseDataType: "3", trefresh: new Date().getTime()},
-            url: '/zhfz/zhfz/bacs/clue/listCaseDataClue.do',
+            url: '/sscw/zhfz/bacs/clue/listCaseDataClue.do',
             singleSelect: true,
             columns: [[
                 {field: 'checked', checkbox: true, width: 0},
@@ -366,7 +366,7 @@
                     field: 'id', title: '操作', width: 50,
                     formatter: function (value, row, index) {
                         var d = '';
-                        d = '<a  href="/zhfz/zhfz/bacs/clue/download.do?id=' + value + '" class="button-delete button-red">下载</a>';
+                        d = '<a  href="/sscw/zhfz/bacs/clue/download.do?id=' + value + '" class="button-delete button-red">下载</a>';
                         return d;
                     }
                 }

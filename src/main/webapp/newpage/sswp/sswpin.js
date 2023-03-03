@@ -9,8 +9,8 @@ $(function () {
     $("#inshow").show();
     datagridDit = $('#detid').datagrid({
         method: "get",
-        // url:  '/zhfz/zhfz/bacs/belong/queryCase.do',
-        url: '/zhfz/zhfz/bacs/belong/listAllBelongdet2.do',
+        // url:  '/sscw/zhfz/bacs/belong/queryCase.do',
+        url: '/sscw/zhfz/bacs/belong/listAllBelongdet2.do',
         fit: true,
         fitColumns: true,
         border: true,
@@ -84,7 +84,7 @@ function loadPerson() {
     $('#serialIdQuery').combogrid({
         panelWidth: 360,
         mode: 'remote',
-        url: '/zhfz/zhfz/common/combogrid/getPersonBelong.do?areaId=' + ssareaid,
+        url: '/sscw/zhfz/common/combogrid/getPersonBelong.do?areaId=' + ssareaid,
         idField: 'id',
         textField: 'name',
         columns: [[
@@ -126,7 +126,7 @@ function shuaxin() {
     $('#serialIdQuery').combogrid({
         panelWidth: 360,
         mode: 'remote',
-        url: '/zhfz/zhfz/common/combogrid/getPersonBelong.do?areaId=' + ssareaid,
+        url: '/sscw/zhfz/common/combogrid/getPersonBelong.do?areaId=' + ssareaid,
         idField: 'id',
         textField: 'name',
         columns: [[
@@ -260,7 +260,7 @@ function showImages() {
     });
     jQuery.ajax({
         type: 'POST',
-        url: "/zhfz/zhfz/bacs/belong/getImages.do",
+        url: "/sscw/zhfz/bacs/belong/getImages.do",
         data: {belongingsId: belongingsId},
         dataType: 'json',
         success: function (data) {
@@ -319,7 +319,7 @@ function edit(index) {
                     jQuery.ajax({
                         type: 'POST',
                         contentType: 'application/json',
-                        url: "/zhfz/zhfz/bacs/belong/editBelongdet.do",
+                        url: "/sscw/zhfz/bacs/belong/editBelongdet.do",
                         data: edtJson,
                         dataType: 'json',
                         success: function (data) {
@@ -376,7 +376,7 @@ function remove(id) {
             jQuery.ajax({
                 type: 'POST',
                 contentType: 'application/json',
-                url: '/zhfz/zhfz/bacs/belong/removeBelongdet.do?belongingsId=' + belongingsId + "&detailId=" + detailId,
+                url: '/sscw/zhfz/bacs/belong/removeBelongdet.do?belongingsId=' + belongingsId + "&detailId=" + detailId,
                 // data: {belongingsId: belongingsId, detailId: detailId},
                 dataType: 'json',
                 success: function (data) {

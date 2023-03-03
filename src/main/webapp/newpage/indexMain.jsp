@@ -520,7 +520,7 @@
                         jQuery.ajax({
                             type: 'POST',
                             contentType: 'application/json',
-                            url: '/zhfz/zhfz/common/user/changePsw.do',
+                            url: '/sscw/zhfz/common/user/changePsw.do',
                             data: enterpriseinfo,
                             dataType: 'json',
                             success: function (data) {

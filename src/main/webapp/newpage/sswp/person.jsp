@@ -39,8 +39,8 @@
     $(function () {
         datagridPerson = $('#dgperson').datagrid({
             method: "get",
-            // url:  '/zhfz/zhfz/bacs/belong/queryCase.do',
-            url: '/zhfz/zhfz/bacs/belong/queryPerson.do',
+            // url:  '/sscw/zhfz/bacs/belong/queryCase.do',
+            url: '/sscw/zhfz/bacs/belong/queryPerson.do',
             fit: true,
             fitColumns: true,
             border: true,

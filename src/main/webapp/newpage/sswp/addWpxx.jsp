@@ -90,9 +90,102 @@
     var dialogXyr;
     $(function () {
         loadLocked();
+        datagridPerson = $('#dgperson').datagrid({
+            method: "get",
+            // url:  '/sscw/zhfz/bacs/belong/queryCase.do',
+            url: '/sscw/zhfz/bacs/belong/queryPerson.do',
+            fit: true,
+            fitColumns: true,
+            border: true,
+            idField: 'id',
+            striped: true,
+            pagination: true,
+            rownumbers: true,
+            pageNumber: 1,
+            pageSize: 10,
+            pageList: [10, 20, 30, 50, 100],
+            singleSelect: true,
+            selectOnCheck: true,
+            checkOnSelect: true,
+            columns: [[
+                {field: 'ck', checkbox: true},
+                {field: 'id', title: 'id', hidden: true},
+                {
+                    field: 'ajmc', title: '案件名称', width: 150, formatter: function (value, rec) {
+                        if (value == null || value == '') {
+                            return '无';
+                        } else {
+                            return "<div title='" + value + "' class='textEllipsis'>" + value + "</div>";
+                        }
+                    }
+                },
+                {
+                    field: 'ajbh', title: '案件编号', width: 120, formatter: function (value, rec) {
+                        if (value == null || value == '') {
+                            return '无';
+                        } else {
+                            return "<div title='" + value + "' class='textEllipsis'>" + value + "</div>";
+                        }
+                    }
+                },
+                {
+                    field: 'areaName', title: '所属单位', width: 140
+                },
+                {field: 'name', title: '嫌疑人姓名', width: 70},
+                {
+                    field: 'sex', title: '性别', width: 40,
+                    formatter: function (value, rec) {
+                        if (1 == value) {
+                            return "男";
+                        } else if (2 == value) {
+                            return "女";
+                        } else {
+                            return '未知';
+                        }
+                    }
+                },
+                {field: 'certificateTypeName', title: '证件类型', width: 70},
+                {field: 'certificateNo', title: '证件号码', width: 120},
+                /*{
+                    field: 'operate', title: '操作', width: 120,
+                    formatter: function (value, row, index) {
+                        var d = "<a onclick='remove(" + row.id + ")' class='button-delete button-red'>删除</a>";
+                        var e = "<a onclick='edit(" + row.id + ")' class='button-edit button-blue'>编辑</a>";
+                        return e + '  ' + d;
+                    }
+                }*/
+            ]],
+            onLoadSuccess: function (data) {
+                $('.button-delete').linkbutton({});
+                $('.button-edit').linkbutton({});
+
+                if (data) {
+                    $.each(data.rows,
+                        function (index, item) {
+                            if (item.checked) {
+                                $('#dg').datagrid('checkRow', index);
+                            }
+                        });
+                }
+            },
+            onSelect: function (index, row) {
+                if (row.isFixed == 1) {//固定的
+//                    $('#btn-edit').hide();
+                    $('#btn-delete').hide();
+                } else {
+//                    $('#btn-edit').show();
+                    $('#btn-delete').show();
+                }
+            },
+            queryParams: {
+                username: $('#username').val(),
+                mobile: $('#mobile').val(),
+                gender: $('#gender').val()
+            }
+        });
         $('#belonggrid').datagrid({
             method: "get",
-            url: '/zhfz/zhfz/bacs/belong/listAllBelongdet2.do',
+            url: '/sscw/zhfz/bacs/belong/listAllBelongdet2.do',
             fit: true,
             fitColumns: true,
             border: true,
@@ -160,7 +253,7 @@
     });
 
     function loadLocked() {
-        var lockerId_ulr = "/zhfz/zhfz/bacs/belong/listBelongLockerBox.do?areaId=" + $('#ssareaid').val() + "&timeSign=" + getTimeSign();
+        var lockerId_ulr = "/sscw/zhfz/bacs/belong/listBelongLockerBox.do?areaId=" + $('#ssareaid').val() + "&timeSign=" + getTimeSign();
         $('#lockerId').combobox({
             url: lockerId_ulr,
             valueField: 'id',
@@ -191,7 +284,7 @@
                 jQuery.ajax({
                     type: 'POST',
                     contentType: 'application/json',
-                    url: '/zhfz/zhfz/bacs/belong/removeBelongdet.do?belongingsId=' + belongingsId + "&detailId=" + detailId,
+                    url: '/sscw/zhfz/bacs/belong/removeBelongdet.do?belongingsId=' + belongingsId + "&detailId=" + detailId,
                     dataType: 'json',
                     success: function (data) {
                         U.msg(data.content);
@@ -269,7 +362,7 @@
             jQuery.ajax({
                 type: 'POST',
                 contentType: 'application/json',
-                url: "/zhfz/zhfz/bacs/belong/belongsave.do",
+                url: "/sscw/zhfz/bacs/belong/belongsave.do",
                 data: wpxxJson,
                 dataType: 'json',
                 success: function (data) {

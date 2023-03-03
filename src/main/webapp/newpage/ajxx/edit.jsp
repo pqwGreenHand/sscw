@@ -93,7 +93,7 @@
     //加载主办单位
     function loadZbdw(zbdwId) {
         $("#zbdwId").combobox({
-            url: '/zhfz/zhfz/common/combobox/listAllOrganizationNameCombobox.do',
+            url: '/sscw/zhfz/common/combobox/listAllOrganizationNameCombobox.do',
             valueField: 'id',
             textField: 'value',
             onLoadSuccess: function () {
@@ -105,7 +105,7 @@
     }
     function loadAjlx(ajlx, ab) {
         $('#ajlx').combobox({
-            url: "/zhfz/zhfz/common/code/listCodeByType.do?type=AJLX&tresh=" + new Date().getTime(),
+            url: "/sscw/zhfz/common/code/listCodeByType.do?type=AJLX&tresh=" + new Date().getTime(),
             valueField: 'codeKey',
             textField: 'codeValue',
             editable: false,
@@ -135,7 +135,7 @@
         }
         //加载犯罪类型
         $('#ab').combobox({
-            url: '/zhfz/zhfz/bacs/combobox/listcrimetypebynature.do?nature=' + encodeURI(natureValue, "UTF-8") + '&tresh=' + new Date().getTime(),
+            url: '/sscw/zhfz/bacs/combobox/listcrimetypebynature.do?nature=' + encodeURI(natureValue, "UTF-8") + '&tresh=' + new Date().getTime(),
             valueField: 'id',
             textField: 'value',
             onLoadSuccess: function (data) {
@@ -161,7 +161,7 @@
             type: 'POST',
             contentType: 'application/json',
             dataType: 'json',
-            url: '/zhfz/zhfz/bacs/order/searchUser.do',
+            url: '/sscw/zhfz/bacs/order/searchUser.do',
             data: jsonrtinfo,
             success: function (data) {
                 if (data != null && data.id != null) {
@@ -204,7 +204,7 @@
             type: 'POST',
             contentType: 'application/json',
             dataType: 'json',
-            url: '/zhfz/zhfz/bacs/order/searchUser.do',
+            url: '/sscw/zhfz/bacs/order/searchUser.do',
             data: jsonrtinfo,
             success: function (data) {
                 if (data != null && data.id != null) {
@@ -236,7 +236,7 @@
             type: 'get',
             async: false,
             dataType: 'json',
-            url: '/zhfz/zhfz/bacs/personalconfig/listConfigDetailByAreaAndName.do?name=' + encodeURIComponent('案发地址绑定'),
+            url: '/sscw/zhfz/bacs/personalconfig/listConfigDetailByAreaAndName.do?name=' + encodeURIComponent('案发地址绑定'),
             success: function (data) {
                 if (data != null && data.error == false && data.callbackData != null) {
 
@@ -252,7 +252,7 @@
     //加载省市县村三级联动
     function BindAddress(arr) {
         var province = $('#province').combobox({
-            url: '/zhfz/zhfz/common/region/list.do?level=1&trefresh=' + new Date().getTime(),
+            url: '/sscw/zhfz/common/region/list.do?level=1&trefresh=' + new Date().getTime(),
             valueField: 'code',
             textField: 'name',
             onChange: function (newValue, oldValue) {
@@ -260,7 +260,7 @@
                 jQuery.ajax({
                     type: 'get',
                     dataType: 'json',
-                    url: '/zhfz/zhfz/common/region/list.do?level=2&parentId=' + newValue + "&trefresh=" + new Date().getTime(),
+                    url: '/sscw/zhfz/common/region/list.do?level=2&parentId=' + newValue + "&trefresh=" + new Date().getTime(),
                     success: function (data) {
                         city.combobox("clear").combobox('loadData', data);
                         district.combobox("clear");
@@ -291,7 +291,7 @@
             onChange: function (newValue, oldValue) {
                 if (newValue != "") {
                     //区县
-                    $.get('/zhfz/zhfz/common/region/list.do', {
+                    $.get('/sscw/zhfz/common/region/list.do', {
                         level: 3,
                         trefresh: new Date().getTime(),
                         parentId: newValue
@@ -320,7 +320,7 @@
             editable: true,
             onChange: function (newValue, oldValue) {
                 if (newValue != "") {
-                    $.get('/zhfz/zhfz/common/region/list.do', {
+                    $.get('/sscw/zhfz/common/region/list.do', {
                         level: 4,
                         trefresh: new Date().getTime(),
                         parentId: newValue

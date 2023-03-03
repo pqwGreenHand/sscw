@@ -83,7 +83,7 @@
 
 <!-- 下载隐藏信息 -->
 <div style="display: none">
-    <form id="lawdocInfo_belonginfo" class="form-style" method="get" action="/zhfz/zhfz/lawdocProcess/download.do"
+    <form id="lawdocInfo_belonginfo" class="form-style" method="get" action="/sscw/zhfz/lawdocProcess/download.do"
           accept-charset="UTF-8'">
         <input type="hidden" id="number" name="number"/>
         <input type="hidden" id="name" name="name"/>

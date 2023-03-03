@@ -8,7 +8,7 @@ $(function () {
     $("#qcShow").show();
     datagridPerson = $('#dg').datagrid({
         method: "get",
-        url: '/zhfz/zhfz/bacs/belong/listBelongTemp.do',
+        url: '/sscw/zhfz/bacs/belong/listBelongTemp.do',
         fit: true,
         fitColumns: true,
         border: true,
@@ -114,7 +114,7 @@ $(function () {
         method: 'get',
         remoteSort: false,
         queryParams: {tempId: -99},
-        url: '/zhfz/zhfz/bacs/belong/listBelongTempDetail.do',
+        url: '/sscw/zhfz/bacs/belong/listBelongTempDetail.do',
         singleSelect: true,
         columns: [[
             {field: 'name', title: '物品名称', width: 100},
@@ -141,7 +141,7 @@ function lawdocDetailgridLoad(rowData) {
 //加载办案场所
 function loadArea() {
     $('#areaId').combobox({
-        url:  '/zhfz/zhfz/bacs/order/comboArea.do',
+        url:  '/sscw/zhfz/bacs/order/comboArea.do',
         valueField: 'id',
         textField: 'name',
         onLoadSuccess: function (data) {
@@ -150,7 +150,7 @@ function loadArea() {
             }*/
         },
         onChange:function (data) {
-            var lockerId_ulr = "/zhfz/zhfz/bacs/belong/listBelongLockerBox.do?areaId=" + data + "&timeSign=" + getTimeSign();
+            var lockerId_ulr = "/sscw/zhfz/bacs/belong/listBelongLockerBox.do?areaId=" + data + "&timeSign=" + getTimeSign();
             $('#lockerId').combobox({
                 url: lockerId_ulr,
                 valueField: 'id',
@@ -205,7 +205,7 @@ function yjAccept() {
                                 jQuery.ajax({
                                     type: 'POST',
                                     contentType: 'application/json',
-                                    url: '/zhfz/zhfz/bacs/belong/saveYjBelong.do',
+                                    url: '/sscw/zhfz/bacs/belong/saveYjBelong.do',
                                     dataType: 'json',
                                     data: enterpriseinfo,
                                     success: function (data) {
@@ -283,7 +283,7 @@ function yjRefuse() {
                                     jQuery.ajax({
                                         type: 'POST',
                                         contentType: 'application/json',
-                                        url: '/zhfz/zhfz/bacs/belong/updateBelongTempStatusById.do',
+                                        url: '/sscw/zhfz/bacs/belong/updateBelongTempStatusById.do',
                                         dataType: 'json',
                                         data: enterpriseinfo,
                                         success: function (data) {
@@ -327,7 +327,7 @@ function searchImage() {
     });
     jQuery.ajax({
         type: 'POST',
-        url: '/zhfz/zhfz/bacs/belong/getImagesTemp.do',
+        url: '/sscw/zhfz/bacs/belong/getImagesTemp.do',
         data: {tempId: tempId},
         dataType: 'json',
         success: function (data) {
@@ -378,7 +378,7 @@ function loadSexSearch() {
 
 function codeCombo(id, type, selectedId) {
     $('#' + id).combobox({
-        url: "/zhfz/zhfz/common/code/listCodeByType.do?type=" + type,
+        url: "/sscw/zhfz/common/code/listCodeByType.do?type=" + type,
         valueField: 'codeKey',
         textField: 'codeValue',
         editable: false,
@@ -428,7 +428,7 @@ function add() {
                     jQuery.ajax({
                         type: 'POST',
                         contentType: 'application/json',
-                        url: "/zhfz/zhfz/bacs/person/insertPerson.do",
+                        url: "/sscw/zhfz/bacs/person/insertPerson.do",
                         data: personsJson,
                         dataType: 'json',
                         success: function (data) {
@@ -493,7 +493,7 @@ function edit(id) {
                     jQuery.ajax({
                         type: 'POST',
                         contentType: 'application/json',
-                        url: "/zhfz/zhfz/bacs/person/updatePerson.do",
+                        url: "/sscw/zhfz/bacs/person/updatePerson.do",
                         data: personsJson,
                         dataType: 'json',
                         success: function (data) {
@@ -539,7 +539,7 @@ function remove(id) {
             jQuery.ajax({
                 type: 'POST',
                 contentType: 'application/json',
-                url: '/zhfz/zhfz/bacs/person/deletePerson.do',
+                url: '/sscw/zhfz/bacs/person/deletePerson.do',
                 data: jsonrtinfo,
                 dataType: 'json',
                 success: function (data) {

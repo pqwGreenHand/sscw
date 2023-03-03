@@ -12,8 +12,8 @@ $(function () {
     loadSexSearch();
     datagridPerson = $('#dg').datagrid({
         method: "get",
-        // url:  '/zhfz/zhfz/bacs/belong/queryCase.do',
-        url: '/zhfz/zhfz/bacs/belong/queryPerson.do',
+        // url:  '/sscw/zhfz/bacs/belong/queryCase.do',
+        url: '/sscw/zhfz/bacs/belong/queryPerson.do',
         fit: true,
         fitColumns: true,
         border: true,
@@ -131,7 +131,7 @@ function loadSexSearch() {
 
 function codeCombo(id, type, selectedId) {
     $('#' + id).combobox({
-        url: "/zhfz/zhfz/common/code/listCodeByType.do?type=" + type,
+        url: "/sscw/zhfz/common/code/listCodeByType.do?type=" + type,
         valueField: 'codeKey',
         textField: 'codeValue',
         editable: false,
@@ -181,7 +181,7 @@ function add() {
                     jQuery.ajax({
                         type: 'POST',
                         contentType: 'application/json',
-                        url: "/zhfz/zhfz/bacs/person/insertPerson.do",
+                        url: "/sscw/zhfz/bacs/person/insertPerson.do",
                         data: personsJson,
                         dataType: 'json',
                         success: function (data) {
@@ -254,7 +254,7 @@ function sysZfbaData() {
                 });
                 jQuery.ajax({
                     type: 'POST',
-                    url: "/zhfz/zhfz/common/case/addPersonAndCase.do",
+                    url: "/sscw/zhfz/common/case/addPersonAndCase.do",
                     data: {
                         form: CaseFormJson
                     },
@@ -319,7 +319,7 @@ function edit(id) {
                     jQuery.ajax({
                         type: 'POST',
                         contentType: 'application/json',
-                        url: "/zhfz/zhfz/bacs/person/updatePerson.do",
+                        url: "/sscw/zhfz/bacs/person/updatePerson.do",
                         data: personsJson,
                         dataType: 'json',
                         success: function (data) {
@@ -365,7 +365,7 @@ function remove(id) {
             jQuery.ajax({
                 type: 'POST',
                 contentType: 'application/json',
-                url: '/zhfz/zhfz/bacs/person/deletePerson.do',
+                url: '/sscw/zhfz/bacs/person/deletePerson.do',
                 data: jsonrtinfo,
                 dataType: 'json',
                 success: function (data) {

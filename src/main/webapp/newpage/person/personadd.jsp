@@ -81,7 +81,7 @@
         loadSex();
         codeCombo('person_country', 'GJID', 156);
         $('#person_certificate_type').combobox({
-            url: '/zhfz/zhfz/common/combobox/certificateTypes.do',
+            url: '/sscw/zhfz/common/combobox/certificateTypes.do',
             valueField: 'id',
             textField: 'value',
             required: true,
@@ -91,7 +91,7 @@
                         type: 'POST',
                         contentType: 'application/json',
                         dataType: 'json',
-                        url: "/zhfz/zhfz/common/combobox/listWMSCount.do",
+                        url: "/sscw/zhfz/common/combobox/listWMSCount.do",
                         success: function (data) {
                             var count = data + 1;
                             $('#person_name').textbox('setValue', "无名氏" + count);
@@ -159,7 +159,7 @@
 
     function codeCombo(id, type, selectedId) {
         $('#' + id).combobox({
-            url: "/zhfz/zhfz/common/code/listCodeByType.do?type=" + type,
+            url: "/sscw/zhfz/common/code/listCodeByType.do?type=" + type,
             valueField: 'codeKey',
             textField: 'codeValue',
             editable: false,
@@ -185,7 +185,7 @@
             type: 'get',
             async: true,
             dataType: 'json',
-            url: "/zhfz/zhfz/common/code/listCodeByType.do?type=MZID",
+            url: "/sscw/zhfz/common/code/listCodeByType.do?type=MZID",
             success: function (data) {
                 if (data != null) {
                     $('#person_nation').combobox({

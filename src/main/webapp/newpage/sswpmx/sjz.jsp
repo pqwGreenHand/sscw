@@ -62,7 +62,7 @@
             $.ajax(
                 {
                     type: 'post',
-                    url: '/zhfz/zhfz/bacs/belong/getSjz.do',
+                    url: '/sscw/zhfz/bacs/belong/getSjz.do',
                     data: 'id=' + id,
                     dataType: 'json',
                     success: function (data) {

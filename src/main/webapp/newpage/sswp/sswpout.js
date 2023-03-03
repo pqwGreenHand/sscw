@@ -7,8 +7,8 @@ $(function () {
     $("#outshow").show();
     datagridDit = $('#detid').datagrid({
         method: "get",
-        // url:  '/zhfz/zhfz/bacs/belong/queryCase.do',
-        url: '/zhfz/zhfz/bacs/belong/listAllBelongdetByLockerId.do',
+        // url:  '/sscw/zhfz/bacs/belong/queryCase.do',
+        url: '/sscw/zhfz/bacs/belong/listAllBelongdetByLockerId.do',
         fit: true,
         fitColumns: true,
         border: true,
@@ -87,7 +87,7 @@ $(function () {
     });
 
     $('#jsdwId').combobox({
-        url: '/zhfz/zhfz/bacs/combobox/listAllOrganizationCode.do',
+        url: '/sscw/zhfz/bacs/combobox/listAllOrganizationCode.do',
         valueField: 'id',
         textField: 'value',
         onChange: function (value) {
@@ -117,7 +117,7 @@ function loadPerson() {
     $('#serialIdQuery').combogrid({
         panelWidth: 360,
         mode: 'remote',
-        url: '/zhfz/zhfz/common/combogrid/getPersonBelong.do?areaId=' + ssareaid,
+        url: '/sscw/zhfz/common/combogrid/getPersonBelong.do?areaId=' + ssareaid,
         idField: 'id',
         textField: 'name',
         columns: [[
@@ -162,7 +162,7 @@ function shuaxin() {
     $('#serialIdQuery').combogrid({
         panelWidth: 360,
         mode: 'remote',
-        url: '/zhfz/zhfz/common/combogrid/getPersonBelong.do?areaId=' + ssareaid,
+        url: '/sscw/zhfz/common/combogrid/getPersonBelong.do?areaId=' + ssareaid,
         idField: 'id',
         textField: 'name',
         columns: [[
@@ -192,7 +192,7 @@ function boxopens(index){
     $('#jsdwId').combobox('setValues', '');
     $('#belongingsId').val(rowData.belongingsId);
     $('#lockerId').val(rowData.lockerId);
-    url = '/zhfz/zhfz/bacs/belong/editBoxopenouts.do?id=' + rowData.id;
+    url = '/sscw/zhfz/bacs/belong/editBoxopenouts.do?id=' + rowData.id;
     dialog = $("#lqwpxx").dialog({
         title: '领取物品',
         width: 500,
@@ -271,7 +271,7 @@ function boxopen() {
         }
         $('#jsdwId').combobox('setValues', '');
         $('#getWay').combobox('setValues', '');
-        url = '/zhfz/zhfz/bacs/belong/editBoxopenout.do?id=' + row.id;
+        url = '/sscw/zhfz/bacs/belong/editBoxopenout.do?id=' + row.id;
         dialog = $("#lqwpxx").dialog({
             title: '领取物品',
             width: 500,
@@ -381,7 +381,7 @@ function showImages() {
     });
     jQuery.ajax({
         type: 'POST',
-        url: "/zhfz/zhfz/bacs/belong/getImages.do",
+        url: "/sscw/zhfz/bacs/belong/getImages.do",
         data: {belongingsId: belongingsId},
         dataType: 'json',
         success: function (data) {
@@ -440,7 +440,7 @@ function edit(index) {
                     jQuery.ajax({
                         type: 'POST',
                         contentType: 'application/json',
-                        url: "/zhfz/zhfz/bacs/belong/editBelongdet.do",
+                        url: "/sscw/zhfz/bacs/belong/editBelongdet.do",
                         data: edtJson,
                         dataType: 'json',
                         success: function (data) {
@@ -497,7 +497,7 @@ function remove(id) {
             jQuery.ajax({
                 type: 'POST',
                 contentType: 'application/json',
-                url: '/zhfz/zhfz/bacs/belong/removeBelongdet.do?belongingsId=' + belongingsId + "&detailId=" + detailId,
+                url: '/sscw/zhfz/bacs/belong/removeBelongdet.do?belongingsId=' + belongingsId + "&detailId=" + detailId,
                 // data: {belongingsId: belongingsId, detailId: detailId},
                 dataType: 'json',
                 success: function (data) {

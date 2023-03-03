@@ -68,7 +68,7 @@ function loadinfo() {
         async: false,
         type: 'POST',
         contentType: 'application/json',
-        url: '/zhfz/zhfz/bacs/belong/listboxinfo.do?areaid=' + ssareaid + "&timeSign=" + getTimeSign(),
+        url: '/sscw/zhfz/bacs/belong/listboxinfo.do?areaid=' + ssareaid + "&timeSign=" + getTimeSign(),
         dataType: 'json',
         success: function (data) {
             for (var key in data) {

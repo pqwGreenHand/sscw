@@ -4,7 +4,7 @@ $(function () {
     loadSexSearch();
     datagridPerson = $('#dg').datagrid({
         method: "get",
-        url: '/zhfz/zhfz/bacs/belong/listAllBelong.do',
+        url: '/sscw/zhfz/bacs/belong/listAllBelong.do',
         fit: true,
         fitColumns: true,
         border: true,
@@ -80,7 +80,7 @@ $(function () {
 
     datagridPerson = $('#dgdetail').datagrid({
         method: "get",
-        url: '/zhfz/zhfz/bacs/belong/listAllBelongdet.do',
+        url: '/sscw/zhfz/bacs/belong/listAllBelongdet.do',
         fit: true,
         fitColumns: true,
         border: true,
@@ -215,7 +215,7 @@ function loadSexSearch() {
 
 function codeCombo(id, type, selectedId) {
     $('#' + id).combobox({
-        url: "/zhfz/zhfz/common/code/listCodeByType.do?type=" + type,
+        url: "/sscw/zhfz/common/code/listCodeByType.do?type=" + type,
         valueField: 'codeKey',
         textField: 'codeValue',
         editable: false,
@@ -265,7 +265,7 @@ function add() {
                     jQuery.ajax({
                         type: 'POST',
                         contentType: 'application/json',
-                        url: "/zhfz/zhfz/bacs/person/insertPerson.do",
+                        url: "/sscw/zhfz/bacs/person/insertPerson.do",
                         data: personsJson,
                         dataType: 'json',
                         success: function (data) {
@@ -300,7 +300,7 @@ function edit(id) {
     });
     jQuery.ajax({
         type: 'POST',
-        url: "/zhfz/zhfz/bacs/belong/getImages.do",
+        url: "/sscw/zhfz/bacs/belong/getImages.do",
         data: {belongingsId: belongingsId},
         dataType: 'json',
         success: function (data) {
@@ -355,7 +355,7 @@ function remove(id) {
             jQuery.ajax({
                 type: 'POST',
                 contentType: 'application/json',
-                url: '/zhfz/zhfz/common/user/delete.do',
+                url: '/sscw/zhfz/common/user/delete.do',
                 data: jsonrtinfo,
                 dataType: 'json',
                 success: function (data) {

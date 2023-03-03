@@ -38,7 +38,7 @@
 
 </div>
 <div>
-    <form id="lawdocInfo" class="form-style" method="post" action="/zhfz/zhfz/lawdocProcess/download.do"
+    <form id="lawdocInfo" class="form-style" method="post" action="/sscw/zhfz/lawdocProcess/download.do"
           accept-charset="UTF-8'">
         <input type="hidden" id="number" name="number"/>
         <input type="hidden" id="userId" name="userId"/>
@@ -63,7 +63,7 @@
         datagrid = $('#dg').datagrid({
             method: "get",
             <%--url: '${ctx}/sys/user/page',--%>
-            url: '/zhfz/zhfz/bacs/lawdoc/listPerson.do',
+            url: '/sscw/zhfz/bacs/lawdoc/listPerson.do',
             fit: true,
             fitColumns: true,
             border: true,
@@ -155,7 +155,7 @@
         datagriddetail = $('#lawdocDetailgrid').datagrid({
             method: "get",
             queryParams: "{'enpId':'-99','trefresh':" + new Date().getTime() + "}",
-            url: '/zhfz/zhfz/bacs/lawdoc/listlawdoc.do',
+            url: '/sscw/zhfz/bacs/lawdoc/listlawdoc.do',
             fit: true,
             fitColumns: true,
             border: true,

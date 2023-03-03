@@ -2,10 +2,7 @@ package com.zhixin.zhfz.bacs.controller.order;
 
 
 import com.zhixin.zhfz.bacs.entity.*;
-import com.zhixin.zhfz.bacs.form.NvrForm;
-import com.zhixin.zhfz.bacs.form.OrdeAddPersonForm;
-import com.zhixin.zhfz.bacs.form.OrderRequestForm;
-import com.zhixin.zhfz.bacs.form.OrderRequestPersonForm;
+import com.zhixin.zhfz.bacs.form.*;
 import com.zhixin.zhfz.bacs.services.area.IAreaService;
 import com.zhixin.zhfz.bacs.services.jzPerson.IJzPersonService;
 import com.zhixin.zhfz.bacs.services.order.IOrderPersonService;
@@ -74,6 +71,24 @@ public class OrderRequestController {
     private IJzPersonService jzPersonService;
     @Resource
     private ICommonCommonMapper commonCommonMapper;
+
+    /**
+     * 查询警号是否存在
+     *
+     * @param form
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/searchUser")
+    @ResponseBody
+    public UserEntity searchUser(@RequestBody UserNoSearchForm form) throws Exception {
+        UserEntity user = userService.getUserByCertificateNo(form.getUserNo());
+        if (user != null) {
+            return user;
+        } else {
+            return null;
+        }
+    }
 
     //系统状态
     @RequestMapping(value = "/queryXtStatus")

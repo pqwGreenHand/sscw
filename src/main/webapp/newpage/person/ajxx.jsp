@@ -38,7 +38,7 @@
         datagridajxx = $('#dgajxx').datagrid({
             method: "get",
             <%--url: '${ctx}/sys/user/page',--%>
-            url:  '/zhfz/zhfz/bacs/belong/queryCase.do',
+            url:  '/sscw/zhfz/bacs/belong/queryCase.do',
             fit: true,
             fitColumns: true,
             border: true,
