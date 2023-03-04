@@ -122,6 +122,7 @@
         playParam.StartTime = valueToDate(new Date().getTime()-10 * 60 * 1000);//开始时间
         playParam.EndTime = valueToDate(new Date().getTime() - 5 * 60 * 1000);//结束时间,往后推5分钟
         var json = JSON.stringify(playParam);//需要变成字符串格式
+
         $.ajax({
             type: "POST",
             url: "http://127.0.0.1:28281/PlayBack/Play",
