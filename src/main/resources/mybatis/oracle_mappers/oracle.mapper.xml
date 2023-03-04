@@ -5,16 +5,21 @@
     <select id="queryJzDataAjxx" parameterType="java.util.Map" resultType="java.util.Map">
         SELECT * FROM (SELECT tt.*, ROWNUM AS rowno
         FROM ( SELECT
-        AJBH,AJMC,FADDXZ,TO_CHAR(FXSJ,'yyyy-MM-dd HH:mm:ss') as FXSJ,AJLX,ZBR_XM,ZBR_SFZH,ZBDW_BH
-        FROM SJJH_WA_AJXX where 1=1
+        (SELECT code.name FROM code code where DIC_NAME='案件性质' and code.code=aj.ajxz) AJXZ,
+        org.name,
+        aj.AJBH,aj.AJMC,aj.FADDXZ,TO_CHAR(aj.FXSJ,'yyyy-MM-dd HH:mm:ss') as
+        FXSJ,aj.AJLX,aj.ZBR_XM,aj.ZBR_SFZH,aj.ZBDW_BH
+        FROM SJJH_WA_AJXX aj
+        LEFT JOIN SJJH_WA_ORG org ON aj.ZBDW_BH = org.CODE
+        where 1=1 and INSTR (org.NAME, '平谷') > 0 AND ROWNUM&lt;5000
         <if test="ajbh!=null and ajbh!=''">
-            and AJBH like  '%${ajbh}%'
+            and aj.AJBH like '%${ajbh}%'
         </if>
         <if test="caseName!=null and caseName!=''">
-            and AJMC like '%' || #{caseName} || '%'
+            and aj.AJMC like '%' || #{caseName} || '%'
         </if>
         <if test="orgCode!=null and orgCode!=''">
-            and ZBDW_BH in (${orgCode})
+            and aj.ZBDW_BH in (${orgCode})
         </if>
         ORDER BY FXSJ DESC) tt) table_alias
         <if test="start!=null and start!=''">
@@ -24,15 +29,19 @@
 
 
     <select id="queryJzDataAjxxCount" resultType="java.lang.Integer" parameterType="java.util.Map">
-        SELECT count(1) FROM SJJH_WA_AJXX where 1=1
+        SELECT
+        count(1)
+        FROM SJJH_WA_AJXX aj
+        LEFT JOIN SJJH_WA_ORG org ON aj.ZBDW_BH = org.CODE
+        where 1=1 and INSTR (org.NAME, '平谷') > 0 AND ROWNUM&lt;5000
         <if test="ajbh!=null and ajbh!=''">
-            and AJBH like  '%${ajbh}%'
+            and aj.AJBH like '%${ajbh}%'
         </if>
         <if test="caseName!=null and caseName!=''">
-            and AJMC like '%' || #{caseName} || '%'
+            and aj.AJMC like '%' || #{caseName} || '%'
         </if>
         <if test="orgCode!=null and orgCode!=''">
-            and ZBDW_BH in (${orgCode})
+            and aj.ZBDW_BH in (${orgCode})
         </if>
 
     </select>
@@ -40,7 +49,7 @@
 
     <select id="queryJzDataPerson" resultType="java.util.Map" parameterType="java.util.Map">
         SELECT
-        RYXM,XB,ZJHM,AJBH,RYBH,TO_CHAR(LRSJ,'yyyy-MM-dd hh:mi:ss am') as LRSJ,HJDXZ,GJ,AGE,CSRQ,MZ
+        RYXM,XB,ZJHM,AJBH,RYBH,TO_CHAR(LRSJ,'yyyy-MM-dd hh:mi:ss am') as LRSJ,HJDXZ,GJ,AGE,MZ
         FROM SJJH_WA_RYXX
         where 1=1
         <if test="caseNo!=null and caseNo!=''">

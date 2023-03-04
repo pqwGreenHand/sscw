@@ -90,7 +90,12 @@
                         }
                     }
                 }, {
+                    field: 'AJXZ', title: '案件性质', width: 20
+                }, {
                     field: 'ZBR_XM', title: '主办民警', width: 20
+                },
+                {
+                    field: 'NAME', title: '主办单位', width: 20
                 },
                 {field: 'FADDXZ', title: '案发地址', width: 30},
                 {field: 'FXSJ', title: '案发时间', width: 30}
@@ -108,6 +113,7 @@
             onSelect: function (index, row) {
                 //行选择方法，进行条件触发
                 detailPersongridLoad(row);
+                $("#dgdetail").datagrid("unselectAll"); //全部不选中
             }
         });
 
@@ -127,7 +133,7 @@
             singleSelect: true,
             selectOnCheck: true,
             checkOnSelect: true,
-            queryParams: {'caseNo': '-99', 'trefresh': new Date().getTime()},
+            // queryParams: {'caseNo': '-99', 'trefresh': new Date().getTime()},
             // toolbar: '#tb',
             columns: [[
                 {field: 'ck', checkbox: true},
@@ -144,21 +150,8 @@
             ]],
             onLoadSuccess: function (data) {
 
-                if (data) {
-                    $.each(data.rows,
-                        function (index, item) {
-                            if (item.checked) {
-                                $('#dg').datagrid('checkRow', index);
-                            }
-                        });
-                }
             },
             onSelect: function (index, row) {
-                if (row.isFixed == 1) {//固定的
-                    $('#btn-delete').hide();
-                } else {
-                    $('#btn-delete').show();
-                }
             }
 
         });
@@ -171,7 +164,7 @@
 
     function queryZfbaAjxx() {
         $(datagridaj).datagrid('load', {
-            caseName: $('#zfbaajmc').textbox("getValue"),
+                caseName: $('#zfbaajmc').textbox("getValue"),
                 ajbh: $('#zfbaajbh').textbox("getValue")
             }
         );

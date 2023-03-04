@@ -112,13 +112,13 @@
         playParam.EndTime = valueToDate(row.time + 5 * 60 * 1000);//结束时间,往后推5分钟*/
 
         playParam.NodeName = "随身物品登记室";//房间name
-        playParam.VenderType = "1";//nvrTpye
-        playParam.DeviceIp = "127.0.0.1";//nvrip
-        playParam.Port = "8000";//nvr
+        playParam.VenderType = "2";//nvrTpye
+        playParam.DeviceIp = "14.200.5.176";//nvrip
+        playParam.Port = "37000";//nvr
         playParam.Account = "admin";//nvr用户
-        playParam.Password = "password1";//nvr密码
-        playParam.Channel = "1";//摄像头通道
-        playParam.CameraNo = "1";//摄像头编号
+        playParam.Password = "admin123";//nvr密码
+        playParam.Channel = "23";//摄像头通道
+        playParam.CameraNo = "23";//摄像头编号
         playParam.StartTime = valueToDate(new Date().getTime()-10 * 60 * 1000);//开始时间
         playParam.EndTime = valueToDate(new Date().getTime() - 5 * 60 * 1000);//结束时间,往后推5分钟
         var json = JSON.stringify(playParam);//需要变成字符串格式

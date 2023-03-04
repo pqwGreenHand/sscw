@@ -1,90 +1,93 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>  
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhixin.zhfz.bacs.dao.crimedefine.ICrimeDefineMapper">
 
-	<resultMap id="crimeDefineMap" type="com.zhixin.zhfz.bacs.entity.CrimeDefineEntity">
-		<id property="id" column="id"/>
-		<result property="codeClass" column="code_class" jdbcType="VARCHAR"/>
-		<result property="codeClassDesc" column="code_class_desc" jdbcType="VARCHAR"/>
-		<result property="code" column="code" jdbcType="VARCHAR"/>
-		<result property="codeDesc" column="code_desc" jdbcType="VARCHAR"/>
-		<result property="spellCode" column="spell_code" jdbcType="VARCHAR"/>
-		<result property="sortNo" column="sort_no" jdbcType="BIGINT"/>
-		<result column="op_pid" property="op_Pid" jdbcType="VARCHAR" />
-		<result column="op_user_id" property="op_User_Id" jdbcType="INTEGER" />
-	</resultMap>
- 
+    <resultMap id="crimeDefineMap" type="com.zhixin.zhfz.bacs.entity.CrimeDefineEntity">
+        <id property="id" column="id"/>
+        <result property="codeClass" column="code_class" jdbcType="VARCHAR"/>
+        <result property="codeClassDesc" column="code_class_desc" jdbcType="VARCHAR"/>
+        <result property="code" column="code" jdbcType="VARCHAR"/>
+        <result property="codeDesc" column="code_desc" jdbcType="VARCHAR"/>
+        <result property="spellCode" column="spell_code" jdbcType="VARCHAR"/>
+        <result property="sortNo" column="sort_no" jdbcType="BIGINT"/>
+        <result column="op_pid" property="op_Pid" jdbcType="VARCHAR"/>
+        <result column="op_user_id" property="op_User_Id" jdbcType="INTEGER"/>
+    </resultMap>
 
-	<!-- id is same to interface'methmod -->
-	<select id="list" resultMap="crimeDefineMap" parameterType="java.util.Map">  
-        	SELECT * FROM xt_crime_define
-		<where>
-			1=1
-			<if test="dataAuth!=null and dataAuth!=''">
-				and ${dataAuth}
-			</if>
-			<if test="codeClassDesc!=null and codeClassDesc !=''">
-        			 and code_class_desc like "%${codeClassDesc}%"
-			</if>
-			<if test="codeDesc!=null and codeDesc !=''">
-        			 and code_desc like "%${codeDesc}%"
-			</if>
-		</where>
-        	limit ${pageStart},${rows}	
-	</select>
-	<select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">  
-        	SELECT count(*) FROM xt_crime_define
-		<where>
-			1=1
-			<if test="dataAuth!=null and dataAuth!=''">
-				and ${dataAuth}
-			</if>
-			<if test="codeClassDesc!=null and codeClassDesc !=''">
-        			 and code_class_desc like "%${codeClassDesc}%"
-			</if>
-			<if test="codeDesc!=null and codeDesc !=''">
-        			 and code_desc like "%${codeDesc}%"
-			</if>
-		</where>
-	</select>
-    
-	<select id="getCrimeTypeId" resultType="java.lang.Integer" parameterType="java.util.Map">  
+
+    <!-- id is same to interface'methmod -->
+    <select id="list" resultMap="crimeDefineMap" parameterType="java.util.Map">
+        SELECT * FROM xt_crime_define
+        <where>
+            1=1
+            <if test="dataAuth!=null and dataAuth!=''">
+                and ${dataAuth}
+            </if>
+            <if test="codeClassDesc!=null and codeClassDesc !=''">
+                and code_class_desc like "%${codeClassDesc}%"
+            </if>
+            <if test="codeDesc!=null and codeDesc !=''">
+                and code_desc = #{codeDesc}
+            </if>
+        </where>
+        <if test="pageStart != null and rows != null">
+            limit ${pageStart},${rows}
+        </if>
+    </select>
+    <select id="count" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT count(*) FROM xt_crime_define
+        <where>
+            1=1
+            <if test="dataAuth!=null and dataAuth!=''">
+                and ${dataAuth}
+            </if>
+            <if test="codeClassDesc!=null and codeClassDesc !=''">
+                and code_class_desc like "%${codeClassDesc}%"
+            </if>
+            <if test="codeDesc!=null and codeDesc !=''">
+                and code_desc like "%${codeDesc}%"
+            </if>
+        </where>
+    </select>
+
+    <select id="getCrimeTypeId" resultType="java.lang.Integer" parameterType="java.util.Map">
         select case code_class_desc when '行政案由' then 1 else 0 end typeid from xt_crime_define where id=#{caseNatureId} LIMIT 1
 	</select>
-    
-	<insert id="insert" parameterType="com.zhixin.zhfz.bacs.entity.CrimeDefineEntity" keyProperty="id" useGeneratedKeys="true">
+
+    <insert id="insert" parameterType="com.zhixin.zhfz.bacs.entity.CrimeDefineEntity" keyProperty="id"
+            useGeneratedKeys="true">
             INSERT INTO xt_crime_define (`code_class`, `code_class_desc`, `code`, `code_desc`, `spell_code`, `sort_no`,op_pid,op_user_id )
             values (#{codeClass},#{codeClassDesc},#{code},#{codeDesc},#{spellCode},#{sortNo},#{op_Pid},#{op_User_Id})
 	</insert>
-    
-	<delete id="delete" parameterType="int">  
+
+    <delete id="delete" parameterType="int">
             delete from xt_crime_define where id=#{id}
 	</delete>
 
-	<update id="update" parameterType="com.zhixin.zhfz.bacs.entity.CrimeDefineEntity">
-           update xt_crime_define
-		<set>
-			<if test="codeClass !=null and codeClass !=''">
-	        		code_class = #{codeClass}
-			</if>
-			<if test="codeClassDesc !=null and codeClassDesc !=''" >
-        			,code_class_desc = #{codeClassDesc}
-			</if>
-			<if test="code !=null and code !=''" >
-        			,code = #{code}
-			</if>
-			<if test="codeDesc !=null and codeDesc !=''" >
-        			,code_desc = #{codeDesc}
-			</if>
-			<if test="spellCode !=null and spellCode !=''" >
-        			,spell_code = #{spellCode}
-			</if>
-      			
-		</set>
-           where id=#{id} 
-	</update>
-	<!-- 犯罪类型热点+1 -->
-	<update id="updateSortNo" parameterType="com.zhixin.zhfz.bacs.entity.CrimeDefineEntity">
+    <update id="update" parameterType="com.zhixin.zhfz.bacs.entity.CrimeDefineEntity">
+        update xt_crime_define
+        <set>
+            <if test="codeClass !=null and codeClass !=''">
+                code_class = #{codeClass}
+            </if>
+            <if test="codeClassDesc !=null and codeClassDesc !=''">
+                ,code_class_desc = #{codeClassDesc}
+            </if>
+            <if test="code !=null and code !=''">
+                ,code = #{code}
+            </if>
+            <if test="codeDesc !=null and codeDesc !=''">
+                ,code_desc = #{codeDesc}
+            </if>
+            <if test="spellCode !=null and spellCode !=''">
+                ,spell_code = #{spellCode}
+            </if>
+
+        </set>
+        where id=#{id}
+    </update>
+    <!-- 犯罪类型热点+1 -->
+    <update id="updateSortNo" parameterType="com.zhixin.zhfz.bacs.entity.CrimeDefineEntity">
            UPDATE xt_crime_define set sort_no=sort_no+1 where id=#{id}
 	</update>
 

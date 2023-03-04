@@ -2,27 +2,18 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.zhixin.zhfz</groupId>
-	<artifactId>zhfz</artifactId>
+	<groupId>com</groupId>
+	<artifactId>sscw</artifactId>
 	<packaging>war</packaging>
 	<version>1.0.0</version>
-	<name>zhfz</name>
+	<name>sscw</name>
 
 	<organization>
-		<name>zhfz</name>
+		<name>sscw</name>
 	</organization>
 	<developers>
 		<developer>
-			<name>Pei Guocai</name>
-		</developer>
-		<developer>
-			<name>Deng Hongchao</name>
-		</developer>
-		<developer>
-			<name>Fang Yangmao</name>
-		</developer>
-		<developer>
-			<name>Li Huancheng</name>
+			<name>Pan QiaoWei</name>
 		</developer>
 	</developers>
 
@@ -565,7 +556,7 @@
 
 	<build>
 		<!-- web project name -->
-		<finalName>zhfz</finalName>
+		<finalName>sscw</finalName>
 		<plugins>
 		
 			<plugin>
@@ -573,8 +564,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>

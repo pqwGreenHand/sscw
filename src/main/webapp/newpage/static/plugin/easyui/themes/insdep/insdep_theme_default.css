@@ -136,7 +136,8 @@ i, cite, em, var, address, dfn {/*斜体*/
 	/*头部菜单按钮全局样式,根据需要删减*/
 	.theme-navigate{height:75px;}
 	.theme-navigate .left,.theme-navigate .right{ height:46px;}
-	.theme-navigate{ overflow:hidden; clear:both; padding:5px 0 0 280px;}
+	/*.theme-navigate{ overflow:hidden; clear:both; padding:5px 0 0 280px;}*/
+	.theme-navigate{ overflow:hidden; clear:both;}
 	.theme-navigate .left{ float:left;}
 	.theme-navigate .right{ float:right; padding:0 20px 0 0;}
 	.theme-navigate .l-btn-text{ color:#c3c3c3; margin: 3px 5px;}

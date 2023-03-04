@@ -27,7 +27,7 @@
         /*}*/
         .logo {
             display: block;
-            width: 1200px;
+            /*width: 1200px;*/
             height: 98px;
             z-index: 4;
             margin: auto;

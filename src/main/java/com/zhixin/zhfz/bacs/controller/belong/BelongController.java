@@ -110,9 +110,12 @@ public class BelongController {
                                          HttpServletResponse response) throws Exception {
         Map<String, Object> map = ControllerTool.mapFilter(pageMap);
         SessionInfo sessionInfo = ControllerTool.getSessionInfo(request);
-        map.put("orgCode",sessionInfo.getCurrentOrg().getOrgCode());
-        map.put("start", (Integer.parseInt(map.get("page").toString()) - 1) * Integer.parseInt(map.get("rows").toString()) + 1);
+       map.put("start", (Integer.parseInt(map.get("page").toString()) - 1) * Integer.parseInt(map.get("rows").toString()) + 1);
         map.put("end", Integer.parseInt(map.get("page").toString()) * Integer.parseInt(map.get("rows").toString()));
+        if (RoleEntity.DATA_AUTH_SELFAREA == (ControllerTool.getRoleDataAuth(request))) {
+            // 办案场所-本办案场所
+            map.put("orgCode",sessionInfo.getCurrentOrg().getOrgCode());
+        }
         Map<String, Object> result = new HashMap<String, Object>();
         List<Map<String, Object>> list = belongService.listCaseZfba(map);
         int total = belongService.listCaseZfbaCount(map);
@@ -125,9 +128,12 @@ public class BelongController {
     public Map<String, Object> listPersonZfba(@RequestParam Map<String, Object> pageMap, HttpServletRequest request,
                                          HttpServletResponse response) throws Exception {
         Map<String, Object> map = ControllerTool.mapFilter(pageMap);
-        SessionInfo sessionInfo = ControllerTool.getSessionInfo(request);
         Map<String, Object> result = new HashMap<String, Object>();
-        List<Map<String, Object>> list = belongService.listPersonZfba(map);
+        List<Map<String, Object>> list= new ArrayList<>();
+        try{
+            list = belongService.listPersonZfba(map);
+        }catch (Exception e){}
+
         result.put("rows", list);
         return result;
     }

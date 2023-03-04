@@ -1,8 +1,10 @@
 package com.zhixin.zhfz.common.controller.Icase;
 
+import com.zhixin.zhfz.bacs.entity.CrimeDefineEntity;
 import com.zhixin.zhfz.bacs.entity.JzAjxxEntity;
 import com.zhixin.zhfz.bacs.entity.OrderRequestEntity;
 import com.zhixin.zhfz.bacs.entity.PersonEntity;
+import com.zhixin.zhfz.bacs.services.crimedefine.ICrimeDefineService;
 import com.zhixin.zhfz.bacs.services.jzAjxx.IJzAjxxService;
 import com.zhixin.zhfz.bacs.services.order.IOrderPersonService;
 import com.zhixin.zhfz.bacs.services.order.IOrderRequestService;
@@ -50,6 +52,8 @@ public class ICaseController {
 
     @Autowired
     private IJzAjxxService jzAjxxService;
+    @Autowired
+    private ICrimeDefineService crimeDefineService;
 
     // 查询历史案件
     @RequestMapping(value = "/listCase")
@@ -143,7 +147,13 @@ public class ICaseController {
             caseEntity.setAjly(caseForm.getAjly());
             caseEntity.setAjlx(Integer.valueOf(formatStr(caseForm.getAjlx())));
 //            caseEntity.setAb(caseForm.getAb());//无
-//            caseEntity.setAbmc(caseForm.getAbmc());//无
+            Map<String, Object> param = new HashMap<>();
+            param.put("codeDesc", caseForm.getAbmc());
+            List<CrimeDefineEntity> list = crimeDefineService.list(param);
+            if (list.size()>0) {
+                caseEntity.setAb(list.get(0).getId());
+            }
+            caseEntity.setAbmc(caseForm.getAbmc());//无
             caseEntity.setUuid(java.util.UUID.randomUUID().toString());
             caseEntity.setAfdd(formatStr(caseForm.getAfdd()));
             caseEntity.setCreatedTime(new Date());
@@ -156,10 +166,9 @@ public class ICaseController {
             String zbdwbh = formatStr(caseForm.getZbdwbh());
             List<OrganizationEntity> organizationEntities = organizationService.listOrgByOrgCode(Long.valueOf(zbdwbh));
             if (organizationEntities.size() > 0) {
-                caseEntity.setZbdwmc(organizationEntities.get(0).getName());
                 caseEntity.setZbdwId(organizationEntities.get(0).getId());
             }
-
+            caseEntity.setZbdwmc(formatStr(caseForm.getZbdwmc()));
             //查询案件编号是否已存在
             List<CaseEntity> casea = caseService.queryCaseByAjbh(caseEntity.getAjbh());
             if (casea.size() > 0) {
@@ -168,7 +177,7 @@ public class ICaseController {
                 caseService.insertCase(caseEntity);
             }
             //插入嫌疑人
-            if(caseForm.getName()!=null||"".equals(caseForm.getName())){
+            if (caseForm.getName() != null || "".equals(caseForm.getName())) {
                 PersonEntity entity = new PersonEntity();
                 entity.setCertificateTypeId(111);
                 entity.setCaseId(caseEntity.getId());

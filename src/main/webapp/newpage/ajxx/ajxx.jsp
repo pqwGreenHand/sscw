@@ -54,9 +54,34 @@
     </div>
 </div>
 <div id="dlg"></div>
+
+<div id="dlgzfba" style="display: none">
+    <div data-options="region:'north',border:false" style="padding: 10px 5px;">
+        <input id="zfbaajmc" class="easyui-textbox" data-options="label:'案件名称'" style="width:250px;"/>
+        <input id="zfbaajbh" class="easyui-textbox" data-options="label:'案件编号'" style="width:250px;"/>
+        <a href="javascript:void(0)" onclick="queryZfbaAjxx()" class="easyui-linkbutton button-line-blue"
+           style="width: 70px;margin-left: 10px;">查&nbsp;询</a>
+        <a href="javascript:void(0)" onclick="clearZfbaSearch()" class="easyui-linkbutton button-line-red"
+           style="width: 70px;margin-left: 10px;">清&nbsp;除</a>
+    </div>
+    <div class="easyui-layout" data-options="fit:true,border:false">
+        <div data-options="region:'center',border:false" style="height:50%">
+            <table id="dgaj" style="width:100%;">
+            </table>
+        </div>
+        <div data-options="region:'south',border:false" style="height:50%;">
+            <table id="dgdetail" style="width:100%;">
+            </table>
+        </div>
+    </div>
+
+</div>
+
 <script>
     var datagrid;
     var dialog;
+    var datagridaj;
+    var datagridperson;
     $(function () {
         datagrid = $('#dg').datagrid({
             method: "get",
@@ -174,6 +199,8 @@
                 gender: $('#gender').val()
             }
         });
+
+
     });
 
     function queryUsers() {
@@ -190,11 +217,120 @@
     }
 
     function sysZfbaData() {
-        dialog = $("#dlg").dialog({
+        datagridaj = $('#dgaj').datagrid({
+            method: "get",
+            url: '/sscw/zhfz/bacs/belong/listCaseZfba.do',
+            fit: true,
+            fitColumns: true,
+            border: true,
+            idField: 'id',
+            striped: true,
+            pagination: true,
+            rownumbers: true,
+            pageNumber: 1,
+            pageSize: 15,
+            pageList: [15, 20, 30, 50, 100],
+            singleSelect: true,
+            selectOnCheck: true,
+            checkOnSelect: true,
+            // toolbar: '#tb',
+            columns: [[
+                {field: 'ck', checkbox: true},
+                {field: 'id', title: 'id', hidden: true},
+                {field: 'ZBR_SFZH', title: 'ZBR_SFZH', hidden: true},
+                {field: 'JYAQ', title: 'JYAQ', hidden: true},
+                {field: 'ZBDW_BH', title: 'ZBDW_BH', hidden: true},
+                {
+                    field: 'AJMC', title: '案件名称', width: 30,
+                    formatter: function (value, row, index) {
+                        return "<font>" + value + "</font>";
+                    }
+                }, {
+                    field: 'AJBH', title: '案件编号', width: 50,
+                    formatter: function (value, row, index) {
+                        return "<font>" + value + "</font>";
+                    }
+                },
+                {
+                    field: 'AJLX', title: '案件性质', width: 20,
+                    formatter: function (value, rec, index) {
+                        if (value == '01') {
+                            return '行政案件';
+                        } else {
+                            return "刑事案件";
+                        }
+                    }
+                }, {
+                    field: 'AJXZ', title: '案件性质', width: 20
+                }, {
+                    field: 'ZBR_XM', title: '主办民警', width: 20
+                },
+                {
+                    field: 'NAME', title: '主办单位', width: 20
+                },
+                {field: 'FADDXZ', title: '案发地址', width: 30},
+                {field: 'FXSJ', title: '案发时间', width: 30}
+            ]],
+            onLoadSuccess: function (data) {
+                if (data) {
+                    $.each(data.rows,
+                        function (index, item) {
+                            if (item.checked) {
+                                $('#dgaj').datagrid('checkRow', index);
+                            }
+                        });
+                }
+            },
+            onSelect: function (index, row) {
+                //行选择方法，进行条件触发
+                detailPersongridLoad(row);
+                $("#dgdetail").datagrid("unselectAll"); //全部不选中
+            }
+        });
+
+        datagridperson = $('#dgdetail').datagrid({
+            method: "get",
+            url: '/sscw/zhfz/bacs/belong/listPersonZfba.do',
+            fit: true,
+            fitColumns: true,
+            border: true,
+            idField: 'id',
+            striped: true,
+            pagination: true,
+            rownumbers: true,
+            pageNumber: 1,
+            pageSize: 15,
+            pageList: [15, 20, 30, 50, 100],
+            singleSelect: true,
+            selectOnCheck: true,
+            checkOnSelect: true,
+            queryParams: {'caseNo': '-99', 'trefresh': new Date().getTime()},
+            // toolbar: '#tb',
+            columns: [[
+                {field: 'ck', checkbox: true},
+                {field: 'id', title: 'id', hidden: true},
+                {field: 'GJ', title: 'GJ', hidden: true},
+                {field: 'AGE', title: 'AGE', hidden: true},
+                {field: 'XB', title: 'XB', hidden: true},
+                {field: 'CSRQ', title: 'CSRQ', hidden: true},
+                {field: 'MZ', title: 'MZ', hidden: true},
+                {field: 'RYBH', title: '人员编号', width: 50},
+                {field: 'RYXM', title: '姓名', width: 30},
+                {field: 'ZJHM', title: '证件号码', width: 40,},
+                {field: 'HJDXZ', title: '户籍地', width: 40}
+            ]],
+            onLoadSuccess: function (data) {
+
+            },
+            onSelect: function (index, row) {
+            }
+
+        });
+        dialog = $("#dlgzfba").dialog({
             title: '同步数据',
             width: 1200,
             height: 700,
-            href: '${ctx}/newpage/ajxx/zfbadata.jsp',
+            <%--href: '${ctx}/newpage/ajxx/zfbadata.jsp',--%>
             maximizable: false,
             modal: true,
             buttons: [{
@@ -213,6 +349,8 @@
                         CaseForm["zbdwbh"] = rowAJ.ZBDW_BH;
                         CaseForm["afsj"] = rowAJ.FXSJ;
                         CaseForm["ajlx"] = rowAJ.AJLX;
+                        CaseForm["abmc"] = rowAJ.AJXZ;
+                        CaseForm["zbdwmc"] = rowAJ.NAME;
                         CaseForm["ajly"] = 2;
                     }
 
@@ -261,6 +399,24 @@
             }]
         });
     }
+    //选中触发刷新
+    function detailPersongridLoad(rowData) {
+        $('#dgdetail').datagrid('load', {caseNo: rowData.AJBH, trefresh: new Date().getTime()});
+    }
+
+    function queryZfbaAjxx() {
+        $(datagridaj).datagrid('load', {
+                caseName: $('#zfbaajmc').textbox("getValue"),
+                ajbh: $('#zfbaajbh').textbox("getValue")
+            }
+        );
+    }
+
+    function clearZfbaSearch() {
+        $('#zfbaajmc').textbox('setValue', '');
+        $('#zfbaajbh').textbox('setValue', '');
+    }
+
 
     function add() {
         dialog = $("#dlg").dialog({

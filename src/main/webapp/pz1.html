@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>打印条码</title>
+    <script src="LodopFuncs.js"></script>
+</head>
+<body>
+<object id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=0 height=0>
+    <embed id="LODOP_EM" type="application/x-print-lodop" width=0 height=0></embed>
+</object>
+<button onclick="test()">打印条码</button>
+<br/>
+</body>
+<script>
+    function test() {
+        var LODOP = getLodop(document.getElementById('LODOP_OB'), document.getElementById('LODOP_EM'));
+        LODOP.PRINT_INIT("打印任务名");               //首先一个初始化语句
+        LODOP.ADD_PRINT_TEXT(0,0,100,20,"姓名：测试");//然后多个ADD语句及SET语句
+        LODOP.ADD_PRINT_TEXT(20,0,100,20,"物品名字：手机");//然后多个ADD语句及SET语句
+        LODOP.SET_PRINT_STYLE("FontSize",15);
+        LODOP.ADD_PRINT_BARCODE(40,10,160,70,'QRCode',"111111");
+        LODOP.PRINT();
+    }
+</script>
+</html>
