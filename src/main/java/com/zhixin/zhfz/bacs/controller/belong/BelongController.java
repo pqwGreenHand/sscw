@@ -104,6 +104,18 @@ public class BelongController {
     @Resource
     private IZfbaService zfbaService;
 
+    @RequestMapping("/getMaterials")
+    @ResponseBody
+    public Map<String, Object> getMaterials(@RequestParam Map<String, Object> param, HttpServletRequest request) throws
+            Exception {
+        Map<String, Object> map = ControllerTool.mapFilter(param);
+        belongService.getBelongdetByWpUuid(map)
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put("rows", list);
+        return result;
+    }
+
+
     @RequestMapping(value = "/listCaseZfba")
     @ResponseBody
     public Map<String, Object> listCaseZfba(@RequestParam Map<String, Object> pageMap, HttpServletRequest request,

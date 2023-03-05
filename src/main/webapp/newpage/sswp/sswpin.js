@@ -167,6 +167,7 @@ function add() {
             iconCls: 'icon-ok',
             handler: function () {
                 dialog.dialog('close');
+
             }
         }, {
             text: '取消', iconCls: 'icon-cancel',
@@ -290,6 +291,46 @@ function showImages() {
             $.messager.progress('close');
             //exception in java
             U.msg(data.content);
+        }
+    });
+}
+
+function printcod(){
+    var enterpriseinfo = {"serialId": 1, belongingsId: 2};
+    var json_data = JSON.stringify(enterpriseinfo);
+    jQuery.ajax({
+        type: 'POST',
+        contentType: 'application/json',
+        url: '/sscw/zhfz/bacs/belong/addBelongcodNew.do',
+        data: json_data,
+        dataType: 'json',
+        cache: false,
+        async: false,
+        success: function (data) {
+            if (data != null && data.length > 0) {
+                for (var i = 0; i < data.length; i++) {
+                    an = data[i].aname;
+                    wName = data[i].wname;
+                    pn = data[i].pname;
+                    co = data[i].wpUuid;
+                    count = data[i].detailCount
+                    // alert("wName= "+wName+"co= "+co+count);
+                    OpenPrinter();
+                    // PSKPrn.PTKDrawTextEx(200, 10, 0, 97, 1, 1, 78, "物品名称:" + wName, false);
+                    // PSKPrn.PTKDrawTextEx(200, 50, 0, 97, 1, 1, 78, "数量：" + count, false);
+                    // PSKPrn.PTKDrawBar2DQR(200, 80, 180, 180, 0, 7, 2, 0, 0, co);// QR码
+                    PSKPrn.PTKDrawTextEx(150, 10, 0, 97, 1, 1, 78, "物品名称:" + wName, false);
+                    PSKPrn.PTKDrawTextEx(150, 50, 0, 97, 1, 1, 78, "数量：" + count, false);
+                    PSKPrn.PTKDrawBarcodeEx(90, 150, 0, "1A", 2, 5, 60, 66, "\"" + co + "\"C0", true);
+                    PSKPrn.PTKPrintLabel(1, 1);
+                    ClosePrinter();
+                }
+
+                $.messager.progress('close');
+            }
+        },
+        error: function (data) {
+            $.messager.alert('错误', '打印条码错误!');
         }
     });
 }

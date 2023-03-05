@@ -159,6 +159,12 @@
 			<version>4.2.11.RELEASE</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.sun</groupId>
+			<artifactId>jna</artifactId>
+			<version>4.5.1</version>
+		</dependency>
+
 		<!-- mybatis -->
 		<dependency>
 			<groupId>org.mybatis</groupId>

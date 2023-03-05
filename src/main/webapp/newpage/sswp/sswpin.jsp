@@ -51,7 +51,7 @@
                style="width: 100px;height:40px;margin-left: 10px;">开&nbsp;柜</a>
             <a href="javascript:void(0)" onclick="securityDownLoad()"  data-options="iconCls:'icon-print'"  class="easyui-linkbutton button-line-blue"
                style="width: 100px;height:40px;margin-left: 10px;">台&nbsp;账</a>
-            <a href="javascript:void(0)" onclick="showImages()" s data-options="iconCls:'icon-large-picture'"  class="easyui-linkbutton button-line-blue"
+            <a href="javascript:void(0)" onclick="showImages()"  data-options="iconCls:'icon-large-picture'"  class="easyui-linkbutton button-line-blue"
                style="width: 100px;height:40px;margin-left: 10px;">照&nbsp;片</a>
             <a href="javascript:void(0)" data-options="iconCls:'icon-back'"  onclick="javascript:window.location.href ='index.jsp';" class="easyui-linkbutton button-line-red"
                style="width: 100px;height:40px;margin-left: 10px;">返回</a>

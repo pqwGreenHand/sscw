@@ -26,7 +26,8 @@
             <table style="margin: 0 auto; padding: 10px;width: 100%">
                 <tr>
                     <td>选择嫌疑人:</td>
-                    <td><a href="javascript:void(0)" onclick="selectPerson()" class="easyui-menubutton  button-line-blue"
+                    <td><a href="javascript:void(0)" onclick="selectPerson()"
+                           class="easyui-menubutton  button-line-blue"
                            data-options="iconCls:'icon-search'">高级查询</a>
                     </td>
                     <%--<td><a href="javascript:void(0)" class="easyui-menubutton  button-line-blue"
@@ -51,7 +52,8 @@
                 </tr>
                 <tr>
                     <td>数量:</td>
-                    <td><input id="detailCount1" name="detailCount" class="easyui-textbox" data-options="required:true"/>
+                    <td><input id="detailCount1" name="detailCount" class="easyui-textbox"
+                               data-options="required:true"/>
                     </td>
                     <td>单位:</td>
                     <td><input id="unit1" name="unit" class="easyui-combobox"
@@ -61,7 +63,8 @@
 
                 <tr>
                     <td>特征:</td>
-                    <td><input id="description1" name="description" class="easyui-textbox" data-options="required:true"/>
+                    <td><input id="description1" name="description" class="easyui-textbox"
+                               data-options="required:true"/>
                     </td>
                     <td>暂存方式:</td>
                     <td><input id="saveMethod" name="saveMethod" class="easyui-combobox"
@@ -69,7 +72,13 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="4" style="text-align: center;padding-top: 40px">
+                    <td colspan="2" style="text-align: center;padding-top: 40px">
+                        <input name="wpbh" id="wpbh1" style="width:150px"/>&nbsp;&nbsp;
+                        <a href="javascript:void(0)" onclick="smWpxx()" style="width: 200px;;"
+                           data-options="iconCls:'icon-save'" class="easyui-linkbutton button-line-blue"
+                           style="width: 70px;margin-left: 10px;">扫描物品</a>
+                    </td>
+                    <td colspan="2" style="text-align: center;padding-top: 40px">
                         <a href="javascript:void(0)" onclick="addWpxx()" style="width: 200px;;"
                            data-options="iconCls:'icon-add'" class="easyui-linkbutton button-line-blue"
                            style="width: 70px;margin-left: 10px;">添加物品</a>
@@ -89,6 +98,17 @@
 <script>
     var dialogXyr;
     $(function () {
+        // $('#wpbh').textbox("textbox").keydown(function (event) {
+        //     if (event.keyCode == 13) {
+        //         alert(1111)
+        //     }
+        // });
+        $("#wpbh1").keydown(function () {
+            if (event.keyCode == 13) {
+                //这里写你要执行的事件;
+                queryWpxxByWpbh();
+            }
+        });
         loadLocked();
         datagridPerson = $('#dgperson').datagrid({
             method: "get",
@@ -250,6 +270,101 @@
                 gender: $('#gender').val()
             }
         });
+
+
+        datagridPerson = $('#dgperson').datagrid({
+            method: "get",
+            // url:  '/sscw/zhfz/bacs/belong/queryCase.do',
+            url: '/sscw/zhfz/bacs/belong/queryPerson.do',
+            fit: true,
+            fitColumns: true,
+            border: true,
+            idField: 'id',
+            striped: true,
+            pagination: true,
+            rownumbers: true,
+            pageNumber: 1,
+            pageSize: 10,
+            pageList: [10, 20, 30, 50, 100],
+            singleSelect: true,
+            selectOnCheck: true,
+            checkOnSelect: true,
+            columns: [[
+                {field: 'ck', checkbox: true},
+                {field: 'id', title: 'id', hidden: true},
+                {
+                    field: 'ajmc', title: '案件名称', width: 150, formatter: function (value, rec) {
+                        if (value == null || value == '') {
+                            return '无';
+                        } else {
+                            return "<div title='" + value + "' class='textEllipsis'>" + value + "</div>";
+                        }
+                    }
+                },
+                {
+                    field: 'ajbh', title: '案件编号', width: 120, formatter: function (value, rec) {
+                        if (value == null || value == '') {
+                            return '无';
+                        } else {
+                            return "<div title='" + value + "' class='textEllipsis'>" + value + "</div>";
+                        }
+                    }
+                },
+                {
+                    field: 'areaName', title: '所属单位', width: 140
+                },
+                {field: 'name', title: '嫌疑人姓名', width: 70},
+                {
+                    field: 'sex', title: '性别', width: 40,
+                    formatter: function (value, rec) {
+                        if (1 == value) {
+                            return "男";
+                        } else if (2 == value) {
+                            return "女";
+                        } else {
+                            return '未知';
+                        }
+                    }
+                },
+                {field: 'certificateTypeName', title: '证件类型', width: 70},
+                {field: 'certificateNo', title: '证件号码', width: 120},
+                /*{
+                    field: 'operate', title: '操作', width: 120,
+                    formatter: function (value, row, index) {
+                        var d = "<a onclick='remove(" + row.id + ")' class='button-delete button-red'>删除</a>";
+                        var e = "<a onclick='edit(" + row.id + ")' class='button-edit button-blue'>编辑</a>";
+                        return e + '  ' + d;
+                    }
+                }*/
+            ]],
+            onLoadSuccess: function (data) {
+                $('.button-delete').linkbutton({});
+                $('.button-edit').linkbutton({});
+
+                if (data) {
+                    $.each(data.rows,
+                        function (index, item) {
+                            if (item.checked) {
+                                $('#dg').datagrid('checkRow', index);
+                            }
+                        });
+                }
+            },
+            onSelect: function (index, row) {
+                if (row.isFixed == 1) {//固定的
+//                    $('#btn-edit').hide();
+                    $('#btn-delete').hide();
+                } else {
+//                    $('#btn-edit').show();
+                    $('#btn-delete').show();
+                }
+            },
+            queryParams: {
+                username: $('#username').val(),
+                mobile: $('#mobile').val(),
+                gender: $('#gender').val()
+            }
+        });
     });
 
     function loadLocked() {
@@ -328,6 +443,7 @@
                         $('#caseId').val(personInfo.caseId);
                         $('#areaId').val(ssareaid);
                         $('#lockerId').combobox('reload');
+                        $('#serialIdQuery').combogrid('setValue', personInfo.id);
                         $('#detid').datagrid('load', {
                             enpId: personInfo.id, areaId: ssareaid, trefresh: new Date().getTime()
                         });
@@ -336,8 +452,7 @@
                         });
                         U.msg("关联人员数据成功");
                         dialogXyr.dialog('close');
-                    }
-                    else {
+                    } else {
                         U.msg("请先选择嫌疑人数据");
                     }
                 }
@@ -350,7 +465,94 @@
         });
     }
 
+    function smWpxx() {
+        if ($('#serialId').val() == null || $('#serialId').val() == "") {
+            U.msg("请再高级查询中先选择嫌疑人,再进行扫描！");
+            return;
+        }
+        if ($('#lockerId').combobox('getValue')== null || $('#lockerId').combobox('getValue') == "") {
+            U.msg("请先选择嫌疑人选择存放位置,再进行扫描！");
+            return;
+        }
+        $("#wpbh1").focus();
+
+    }
+
+    function queryWpxxByWpbh() {
+        var wpbh = $('#wpbh1').val();
+        /*if (wpbh.indexOf("W") < -1) {
+            $.messager.alert('提示', '扫描物品编号不正确，请确认后重新扫描！');
+            $.messager.progress('close');
+            return
+        }*/
+        // var wpbh = "W1102271400002022055014";
+        jQuery.ajax({
+            type: 'GET',
+            url: '/sscw/zhfz/bacs/belong/queryBelongDtailByUUID.do?wpUuid=' + wpbh,
+            dataType: 'json',
+            success: function (res) {
+                console.log(res)
+                if (res != null && res.length > 0) {
+                    smaddWpxx(res);
+                    $('#wpbh1').val("");
+                    $("#wpbh1").focus();
+                } else {
+                    $.messager.alert('提示', '无对应物品，请重新扫描！');
+                }
+            },
+            error: function (data) {
+                $.messager.alert('错误', '失败（queryBelongDtailByUUID）!');
+            }
+        });
+    }
+
+    function smaddWpxx(res) {
+        $.messager.progress({
+            title: '请等待',
+            msg: '添加/修改数据中...'
+        });
+        var wpxxList = $("#formwpxx").serializeObject();
+        wpxxList["detailCount"] = res[0].detailCount;
+        wpxxList["name"] = res[0].name;
+        wpxxList["unit"] = res[0].unit;
+        wpxxList["description"] = res[0].description;
+        var wpxxJson = JSON.stringify(wpxxList);
+        jQuery.ajax({
+            type: 'POST',
+            contentType: 'application/json',
+            url: "/sscw/zhfz/bacs/belong/belongsave.do",
+            data: wpxxJson,
+            dataType: 'json',
+            success: function (data) {
+                U.msg(data.content);
+                $('#detid').datagrid('reload', {
+                    enpId: data.callbackData,
+                    areaId: ssareaid,
+                    trefresh: new Date().getTime()
+                });
+                loadPerson();
+                $('#serialIdQuery').combogrid('setValue', data.callbackData);
+                $('#belonggrid').datagrid('load', {
+                    enpId: data.callbackData, areaId: ssareaid, trefresh: new Date().getTime()
+                });
+                $.messager.progress('close');
+                $('#unit1').combobox('clear');
+                $('#detailCount1').textbox('setValue', '');
+                $('#description1').textbox('setValue', '');
+                $('#wpbh1').val('');
+            },
+            error: function (data) {
+                $.messager.progress('close');
+                U.msg(data.content);
+            }
+        });
+    }
+
     function addWpxx() {
+        if ($('#serialId').val() == null || $('#serialId').val() == "") {
+            U.msg("请再高级查询中先选择嫌疑人！");
+            return;
+        }
         var isValid = $("#formwpxx").form('validate');
         if (isValid) {
             $.messager.progress({
@@ -372,6 +574,7 @@
                         areaId: ssareaid,
                         trefresh: new Date().getTime()
                     });
+                    loadPerson();
                     $('#serialIdQuery').combogrid('setValue', data.callbackData);
                     $('#belonggrid').datagrid('load', {
                         enpId: data.callbackData, areaId: ssareaid, trefresh: new Date().getTime()

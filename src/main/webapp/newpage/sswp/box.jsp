@@ -39,12 +39,16 @@
         <div class="control-bar">
             <div style=" overflow: hidden;width: 700px;left: 50%;margin-left: -281px;position: absolute;">
                 <div style="padding-left: 100px">
-                    <a href="javascript:void(0)" onclick="goBelongin('<%=ssareaid%>');" data-options="iconCls:'icon-undo'"
+                   <%-- <a href="javascript:void(0)" onclick="goBelongin('<%=ssareaid%>');" data-options="iconCls:'icon-undo'"
                        class="easyui-linkbutton button-line-blue"
                        style="width: 80px;margin-left: 10px;">存物</a>
                     <a href="javascript:void(0)" onclick="goBelongout('<%=ssareaid%>');" data-options="iconCls:'icon-redo'"
                        class="easyui-linkbutton button-line-blue"
-                       style="width: 80px;margin-left: 10px;">取物</a>
+                       style="width: 80px;margin-left: 10px;">取物</a>--%>
+                    <a href="javascript:void(0)" onclick="goBelongin('<%=ssareaid%>');"  data-options="iconCls:'icon-undo'"  class="easyui-linkbutton button-line-blue"
+                       style="width: 100px;height:40px;margin-left: 10px;">存物</a>
+                    <a href="javascript:void(0)" onclick="goBelongout('<%=ssareaid%>');"  data-options="iconCls:'icon-redo'"  class="easyui-linkbutton button-line-blue"
+                       style="width: 100px;height:40px;margin-left: 10px;">取物</a>
                   <%--  <a href="javascript:void(0)" onclick="goBelongManage('<%=ssareaid%>');" data-options="iconCls:'icon-set'"
                        class="easyui-linkbutton button-line-blue"
                        style="width: 80px;margin-left: 10px;">管理</a>--%>
