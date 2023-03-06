@@ -94,7 +94,24 @@
         </table>
     </div>
 </div>
-<div id="dlgxyr"></div>
+
+<div  id="dlgxyr" >
+    <div data-options="region:'north',border:false" style="padding: 10px 5px;">
+        <input id="ajmc" class="easyui-textbox" data-options="label:'案件名称'" style="width:220px;"/>
+        <input id="ajbh" class="easyui-textbox" data-options="label:'案件编号'" style="width:220px;"/>
+        <input id="xm" class="easyui-textbox" data-options="label:'姓名'" style="width:150px;"/>
+        <input id="zjhm" class="easyui-textbox" data-options="label:'证件号码'" style="width:220px;"/>
+        <a href="javascript:void(0)" onclick="queryXyr()" class="easyui-linkbutton button-line-blue"
+           style="width: 70px;margin-left: 10px;">查&nbsp;询</a>
+        <a href="javascript:void(0)" onclick="clearXyrSearch()" class="easyui-linkbutton button-line-red"
+           style="width: 70px;margin-left: 10px;">清&nbsp;除</a>
+    </div>
+
+    <div data-options="region:'center',border:false" style="height:100%">
+        <table id="dgperson" style="width:100%;height:100%;">
+        </table>
+    </div>
+</div>
 <script>
     var dialogXyr;
     $(function () {
@@ -272,7 +289,7 @@
         });
 
 
-        datagridPerson = $('#dgperson').datagrid({
+        $('#dgperson').datagrid({
             method: "get",
             // url:  '/sscw/zhfz/bacs/belong/queryCase.do',
             url: '/sscw/zhfz/bacs/belong/queryPerson.do',
@@ -376,6 +393,22 @@
         });
     }
 
+    function queryXyr() {
+        $('#dgperson').datagrid('load', {
+                ajmc: $('#ajmc').textbox("getValue"),
+                ajbh: $('#ajbh').textbox("getValue"),
+                name: $('#xm').textbox("getValue"),
+                certificateNo: $('#zjhm').textbox("getValue")
+            }
+        );
+    }
+
+    function clearXyrSearch() {
+        $('#ajmc').textbox('setValue', '');
+        $('#ajbh').textbox('setValue', '');
+        $('#xm').textbox('setValue', '');
+        $('#zjhm').textbox('setValue', '');
+    }
     function removebelong(id) {
         if (id == null) {
             var row = $('#belonggrid').datagrid('getSelected');
@@ -429,7 +462,7 @@
             title: '选择嫌疑人',
             width: 1200,
             height: 550,
-            href: 'person.jsp',
+            // href: 'person.js',
             maximizable: false,
             modal: true,
             buttons: [{
@@ -470,7 +503,7 @@
             U.msg("请再高级查询中先选择嫌疑人,再进行扫描！");
             return;
         }
-        if ($('#lockerId').combobox('getValue')== null || $('#lockerId').combobox('getValue') == "") {
+        if ($('#lockerId').combobox('getValue') == null || $('#lockerId').combobox('getValue') == "") {
             U.msg("请先选择嫌疑人选择存放位置,再进行扫描！");
             return;
         }

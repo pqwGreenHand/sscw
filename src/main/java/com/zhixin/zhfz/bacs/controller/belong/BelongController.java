@@ -104,18 +104,6 @@ public class BelongController {
     @Resource
     private IZfbaService zfbaService;
 
-    @RequestMapping("/getMaterials")
-    @ResponseBody
-    public Map<String, Object> getMaterials(@RequestParam Map<String, Object> param, HttpServletRequest request) throws
-            Exception {
-        Map<String, Object> map = ControllerTool.mapFilter(param);
-        belongService.getBelongdetByWpUuid(map)
-        Map<String, Object> result = new HashMap<String, Object>();
-        result.put("rows", list);
-        return result;
-    }
-
-
     @RequestMapping(value = "/listCaseZfba")
     @ResponseBody
     public Map<String, Object> listCaseZfba(@RequestParam Map<String, Object> pageMap, HttpServletRequest request,
@@ -497,9 +485,9 @@ public class BelongController {
         logger.info("开始警综信息数据查询------------------");
         Map<String, Object> map = ControllerTool.mapFilter(pageMap);
         SessionInfo sessionInfo = ControllerTool.getSessionInfo(request);
-        map.put("orgCode",sessionInfo.getCurrentOrg().getOrgCode());
         if (RoleEntity.DATA_AUTH_SELFAREA == (ControllerTool.getRoleDataAuth(request))) {
             // 办案场所-本办案场所
+            map.put("orgCode",sessionInfo.getCurrentOrg().getOrgCode());
             map.put("dataAuth", " ( m.id = " + ControllerTool.getCurrentAreaID(request)
                     + " ) ");
         } else if (RoleEntity.DATA_AUTH_DOWN_CASCADEAREA == (ControllerTool.getRoleDataAuth(request))) {

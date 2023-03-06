@@ -74,35 +74,55 @@
         left join xt_code cs on cs.type='XBID' and p.sex=cs.code_key
         left join xt_code cr on cr.type='RDDBID' and p.officer=cr.code_key
         where 1=1
-            <if test="dataAuth!=null and dataAuth!=''">
-                and ${dataAuth}
-            </if>
+        <if test="dataAuth!=null and dataAuth!=''">
+            and ${dataAuth}
+        </if>
+        <if test="name!=null and name!=''">
+            and p.name like '%${name}%'
+        </if>
+        <if test="certificateNo!=null and certificateNo!=''">
+            and p.certificate_no like '%${certificateNo}%'
+        </if>
+        <if test="sex!=null and sex!=''">
+            and p.sex like '%${sex}%'
+        </if>
+        <if test="ajbh!=null and ajbh!=''">
+            and bc.ajbh like '%${ajbh}%'
+        </if>
+        <if test="ajmc!=null and ajmc!=''">
+            and bc.ajmc like '%${ajmc}%'
+        </if>
+        <if test="start_date!=null and start_date!=''">
+            and p.created_time &gt;=#{start_date}
+        </if>
+        <if test="end_date!=null and end_date!=''">
+            and p.created_time &lt;=#{end_date}
+        </if>
+        <if test="areaId!=null and areaId!=0">
+            and m.id=#{areaId}
+        </if>
+        <if test="orgCode!=null and orgCode!=''">
+            or EXISTS(
+            SELECT * FROM ba_belongings_temp bbt
+            left join ba_person p1 ON bbt.person_id=p1.id
+            left join ba_case bc1 ON bc1.id=p1.case_id
+            where bbt.status=1 and bbt.jsdw_id=#{orgCode}
             <if test="name!=null and name!=''">
-                and p.name like '%${name}%'
+                and p1.name like '%${name}%'
             </if>
             <if test="certificateNo!=null and certificateNo!=''">
-                and p.certificate_no like '%${certificateNo}%'
+                and p1.certificate_no like '%${certificateNo}%'
             </if>
             <if test="sex!=null and sex!=''">
-                and p.sex like '%${sex}%'
+                and p1.sex like '%${sex}%'
             </if>
             <if test="ajbh!=null and ajbh!=''">
-                and bc.ajbh like '%${ajbh}%'
+                and bc1.ajbh like '%${ajbh}%'
             </if>
             <if test="ajmc!=null and ajmc!=''">
-                and bc.ajmc like '%${ajmc}%'
+                and bc1.ajmc like '%${ajmc}%'
             </if>
-            <if test="start_date!=null and start_date!=''">
-                and p.created_time &gt;=#{start_date}
-            </if>
-            <if test="end_date!=null and end_date!=''">
-                and p.created_time &lt;=#{end_date}
-            </if>
-            <if test="areaId!=null and areaId!=0">
-                and m.id=#{areaId}
-            </if>
-        <if test="orgCode!=null and orgCode!=''">
-            or EXISTS(SELECT * FROM ba_belongings_temp bbt where bbt.person_id=p.id and bbt.status=1 and bbt.jsdw_id=#{orgCode})
+            )
         </if>
         order by p.id desc
         limit ${pageStart},${rows}
@@ -151,7 +171,27 @@
                 and m.id=#{areaId}
             </if>
             <if test="orgCode!=null and orgCode!=''">
-                or  EXISTS(SELECT * FROM ba_belongings_temp bbt where  bbt.person_id=p.id and bbt.status=1 and bbt.jsdw_id=#{orgCode})
+                or EXISTS(
+                SELECT * FROM ba_belongings_temp bbt
+                left join ba_person p1 ON bbt.person_id=p1.id
+                left join ba_case bc1 ON bc1.id=p1.case_id
+                where bbt.status=1 and bbt.jsdw_id=#{orgCode}
+                <if test="name!=null and name!=''">
+                    and p1.name like '%${name}%'
+                </if>
+                <if test="certificateNo!=null and certificateNo!=''">
+                    and p1.certificate_no like '%${certificateNo}%'
+                </if>
+                <if test="sex!=null and sex!=''">
+                    and p1.sex like '%${sex}%'
+                </if>
+                <if test="ajbh!=null and ajbh!=''">
+                    and bc1.ajbh like '%${ajbh}%'
+                </if>
+                <if test="ajmc!=null and ajmc!=''">
+                    and bc1.ajmc like '%${ajmc}%'
+                </if>
+                )
             </if>
         </where>
         order by p.id desc
