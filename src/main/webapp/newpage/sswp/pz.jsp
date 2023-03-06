@@ -1,20 +1,48 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
+<%@ page language="java" pageEncoding="UTF-8"
+         contentType="text/html; charset=UTF-8" %>
+<%
+    String path = request.getContextPath();
+    String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+            + path + "/";
+%>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>拍照2</title>
 </head>
-
+<%@ include file="../common.jsp" %>
 <body>
-<button id="button_take">拍照</button><br />
-<div style="float: left;width:50%"><video id="v"></video></div>
-<canvas id="canvas" style="display:none;"></canvas><br />
-<img src="" id="photo" alt="photo" style="float: left;">
+
+<table class="main_form1">
+    <tr>
+        <td>
+            <!-- 入区照片框 -->
+            <video id="v" style="width: 300px;height: 300px"></video>
+        </td>
+        <td>
+            <canvas id="canvas" style="display:none;"></canvas>
+            <br/>
+            <img src="" id="photo" alt="photo" style="float: left;">
+
+        </td>
+    </tr>
+    <tr>
+        <button id="button_take">拍照</button>
+        <a href="javascript:void(0)" onclick="securityDownLoad()" data-options="iconCls:'icon-print'"
+           class="easyui-linkbutton button-line-blue"
+           style="width: 100px;height:40px;margin-left: 10px;">台&nbsp;账</a>
+    </tr>
+</table>
+
+
+
 </body>
 
 <script>
     !(function () {
+        var mediaStreamTrack;
         // 老的浏览器可能根本没有实现 mediaDevices，所以我们可以先设置一个空的对象
         if (navigator.mediaDevices === undefined) {
             navigator.mediaDevices = {};
@@ -35,6 +63,7 @@
                 });
             }
         }
+
         var constraints = {
             video: true,
             audio: false
@@ -42,8 +71,8 @@
         var videoPlaying = false;
         var v = document.getElementById('v');
         var promise = navigator.mediaDevices.getUserMedia(constraints);
-        promise.then(stream => {
-            // 旧的浏览器可能没有srcObject
+        promise.then(function (stream) {
+            /* 使用这个stream stream */
             if ("srcObject" in v) {
                 v.srcObject = stream;
             } else {
@@ -52,11 +81,14 @@
             }
             v.onloadedmetadata = function (e) {
                 v.play();
+                mediaStreamTrack = stream;
                 videoPlaying = true;
             };
-        }).catch(err => {
-            console.error(err.name + ": " + err.message);
-        });
+        })
+            .catch(function (err) {
+                /* 处理error */
+                console.error(err.name + ": " + err.message);
+            });
         document.getElementById('button_take').addEventListener('click', function () {
             if (videoPlaying) {
                 var canvas = document.getElementById('canvas');
@@ -66,10 +98,37 @@
                 var data = canvas.toDataURL('image/webp');
                 document.getElementById('photo').setAttribute('src', data);
                 console.log(data)
-                videoPlaying=false
+                // stopVideoOnly(mediaStreamTrack);
                 //   canvas.getContext("2d").drawImage(Img,0,0,width,height); //将图片绘制到canvas中
             }
         }, false);
     })();
+
+    // stop both mic and camera
+    function stopBothVideoAndAudio(stream) {
+        stream.getTracks().forEach(function (track) {
+            if (track.readyState == 'live') {
+                track.stop();
+            }
+        });
+    }
+
+    // stop only camera
+    function stopVideoOnly(stream) {
+        stream.getTracks().forEach(function (track) {
+            if (track.readyState == 'live' && track.kind === 'video') {
+                track.stop();
+            }
+        });
+    }
+
+    // stop only mic
+    function stopAudioOnly(stream) {
+        stream.getTracks().forEach(function (track) {
+            if (track.readyState == 'live' && track.kind === 'audio') {
+                track.stop();
+            }
+        });
+    }
 </script>
 </html>

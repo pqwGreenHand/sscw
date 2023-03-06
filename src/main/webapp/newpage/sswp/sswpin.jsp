@@ -43,17 +43,22 @@
         <div style="text-align: center;display: none" id="inshow">
             <input id="ssareaid" type="hidden" name="ssareaid" value="<%=ssareaid%>">
             <input id="personId" type="hidden" name="personId" value="<%=personId%>">
-            <a href="javascript:void(0)" onclick="showphotowid()"  data-options="iconCls:'icon-photo'" class="easyui-linkbutton button-line-blue"
+            <a href="javascript:void(0)" onclick="showphotowid()" data-options="iconCls:'icon-photo'"
+               class="easyui-linkbutton button-line-blue"
                style="width: 100px;height:40px;margin-left: 10px;">拍&nbsp;照</a>
-            <a href="javascript:void(0)" onclick="printcod()"  data-options="iconCls:'icon-recover-deleted-items'" class="easyui-linkbutton button-line-blue"
+            <a href="javascript:void(0)" onclick="printcod()" data-options="iconCls:'icon-recover-deleted-items'"
+               class="easyui-linkbutton button-line-blue"
                style="width: 100px;height:40px;margin-left: 10px;">条&nbsp;码</a>
-            <a href="javascript:void(0)" onclick="belongsavebox()"  data-options="iconCls:'icon-lock-go'" class="easyui-linkbutton button-line-blue"
+            <a href="javascript:void(0)" onclick="belongsavebox()" data-options="iconCls:'icon-lock-go'"
+               class="easyui-linkbutton button-line-blue"
                style="width: 100px;height:40px;margin-left: 10px;">开&nbsp;柜</a>
-            <a href="javascript:void(0)" onclick="securityDownLoad()"  data-options="iconCls:'icon-print'"  class="easyui-linkbutton button-line-blue"
+            <a href="javascript:void(0)" onclick="securityDownLoad()" data-options="iconCls:'icon-print'"
+               class="easyui-linkbutton button-line-blue"
                style="width: 100px;height:40px;margin-left: 10px;">台&nbsp;账</a>
             <a href="javascript:void(0)" onclick="showImages()"  data-options="iconCls:'icon-large-picture'"  class="easyui-linkbutton button-line-blue"
                style="width: 100px;height:40px;margin-left: 10px;">照&nbsp;片</a>
-            <a href="javascript:void(0)" data-options="iconCls:'icon-back'"  onclick="javascript:window.location.href ='index.jsp';" class="easyui-linkbutton button-line-red"
+            <a href="javascript:void(0)" data-options="iconCls:'icon-back'"
+               onclick="javascript:window.location.href ='index.jsp';" class="easyui-linkbutton button-line-red"
                style="width: 100px;height:40px;margin-left: 10px;">返回</a>
         </div>
 
@@ -81,6 +86,37 @@
     </form>
 </div>
 
+
+<div id="imageDialog" style="display: none">
+    <table >
+        <tr>
+            <td>
+                <!-- 入区照片框 -->
+                <video id="v" style="width: 300px;height: 300px"></video>
+            </td>
+            <td>
+                <canvas id="canvas" style="display:none;"></canvas>
+                <br/>
+                <img src="" id="photo"  style="float: left;">
+
+            </td>
+        </tr>
+        <tr >
+            <td colspan="2">
+
+                <%--<button id="button_take">拍照</button>--%>
+                <a href="javascript:void(0)" onclick="pzOnclick()" data-options="iconCls:'icon-photo'"
+                   class="easyui-linkbutton button-line-blue"
+                   style="width: 100px;height:40px;margin-left: 10px;">拍&nbsp;照</a>
+                <a href="javascript:void(0)" onclick="uploadPicture()" data-options="iconCls:'icon-upload'"
+                   class="easyui-linkbutton button-line-blue"
+                   style="width: 100px;height:40px;margin-left: 10px;">上&nbsp;传</a>
+            </td>
+
+        </tr>
+    </table>
+</div>
+
 <!-- 下载隐藏信息 -->
 <div style="display: none">
     <form id="lawdocInfo_belonginfo" class="form-style" method="get" action="/sscw/zhfz/lawdocProcess/download.do"
@@ -106,6 +142,7 @@
         color: #fff;
         box-shadow: 0px 4px 10px 0px rgba(8, 29, 64, 0.6);
     }
+
     .m-btn-1.blue {
         background: #0b74b0;
         background: -moz-linear-gradient( 90deg, rgba(32,83,151,1), rgba(5,128,190,1));

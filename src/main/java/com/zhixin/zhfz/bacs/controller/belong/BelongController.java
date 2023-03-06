@@ -29,6 +29,7 @@ import com.zhixin.zhfz.common.services.operLog.IOperLogService;
 import com.zhixin.zhfz.common.services.organiztion.IOrganizationService;
 import com.zhixin.zhfz.common.utils.ControllerTool;
 import com.zhixin.zhfz.common.utils.PropertyUtil;
+import com.zhixin.zhfz.common.utils.Utils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -42,11 +43,10 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import sun.misc.BASE64Decoder;
 
 import javax.annotation.Resource;
+import javax.mail.internet.MimeUtility;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -1088,7 +1088,7 @@ public class BelongController {
 
     @RequestMapping({"/outgetpicturenew"})
     @ResponseBody
-    public MessageEntity outgetpicturenew(@RequestParam Map<String, Object> params1, HttpServletRequest request, String serialNo, String serialid, String base64, HttpServletResponse response)
+    public MessageEntity outgetpicturenew(@RequestParam Map<String, Object> params1, HttpServletRequest request, String serialNo, String serialid, String dataImage, HttpServletResponse response)
             throws Exception {
         logger.info("========================图片上传 serialID=" + serialid);
         String serialID = serialid;
@@ -1100,6 +1100,7 @@ public class BelongController {
             FileUtil.createDir(path);
             String filename = "belong-" + serialNo + "-" + new Random().nextInt(10000) + "-yt.jpg";
             String spath = path + filename;
+            String base64 = dataImage.substring(23);
             try {
                 BASE64Decoder d = new BASE64Decoder();
                 byte[] bs = d.decodeBuffer(base64);
@@ -1165,15 +1166,6 @@ public class BelongController {
                             File localFile = new File(path, filename);
                             file.transferTo(localFile);
                             logger.info("========================图片上传错误 create file=");
-
-//                                form.setSysType("ba");
-//                                form.setFileType("WP");
-//                                form.setUuid(serialNo);
-//                                form.setSysId(ControllerTool.getCurrentAreaID(request)+"");
-//                                form.setFile(file);
-//                                String filename = "belong-" + serialNo + "-" + new Random().nextInt(10000) + "-yt.jpg";
-//                                form.setFileName(filename);
-//                                fileConfigService.upload(form);
                             belongService.creatbelongphoto(serialID, spath, ControllerTool.getSessionInfo(request).getCurrentOrg().getPid(), ControllerTool.getSessionInfo(request).getUser().getId().toString());
                         }
                     }
@@ -1710,7 +1702,7 @@ public class BelongController {
                 if (photo.getWebUrl() != null) {
                     result.add(photo.getWebUrl() + "?path=" + photo.getUrl());
                 } else {
-                    result.add("http://127.0.0.1:8088/zhfz/zhfz/bacs/iriscollection/imageshow.do?path=" + photo.getUrl());
+                    result.add("http://127.0.0.1:8081/sscw/zhfz/bacs/iriscollection/imageshow.do?path=" + photo.getUrl());
                 }
             }
         }

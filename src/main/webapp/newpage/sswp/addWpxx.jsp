@@ -475,7 +475,10 @@
             return;
         }
         $("#wpbh1").focus();
-
+        $.messager.progress({
+            title: '请等待',
+            msg: '请用扫描枪对准条码...'
+        });
     }
 
     function queryWpxxByWpbh() {
@@ -496,8 +499,12 @@
                     smaddWpxx(res);
                     $('#wpbh1').val("");
                     $("#wpbh1").focus();
+                    $.messager.progress('close');
                 } else {
                     $.messager.alert('提示', '无对应物品，请重新扫描！');
+                    $('#wpbh1').val("");
+                    $("#wpbh1").focus();
+                    $.messager.progress('close');
                 }
             },
             error: function (data) {

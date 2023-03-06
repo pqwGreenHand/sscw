@@ -179,6 +179,173 @@ function add() {
 }
 
 function showphotowid() {
+    var cg = $('#serialIdQuery').combogrid('grid'); // 获取数据表格对象
+    var row = cg.datagrid('getSelected');
+    var belongId = null;
+    var personId = null;
+    var rowdata = $('#detid').datagrid('getRows')[0];
+    if (row == null && rowdata == null) {
+        $.messager.alert('提示', '请选择嫌疑人!');
+        return;
+    }
+    pzInit();
+    $("#imageDialog").dialog({
+        title: '物品拍照',
+        width: 1000,
+        height: 650,
+        // href: 'wppz.jsp?id='+1,
+        maximizable: false,
+        modal: true,
+        buttons: [{
+            text: '关闭', iconCls: 'icon-cancel',
+            handler: function () {
+                stopVideoOnly(mediaStreamTrack);
+                $("#imageDialog").dialog('close');
+            }
+        }]
+    });
+
+}
+
+var mediaStreamTrack;
+
+function pzInit() {
+    // 老的浏览器可能根本没有实现 mediaDevices，所以我们可以先设置一个空的对象
+    if (navigator.mediaDevices === undefined) {
+        navigator.mediaDevices = {};
+    }
+    if (navigator.mediaDevices.getUserMedia === undefined) {
+        navigator.mediaDevices.getUserMedia = function (constraints) {
+            // 首先，如果有getUserMedia的话，就获得它
+            var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
+            // 一些浏览器根本没实现它 - 那么就返回一个error到promise的reject来保持一个统一的接口
+            if (!getUserMedia) {
+                return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
+            }
+
+            // 否则，为老的navigator.getUserMedia方法包裹一个Promise
+            return new Promise(function (resolve, reject) {
+                getUserMedia.call(navigator, constraints, resolve, reject);
+            });
+        }
+    }
+
+    var constraints = {
+        video: true,
+        audio: false
+    };
+    var videoPlaying = false;
+    var v = document.getElementById('v');
+    var promise = navigator.mediaDevices.getUserMedia(constraints);
+    promise.then(function (stream) {
+        /* 使用这个stream stream */
+        if ("srcObject" in v) {
+            v.srcObject = stream;
+        } else {
+            // 防止再新的浏览器里使用它，应为它已经不再支持了
+            v.src = window.URL.createObjectURL(stream);
+        }
+        v.onloadedmetadata = function (e) {
+            v.play();
+            mediaStreamTrack = stream;
+            videoPlaying = true;
+        };
+    })
+        .catch(function (err) {
+            /* 处理error */
+            console.error(err.name + ": " + err.message);
+        });
+    /* document.getElementById('button_take').addEventListener('click', function () {
+         if (videoPlaying) {
+             var canvas = document.getElementById('canvas');
+             canvas.width = v.videoWidth;
+             canvas.height = v.videoHeight;
+             canvas.getContext('2d').drawImage(v, 0, 0);
+             var data = canvas.toDataURL('image/webp');
+             document.getElementById('photo').setAttribute('src', data);
+             console.log(data)
+             // stopVideoOnly(mediaStreamTrack);
+             //   canvas.getContext("2d").drawImage(Img,0,0,width,height); //将图片绘制到canvas中
+         }
+     }, false);*/
+}
+
+var tpBase64;
+
+function pzOnclick() {
+    var canvas = document.getElementById('canvas');
+    canvas.width = v.videoWidth;
+    canvas.height = v.videoHeight;
+    canvas.getContext('2d').drawImage(v, 0, 0);
+    var data = canvas.toDataURL('image/webp');
+    document.getElementById('photo').setAttribute('src', data);
+    tpBase64 = data;
+    console.log(data)
+}
+
+
+function uploadPicture() {
+    var cg = $('#serialIdQuery').combogrid('grid'); // 获取数据表格对象
+    var row = cg.datagrid('getSelected');
+    var belongId = null;
+    var personId = null;
+    var rowdata = $('#detid').datagrid('getRows')[0];
+    if (row == null && rowdata == null) {
+        $.messager.alert('提示', '请选择嫌疑人!');
+        return;
+    } else {
+        if (row != null) {
+            belongId = row.belongingsId
+            personId = row.id
+        } else {
+            belongId = rowdata.belongingsId
+            personId = rowdata.serialId
+        }
+    }
+    jQuery.ajax({
+        async: false,
+        type: 'POST',
+        url: '/sscw/zhfz/bacs/belong/outgetpicturenew.do',
+        data: {serialid: personId, dataImage: tpBase64, serialNo: belongId},
+        dataType: 'json',
+        success: function (data) {
+            U.msg('上传成功');
+        },
+        error: function (data) {
+            U.msg('上传失败');
+        }
+    });
+}
+
+// stop both mic and camera
+function stopBothVideoAndAudio(stream) {
+    stream.getTracks().forEach(function (track) {
+        if (track.readyState == 'live') {
+            track.stop();
+        }
+    });
+}
+
+// stop only camera
+function stopVideoOnly(stream) {
+    stream.getTracks().forEach(function (track) {
+        if (track.readyState == 'live' && track.kind === 'video') {
+            track.stop();
+        }
+    });
+}
+
+// stop only mic
+function stopAudioOnly(stream) {
+    stream.getTracks().forEach(function (track) {
+        if (track.readyState == 'live' && track.kind === 'audio') {
+            track.stop();
+        }
+    });
+}
+
+function showphotowidqd() {
     var cg = $('#interrogateSerialId').combogrid('grid');	// 获取数据表格对象
     var row = cg.datagrid('getSelected');
     //上传图片开始
