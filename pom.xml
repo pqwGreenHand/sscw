@@ -159,11 +159,11 @@
 			<version>4.2.11.RELEASE</version>
 		</dependency>
 
-		<dependency>
+		<!--<dependency>
 			<groupId>com.sun</groupId>
 			<artifactId>jna</artifactId>
 			<version>4.5.1</version>
-		</dependency>
+		</dependency>-->
 
 		<!-- mybatis -->
 		<dependency>
@@ -202,7 +202,8 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.20</version>
+			<!--<version>5.1.20</version>-->
+			<version>8.0.19</version>
 		</dependency>
 		<dependency>
 			<groupId>ojdbc</groupId>
