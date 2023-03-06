@@ -197,7 +197,7 @@ function detailgridLoad(rowData)
 }
 
 function queryUsers() {
-    $(datagridPerson).datagrid('load', {
+    $('#dg').datagrid('load', {
             name: $('#name').textbox('getValue'),
             certificateNo: $('#certificate_no').textbox('getValue'),
         }

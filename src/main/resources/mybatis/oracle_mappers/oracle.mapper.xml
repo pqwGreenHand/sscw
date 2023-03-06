@@ -11,7 +11,8 @@
         FXSJ,aj.AJLX,aj.ZBR_XM,aj.ZBR_SFZH,aj.ZBDW_BH
         FROM SJJH_WA_AJXX aj
         LEFT JOIN SJJH_WA_ORG org ON aj.ZBDW_BH = org.CODE
-        where 1=1 and INSTR (org.NAME, '平谷') > 0 AND ROWNUM&lt;5000
+        where 1=1 and INSTR (org.NAME, '平谷') > 0 AND to_char(aj.LRSJ, 'yy-mm-dd hh24:mi:ss') >= to_char(sysdate-3,'yy-mm-dd hh24:mi:ss')
+        AND ROWNUM&lt;5000
         <if test="ajbh!=null and ajbh!=''">
             and aj.AJBH like '%${ajbh}%'
         </if>
@@ -21,7 +22,7 @@
         <if test="orgCode!=null and orgCode!=''">
             and aj.ZBDW_BH in (${orgCode})
         </if>
-        ORDER BY FXSJ DESC) tt) table_alias
+        ORDER BY AJ.LRSJ DESC) tt) table_alias
         <if test="start!=null and start!=''">
             WHERE table_alias.rowno BETWEEN #{start} AND #{end}
         </if>

@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -33,16 +34,16 @@ public class PowerCacheUtil implements InitializingBean,Runnable {
 		powerCacheUtil = this;
 	}
 
-	@Autowired
+	@Resource
 	private IAuthorityMapper authorityMapper;
 	
-	@Autowired
+	@Resource
 	private IRoleMapper roleMapper;
 
-	@Autowired
+	@Resource
 	private IUserMapper userMapper;
 
-	@Autowired
+	@Resource
 	private IAreaMapper areaMapper;
 
 	private final static ReadWriteLock rwl = new ReentrantReadWriteLock();

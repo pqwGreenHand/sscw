@@ -25,9 +25,6 @@
            style="width: 70px;margin-left: 10px;">查&nbsp;询</a>
         <a href="javascript:void(0)" onclick="clearSearch()" class="easyui-linkbutton button-line-red"
            style="width: 70px;margin-left: 10px;">清&nbsp;除</a>
-        &nbsp;&nbsp;
-        <a href="javascript:void(0)" onclick="add()" class="easyui-linkbutton button-line-blue" iconCls="icon-add"
-           plain="true">添加</a>
     </div>
 
     <div data-options="region:'center',border:false" style="height:40%">

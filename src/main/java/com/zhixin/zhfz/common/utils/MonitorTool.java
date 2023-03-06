@@ -119,7 +119,7 @@ public class MonitorTool {
 	private static Connection getConnect(String type, String url, String name, String pwd) {
 		try {
 			if ("mysql".equalsIgnoreCase(type)) {
-				DriverManager.registerDriver(new org.gjt.mm.mysql.Driver());
+//				DriverManager.registerDriver(new org.gjt.mm.mysql.Driver());
 			} else if ("oracle".equalsIgnoreCase(type)) {
 				DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
 			}
