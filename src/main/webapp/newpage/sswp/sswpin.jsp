@@ -12,10 +12,14 @@
     <title>人员管理</title>
     <%@ include file="../common.jsp" %>
     <script type="text/javascript" src="sswpin.js"></script>
+    <script src="../../LodopFuncs.js"></script>
     <%
         String ssareaid = request.getParameter("ssareaid");
         String personId = request.getParameter("personId");
     %>
+    <object id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=0 height=0>
+        <embed id="LODOP_EM" type="application/x-print-lodop" width=0 height=0></embed>
+    </object>
 </head>
 
 <body>

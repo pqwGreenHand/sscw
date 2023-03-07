@@ -463,7 +463,24 @@ function showImages() {
 }
 
 function printcod(){
-    var enterpriseinfo = {"serialId": 1, belongingsId: 2};
+    var cg = $('#serialIdQuery').combogrid('grid'); // 获取数据表格对象
+    var row = cg.datagrid('getSelected');
+    var belongId = null;
+    var personId = null;
+    var rowdata = $('#detid').datagrid('getRows')[0];
+    if (row == null && rowdata == null) {
+        $.messager.alert('提示', '请选择嫌疑人!');
+        return;
+    } else {
+        if (row != null) {
+            belongId = row.belongingsId
+            personId = row.id
+        } else {
+            belongId = rowdata.belongingsId
+            personId = rowdata.serialId
+        }
+    }
+    var enterpriseinfo = {"serialId": personId, belongingsId: belongId};
     var json_data = JSON.stringify(enterpriseinfo);
     jQuery.ajax({
         type: 'POST',
@@ -476,21 +493,29 @@ function printcod(){
         success: function (data) {
             if (data != null && data.length > 0) {
                 for (var i = 0; i < data.length; i++) {
-                    an = data[i].aname;
-                    wName = data[i].wname;
-                    pn = data[i].pname;
-                    co = data[i].wpUuid;
-                    count = data[i].detailCount
-                    // alert("wName= "+wName+"co= "+co+count);
-                    OpenPrinter();
-                    // PSKPrn.PTKDrawTextEx(200, 10, 0, 97, 1, 1, 78, "物品名称:" + wName, false);
-                    // PSKPrn.PTKDrawTextEx(200, 50, 0, 97, 1, 1, 78, "数量：" + count, false);
-                    // PSKPrn.PTKDrawBar2DQR(200, 80, 180, 180, 0, 7, 2, 0, 0, co);// QR码
-                    PSKPrn.PTKDrawTextEx(150, 10, 0, 97, 1, 1, 78, "物品名称:" + wName, false);
-                    PSKPrn.PTKDrawTextEx(150, 50, 0, 97, 1, 1, 78, "数量：" + count, false);
-                    PSKPrn.PTKDrawBarcodeEx(90, 150, 0, "1A", 2, 5, 60, 66, "\"" + co + "\"C0", true);
-                    PSKPrn.PTKPrintLabel(1, 1);
-                    ClosePrinter();
+                    var LODOP = getLodop(document.getElementById('LODOP_OB'), document.getElementById('LODOP_EM'));
+                    // LODOP.SET_LICENSES("","11D301338B627DC14B507A3F0C284F11","","");
+                    LODOP.PRINT_INIT("打印任务名");               //首先一个初始化语句
+                    LODOP.SET_PRINT_PAGESIZE(1,400,300,"物品")//设定纸张大小
+                    //判断案件名称的字数，
+                    var ajmc=data[i].casename;
+                    if(ajmc.length<12){
+                        LODOP.ADD_PRINT_TEXT(10,0,200,20,data[i].casename );//然后多个ADD语句及SET语句
+                        LODOP.ADD_PRINT_TEXT(25,0,250,20,"物品名字:"+ data[i].wname+"("+data[i].detailCount+data[i].unit+")");//然后多个ADD语句及SET语句
+                        LODOP.ADD_PRINT_TEXT(40,0,200,20,"姓名(签字):");//然后多个ADD语句及SET语句
+                        LODOP.ADD_PRINT_TEXT(55,0,200,20,"时间："+"  "+"年"+"  "+"月"+"  "+"日"  );//然后多个ADD语句及SET语句
+                        LODOP.ADD_PRINT_TEXT(70,0,200,20,"案由：盗窃" );//然后多个ADD语句及SET语句
+                        LODOP.ADD_PRINT_BARCODE(85,10,180,60,'EAN128A',data[i].wpUuid);
+                    }else{
+                        LODOP.ADD_PRINT_TEXT(10,0,200,20,"案由：盗窃" );//然后多个ADD语句及SET语句
+                        LODOP.SET_PRINT_STYLEA(1,"FontSize",10);
+                        LODOP.ADD_PRINT_TEXT(40,0,250,20,"物品名字:"+ data[i].wname+"("+data[i].detailCount+data[i].unit+")");//然后多个ADD语句及SET语句
+                        LODOP.ADD_PRINT_TEXT(55,0,200,20,"姓名(签字):");//然后多个ADD语句及SET语句
+                        LODOP.ADD_PRINT_TEXT(70,0,200,20,"时间："+"  "+"年"+"  "+"月"+"  "+"日"  );//然后多个ADD语句及SET语句
+                        LODOP.ADD_PRINT_BARCODE(85,10,180,60,'EAN128A',data[i].wpUuid);
+                    }
+                    // LODOP.ADD_PRINT_BARCODE(25,10,200,69,'QRCode',"WP111111111111");
+                    LODOP.PRINT();
                 }
 
                 $.messager.progress('close');

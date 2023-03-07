@@ -1055,8 +1055,9 @@
         p.`name` AS pname,
         p.certificate_no certificateNo,
         bd.detail_count,
+        bd.unit,
 		bd.name wname,
-		bd.wp_uuid
+		bd.wp_uuid,bc.ajmc casename
         FROM
         ba_belongings b,
         ba_belongings_detail bd,
@@ -1065,6 +1066,7 @@
         WHERE
         b.serial_id = p.id
         AND b.area_id = a.id
+        AND bc.id=b.id
         AND b.is_get = 0
         AND b.serial_id = #{serialId} and bd.belongings_id=#{belongingsId}
     </select>

@@ -16,12 +16,14 @@
 <script>
     function test() {
         var LODOP = getLodop(document.getElementById('LODOP_OB'), document.getElementById('LODOP_EM'));
+        // LODOP.SET_LICENSES("","11D301338B627DC14B507A3F0C284F11","","");
         LODOP.PRINT_INIT("打印任务名");               //首先一个初始化语句
-        LODOP.SET_PRINT_PAGESIZE(1,300,230,"物品")//设定纸张大小
-        LODOP.ADD_PRINT_TEXT(0,0,100,20,"姓名：测试");//然后多个ADD语句及SET语句
-        LODOP.ADD_PRINT_TEXT(15,0,100,20,"物品名字：手机");//然后多个ADD语句及SET语句
+        LODOP.SET_PRINT_PAGESIZE(1,400,300,"物品")//设定纸张大小
+        LODOP.ADD_PRINT_TEXT(10,0,250,20,"物品名字：手机");//然后多个ADD语句及SET语句
+        LODOP.ADD_PRINT_TEXT(30,0,200,20,"姓名(签字):");//然后多个ADD语句及SET语句
+        LODOP.ADD_PRINT_TEXT(50,0,200,20,"时间："+"  "+"年"+"  "+"月"+"  "+"日"  );//然后多个ADD语句及SET语句
         LODOP.SET_PRINT_STYLE("FontSize",15);
-        LODOP.ADD_PRINT_BARCODE(35,10,150,70,'128A',"WP111111111111");
+        LODOP.ADD_PRINT_BARCODE(70,10,180,60,'EAN128A',"WP111111111111");
         // LODOP.ADD_PRINT_BARCODE(25,10,200,69,'QRCode',"WP111111111111");
         // LODOP.PREVIEW();
         LODOP.PRINT();
