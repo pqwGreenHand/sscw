@@ -109,6 +109,11 @@ $(function () {
             } else {
                 $('#jsdwShow').hide()
             }
+            /*if (value == 6) {
+                $('#yjShow').show()
+            } else {
+                $('#yjShow').hide()
+            }*/
         }
     });
 });

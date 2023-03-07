@@ -112,7 +112,7 @@
                 <a href="javascript:void(0)" onclick="pzOnclick()" data-options="iconCls:'icon-photo'"
                    class="easyui-linkbutton button-line-blue"
                    style="width: 100px;height:40px;margin-left: 10px;">拍&nbsp;照</a>
-                <a href="javascript:void(0)" onclick="uploadPicture()" data-options="iconCls:'icon-upload'"
+                <a href="javascript:void(0)" onclick="uploadPicture()" data-options="iconCls:'icon-ok'"
                    class="easyui-linkbutton button-line-blue"
                    style="width: 100px;height:40px;margin-left: 10px;">上&nbsp;传</a>
             </td>

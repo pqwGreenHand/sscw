@@ -462,7 +462,7 @@ function showImages() {
     });
 }
 
-function printcod(){
+function printcod() {
     var cg = $('#serialIdQuery').combogrid('grid'); // 获取数据表格对象
     var row = cg.datagrid('getSelected');
     var belongId = null;
@@ -491,28 +491,35 @@ function printcod(){
         cache: false,
         async: false,
         success: function (data) {
+            console.log(data)
             if (data != null && data.length > 0) {
                 for (var i = 0; i < data.length; i++) {
                     var LODOP = getLodop(document.getElementById('LODOP_OB'), document.getElementById('LODOP_EM'));
-                    // LODOP.SET_LICENSES("","11D301338B627DC14B507A3F0C284F11","","");
+                    LODOP.SET_LICENSES("", "11D301338B627DC14B507A3F0C284F11", "", "");
                     LODOP.PRINT_INIT("打印任务名");               //首先一个初始化语句
-                    LODOP.SET_PRINT_PAGESIZE(1,400,300,"物品")//设定纸张大小
+                    LODOP.SET_PRINT_PAGESIZE(1, 400, 300, "物品")//设定纸张大小
                     //判断案件名称的字数，
-                    var ajmc=data[i].casename;
-                    if(ajmc.length<12){
-                        LODOP.ADD_PRINT_TEXT(10,0,200,20,data[i].casename );//然后多个ADD语句及SET语句
-                        LODOP.ADD_PRINT_TEXT(25,0,250,20,"物品名字:"+ data[i].wname+"("+data[i].detailCount+data[i].unit+")");//然后多个ADD语句及SET语句
-                        LODOP.ADD_PRINT_TEXT(40,0,200,20,"姓名(签字):");//然后多个ADD语句及SET语句
-                        LODOP.ADD_PRINT_TEXT(55,0,200,20,"时间："+"  "+"年"+"  "+"月"+"  "+"日"  );//然后多个ADD语句及SET语句
-                        LODOP.ADD_PRINT_TEXT(70,0,200,20,"案由：盗窃" );//然后多个ADD语句及SET语句
-                        LODOP.ADD_PRINT_BARCODE(85,10,180,60,'EAN128A',data[i].wpUuid);
-                    }else{
-                        LODOP.ADD_PRINT_TEXT(10,0,200,20,"案由：盗窃" );//然后多个ADD语句及SET语句
-                        LODOP.SET_PRINT_STYLEA(1,"FontSize",10);
-                        LODOP.ADD_PRINT_TEXT(40,0,250,20,"物品名字:"+ data[i].wname+"("+data[i].detailCount+data[i].unit+")");//然后多个ADD语句及SET语句
-                        LODOP.ADD_PRINT_TEXT(55,0,200,20,"姓名(签字):");//然后多个ADD语句及SET语句
-                        LODOP.ADD_PRINT_TEXT(70,0,200,20,"时间："+"  "+"年"+"  "+"月"+"  "+"日"  );//然后多个ADD语句及SET语句
-                        LODOP.ADD_PRINT_BARCODE(85,10,180,60,'EAN128A',data[i].wpUuid);
+                    var ajmc = data[i].casename;
+                    if (ajmc.length < 12) {
+                        LODOP.ADD_PRINT_TEXT(0, 0, 200, 20, data[i].casename);//然后多个ADD语句及SET语句
+                        LODOP.ADD_PRINT_TEXT(15, 0, 200, 20, "物品名字:" + data[i].wname + "(" + data[i].detailCount + data[i].unit + ")");//然后多个ADD语句及SET语句
+                        LODOP.ADD_PRINT_TEXT(30, 0, 200, 20, "姓名(签字):");//然后多个ADD语句及SET语句
+                        LODOP.ADD_PRINT_TEXT(45, 0, 200, 20, "时间：" + "   " + "年" + "   " + "月" + "   " + "日");//然后多个ADD语句及SET语句
+                        LODOP.ADD_PRINT_BARCODE(60, 10, 180, 60, 'EAN128A', data[i].wpUuid);
+                    } else {
+                        LODOP.ADD_PRINT_TEXT(0, 0, 170, 20, data[i].casename);//然后多个ADD语句及SET语句
+                        if (ajmc.length < 14) {
+                            LODOP.SET_PRINT_STYLEA(1, "FontSize", 8);
+                        } else if (14 < ajmc.length <= 16) {
+                            LODOP.SET_PRINT_STYLEA(1, "FontSize", 7);
+                        } else {
+                            LODOP.SET_PRINT_STYLEA(1, "FontSize", 4);
+                        }
+
+                        LODOP.ADD_PRINT_TEXT(15, 0, 200, 20, "物品名字:" + data[i].wname + "(" + data[i].detailCount + data[i].unit + ")");//然后多个ADD语句及SET语句
+                        LODOP.ADD_PRINT_TEXT(30, 0, 200, 20, "姓名(签字):");//然后多个ADD语句及SET语句
+                        LODOP.ADD_PRINT_TEXT(45, 0, 200, 20, "时间：" + "   " + "年" + "   " + "月" + "   " + "日");//然后多个ADD语句及SET语句
+                        LODOP.ADD_PRINT_BARCODE(60, 10, 180, 60, 'EAN128A', data[i].wpUuid);
                     }
                     // LODOP.ADD_PRINT_BARCODE(25,10,200,69,'QRCode',"WP111111111111");
                     LODOP.PRINT();
@@ -556,7 +563,6 @@ function edit(index) {
                         data: edtJson,
                         dataType: 'json',
                         success: function (data) {
-                            U.msg(data.content);
                             dialog.dialog('close');
                             $.messager.progress('close');
                             var cg = $('#serialIdQuery').combogrid('grid');	// 获取数据表格对象

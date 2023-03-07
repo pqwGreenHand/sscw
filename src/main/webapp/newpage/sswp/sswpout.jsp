@@ -38,8 +38,8 @@
             <input id="ssareaid" type="hidden" name="ssareaid" value="<%=ssareaid%>">
             <a href="javascript:void(0)" onclick="boxopen()"  data-options="iconCls:'icon-recover-deleted-items'" class="easyui-linkbutton button-line-blue"
                style="width: 160px;height:40px;margin-left: 10px;">提取全部</a>
-            <a href="javascript:void(0)" onclick="showphotowid()"  data-options="iconCls:'icon-photo'" class="easyui-linkbutton button-line-blue"
-               style="width: 100px;height:40px;margin-left: 10px;">拍&nbsp;照</a>
+<%--            <a href="javascript:void(0)" onclick="showphotowid()"  data-options="iconCls:'icon-photo'" class="easyui-linkbutton button-line-blue"--%>
+<%--               style="width: 100px;height:40px;margin-left: 10px;">拍&nbsp;照</a>--%>
             <a href="javascript:void(0)" onclick="boxoutopen()"  data-options="iconCls:'icon-lock-go'" class="easyui-linkbutton button-line-blue"
                style="width: 100px;height:40px;margin-left: 10px;">开&nbsp;柜</a>
             <a href="javascript:void(0)" onclick="securityDownLoad()"  data-options="iconCls:'icon-print'"  class="easyui-linkbutton button-line-blue"
@@ -67,6 +67,7 @@
                     <%--<option value="3">本人收到扣押物品清单</option>--%>
                     <option value="4">转涉案财物</option>
                     <option value="5">移交</option>
+                    <option value="6">邮寄</option>
                 </select></td>
             </tr>
             <tr>

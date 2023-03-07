@@ -1062,11 +1062,12 @@
         ba_belongings b,
         ba_belongings_detail bd,
         ba_area a,
-        ba_person p
+        ba_person p,
+        ba_case bc
         WHERE
         b.serial_id = p.id
         AND b.area_id = a.id
-        AND bc.id=b.id
+        AND bc.id=b.case_id
         AND b.is_get = 0
         AND b.serial_id = #{serialId} and bd.belongings_id=#{belongingsId}
     </select>
