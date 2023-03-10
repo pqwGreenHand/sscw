@@ -80,6 +80,9 @@ var ztab = {
             var title = tab.panel('options').title;
             ztab.refresh(title);
         },
+        existsRefresh: function (title) {
+            ztab.refresh(title);
+        },
         exists: function (title) {
             var ret = $(ztab.tabs).tabs('exists', title);
             return ret;

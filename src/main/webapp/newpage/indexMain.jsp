@@ -19,11 +19,13 @@
         #mainTabs > .tabs-header {
             padding-top: 0px;
         }
-        .datagrid-body{
+
+        .datagrid-body {
             height: 60px !important;
         }
+
         /*.panel-body .accordion-body{*/
-            /*height:fit-content !important;*/
+        /*height:fit-content !important;*/
         /*}*/
         .logo {
             display: block;
@@ -36,6 +38,7 @@
             margin-bottom: 30px;
             margin-top: -10px;
         }
+
         .logo span {
             color: #fff;
             font-size: 44px;
@@ -45,6 +48,7 @@
             padding-left: 110px;
             position: relative;
         }
+
         .logo span:before {
             content: '';
             display: inline-block;
@@ -69,8 +73,8 @@
                 <div class="logo">
                     <span style="font-size: 35px;font-weight:bold;">平谷分局涉案人员随身财物管理智能化系统</span>
                 </div>
-              <%--  <a href="#" class="easyui-linkbutton left-control-switch"><i class="fa fa-bars fa-lg"></i></a>
-               --%> <%--<a href="#" class="easyui-menubutton theme-navigate-user-button"
+                <%--  <a href="#" class="easyui-linkbutton left-control-switch"><i class="fa fa-bars fa-lg"></i></a>
+                 --%> <%--<a href="#" class="easyui-menubutton theme-navigate-user-button"
                    data-options="menu:'.theme-navigate-user-panel'">${user.username}&lt;%&ndash;匿名&ndash;%&gt;</a>--%>
                 <%--<a href="#" class="easyui-linkbutton">新建</a>
                 <a href="#" class="easyui-menubutton" data-options="menu:'#mm1',hasDownArrow:false">文件</a>
@@ -138,7 +142,7 @@
                             </dt>
                             <dd>
                                 <b class="badge-prompt">
-                                    </b>
+                                </b>
                                 <p>消息：<i class="badge color-important">10</i></p>
                                 <%--<p>安全等级：<i class="text-success" id="testHeight">11</i></p>--%>
                             </dd>
@@ -164,22 +168,22 @@
                                     <li value="Test.html">案件登记1</li>
                                 </ul>
                             </div>--%>
-                       <div title="案件管理">
+                        <div title="案件管理">
                             <ul class="easyui-datalist"
                                 data-options="border:false, onClickRow:function(index,row){ztab.open(row.text,row.value)}">
                                 <li value="${ctx}/newpage/ajxx/ajxx.jsp">案件管理</li>
                             </ul>
                         </div>
-                            <div title="人员管理">
-                                <ul class="easyui-datalist"
-                                    data-options="border:false, onClickRow:function(index,row){ztab.open(row.text,row.value)}">
-                                    <li value="${ctx}/newpage/person/person.jsp">人员管理</li>
-                                </ul>
-                            </div>
-                        <div title="物品暂存">
+                        <div title="人员管理">
                             <ul class="easyui-datalist"
                                 data-options="border:false, onClickRow:function(index,row){ztab.open(row.text,row.value)}">
-                                <li value="${ctx}/newpage/sswp/index.jsp">随身物品暂存</li>
+                                <li value="${ctx}/newpage/person/person.jsp">人员管理</li>
+                            </ul>
+                        </div>
+                        <div title="物品管理">
+                            <ul class="easyui-datalist"
+                                data-options="border:false, onClickRow:function(index,row){ztab.open(row.text,row.value)}">
+                                <li value="${ctx}/newpage/sswp/index.jsp">随身物品管理</li>
                             </ul>
                         </div>
                         <div title="移交接收">
@@ -201,18 +205,18 @@
                                 <li value="${ctx}/newpage/dzda/dzda.jsp">电子档案</li>
                             </ul>
                         </div>
-                            <div title="物品明细">
-                                <ul class="easyui-datalist"
-                                    data-options="border:false, onClickRow:function(index,row){ztab.open(row.text,row.value)}">
-                                    <li value="${ctx}/newpage/sswpmx/sswpdetail.jsp">物品明细</li>
-                                </ul>
-                            </div>
-                            <div title="民警管理">
-                                <ul class="easyui-datalist"
-                                    data-options="border:false, onClickRow:function(index,row){ztab.open(row.text,row.value)}">
-                                    <li value="${ctx}/newpage/user/user.jsp">民警管理</li>
-                                </ul>
-                            </div>
+                        <div title="物品明细">
+                            <ul class="easyui-datalist"
+                                data-options="border:false, onClickRow:function(index,row){ztab.open(row.text,row.value)}">
+                                <li value="${ctx}/newpage/sswpmx/sswpdetail.jsp">物品明细</li>
+                            </ul>
+                        </div>
+                        <div title="民警管理">
+                            <ul class="easyui-datalist"
+                                data-options="border:false, onClickRow:function(index,row){ztab.open(row.text,row.value)}">
+                                <li value="${ctx}/newpage/user/user.jsp">民警管理</li>
+                            </ul>
+                        </div>
                         <%--
                             <div title="控制台">
                                 <ul class="easyui-datalist"
@@ -324,31 +328,34 @@
 <div id="dlg"></div>
 
 <div id="updatePw" style="display: none">
-    <form id="keyForm" >
-        <input type="hidden" id="id" name="id" />
-            <table style="margin: 0 auto; padding: 10px;width: 90%">
-                <tr>
-                    <td>旧&nbsp;&nbsp;&nbsp;&nbsp;密&nbsp;&nbsp;&nbsp;码：:</td>
-                    <td><input  id="oldPwd" name="oldPwd" type="password"  class="easyui-textbox" required="true" style="margin: -2px; width: 170px; height: 28px" ><font color="red">*</font>
-                    </td>
-                </tr>
-                <tr>
-                    <td>新&nbsp;&nbsp;&nbsp;密&nbsp;&nbsp;&nbsp;码</td>
-                    <td><input id="newPwd" name="newPwd" type="password" class="easyui-textbox" required="true" style="margin: -2px; width: 170px; height: 28px" ><font color="red">*</font>
-                    </td>
-                </tr>
-                <tr>
-                    <td>确认新密码</td>
-                    <td><input id="confirmPwd" name="confirmPwd" type="password" class="easyui-textbox" required="true" style="margin: -2px; width: 170px; height: 28px" ><font color="red">*</font>
-                    </td>
-                </tr>
-            </table>
+    <form id="keyForm">
+        <input type="hidden" id="id" name="id"/>
+        <table style="margin: 0 auto; padding: 10px;width: 90%">
+            <tr>
+                <td>旧&nbsp;&nbsp;&nbsp;&nbsp;密&nbsp;&nbsp;&nbsp;码：:</td>
+                <td><input id="oldPwd" name="oldPwd" type="password" class="easyui-textbox" required="true"
+                           style="margin: -2px; width: 170px; height: 28px"><font color="red">*</font>
+                </td>
+            </tr>
+            <tr>
+                <td>新&nbsp;&nbsp;&nbsp;密&nbsp;&nbsp;&nbsp;码</td>
+                <td><input id="newPwd" name="newPwd" type="password" class="easyui-textbox" required="true"
+                           style="margin: -2px; width: 170px; height: 28px"><font color="red">*</font>
+                </td>
+            </tr>
+            <tr>
+                <td>确认新密码</td>
+                <td><input id="confirmPwd" name="confirmPwd" type="password" class="easyui-textbox" required="true"
+                           style="margin: -2px; width: 170px; height: 28px"><font color="red">*</font>
+                </td>
+            </tr>
+        </table>
     </form>
 
-  <%--  <div id="changeps-buttons">
-        <a href="#" class="easyui-linkbutton" iconCls="icon-ok" name="noButton" onclick="updatePwdSave()">保存</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" name="noButton" onclick="closeUpdatePw();">关闭</a>
-    </div>--%>
+    <%--  <div id="changeps-buttons">
+          <a href="#" class="easyui-linkbutton" iconCls="icon-ok" name="noButton" onclick="updatePwdSave()">保存</a>
+          <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" name="noButton" onclick="closeUpdatePw();">关闭</a>
+      </div>--%>
 </div>
 
 <script>
@@ -404,16 +411,30 @@
         //主页
         <%--ztab.openWithOptions({title: '主页', url: '${ctx}/login.jsp'});--%>
         ztab.openWithOptions({title: '主页', url: '${ctx}/newpage/dashboard.jsp'});
+        $('#mainTabs').tabs({
+            onSelect: function (e, title, index) {
+                if (e == '移交接收') {
+                    var tab = $('#mainTabs').tabs('getSelected'); //获取选定的面板
+                    $("#mainTabs").tabs("update", {
+                        tab: tab,
+                        options: {
+                            content: tab[0].innerHTML,
+                        }
+                    });
+                }
+
+            }
+        });
     });
 
     function initUserName() {
         $.get("${ctx}/common/getSessionInfo.do", function (data) {
             var sessionObj = eval('(' + data + ')');
-            if(sessionObj.user==null){
+            if (sessionObj.user == null) {
                 $.messager.alert('错误', '网络已断开，请重新登录', 'warning', function () {
                     location.href = '${ctx}/newpage/login.jsp';
                 });
-            }else{
+            } else {
                 $(".badge-prompt").text(sessionObj.user.realName);
             }
             /*$("#userName").html(sessionObj.user.realName);
@@ -434,6 +455,7 @@
             $("#description").val(sessionObj.user.description);*/
         });
     }
+
     function initMenuFun(pid) {
         <%--window.open('${ctx}/common/listMenuByPidMvw.do?pid=' + pid)--%>
         $.ajax({

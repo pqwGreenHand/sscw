@@ -59,7 +59,7 @@ $(function () {
             {
                 field: 'status', title: '状态', width: 60, formatter: function (value, row, index) {
                     if (value == 0 || value == null) {
-                        return '<font color="blue">已移交</font>';
+                        return '<font color="red">待接收</font>';
                     } else if (value == 1) {
                         return '<font color="black">已接收</font>';
                     } else if (value == 2) {
@@ -175,9 +175,8 @@ function yjAccept() {
     }else{
         var rowData = $('#dg').datagrid('getSelected');
         var jsdwId=rowData.jsdwId;
-        $.get("/zhfz/common/getSessionInfo.do", function(data){
+        $.get("/sscw/common/getSessionInfo.do", function(data){
             var sessionObj = eval('('+data+')');
-            console.log(sessionObj)
             if(sessionObj.currentOrg.orgCode!=jsdwId){
                 U.msg('请选择用正确的接收单位登录，进行物品接收!');
                 return

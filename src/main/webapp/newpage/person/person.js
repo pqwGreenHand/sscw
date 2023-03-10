@@ -31,6 +31,21 @@ $(function () {
         columns: [[
             {field: 'ck', checkbox: true},
             {field: 'id', title: 'id', hidden: true},
+            {field: 'name', title: '嫌疑人姓名', width: 70},
+            {
+                field: 'sex', title: '性别', width: 40,
+                formatter: function (value, rec) {
+                    if (1 == value) {
+                        return "男";
+                    } else if (2 == value) {
+                        return "女";
+                    } else {
+                        return '未知';
+                    }
+                }
+            },
+            {field: 'certificateTypeName', title: '证件类型', width: 70},
+            {field: 'certificateNo', title: '证件号码', width: 120},
             {
                 field: 'ajmc', title: '案件名称', width: 150, formatter: function (value, rec) {
                     if (value == null || value == '') {
@@ -52,21 +67,7 @@ $(function () {
             {
                 field: 'areaName', title: '所属单位', width: 140
             },
-            {field: 'name', title: '嫌疑人姓名', width: 70},
-            {
-                field: 'sex', title: '性别', width: 40,
-                formatter: function (value, rec) {
-                    if (1 == value) {
-                        return "男";
-                    } else if (2 == value) {
-                        return "女";
-                    } else {
-                        return '未知';
-                    }
-                }
-            },
-            {field: 'certificateTypeName', title: '证件类型', width: 70},
-            {field: 'certificateNo', title: '证件号码', width: 120},
+
             {
                 field: 'operate', title: '操作', width: 120,
                 formatter: function (value, row, index) {

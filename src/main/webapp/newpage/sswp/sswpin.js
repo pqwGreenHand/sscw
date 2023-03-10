@@ -491,13 +491,14 @@ function printcod() {
         cache: false,
         async: false,
         success: function (data) {
-            console.log(data)
             if (data != null && data.length > 0) {
                 for (var i = 0; i < data.length; i++) {
                     var LODOP = getLodop(document.getElementById('LODOP_OB'), document.getElementById('LODOP_EM'));
-                    LODOP.SET_LICENSES("", "11D301338B627DC14B507A3F0C284F11", "", "");
+                    // LODOP.SET_LICENSES("","11D301338B627DC14B507A3F0C284F11","","");
                     LODOP.PRINT_INIT("打印任务名");               //首先一个初始化语句
-                    LODOP.SET_PRINT_PAGESIZE(1, 400, 300, "物品")//设定纸张大小
+                    LODOP.SET_PRINT_PAGESIZE(1,400,300,"物品")//设定纸张大小
+                    // LODOP.SET_PRINT_MODE("WINDOW_DEFPRINTER",打印机名称或序号);
+                    LODOP.SET_PRINT_MODE("WINDOW_DEFPRINTER","2120TU(标签)");
                     //判断案件名称的字数，
                     var ajmc = data[i].casename;
                     if (ajmc.length < 12) {
@@ -563,6 +564,7 @@ function edit(index) {
                         data: edtJson,
                         dataType: 'json',
                         success: function (data) {
+                            U.msg(data.content);
                             dialog.dialog('close');
                             $.messager.progress('close');
                             var cg = $('#serialIdQuery').combogrid('grid');	// 获取数据表格对象
