@@ -12,6 +12,7 @@ public class LawDocForm implements Serializable {
     private long userId;
     private String serialNo;
     private Long serialId;
+    private Long caseId;
     private String startTime;
     private String endTime;
     private int areaId;
@@ -23,6 +24,14 @@ public class LawDocForm implements Serializable {
     private Long policeId;
     private String serialUUID;
     private Integer count;
+
+    public Long getCaseId() {
+        return caseId;
+    }
+
+    public void setCaseId(Long caseId) {
+        this.caseId = caseId;
+    }
 
     public String getSerialUUID() {
         return serialUUID;

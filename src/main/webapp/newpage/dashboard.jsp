@@ -483,32 +483,41 @@
                                 <th style="text-align:center;padding:10px;font-size:14px;color: black">已拒绝 <span
                                         id="countSsjj">0</span>件
                                 </th>
+                                <th style="text-align:center;padding:10px;font-size:14px;color: black">转涉案 <span
+                                        id="countZsacs">0</span>件
+                                </th>
                             <tr>
-                                <td width="25%" align="center" valign="middle" style="border-color: black;">
+                                <td width="20%" align="center" valign="middle" style="border-color: black;">
                                     <div class="process_b">
                                         <p style="font-size:18px;">已存物</p>
                                         <span style="font-size:18px;"></span>
                                     </div>
                                 </td>
-                                <td width="25%" align="center" valign="middle" style="border-color: black">
+                                <td width="20%" align="center" valign="middle" style="border-color: black">
                                     <div class="process_h">
                                         <p style="font-size:18px;">已移交</p>
                                         <span style="font-size:18px;"></span>
                                     </div>
 
                                 </td>
-                                <td width="25%" align="center" valign="middle" style="border-color: black">
+                                <td width="20%" align="center" valign="middle" style="border-color: black">
                                     <div class="process_d">
                                         <p style="font-size:18px;">已接收</p>
                                         <span style="font-size:18px;"></span>
                                     </div>
                                 </td>
-                                <td width="25%" align="center" valign="middle" style="border-color: black">
+                                <td width="20%" align="center" valign="middle" style="border-color: black">
                                     <div class="process_f">
                                         <p style="font-size:18px;">已拒绝</p>
                                         <span style="font-size:18px;"></span>
                                     </div>
                                 </td>
+                              <td width="25%" align="center" valign="middle" style="border-color: black">
+                                <div class="process_e">
+                                    <p style="font-size:18px;">转涉案</p>
+                                    <span style="font-size:18px;"></span>
+                                </div>
+                            </td>
                             </tr>
                         </table>
                     </div>
@@ -538,7 +547,6 @@
             success: function (data) {
                 $('div.process_b').children('span').text(data.count + '件');
                 $('#countSscw').text(data.count);
-                countSscw += data.count;
             }
         });
 
@@ -552,9 +560,8 @@
             success: function (data) {
                 $('div.process_h').children('span').text(data.count + '件');
                 $('#countSsyj').text(data.count);
-                countSsyj += data.count;
             }
-        })
+    })
 
 
         jQuery.ajax({
@@ -565,7 +572,6 @@
             dataType: 'json',
             success: function (data) {
                 $('div.process_d').children('span').text(data.count + '件');
-                countSsjs += data.count;
                 $('#countSsjs').text(data.count);
 
             }
@@ -579,8 +585,20 @@
             dataType: 'json',
             success: function (data) {
                 $('div.process_f').children('span').text(data.count + '件');
-                countSsjs += data.count;
                 $('#countSsjj').text(data.count);
+
+            }
+        });
+         //转涉案和邮寄
+        jQuery.ajax({
+            async: false,
+            type: 'POST',
+            contentType: 'application/json',
+            url: '${ctx}/zhfz/bacs/console/countZsacs.do?areaId=' + areaId,
+            dataType: 'json',
+            success: function (data) {
+                $('div.process_e').children('span').text(data.count + '件');
+                $('#countZsacs').text(data.count);
 
             }
         });

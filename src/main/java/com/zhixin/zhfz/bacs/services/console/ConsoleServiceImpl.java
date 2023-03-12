@@ -163,4 +163,9 @@ public class ConsoleServiceImpl implements IConsoleService{
 		return consoleMapper.countTj();
 	}
 
+	@Override
+	public int countZsacs(Map<String, Object> param) {
+		return consoleMapper.countZsacs();
+	}
+
 }

@@ -72,4 +72,6 @@ public interface IConsoleMapper {
 	List<Map<String, Object>> countSscwTj();
 
 	Map<String,Object> countTj();
+
+	int countZsacs();
 }

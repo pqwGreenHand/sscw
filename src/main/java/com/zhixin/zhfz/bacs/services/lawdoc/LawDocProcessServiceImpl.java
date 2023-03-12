@@ -200,6 +200,7 @@ public class LawDocProcessServiceImpl implements ILawDocProcessService {
         if (form.getNumber() == 9) {// 示例
             result.setUserId(form.getUserId());
             result.setBelongingsId(form.getBelongingsId());
+            result.setCaseId(form.getCaseId());
             getTestData9(result);
         }
 

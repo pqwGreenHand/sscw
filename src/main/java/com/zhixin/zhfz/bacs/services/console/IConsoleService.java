@@ -87,4 +87,6 @@ public interface IConsoleService {
 	List<Map<String, Object>> countSscwTj();
 
     Map<String,Object> countTj();
+
+    int countZsacs(Map<String, Object> param);
 }

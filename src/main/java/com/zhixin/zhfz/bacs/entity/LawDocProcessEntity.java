@@ -18,6 +18,15 @@ public class LawDocProcessEntity implements Serializable {
 
     private long belongingsId;
     private Long policeId;
+    private Long caseId;
+
+    public Long getCaseId() {
+        return caseId;
+    }
+
+    public void setCaseId(Long caseId) {
+        this.caseId = caseId;
+    }
 
     public Long getPoliceId() {
         return policeId;

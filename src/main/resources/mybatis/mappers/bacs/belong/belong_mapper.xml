@@ -105,6 +105,9 @@
         <if test="id!=null and id!=''">
             and b.id =#{id}
         </if>
+        <if test="caseId!=null and caseId!=''">
+            and b.case_id =#{caseId}
+        </if>
     </select>
 
     <!-- 查询嫌疑人存取物信息 -->

@@ -157,6 +157,7 @@ public class UserAuthorityInterceptor extends HandlerInterceptorAdapter {
         exceptionUrlList.add("/zhfz/common/user/getUsersInfo.do");
         exceptionUrlList.add("/zhfz/common/user/delete.do");
         exceptionUrlList.add("/zhfz/common/case/addPersonAndCase.do");
+        exceptionUrlList.add("/zhfz/bacs/console/countZsacs.do");
     }
 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

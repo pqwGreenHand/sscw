@@ -317,6 +317,23 @@
 		</if>
 	</select>
 
+	<!-- 查询转涉案财物 -->
+	<select id="countZsacs" resultType="java.lang.Integer" parameterType="java.util.Map">
+		SELECT
+		count(detail_count)
+		FROM
+		ba_belongings_detail bbd
+		left join ba_belongings bb on bb.id = bbd.belongings_id
+		WHERE
+		1=1 and bbd.get_way=4
+		<if test="areaId!=null and areaId!=''">
+			and bb.area_id = #{areaId}
+		</if>
+		<if test="dataAuth!=null and dataAuth!=''">
+			and ${dataAuth}
+		</if>
+	</select>
+
 
 	<!-- 当前办案区柜门使用数量 -->
 	<select id="queryUsedCountBelongDetail" resultType="java.lang.Integer" parameterType="java.util.Map">

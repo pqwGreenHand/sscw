@@ -208,6 +208,8 @@ public class LawDocProcessController {
 		String serialId=request.getParameter("serialId");
 		//String belongingsId=request.getParameter("belongingsId");
 		String policeId=request.getParameter("policeId");
+		String personId=request.getParameter("personId");
+		String caseId=request.getParameter("caseId");
 
 		String serialUUID = request.getParameter("serialUUID");
 		String count = request.getParameter("count");
@@ -274,6 +276,9 @@ public class LawDocProcessController {
 		}
 		if(belongingsId!=null&&!"".equals(belongingsId)){
 			form.setBelongingsId(Integer.parseInt(belongingsId));
+		}
+		if(caseId!=null&&!"".equals(caseId)){
+			form.setCaseId(Long.parseLong(caseId));
 		}
 
 		response.reset();

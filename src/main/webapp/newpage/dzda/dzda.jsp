@@ -18,8 +18,10 @@
 <body>
 <div class="easyui-layout" data-options="fit:true,border:false,minWidth:560">
     <div data-options="region:'north',border:false" style="padding: 10px 5px;">
-        <input id="s_case_name" name="s_case_name"  class="easyui-textbox" data-options="label:'案件名称'" style="width:250px;"/>
-        <input id="s_person_name" name="s_person_name" class="easyui-textbox" data-options="label:'姓名'" style="width:250px;"/>
+        <input id="s_case_name" name="s_case_name" class="easyui-textbox" data-options="label:'案件名称'"
+               style="width:250px;"/>
+        <input id="s_person_name" name="s_person_name" class="easyui-textbox" data-options="label:'姓名'"
+               style="width:250px;"/>
         <a id="cxShow" href="javascript:void(0)" onclick="queryUsers()" class="easyui-linkbutton button-line-blue"
            style="width: 70px;margin-left: 10px;display: none">查&nbsp;询</a>
         <a id="qcShow" href="javascript:void(0)" onclick="clearSearch()" class="easyui-linkbutton button-line-red"
@@ -40,6 +42,9 @@
         </div>
         <div title="其它材料" style="padding:5px">
             <table id="qtDatagrid"></table>
+        </div>
+        <div title="文书管理" style="padding:5px">
+            <table id="wsDatagrid"></table>
         </div>
     </div>
 
@@ -74,10 +79,26 @@
         </table>
     </form>
 </div>
+<div>
+    <form id="lawdocInfo" class="form-style" method="post" action="/sscw/zhfz/lawdocProcess/download.do"
+          accept-charset="UTF-8'">
+        <input type="hidden" id="number" name="number"/>
+        <input type="hidden" id="userId" name="userId"/>
+        <input type="hidden" id="serialNo" name="serialNo"/>
+        <input type="hidden" id="serialId" name="serialId"/>
+        <input type="hidden" id="dataId" name="dataId"/>
+        <input type="hidden" id="type" name="type"/>
+        <input type="hidden" id="name" name="name"/>
+        <input type="hidden" id="caseId" name="caseId"/>
+        <input type="hidden" id="personId" name="personId"/>
+    </form>
 
+</div>
 
 <script>
     var datagrid;
+    var caseIds;
+    var personIds;
     $(function () {
         $("#cxShow").show();
         $("#qcShow").show();
@@ -129,9 +150,12 @@
                 showImage(id, pId)
                 showVideo(id, pId)
                 showQt(id, pId)
+                caseIds = id;
+                personIds = pId;
             },
             toolbar: '#toolbar',
             onSelect: function (row) {
+                // lawdocDetailgridLoad(row);
             }
         });
 
@@ -146,7 +170,66 @@
                 return false;
             }
         });
+
+        $('#wsDatagrid').datagrid({
+            method: "get",
+            queryParams: "{'enpId':'-99','trefresh':" + new Date().getTime() + "}",
+            url: '/sscw/zhfz/bacs/lawdoc/listlawdoc.do',
+            fit: true,
+            fitColumns: true,
+            border: true,
+            idField: 'id',
+            striped: true,
+            pagination: false,
+            rownumbers: true,
+            pageNumber: 1,
+            pageSize: 20,
+            pageList: [10, 20, 30, 50, 100],
+            singleSelect: true,
+            selectOnCheck: true,
+            checkOnSelect: true,
+            toolbar: '#tb',
+            columns: [[
+                {field: 'name', title: '文书名称', width: 350},
+                {
+                    field: 'operate', title: '操作', width: 120,
+                    formatter: function (value, row, index) {
+                        var e = "<a onclick='downloadLow(" + index + ")' class='button-edit button-blue'>下载</a>";
+                        return e;
+                    }
+                }
+            ]],
+            onLoadSuccess: function (data) {
+            },
+            onSelect: function (index, row) {
+
+            }
+        });
+
+
     });
+
+    //文书下载
+    function downloadLow(index) {
+        var rowData = $('#wsDatagrid').datagrid('getRows')[index];
+        var number = rowData.number;
+        var name = rowData.name;
+        var type = rowData.type;
+        var userId = personIds;
+        var caseId = caseIds;
+        var personId = personIds;
+        $('#number').val(number);
+        $('#name').val(name);
+        $('#type').val(type);
+        $('#userId').val(userId);
+        $('#caseId').val(caseId);
+        $.messager.progress({
+            title: '请等待',
+            msg: '下载中...'
+        });
+        document.getElementById("lawdocInfo").submit();
+        $.messager.progress('close');
+    }
 
     var caseId;
     var dialog;
@@ -170,7 +253,7 @@
 
                         var fileType = $("#fileType").combobox("getValue");
                         var personId = $("#person").combobox("getValue");
-                        var add =  "/sscw/zhfz/bacs/archives/onlineupload.do?personId=" + personId + "&fileType=" + fileType + "&caseId=" + caseId;
+                        var add = "/sscw/zhfz/bacs/archives/onlineupload.do?personId=" + personId + "&fileType=" + fileType + "&caseId=" + caseId;
                         $('#fam').form('submit', {
                             url: add,
                             onSubmit: function () {
@@ -220,11 +303,10 @@
     }
 
 
-
     function queryUsers() {
         $('#treegrid').treegrid('load', {
-            ajmc: $('#s_case_name').textbox("getValue"),
-            personName: $('#s_person_name').textbox("getValue")
+                ajmc: $('#s_case_name').textbox("getValue"),
+                personName: $('#s_person_name').textbox("getValue")
             }
         );
     }
@@ -332,6 +414,10 @@
             }
 
         });
+    }
+
+    function showWs(id, pid) {
+
     }
 
     function showQt(id, pid) {

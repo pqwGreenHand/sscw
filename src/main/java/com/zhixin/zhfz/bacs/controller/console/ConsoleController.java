@@ -456,7 +456,6 @@ public class ConsoleController {
 		result.put("count", count);
 		return result;
 	}
-
 	//已接收
 	@RequestMapping(value = "/countSsjs")
 	@ResponseBody
@@ -475,6 +474,30 @@ public class ConsoleController {
 		}
 		param.put("dataAuth", str);
 		int count = consoleService.countSsjs(param);
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("count", count);
+		return result;
+	}
+
+
+	//转涉案
+	@RequestMapping(value = "/countZsacs")
+	@ResponseBody
+	public Map<String, Object> countZsacs(HttpServletRequest request) {
+		Map<String, Object> param = new HashMap<String, Object>();
+		//param.put("interrogateAreaId", (request.getParameter("areaId")!=null)?request.getParameter("areaId"):ControllerTool.getCurrentAreaID(request));
+		String str = "";
+		if (request.getParameter("areaId") == null) {
+			param.put("areaId", (request.getParameter("areaId") != null) ? request.getParameter("areaId") : ControllerTool.getCurrentAreaID(request));
+		} else {
+			if (request.getParameter("areaId").equals("null")) {
+				str = ControllerTool.getAreasInSql(" bb.area_id", ControllerTool.getSessionInfo(request).getCurrentAndSubArea());
+			} else {
+				param.put("areaId", (request.getParameter("areaId") != null) ? request.getParameter("areaId") : ControllerTool.getCurrentAreaID(request));
+			}
+		}
+		param.put("dataAuth", str);
+		int count = consoleService.countZsacs(param);
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("count", count);
 		return result;
