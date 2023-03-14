@@ -193,12 +193,12 @@
                             </ul>
                         </div>
 
-                        <div title="文书管理">
+                       <%-- <div title="文书管理">
                             <ul class="easyui-datalist"
                                 data-options="border:false, onClickRow:function(index,row){ztab.open(row.text,row.value)}">
                                 <li value="${ctx}/newpage/wsgl/wsgl.jsp">文书管理</li>
                             </ul>
-                        </div>
+                        </div>--%>
                         <div title="电子档案">
                             <ul class="easyui-datalist"
                                 data-options="border:false, onClickRow:function(index,row){ztab.open(row.text,row.value)}">
@@ -217,6 +217,26 @@
                                 <li value="${ctx}/newpage/user/user.jsp">民警管理</li>
                             </ul>
                         </div>
+
+                        <%--    <div title="权限管理" id="systemShow">
+                                <ul class="easyui-datalist"
+                                    data-options="border:false, onClickRow:function(index,row){ztab.open(row.text,row.value)}">
+                                    <li value="${ctx}/newpage/role/role.jsp">权限管理</li>
+                                </ul>
+                            </div>
+                            <div title="用户管理">
+                                <ul class="easyui-datalist"
+                                    data-options="border:false, onClickRow:function(index,row){ztab.open(row.text,row.value)}">
+                                    <li value="${ctx}/newpage/userrole/user.jsp">用户管理</li>
+                                </ul>
+                            </div>
+                            <div title="部门管理">
+                                <ul class="easyui-datalist"
+                                    data-options="border:false, onClickRow:function(index,row){ztab.open(row.text,row.value)}">
+                                    <li value="${ctx}/newpage/organization/organization.jsp">部门管理</li>
+                                </ul>
+                            </div>--%>
+
                         <%--
                             <div title="控制台">
                                 <ul class="easyui-datalist"

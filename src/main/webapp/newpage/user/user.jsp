@@ -26,8 +26,18 @@
         <a href="javascript:void(0)" onclick="clearSearch()" class="easyui-linkbutton button-line-red"
            style="width: 70px;margin-left: 10px;">清&nbsp;除</a>
         &nbsp;&nbsp;
-        <a href="javascript:void(0)" onclick="add()" class="easyui-linkbutton button-line-blue" iconCls="icon-add"
-           plain="true">添加</a>
+      <%--  <a href="javascript:void(0)" onclick="add()" class="easyui-linkbutton button-line-blue" iconCls="icon-add"
+           plain="true">添加</a>--%>
+
+        <div id="systemShow">
+            <a href="javascript:void(0)" onclick="useradd('1')" class="easyui-linkbutton" iconCls="icon-add"
+               plain="true">用户</a>
+            <a href="javascript:void(0)" onclick="useradd('2')" class="easyui-linkbutton" iconCls="icon-add"
+               plain="true">角色</a>
+            <a href="javascript:void(0)" onclick="useradd('3')" class="easyui-linkbutton" iconCls="icon-add"
+               plain="true">部门</a>
+        </div>
+
     </div>
 
     <div data-options="region:'center',border:false" style="height:100%">

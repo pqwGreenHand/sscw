@@ -9,6 +9,18 @@ var sfaj = "";
 var datagridPerson;
 var dialog;
 $(function () {
+
+    $.get("../../common/getSessionInfo.do", function (data) {
+        var sessionObj = eval('(' + data + ')');
+        if (sessionObj.user != null) {
+            if (sessionObj.user.id == 1) {
+                $("#systemShow").attr("style","display:black;");
+            }else{
+                $("#systemShow").attr("style","display:none;");
+            }
+        }
+    });
+
     loadSexSearch();
     datagridPerson = $('#dg').datagrid({
         method: "get",
@@ -36,14 +48,14 @@ $(function () {
             {field: 'certificateNo', title: '证件号码', width: 150},
             {field: 'organizationName', title: '单位名称', width: 150},
             {field: 'mobile', title: '手机号码', width: 150},
-            {
-                field: 'operate', title: '操作', width: 120,
-                formatter: function (value, row, index) {
-                    var d = "<a onclick='remove(" + row.id + ")' class='button-delete button-red'>删除</a>";
-                    var e = "<a onclick='edit(" + row.id + ")' class='button-edit button-blue'>编辑</a>";
-                    return e + '  ' + d;
-                }
-            }
+            // {
+            //     field: 'operate', title: '操作', width: 120,
+            //     formatter: function (value, row, index) {
+            //         var d = "<a onclick='remove(" + row.id + ")' class='button-delete button-red'>删除</a>";
+            //         var e = "<a onclick='edit(" + row.id + ")' class='button-edit button-blue'>编辑</a>";
+            //         return e + '  ' + d;
+            //     }
+            // }
         ]],
         onLoadSuccess: function (data) {
             $('.button-delete').linkbutton({});
@@ -234,6 +246,16 @@ function edit(id) {
     });
 }
 
+function useradd(index) {
+    if (index == 1) {
+        self.parent.ztab.open("用户管理", "../newpage/userrole/user.jsp");
+    } else if (index == 2) {
+        self.parent.ztab.open("角色管理", "../newpage/role/role.jsp");
+    } else if (index == 3) {
+        self.parent.ztab.open("部门管理", "../newpage/organization/organization.jsp");
+    }
+}
+
 function remove(id) {
     if (id == null) {
         var row = datagridPerson.datagrid('getSelected');
@@ -271,5 +293,7 @@ function remove(id) {
         }
     });
 }
+
+
 
 

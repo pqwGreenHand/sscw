@@ -121,7 +121,7 @@ public class OrganizationServiceImpl implements IOrganizationService {
 		//当前部门pid
 		sessionInfo.setCurrentOrgPid(currentOrgPid);
 		List<Long> childOrgs = new ArrayList<Long>();
-		findChildIds(currentOrg.getId().longValue(), childOrgs);
+//		findChildIds(currentOrg.getId().longValue(), childOrgs);
 		List<OrganizationEntity> currentAndSubOrg = new ArrayList<OrganizationEntity>();
 		if (!childOrgs.isEmpty()) {
 			currentAndSubOrg = listByIds(childOrgs);
@@ -133,11 +133,11 @@ public class OrganizationServiceImpl implements IOrganizationService {
 		String currentAndSubOrgPid = "'"+currentOrg.getPid()+"%'";
 		sessionInfo.setCurrentAndSubOrgPid(currentAndSubOrgPid);
 		List<Long> subIdList = new ArrayList<Long>();
-		findSubIds(currentOrg.getId().longValue(), subIdList);
+//		findSubIds(currentOrg.getId().longValue(), subIdList);
 		List<OrganizationEntity> superAndSubOrg = new ArrayList<OrganizationEntity>();
-		if (!subIdList.isEmpty()) {
+//		if (!subIdList.isEmpty()) {
 			superAndSubOrg = listByIds(subIdList);
-		}
+//		}
 		//上级部门以及下级部门
 		sessionInfo.setSuperAndSubOrg(superAndSubOrg);
 		String[] parentPid = currentOrg.getPid().split("_");
